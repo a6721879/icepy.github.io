@@ -182,6 +182,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在初始化一个django项目时，我还遇见了一个比较头疼的问题，静态资源的配置，硬编码问题。其实，按照正常的部署来说，静态资源，比如（.css .js img）等，应该另启动一个服务器，去做静态资源的处理，这样是非常常见的，和语言无关，脱离了动态开发内容，特别的适合做内容分发。但是，考虑到前期，我想能在django中集合这样的资源类型，于是，碰到了比较纠结的问题。另外，在django初始化的项目中，竟然还不能在注释中打中文，是不是很疼，没关系，往下看，能解决这样的问题。</p>
+<a id="more"></a>
+
 <p>其实，在django settings.py文件中，我们可以找到三个关于static的内容。STATIC_ROOT，STATIC_URL，STATICFILES_DIRS。于是，我在想，是不是就是配置这三项呢。</p>
 <p><a href="https://docs.djangoproject.com/en/1.5/ref/settings/" target="_blank" rel="external">settings.py 官方给出的配置参数解释</a></p>
 <p>顾名思义，我想在我的项目中利用django内置的服务器来处理静态资源，最能给我合理的参数应该是STATICFILES_DIRS。</p>
