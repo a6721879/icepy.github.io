@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2014-11-14T19:39:11.544Z</updated>
+  <updated>2014-11-14T19:42:21.085Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://lcepy.github.io/2014/11/14/%E6%AD%A3%E5%88%99%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%86%E8%A7%A3/"/>
     <id>http://lcepy.github.io/2014/11/14/正则的一些理解/</id>
     <published>2014-11-14T13:50:22.000Z</published>
-    <updated>2014-11-14T19:30:03.000Z</updated>
+    <updated>2014-11-14T19:41:37.000Z</updated>
     <content type="html"><![CDATA[<p>今天写到这里，是想总结一下，自己重新学习正则表达式之后，对它的一个全新的认识。我想描述一个中心思想，学习任何东西，编程，音乐，基础是非常important的，就好像吉他里基础不在于认识六线谱而是在于节拍。</p>
 <h2 id="从人类的角度来阅读正则">从人类的角度来阅读正则</h2>
 <p>在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。python中也有很多高效处理字符串的方式，比如步距，比如正则，嘿嘿。</p>
@@ -66,7 +66,6 @@
 <p>|  逻辑或</p>
 <p>()组 为一个子组，必须存在，才匹配</p>
 <p>[]列 可以为出现任意一个，都匹配</p>
-<p><em>如果文章对你有用，可以支付宝打赏哟～</em><br><img src="http://websources.qiniudn.com/img/aphqeqbbr88mde48c5.png" alt="lcepy Talk"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>今天写到这里，是想总结一下，自己重新学习正则表达式之后，对它的一个全新的认识。我想描述一个中心思想，学习任何东西，编程，音乐，基础是非常important的，就好像吉他里基础不在于认识六线谱而是在于节拍。</p>
@@ -89,7 +88,7 @@
     <link href="http://lcepy.github.io/2014/11/14/%E5%85%B3%E4%BA%8Edjango%E4%B8%ADCSRF%E5%BC%80%E5%90%AF%E7%9A%84%E9%97%AE%E9%A2%98/"/>
     <id>http://lcepy.github.io/2014/11/14/关于django中CSRF开启的问题/</id>
     <published>2014-11-14T12:33:12.000Z</published>
-    <updated>2014-11-14T19:30:06.000Z</updated>
+    <updated>2014-11-14T19:40:59.000Z</updated>
     <content type="html"><![CDATA[<h2 id="django_处理CSRF机制保护下的POST表单提交">django 处理CSRF机制保护下的POST表单提交</h2>
 <p>昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后解决了。其实在解决这个问题之前，我们先要了解一下，CSRF到底是什么东东，为什么django提交一个POST表单这么困难呢。</p>
 <p><a href="http://baike.baidu.com/link?url=OnI0sPQAHpQHhtxWSXvQFhN3kJWI3CU_rP3Fo7MqnPY3rTdhUPpuca-3lzJ651LdMI7ouoLvdnnihhojFyKtva" target="_blank" rel="external">CSRF 是什么</a></p>
@@ -155,7 +154,6 @@ urlpatterns = patterns('',
     <span class="comment"># url(r'^admin/', include(admin.site.urls)),</span>
 )
 </code></pre><p>大家可以尝试运行一下这个文件，你会发现，原来开启CSRF机制后的POST表单提交，成功了。</p>
-<p><em>如果文章对你有用，可以支付宝打赏哟～</em><br><img src="http://websources.qiniudn.com/img/aphqeqbbr88mde48c5.png" alt="lcepy Talk"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="django_处理CSRF机制保护下的POST表单提交">django 处理CSRF机制保护下的POST表单提交</h2>
@@ -182,7 +180,7 @@ urlpatterns = patterns('',
     <link href="http://lcepy.github.io/2014/11/14/django%E6%A8%A1%E5%9E%8B%E4%BD%BF%E7%94%A8%E7%9A%84%E4%B8%80%E4%BA%9B%E5%BF%83%E5%BE%97/"/>
     <id>http://lcepy.github.io/2014/11/14/django模型使用的一些心得/</id>
     <published>2014-11-14T12:30:31.000Z</published>
-    <updated>2014-11-14T19:21:47.000Z</updated>
+    <updated>2014-11-14T19:41:53.000Z</updated>
     <content type="html"><![CDATA[<p>近很一直在学习django，因为我需要使用它为自己的项目写一个前台页面和一个后台服务。它是一个关于咖啡的邮件订阅社区，既然有服务，自然需要数据库层的支持。这是一个很好的开始，学习django让我了解到python开发web应用真的非常快速，但是也有一个很明显的缺点。那就是国内，对django社区的支持度非常不好，这或许跟国内python的有关，不过也不要紧，学习就是这样，要啃难而上。</p>
 <p>说说在django中模型，对应的数据库层，也就是意味着django帮助我们完成了对数据库的访问，操作，通过它的模型类。</p>
 <blockquote>
@@ -230,7 +228,6 @@ urlpatterns = patterns('',
 <p>在没有找到django关于这方面的信息之前，我用了原始查询，django支持这个。</p>
 <pre><code>模型类.raw('<span class="operator"><span class="keyword">SELECT</span> id,<span class="keyword">MAX</span>(sync_number) <span class="keyword">AS</span> max_number <span class="keyword">FROM</span> sendcloud_weeklysynclist<span class="string">')</span></span>
 </code></pre><p>另外这里也需要关注一个问题，如果要原始查询，必须要带上主键，不然django会抛一个错误出来。</p>
-<p><em>如果文章对你有用，可以支付宝打赏哟～</em><br><img src="http://websources.qiniudn.com/img/aphqeqbbr88mde48c5.png" alt="lcepy Talk"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>近很一直在学习django，因为我需要使用它为自己的项目写一个前台页面和一个后台服务。它是一个关于咖啡的邮件订阅社区，既然有服务，自然需要数据库层的支持。这是一个很好的开始，学习django让我了解到python开发web应用真的非常快速，但是也有一个很明显的缺点。那就是国内，对django社区的支持度非常不好，这或许跟国内python的有关，不过也不要紧，学习就是这样，要啃难而上。</p>
@@ -268,7 +265,7 @@ urlpatterns = patterns('',
     <link href="http://lcepy.github.io/2014/11/14/%E6%90%BA%E7%A8%8B%E9%82%AE%E8%BD%AE%E5%BC%80%E5%8F%91%E9%83%A8django%E5%88%86%E4%BA%AB/"/>
     <id>http://lcepy.github.io/2014/11/14/携程邮轮开发部django分享/</id>
     <published>2014-11-14T12:20:19.000Z</published>
-    <updated>2014-11-14T19:21:23.000Z</updated>
+    <updated>2014-11-14T19:41:28.000Z</updated>
     <content type="html"><![CDATA[<p>使用django快速开发一个web网站</p>
 <p>分享内容（拟）</p>
 <ol>
@@ -436,7 +433,6 @@ Sessions
 <p><a href="https://docs.djangoproject.com/en/1.6/" target="_blank" rel="external">Django API</a></p>
 <p><a href="http://djangobook.py3k.cn/2.0/" target="_blank" rel="external">一本django1.5电子书</a></p>
 <p><a href="http://uliweb.clkg.org/tutorial/read/20" target="_blank" rel="external">简单的django学习</a></p>
-<p><em>如果文章对你有用，可以支付宝打赏哟～</em><br><img src="http://websources.qiniudn.com/img/aphqeqbbr88mde48c5.png" alt="lcepy Talk"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>使用django快速开发一个web网站</p>
@@ -464,7 +460,7 @@ Sessions
     <link href="http://lcepy.github.io/2014/11/14/django%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE%E7%9A%84%E9%97%AE%E9%A2%98/"/>
     <id>http://lcepy.github.io/2014/11/14/django静态资源配置的问题/</id>
     <published>2014-11-14T12:16:20.000Z</published>
-    <updated>2014-11-14T19:32:22.000Z</updated>
+    <updated>2014-11-14T19:41:56.000Z</updated>
     <content type="html"><![CDATA[<p>在初始化一个django项目时，我还遇见了一个比较头疼的问题，静态资源的配置，硬编码问题。其实，按照正常的部署来说，静态资源，比如（.css .js img）等，应该另启动一个服务器，去做静态资源的处理，这样是非常常见的，和语言无关，脱离了动态开发内容，特别的适合做内容分发。但是，考虑到前期，我想能在django中集合这样的资源类型，于是，碰到了比较纠结的问题。另外，在django初始化的项目中，竟然还不能在注释中打中文，是不是很疼，没关系，往下看，能解决这样的问题。</p>
 <a id="more"></a>
 
@@ -477,7 +473,6 @@ Sessions
 <p>在处理好静态资源之后，我想给这里添加一个注释，并写上中文。于是，我发现，出现了一个编码问题。后来查询了python官方的一个PEP，了解到原来，如果我的不是utf-8或者其他支持中文的编码，直接写上中文，那是报一个大大的错误的。</p>
 <p><a href="http://legacy.python.org/dev/peps/" target="_blank" rel="external">Python 官方关于编码的PEP</a></p>
 <p>在文件的头部写上#coding=utf-8即可，这一项2.7到3.x都是完美兼容的，如果现在学习python，建议最小选择从2.7.3开始，到3.x。2.7除了模块不一样名不一样，有很多内置函数，是继承到了3.x。当然如果，不考虑工作的话，我建议直接从python3.x开始学习。</p>
-<p><em>如果文章对你有用，可以支付宝打赏哟～</em><br><img src="http://websources.qiniudn.com/img/aphqeqbbr88mde48c5.png" alt="lcepy Talk"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>在初始化一个django项目时，我还遇见了一个比较头疼的问题，静态资源的配置，硬编码问题。其实，按照正常的部署来说，静态资源，比如（.css .js img）等，应该另启动一个服务器，去做静态资源的处理，这样是非常常见的，和语言无关，脱离了动态开发内容，特别的适合做内容分发。但是，考虑到前期，我想能在django中集合这样的资源类型，于是，碰到了比较纠结的问题。另外，在django初始化的项目中，竟然还不能在注释中打中文，是不是很疼，没关系，往下看，能解决这样的问题。</p>
@@ -494,7 +489,7 @@ Sessions
     <link href="http://lcepy.github.io/2014/11/14/%E5%87%8F%E8%82%A5%E4%B8%8E%E8%AE%AD%E7%BB%83/"/>
     <id>http://lcepy.github.io/2014/11/14/减肥与训练/</id>
     <published>2014-11-14T12:11:56.000Z</published>
-    <updated>2014-11-14T19:20:54.000Z</updated>
+    <updated>2014-11-14T19:41:07.000Z</updated>
     <content type="html"><![CDATA[<p>训练的目的在于，训练自身的素质，为长距离骑行做准备。主要是训练意志力，大腿肌肉，胸部肌肉，以及肺活量。</p>
 <p>我的训练计划有参考的价值，如下：</p>
 <ol>
@@ -547,7 +542,6 @@ Sessions
 <p>清炒长豆角，或者清炒四季豆，清炒，少量盐。</p>
 <p>家常豆腐皮，材料为豆腐皮，青辣椒，少量玉米油清炒。</p>
 <p>酸辣土豆丝，配少量醋，豆豉辣椒油，青红辣椒丝，清炒。</p>
-<p><em>如果文章对你有用，可以支付宝打赏哟～</em><br><img src="http://websources.qiniudn.com/img/aphqeqbbr88mde48c5.png" alt="lcepy Talk"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>训练的目的在于，训练自身的素质，为长距离骑行做准备。主要是训练意志力，大腿肌肉，胸部肌肉，以及肺活量。</p>
@@ -574,7 +568,7 @@ Sessions
     <link href="http://lcepy.github.io/2014/11/14/%E6%88%91%E7%9A%84%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/"/>
     <id>http://lcepy.github.io/2014/11/14/我的项目经历/</id>
     <published>2014-11-14T12:09:19.000Z</published>
-    <updated>2014-11-14T19:39:01.000Z</updated>
+    <updated>2014-11-14T19:40:28.000Z</updated>
     <content type="html"><![CDATA[<p><em>开源项目，可以在 github 查看，主要分为两类项目，一类为给公司开发的开源工具，用来前端的编程效率，一类为自己的学习项目，比如桌面端的MVC一套解决方案，移动组件库，以及个人项目。</em></p>
 <p><em>擅长领域，主要为javascript，python，关系型数据库为mysql，工作中以javascript为主。</em></p>
 <h2 id="个人项目展示">个人项目展示</h2>
@@ -665,7 +659,6 @@ Sessions
 <p>快乐学习网社交空间，工作的内容是负责了全站的前端开发任务，空间类似于2011年的QQ空间。负责教育产品，社交空间的前端开发，培训组内的前端技术，并提供教育系列产品的前端解决方案，并负责一定的服务端开发工作，主要是拼写模板。</p>
 <p>当时的站点，是基于jQuery编写的，使用的是jQuery1.4。</p>
 <p><strong>第一次参加工作，这个阶段皆以学习琢磨为主，在当时的团队中，是主要的程序开发者，根据python的模板的特点，引入了jQuery_Template模板，改变了团队开发程序的形式，模板从服务端移到了在前端实现。</strong></p>
-<p><em>如果文章对你有用，可以支付宝打赏哟～</em><br><img src="http://websources.qiniudn.com/img/aphqeqbbr88mde48c5.png" alt="lcepy Talk"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p><em>开源项目，可以在 github 查看，主要分为两类项目，一类为给公司开发的开源工具，用来前端的编程效率，一类为自己的学习项目，比如桌面端的MVC一套解决方案，移动组件库，以及个人项目。</em></p>
@@ -691,7 +684,7 @@ Sessions
     <link href="http://lcepy.github.io/2014/11/14/%E5%9C%A8%E5%AE%9E%E9%99%85%E5%B7%A5%E4%BD%9C%E4%B8%ADnode%E5%BC%80%E5%8F%91%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%81%E8%A7%A3%E4%B8%8E%E8%B0%83%E8%AF%95/"/>
     <id>http://lcepy.github.io/2014/11/14/在实际工作中node开发的一些见解与调试/</id>
     <published>2014-11-14T12:04:45.000Z</published>
-    <updated>2014-11-14T19:20:38.000Z</updated>
+    <updated>2014-11-14T19:40:38.000Z</updated>
     <content type="html"><![CDATA[<p><strong>真实情况是这样的</strong> </p>
 <ol>
 <li>开发，前端与后端物理性的隔离，前端通过restful接口请求相应的数据，并在客户端渲染。</li>
@@ -733,7 +726,6 @@ Sessions
 <li>配置SublimeREPL编译器环境，运行在编辑器内运行PYTHON，编译器环境可选，不一定是PYTHON。<a href="https://github.com/wuub/SublimeREPL" target="_blank" rel="external">下载</a></li>
 <li>配置python语法智能提示，当然也不仅仅是PYTHON的语法智能提示<a href="https://github.com/SublimeCodeIntel/SublimeCodeIntel" target="_blank" rel="external">下载</a></li>
 </ol>
-<p><em>如果文章对你有用，可以支付宝打赏哟～</em><br><img src="http://websources.qiniudn.com/img/aphqeqbbr88mde48c5.png" alt="lcepy Talk"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p><strong>真实情况是这样的</strong> </p>
@@ -762,7 +754,7 @@ Sessions
     <link href="http://lcepy.github.io/2014/11/14/%E5%AF%B9%E4%BA%8E%E4%B8%AD%E5%B0%8F%E9%A1%B9%E7%9B%AE%E6%88%91%E8%AF%A5%E5%A6%82%E4%BD%95%E7%BB%84%E7%BB%87%E6%88%91%E7%9A%84%E4%BB%A3%E7%A0%81/"/>
     <id>http://lcepy.github.io/2014/11/14/对于中小项目我该如何组织我的代码/</id>
     <published>2014-11-14T11:19:11.000Z</published>
-    <updated>2014-11-14T19:21:07.000Z</updated>
+    <updated>2014-11-14T19:41:18.000Z</updated>
     <content type="html"><![CDATA[<p>从三个角度来分析</p>
 <ol>
 <li>我需要什么（need）</li>
@@ -796,7 +788,6 @@ Sessions
 </ol>
 <h2 id="命题3：我能做些什么">命题3：我能做些什么</h2>
 <p>当我们把上述七个方向的东西，整合成一套体系时，能做的事情，可以根据你的想象，而无限扩大。</p>
-<p><em>如果文章对你有用，可以支付宝打赏哟～</em><br><img src="http://websources.qiniudn.com/img/aphqeqbbr88mde48c5.png" alt="lcepy Talk"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>从三个角度来分析</p>
@@ -819,7 +810,7 @@ Sessions
     <link href="http://lcepy.github.io/2014/11/14/2015%E5%B9%B4%E5%A4%8F%E5%A4%A9%E9%AA%91%E8%A1%8C%E8%AE%A1%E5%88%92%E5%AE%89%E6%8E%92%E4%BA%8B%E9%A1%B9/"/>
     <id>http://lcepy.github.io/2014/11/14/2015年夏天骑行计划安排事项/</id>
     <published>2014-11-13T16:30:26.000Z</published>
-    <updated>2014-11-14T19:27:29.000Z</updated>
+    <updated>2014-11-14T19:41:46.000Z</updated>
     <content type="html"><![CDATA[<p><img src="http://websources.qiniudn.com/img/wow.jpg" alt="回忆是一幅风景"></p>
 <h2 id="装备预算">装备预算</h2>
 <p><strong>骑行必备装预算，计算总价为最低档。</strong></p>

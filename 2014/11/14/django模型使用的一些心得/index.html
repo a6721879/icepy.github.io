@@ -13,7 +13,6 @@
 <meta property="og:site_name" content="lcepy">
 <meta property="og:description" content="近很一直在学习django，因为我需要使用它为自己的项目写一个前台页面和一个后台服务。它是一个关于咖啡的邮件订阅社区，既然有服务，自然需要数据库层的支持。这是一个很好的开始，学习django让我了解到python开发web应用真的非常快速，但是也有一个很明显的缺点。那就是国内，对django社区的支持度非常不好，这或许跟国内python的有关，不过也不要紧，学习就是这样，要啃难而上。
 说说在dja">
-<meta property="og:image" content="http://websources.qiniudn.com/img/aphqeqbbr88mde48c5.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="django模型使用的一些心得">
 <meta name="twitter:description" content="近很一直在学习django，因为我需要使用它为自己的项目写一个前台页面和一个后台服务。它是一个关于咖啡的邮件订阅社区，既然有服务，自然需要数据库层的支持。这是一个很好的开始，学习django让我了解到python开发web应用真的非常快速，但是也有一个很明显的缺点。那就是国内，对django社区的支持度非常不好，这或许跟国内python的有关，不过也不要紧，学习就是这样，要啃难而上。
@@ -231,7 +230,6 @@
 <p>在没有找到django关于这方面的信息之前，我用了原始查询，django支持这个。</p>
 <pre><code>模型类.raw('<span class="operator"><span class="keyword">SELECT</span> id,<span class="keyword">MAX</span>(sync_number) <span class="keyword">AS</span> max_number <span class="keyword">FROM</span> sendcloud_weeklysynclist<span class="string">')</span></span>
 </code></pre><p>另外这里也需要关注一个问题，如果要原始查询，必须要带上主键，不然django会抛一个错误出来。</p>
-<p><em>如果文章对你有用，可以支付宝打赏哟～</em><br><img src="http://websources.qiniudn.com/img/aphqeqbbr88mde48c5.png" alt="lcepy Talk"></p>
 
       
     </div>
