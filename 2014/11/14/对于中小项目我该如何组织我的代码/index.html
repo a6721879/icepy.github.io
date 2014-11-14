@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>对于中小项目我该如何组织我的代码 | lcepy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="从三个角度来分析
+
+我需要什么（need）
+我为什么需要这些（why this）
+我能做些什么（what can）
+
+在这里讨论的一个命题是为了一个不大不小的项目来组织一套可以应用的移动开发流程，能否达到预期的目标，能否使用于中小公司，以及业务不是企业级复杂的逻辑。对于现在越来越工程化的前端体系，组织好它，我可能需要很多额外的工具，来辅助我效率的开发。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对于中小项目我该如何组织我的代码">
+<meta property="og:url" content="http://lcepy.github.io/2014/11/14/对于中小项目我该如何组织我的代码/">
+<meta property="og:site_name" content="lcepy">
+<meta property="og:description" content="从三个角度来分析
+
+我需要什么（need）
+我为什么需要这些（why this）
+我能做些什么（what can）
+
+在这里讨论的一个命题是为了一个不大不小的项目来组织一套可以应用的移动开发流程，能否达到预期的目标，能否使用于中小公司，以及业务不是企业级复杂的逻辑。对于现在越来越工程化的前端体系，组织好它，我可能需要很多额外的工具，来辅助我效率的开发。">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="对于中小项目我该如何组织我的代码">
+<meta name="twitter:description" content="从三个角度来分析
+
+我需要什么（need）
+我为什么需要这些（why this）
+我能做些什么（what can）
+
+在这里讨论的一个命题是为了一个不大不小的项目来组织一套可以应用的移动开发流程，能否达到预期的目标，能否使用于中小公司，以及业务不是企业级复杂的逻辑。对于现在越来越工程化的前端体系，组织好它，我可能需要很多额外的工具，来辅助我效率的开发。">
+
+  
+    <link rel="alternative" href="/atom.xml" title="lcepy" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<div class="profilepic">
+			<img src="http://websources.qiniudn.com/img/me.jpg">
+		</div>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">lcepy</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟!</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud">
+						<a href="/tags/node-js/" style="font-size: 15.00px;">node&js</a><a href="/tags/python-django/" style="font-size: 20.00px;">python django</a><a href="/tags/regex/" style="font-size: 15.00px;">regex</a><a href="/tags/代码分析/" style="font-size: 10.00px;">代码分析</a><a href="/tags/代码组织/" style="font-size: 15.00px;">代码组织</a><a href="/tags/生活/" style="font-size: 15.00px;">生活</a><a href="/tags/项目经历-维护/" style="font-size: 15.00px;">项目经历 维护</a><a href="/tags/骑行-户外/" style="font-size: 15.00px;">骑行 户外</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay"></div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://websources.qiniudn.com/img/me.jpg">
+			</div>
+
+			<hgroup>
+			  <h1 class="header-author"><a href="/">lcepy</a></h1>
+			</hgroup>
+			
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟!</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <article id="post-对于中小项目我该如何组织我的代码" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/11/14/对于中小项目我该如何组织我的代码/" class="article-date">
+  	<time datetime="2014-11-14T11:19:11.000Z" itemprop="datePublished">11月 14 2014</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/代码组织/">代码组织</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      对于中小项目我该如何组织我的代码
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>从三个角度来分析</p>
+<ol>
+<li>我需要什么（need）</li>
+<li>我为什么需要这些（why this）</li>
+<li>我能做些什么（what can）</li>
+</ol>
+<p>在这里讨论的一个命题是为了一个不大不小的项目来组织一套可以应用的移动开发流程，能否达到预期的目标，能否使用于中小公司，以及业务不是企业级复杂的逻辑。对于现在越来越工程化的前端体系，组织好它，我可能需要很多额外的工具，来辅助我效率的开发。</p>
+<p><a id="more"></a><br><strong>移动开发H5版实例</strong></p>
+<h2 id="命题1：我需要什么">命题1：我需要什么</h2>
+<p>我罗列了一部分我能思考到的东西，从如下几个地方来分析：</p>
+<ol>
+<li>我需要一套标准化的UI</li>
+<li>我需要模块化加载来实现对代码模块级别的控制</li>
+<li>我需要对代码风格，以及层级的划分</li>
+<li>我需要对文件操作的自动化</li>
+<li>我需要模板引擎</li>
+<li>我需要工具库</li>
+<li>我需要消除浏览器兼容的选择器，事件系统，ajax，以及动画系统。</li>
+</ol>
+<p>是的，如上七个方向，看看，原来我需要这么些东西，来构建一个移动H5的应用。</p>
+<h2 id="命题2：我为什么需要这些">命题2：我为什么需要这些</h2>
+<p>从上述的七个方向，构成了我基于它的分析，从而来构建自己的应用。但是它仍然抽象，不好理解。比如一套标准的UI，那么什么才是标准？又比如代码风格，以及层级的划分，那么什么样的代码风格和层级划分才比较适合呢？这个命题的讨论，就是把上述的分析方向具体到某些工具的选择，以及实现。</p>
+<ol>
+<li>标准化的UI，这里选择的是ratchet，做为bootstrap原班人马对移动H5的重新实现，它还是值得信赖的。利用它，节省了大量的UI实现以及风格命名，如果需要无法实现，可以在它的基础上来修正视觉，以及利用它的结构，来重新书写UI。虽然它不是标准，但是大量的设计，有参考的价值。</li>
+<li>对于模块化加载器的选择，我更倾向于require.js，浏览器的开发，模块有意义，但是生产分离这么多模块就没有意义了。相比seajs，require.js更加的熟悉，以及它打包工具的使用。</li>
+<li>代码风格的作用，是为了给今后的伙伴或者未来的日子，自己查看阅读使用的。好的风格，在修改bug时，心情可以愉悦。如果几个风格凑合在一起的代码，我想想都比较纠结。所以说到代码风格，又不能不提到层级的划分，以及整个应用业务逻辑实现的规划。你想使用哪些？MVC？MVP？MVVM？这些都有个综合考虑，有些业务场景，也许比较适合MVC，而又有些业务场景又比较适合MVVM，不是说谁比谁更先进，而是谁比谁更适合你的业务。在这里，我选择使用的是MVP。一个非常小巧的库来构建分层系统与代码风格：riot.js。<a href="http://www.oschina.net/translate/riotjs-the-1kb-mvp-framework" target="_blank" rel="external">什么是MVP</a></li>
+<li>自动化的意义，是在于帮助开发者解决琐碎的事情，例如文件的压缩，开发时的静态资源，代码检查，自动重启服务器与清楚缓存等等，现在市面上，有几个关于构建自动化任务的工具，相比之下，这里选择了一个比较稳定而且大众的工具：grunt。</li>
+<li>模板的出现，可以最大限度的复用结构。移动端H5的开发，需要关注渲染的速度，于是这里我选择一款比较小众但是性能非常不错的模板引擎artTemplate，它书写的风格比较类似于Python模板的风格，它甚至可以把一个模板分拆为几个子模板，最大程度的复用。 </li>
+<li>工具类的选择，市面上有几个比较流行的工具库，如underscore。这里的选择，可以把常用的模块抽取出来，并组织进统一的顶层空间中。另外，有些朋友收集了一些，可以替代underscore的工具库，也可以抽取部分，如Lo-Dash。<a href="http://lodash.com/docs" target="_blank" rel="external">lodash DOC</a></li>
+<li>最后我们要消除处理DOM时的兼容，我选择的是zepto，它有15个模块，而常用的模块，我们可以抽取出来。比如选择器引擎，AJAX，事件系统。当然动画系统，我认为，可以利用css3实现一个自己的小helper，它可以更加的小巧，而且可以利用硬件加速来保证流畅度。</li>
+</ol>
+<h2 id="命题3：我能做些什么">命题3：我能做些什么</h2>
+<p>当我们把上述七个方向的东西，整合成一套体系时，能做的事情，可以根据你的想象，而无限扩大。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/11/14/在实际工作中node开发的一些见解与调试/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">&lt;</strong>
+      <div class="article-nav-title">
+        
+          在实际工作中node开发的一些见解与调试
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/11/14/2015年夏天骑行计划安排事项/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">2015年夏天骑行计划安排事项</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="对于中小项目我该如何组织我的代码" data-title="对于中小项目我该如何组织我的代码" data-url="http://lcepy.github.io/2014/11/14/对于中小项目我该如何组织我的代码/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lcepy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2014 lcepy
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+  <script src="/js/main.js" type="text/javascript"></script>
+
+
+  </div>
+</body>
+</html>

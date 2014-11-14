@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>携程邮轮开发部django分享 | lcepy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="使用django快速开发一个web网站
+分享内容（拟）
+
+介绍django的历史
+安装以及配置django项目
+介绍django对请求的回应机制
+讲解django URL的配置
+讲解django模型的使用
+讲解django view template 的使用
+通过一个例子讲解如何快速的实现一个简单的网站（注册，登录，验证用户状态）
+分享学习Python django的资料，以及说说一些django">
+<meta property="og:type" content="article">
+<meta property="og:title" content="携程邮轮开发部django分享">
+<meta property="og:url" content="http://lcepy.github.io/2014/11/14/携程邮轮开发部django分享/">
+<meta property="og:site_name" content="lcepy">
+<meta property="og:description" content="使用django快速开发一个web网站
+分享内容（拟）
+
+介绍django的历史
+安装以及配置django项目
+介绍django对请求的回应机制
+讲解django URL的配置
+讲解django模型的使用
+讲解django view template 的使用
+通过一个例子讲解如何快速的实现一个简单的网站（注册，登录，验证用户状态）
+分享学习Python django的资料，以及说说一些django">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="携程邮轮开发部django分享">
+<meta name="twitter:description" content="使用django快速开发一个web网站
+分享内容（拟）
+
+介绍django的历史
+安装以及配置django项目
+介绍django对请求的回应机制
+讲解django URL的配置
+讲解django模型的使用
+讲解django view template 的使用
+通过一个例子讲解如何快速的实现一个简单的网站（注册，登录，验证用户状态）
+分享学习Python django的资料，以及说说一些django">
+
+  
+    <link rel="alternative" href="/atom.xml" title="lcepy" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<div class="profilepic">
+			<img src="http://websources.qiniudn.com/img/me.jpg">
+		</div>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">lcepy</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟!</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud">
+						<a href="/tags/node-js/" style="font-size: 15.00px;">node&js</a><a href="/tags/python-django/" style="font-size: 20.00px;">python django</a><a href="/tags/regex/" style="font-size: 15.00px;">regex</a><a href="/tags/代码分析/" style="font-size: 10.00px;">代码分析</a><a href="/tags/代码组织/" style="font-size: 15.00px;">代码组织</a><a href="/tags/生活/" style="font-size: 15.00px;">生活</a><a href="/tags/项目经历-维护/" style="font-size: 15.00px;">项目经历 维护</a><a href="/tags/骑行-户外/" style="font-size: 15.00px;">骑行 户外</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay"></div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://websources.qiniudn.com/img/me.jpg">
+			</div>
+
+			<hgroup>
+			  <h1 class="header-author"><a href="/">lcepy</a></h1>
+			</hgroup>
+			
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟!</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <article id="post-携程邮轮开发部django分享" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/11/14/携程邮轮开发部django分享/" class="article-date">
+  	<time datetime="2014-11-14T12:20:19.000Z" itemprop="datePublished">11月 14 2014</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python-django/">python django</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      携程邮轮开发部django分享
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>使用django快速开发一个web网站</p>
+<p>分享内容（拟）</p>
+<ol>
+<li>介绍django的历史</li>
+<li>安装以及配置django项目</li>
+<li>介绍django对请求的回应机制</li>
+<li>讲解django URL的配置</li>
+<li>讲解django模型的使用</li>
+<li>讲解django view template 的使用</li>
+<li>通过一个例子讲解如何快速的实现一个简单的网站（注册，登录，验证用户状态）</li>
+<li>分享学习Python django的资料，以及说说一些django的web工具</li>
+</ol>
+<a id="more"></a>
+
+<h2 id="django的历史">django的历史</h2>
+<p>django是一个开放源代码的Web应用框架，由Python写成。采用了MVC的软件设计模式，即模型M，视图V和控制器C。它最初是被开发来用于管理劳伦斯出版集团旗下的一些以新闻内容为主的网站的，即是CMS（内容管理系统）软件。并于2005年7月在BSD许可证下发布。这套框架是以比利时的吉普赛爵士吉他手django reinhardt来命名的。</p>
+<p><strong>人生苦短，我用Python。</strong></p>
+<h2 id="安装以及配置django项目">安装以及配置django项目</h2>
+<p>安装方式一：</p>
+<p>下载<a href="https://github.com/django/django" target="_blank" rel="external">django</a>源代码到本地，进入这个目录，执行命令：python install setup.py</p>
+<p>安装方式二：</p>
+<p>下载<a href="https://pip.pypa.io/en/latest/" target="_blank" rel="external">pip</a>模块管理器到本地，执行命令：python install get-pip.py</p>
+<p>然后使用pip进行安装，pip install django。</p>
+<p>使用pip安装，可以很方便的删除，选择需要安装的django版本，例如：pip install django==1.5.2安装1.5.2版本的django。</p>
+<p>个人推荐，使用方式二。</p>
+<p>在安装完成好django之后，可以在python shell 交互控制台中测试django是否安装成功。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> django</div><div class="line"></div><div class="line">print(django.get_version()) <span class="comment">#1.5.2</span></div></pre></td></tr></table></figure>
+
+<p>django-admin.py是django提供了一个强大的shell命令行工具，比如建立项目，建立项目内应用，启动开发服务器，测试模型SQL语句，同步模型到数据库等等，用好django出了需要具备python标准库，语法知识，以及django定义的类，组件之外，还需要学习好它的shell命令行工具，admin管理系统等，因为它们会让开发一个web应用，变得非常简单与快速。</p>
+<p>新建立一个项目：cruise</p>
+<pre><code>某目录内 ~/ django.<span class="literal">admin</span>.py startproject cruise
+</code></pre><p>cruise项目目录：</p>
+<pre><code>cruise (dir)
+    wsgi.<span class="keyword">py</span>
+    setting.<span class="keyword">py</span>
+    urls.<span class="keyword">py</span>
+manage.<span class="keyword">py</span>
+</code></pre><p>建立一个应用：login</p>
+<pre><code>cruise目录内 ~/ <span class="keyword">python</span> manage.<span class="keyword">py</span> startapp login
+</code></pre><p>login应用目录：</p>
+<pre><code>login（dir）
+    views.<span class="keyword">py</span>
+    models.<span class="keyword">py</span>
+    test.<span class="keyword">py</span>
+</code></pre><p><strong>概念</strong> django项目中，各种服务类的功能，可以分离成一个个应用，而外层才是项目的配置文件。</p>
+<p>wsgi.py 是一个符合wsgi标准的文件，由django实现，<a href="http://wsgi.readthedocs.org/en/latest/" target="_blank" rel="external">WSGI资料可查看</a></p>
+<p>setting.py 为django项目的配置文件，django实现的组件，以及开发时模板，静态资源等等都在此配置。</p>
+<p>urls.py 可以理解为django为view实现的路由系统。</p>
+<h2 id="介绍django对请求的回应机制（3）">介绍django对请求的回应机制（3）</h2>
+<p>当服务器接收到一个HTTP请求后，一个服务器特定的handler会创建HTTpRequest并传递给下一个处理程序，这个处理程序，会处理URLConf，并调用相应的view，把REQUEST传递给view 处理程序。</p>
+<p>view处理程序，当处理完成之后，进行响应给客户端。另外django的中间件会，增强这些响应的作用。</p>
+<h2 id="django_URL的配置（4）">django URL的配置（4）</h2>
+<p>首先需要先导入django.conf.urls.defaults下的所有模块，它是django URLConf的基本构造，包含了一个patterns函数，调用patterns函数并将返回结果保存到 urlpatterns 变量。实际在建立项目时，django生成的文件中，已经帮助我们做好了这件事情。</p>
+<p>它所需要的参数是一个元组，用来映射视图与URL的关系。</p>
+<p><strong>额外：Python路径搜索规则，建议查看资料。</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"><span class="keyword">from</span> django.conf.urls <span class="keyword">import</span> patterns, include, url</div><div class="line"><span class="comment"># Uncomment the next two lines to enable the admin:</span></div><div class="line"><span class="comment"># from django.contrib import admin</span></div><div class="line"><span class="comment"># admin.autodiscover()</span></div><div class="line"><span class="keyword">import</span> login.views</div><div class="line"><span class="keyword">import</span> home.views</div><div class="line"><span class="comment">#在django中urls.py的作用有点类似于C，实际上它就是一个分发程序，帮助我们对每一项URL进行分发到具体的视图程序中。</span></div><div class="line">urlpatterns = patterns(<span class="string">''</span>,</div><div class="line">    <span class="comment"># Examples:</span></div><div class="line">    <span class="comment"># url(r'^$', 'cruise.views.home', name='home'),</span></div><div class="line">    <span class="comment"># url(r'^cruise/', include('cruise.foo.urls')),</span></div><div class="line">    url(<span class="string">r'^login/$'</span>,login.views.sign_in),</div><div class="line">    url(<span class="string">r'^logout/$'</span>,login.views.sign_out),</div><div class="line">    url(<span class="string">r'^register/$'</span>,login.views.register),</div><div class="line">    url(<span class="string">r'^$'</span>,home.views.mypage),</div><div class="line">    <span class="comment"># Uncomment the admin/doc line below to enable admin documentation:</span></div><div class="line">    <span class="comment"># url(r'^admin/doc/', include('django.contrib.admindocs.urls')),</span></div><div class="line">    <span class="comment">#URL配置例子</span></div><div class="line">    <span class="comment"># Uncomment the next line to enable the admin:</span></div><div class="line">    <span class="comment"># url(r'^admin/', include(admin.site.urls)),</span></div><div class="line">)</div></pre></td></tr></table></figure>
+
+<p><strong>URL正则表：</strong></p>
+<blockquote>
+<p>符号    匹配<br>. (dot)    任意单一字符<br>\d    任意一位数字<br>[A-Z]    A 到 Z中任意一个字符（大写）<br>[a-z]    a 到 z中任意一个字符（小写）<br>[A-Za-z]    a 到 z中任意一个字符（不区分大小写）</p>
+<ul>
+<li>匹配一个或更多 (例如, \d+ 匹配一个或 多个数字字符)<br>[^/]+    一个或多个不为‘/’的字符</li>
+</ul>
+<ul>
+<li>零个或一个之前的表达式（例如：\d? 匹配零个或一个数字）</li>
+<li>匹配0个或更多 (例如, \d* 匹配0个 或更多数字字符)<br>{1,3}    介于一个和三个（包含）之前的表达式（例如，\d{1,3}匹配一个或两个或三个数字）</li>
+</ul>
+</blockquote>
+<h3 id="简单思路">简单思路</h3>
+<p>导入视图模块</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> login.views</div><div class="line"><span class="keyword">import</span> home.views</div></pre></td></tr></table></figure>
+
+<p>django URLConf 的配置，有多种多样的形式，这里主要是介绍一下简单的URL规则，在Python风格中URL应该是双斜杠//，例如：127.0.0.1/home/或者127.0.0.1/home/1/ 。</p>
+<p>一般情况下一个URL是对应一个视图的，例如127.0.01/home/可能对于的就是视图home.views.home。而在URL中也可以动态，比如情况是书籍的详细情况，一本书有一个唯一的书籍号ID，而书籍号ID就可以描述为：127.0.0.1/book/1/，这是ID为1的书籍，又如127.0.0.1/book/2/，这是ID为2的书籍。</p>
+<p>如何实现动态URL？</p>
+<p>之前，有看过URL正则表达式，django URLConf是支持正则表达式，来描述URL的。它会成第二个参数，传递给视图处理程序。例如，我想获取书籍号ID，来显示不同本书籍，那么URL：^book/(\d+)/$，而在视图处理程序中第二个参数，就是GET请求时，获取的book/(\d+)/，这样的数字ID。</p>
+<p>总之URLConf可以通过这些组合来映射相应的视图处理程序，来满足业务需求。</p>
+<h2 id="django模型的使用（5）">django模型的使用（5）</h2>
+<p>在使用模型之前，需要先配置数据库，django支持的数据库类型表：</p>
+<p><code>postgresql</code>    PostgreSQL    psycopg 1.x版， <a href="http://www.djangoproject.com/r/python-pgsql/1/。" target="_blank" rel="external">http://www.djangoproject.com/r/python-pgsql/1/。</a></p>
+<p>postgresql_psycopg2    PostgreSQL    psycopg 2.x版， <a href="http://www.djangoproject.com/r/python-pgsql/。" target="_blank" rel="external">http://www.djangoproject.com/r/python-pgsql/。</a></p>
+<p>mysql    MySQL    MySQLdb , <a href="http://www.djangoproject.com/r/python-mysql/" target="_blank" rel="external">http://www.djangoproject.com/r/python-mysql/</a>.</p>
+<p>sqlite3    SQLite    如果使用Python 2.5+则不需要适配器。 否则就使用 pysqlite ， <a href="http://www.djangoproject.com/r/python-sqlite/。" target="_blank" rel="external">http://www.djangoproject.com/r/python-sqlite/。</a></p>
+<p>oracle    Oracle    cx_Oracle , <a href="http://www.djangoproject.com/r/python-oracle/" target="_blank" rel="external">http://www.djangoproject.com/r/python-oracle/</a>.</p>
+<p>主要为：mysql oracle sqlite等等。</p>
+<p>打开setting.py文件，在起始位置出，默认情况下，这些都是无配置的，需要手动配置好。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 配置数据库模型</span></div><div class="line">DATABASES = {</div><div class="line">    <span class="string">'default'</span>: {</div><div class="line">        <span class="string">'ENGINE'</span>: mydb.DB_ENGINE, <span class="comment"># Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.</span></div><div class="line">        <span class="string">'NAME'</span>: mydb.DB_NAME,                      <span class="comment"># Or path to database file if using sqlite3.</span></div><div class="line">        <span class="comment"># The following settings are not used with sqlite3:</span></div><div class="line">        <span class="string">'USER'</span>: mydb.DB_USER,</div><div class="line">        <span class="string">'PASSWORD'</span>: mydb.DB_PASSWORD,</div><div class="line">        <span class="string">'HOST'</span>: mydb.DB_HOST,                      <span class="comment"># Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.</span></div><div class="line">        <span class="string">'PORT'</span>: mydb.DB_PORT,                      <span class="comment"># Set to empty string for default.</span></div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p><strong>技巧</strong></p>
+<p>可以使用python manage.py shell 进入一个交互环境，在这里可以测试一下增删改查等等。</p>
+<p>django模型的使用是django框架学习比重非常大的一个地方，它实现了一套属于django自己的方式来操作数据库，包括增删改查，以及字段类型的定义，查询的技巧等等方式。</p>
+<p>django中一个模型对应的是一张表，需要继承django.db中models类。</p>
+<p>定义一个模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">x</span><span class="params">(models.Model)</span>:</span></div><div class="line">    u_name = models.CharField(max_length=<span class="number">45</span>)</div><div class="line">    u_pass = models.CharField(max_length=<span class="number">45</span>)</div><div class="line">    u_session = models.CharField(max_length=<span class="number">45</span>)</div><div class="line">	u_status = models.IntegerField(max_length=<span class="number">1</span>,default=<span class="number">0</span>)</div><div class="line">   	<span class="keyword">pass</span></div></pre></td></tr></table></figure>
+
+<p>CharField对应的是数据库中的varchar类型，而IntegerField对应的是int类型，自增主键，django为每一个模型定义了一个主键id。</p>
+<p><strong>增</strong></p>
+<p>要往表中插入一条数据，SQL的语句是INSERT INTO。而django则是实例一下定义的模型类，比如这里定义的x。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">y = x(u_name=<span class="string">'123'</span>,u_pass=<span class="string">'a123'</span>,u_session=<span class="string">'123'</span>)</div><div class="line">y.save()</div></pre></td></tr></table></figure>
+
+<p>最后调用一下save方法，来真正插入一条新的记录。</p>
+<p><strong>查</strong></p>
+<pre><code><span class="keyword">y</span> = <span class="keyword">x</span>.objects.<span class="built_in">filter</span>(u_name=<span class="string">'123'</span>)
+
+<span class="keyword">y</span> = <span class="keyword">y</span>[<span class="number">0</span>]
+
+<span class="keyword">print</span>(<span class="keyword">y</span>.u_name)
+</code></pre><p><strong>改</strong></p>
+<pre><code><span class="variable">y =</span> x.objects.filter(<span class="variable">u_name=</span>'<span class="number">123</span>')
+
+<span class="variable">y =</span> y[<span class="number">0</span>]
+
+y.<span class="variable">u_name =</span> <span class="number">456</span>
+
+y.save()
+</code></pre><p><strong>删</strong></p>
+<pre><code><span class="keyword">y</span> = <span class="keyword">x</span>.objects.<span class="built_in">filter</span>(u_name=<span class="string">'123'</span>)
+
+<span class="keyword">y</span> = <span class="keyword">y</span>[<span class="number">0</span>]
+
+<span class="keyword">y</span>.<span class="built_in">delete</span>()
+</code></pre><p><strong>其他，比如过滤，排序，更新多条数据，限制返回数据，连锁查询，获取单个对象等等，这些需要学习时间</strong></p>
+<h2 id="django_view_template_的使用（6）">django view template 的使用（6）</h2>
+<p>也许我们认为django是一个MTV框架，更加适合。M：模型 T：模板 V：视图。C的管理，由django内部去实现了。</p>
+<p>在视图中文件中，需要导入视图相关的django组件，比如django.http 中的各类响应类，django.template中的与模板相关的类。</p>
+<pre><code><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse
+<span class="keyword">from</span> django.template <span class="keyword">import</span> Context,Template
+<span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">(request)</span>:</span>
+    <span class="keyword">return</span> HttpResonse(<span class="string">'&lt;h1&gt;Hello&lt;/h1&gt;'</span>)
+    <span class="keyword">pass</span>
+</code></pre><p>这里写了一个hello视图函数，并在URLConf中配置好这个视图函数，即可在浏览器中查看这个页面了。</p>
+<p><strong>视图函数中所使用的各种类，需要一定的时间学习。</strong></p>
+<p>它不是最重要的，T才最重要的。</p>
+<p><strong>简单基础</strong></p>
+<p>django模板系统，对于逻辑的操作，需要用百分号，必须有结束语句。而赋值则是两个大括号。django的模板系统，是可以切换的。如果觉得原生自带的模板系统不够好用，可以在setting文件中重新配置要使用的模板系统。</p>
+<p><strong>简单例子</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</div><div class="line"><span class="keyword">from</span> django.template <span class="keyword">import</span> Context,Template</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">(request)</span>:</span></div><div class="line">	t_html = Template(<span class="string">'''</span></div><div class="line">		&lt;h1&gt;&lt;/h1&gt;</div><div class="line">		</div><div class="line">	''')</div><div class="line">	c = Context({<span class="string">"wow"</span>:<span class="keyword">True</span>,<span class="string">"page"</span>:<span class="string">"Hello"</span>})</div><div class="line">	t_html = t_html.render(c)</div><div class="line">	<span class="keyword">return</span> HttpResponse(t_html)</div><div class="line">	<span class="keyword">pass</span></div></pre></td></tr></table></figure>
+
+<p><strong>扩展：模板系统也是一个学习重点，中间有很多技巧性的问题，比如：导入，同一个模板多个上下文，过滤器等等</strong></p>
+<h2 id="扩展部分">扩展部分</h2>
+<ol>
+<li>通过一个例子讲解如何快速的实现一个简单的网站（注册，登录，验证用户状态）</li>
+<li>简单django中几个常用的组件</li>
+<li>分享学习Python django的资料</li>
+</ol>
+<p>django提供了N多的web工具，例如：</p>
+<pre><code>认证
+缓存
+日志
+发送电子邮件
+聚合供稿(RSS/Atom)
+评论, 评论审核 和 自定义评论
+分页
+消息框架
+序列化
+Sessions
+站点地图
+静态文件管理
+数据验证
+</code></pre><p>django是一个大而全的框架，它提供了很多很多基本上包括了web开发中所需要的功能，学习它需要大量的时间。</p>
+<p>学习django的基础，是学习好Python。</p>
+<p><strong>人生苦短 我用Python</strong></p>
+<p><a href="https://docs.python.org/3/library/index.html" target="_blank" rel="external">Python 标准库</a> </p>
+<p><a href="http://docs.pythonsprints.com/python3_porting/py-porting.html" target="_blank" rel="external">Python2x与Python3x对照表</a></p>
+<p><a href="https://docs.djangoproject.com/en/1.6/" target="_blank" rel="external">Django API</a></p>
+<p><a href="http://djangobook.py3k.cn/2.0/" target="_blank" rel="external">一本django1.5电子书</a></p>
+<p><a href="http://uliweb.clkg.org/tutorial/read/20" target="_blank" rel="external">简单的django学习</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/11/14/django模型使用的一些心得/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">&lt;</strong>
+      <div class="article-nav-title">
+        
+          django模型使用的一些心得
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/11/14/django静态资源配置的问题/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">django静态资源配置的问题</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="携程邮轮开发部django分享" data-title="携程邮轮开发部django分享" data-url="http://lcepy.github.io/2014/11/14/携程邮轮开发部django分享/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lcepy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2014 lcepy
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+  <script src="/js/main.js" type="text/javascript"></script>
+
+
+  </div>
+</body>
+</html>

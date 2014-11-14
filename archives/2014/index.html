@@ -99,7 +99,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud">
-						<a href="/tags/骑行-户外/" style="font-size: NaNpx;">骑行 户外</a>
+						<a href="/tags/node-js/" style="font-size: 15.00px;">node&js</a><a href="/tags/python-django/" style="font-size: 20.00px;">python django</a><a href="/tags/regex/" style="font-size: 15.00px;">regex</a><a href="/tags/代码分析/" style="font-size: 10.00px;">代码分析</a><a href="/tags/代码组织/" style="font-size: 15.00px;">代码组织</a><a href="/tags/生活/" style="font-size: 15.00px;">生活</a><a href="/tags/项目经历-维护/" style="font-size: 15.00px;">项目经历 维护</a><a href="/tags/骑行-户外/" style="font-size: 15.00px;">骑行 户外</a>
 					</div>
 				</section>
 				
@@ -153,15 +153,15 @@
 </nav>
       
   
-    <article id="post-2015年夏天骑行计划安排事项" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-正则的一些理解" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2014/11/14/2015年夏天骑行计划安排事项/" class="article-date">
-  	<time datetime="2014-11-13T16:30:26.000Z" itemprop="datePublished">11月 14 2014</time>
+      <a href="/2014/11/14/正则的一些理解/" class="article-date">
+  	<time datetime="2014-11-14T13:50:22.000Z" itemprop="datePublished">11月 14 2014</time>
 </a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/骑行-户外/">骑行 户外</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/regex/">regex</a></li></ul>
 
     </div>
   
@@ -174,7 +174,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/2015年夏天骑行计划安排事项/">2015年夏天骑行计划安排事项</a>
+      <a class="article-title" href="/2014/11/14/正则的一些理解/">正则的一些理解</a>
     </h1>
   
 
@@ -182,34 +182,17 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="http://websources.qiniudn.com/img/wow.jpg" alt="回忆是一幅风景"></p>
-<h2 id="装备预算">装备预算</h2>
-<p><strong>骑行必备装预算，计算总价为最低档。</strong></p>
-<p>如果选择捷安特的整车，如XTC750,XTC790的话，预算分别为3300，5300</p>
-<p>如果是自己配置的话，尽量选择高性能的车架，轮胎，以及变速器，预算也在2500-3000左右。</p>
-<p>魔术头巾，大概6-15</p>
-<p>头盔 120-160</p>
-<p><em>头盔要选择轻量的，通风口越多的头盔。</em></p>
-<p>骑行太阳镜 100-130</p>
-<p><em>骑行眼镜要选择对光线处理的比较好的</em></p>
-<p>水壶，水壶架，前后置灯光</p>
-<p>40  20  58</p>
-<p><em>建议是来穿衣要穿白色或五颜六色的衣服，目标比较醒目。</em></p>
-<p>捷安特750，魔术头巾，头盔，骑行太阳眼镜，水壶，水壶架，前后置灯光</p>
-<p>总价：3708元</p>
-<p><strong>不可选项，但为整个车队携带</strong></p>
-<p>山地车维修工具</p>
-<p><em>注明：一个车队带一套即可，配件为三份</em></p>
-<p>山地车链条（3）</p>
-<p>山地刹车（2）</p>
-<p>山地车轮胎（1）</p>
-<p><strong>轮胎的价格大概50-80，刹车如果带一个碟刹，大概400-600，一个V刹车200-300，链条比较便宜，几十块。维护工具选择了一个专业的工具套装大概300元左右，维修工具由某个人单独购买吧，不计入预算。</strong></p>
-<p>总价：740-1070</p>
-<p>外伤医疗包</p>
-<p>感冒药以及一些必备药品<br>
+        <p>今天写到这里，是想总结一下，自己重新学习正则表达式之后，对它的一个全新的认识。我想描述一个中心思想，学习任何东西，编程，音乐，基础是非常important的，就好像吉他里基础不在于认识六线谱而是在于节拍。</p>
+<h2 id="从人类的角度来阅读正则">从人类的角度来阅读正则</h2>
+<p>在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。python中也有很多高效处理字符串的方式，比如步距，比如正则，嘿嘿。</p>
+<p>import re</p>
+<p>g = re.search(‘\d+(.\d*)?’,’0.2556223.556655’)</p>
+<p>g.group(0)</p>
+<p>我们来看一个搜索浮点数的正则，我们从右往左看，把这一个正则表达式分割成三分，\d+，(.\d<em>)，?。我们知道?描述的是出现零次或一次，在这里阅读的时候，是描述(.\d</em>)这一个组会出现零次或一次。我们再看这个组中的描述.用来描述.，\d用来描述0-9的数字，而*描述的是出现零次或多次，我们组合起来看，这个组就是来描述.后面的数字会出现零次或多次。\d依然是用来描述0-9的数字，+用来描述出现一次或多次。</p>
+<p>到这里，我们把这三个部分，从右往左看，组合起来，用人类阅读的角度去描述它：小数点后面出现的数字是多次的，而这一个部分只能出现一次或零次，并且在小数点之前可以出现一次或多次的数字。<br>
         
           <p class="article-more-link">
-            <a href="/2014/11/14/2015年夏天骑行计划安排事项/#more">more >></a>
+            <a href="/2014/11/14/正则的一些理解/#more">more >></a>
           </p>
         
       
@@ -228,6 +211,264 @@
 
 
   
+    <article id="post-关于django中CSRF开启的问题" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/11/14/关于django中CSRF开启的问题/" class="article-date">
+  	<time datetime="2014-11-14T12:33:12.000Z" itemprop="datePublished">11月 14 2014</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python-django/">python django</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/14/关于django中CSRF开启的问题/">关于django中CSRF开启的问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="django_处理CSRF机制保护下的POST表单提交">django 处理CSRF机制保护下的POST表单提交</h2>
+<p>昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后解决了。其实在解决这个问题之前，我们先要了解一下，CSRF到底是什么东东，为什么django提交一个POST表单这么困难呢。</p>
+<p><a href="http://baike.baidu.com/link?url=OnI0sPQAHpQHhtxWSXvQFhN3kJWI3CU_rP3Fo7MqnPY3rTdhUPpuca-3lzJ651LdMI7ouoLvdnnihhojFyKtva" target="_blank" rel="external">CSRF 是什么</a></p>
+<p><a href="https://docs.djangoproject.com/en/1.5/ref/contrib/csrf/" target="_blank" rel="external">django document CSRF</a></p>
+<p>原来CSRF是为了防止跨站请求伪造用的，当我明白了这个解释之后，我开始找寻django document上如何开启CSRF。</p>
+<p><strong>Add the middleware ‘django.middleware.csrf.CsrfViewMiddleware’ to your list of middleware classes, MIDDLEWARE_CLASSES. (It should come before any view middleware that assume that CSRF attacks have been dealt with.)</strong></p>
+<p>那我在想，如果我把django.middleware.csrf.CsrfViewMiddleware注释掉，是不是就可以不开启CSRF来提交POST表单，人们常说实践是检验真理的唯一标准，试验一下，原来是可以的。但是这并没有解决，我想解决的问题，于是我又把这个中间件，重新写在了MIDDLEWARE_CLASSES上。</p>
+<p>从官方的解释上来看，只要在MIDDLEWARE_CLASSES上加django.middleware.csrf.CsrfViewMiddleware就开启了CSRF机制。</p>
+<p>现在我需要在模板中加入一个tag ｛%csrf_token%｝，来存放一个隐藏的token input。</p>
+<p><strong>In the corresponding view functions, ensure that the ‘django.core.context_processors.csrf’ context processor is being used. Usually, this can be done in one of two ways:</strong></p>
+<p>从这里的解释来看，我还需要django.core.context_processors.csrf，于是我导入这个模块from django.core.context_processors import csrf，运行一下貌似，还不行，接着往下看。我发现django的解释，这里可以用两种方式来处理，最后响应的response，而且django还说了，POST表单提交不要跨链接。</p>
+<p>
+        
+          <p class="article-more-link">
+            <a href="/2014/11/14/关于django中CSRF开启的问题/#more">more >></a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-django模型使用的一些心得" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/11/14/django模型使用的一些心得/" class="article-date">
+  	<time datetime="2014-11-14T12:30:31.000Z" itemprop="datePublished">11月 14 2014</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python-django/">python django</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/14/django模型使用的一些心得/">django模型使用的一些心得</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>近很一直在学习django，因为我需要使用它为自己的项目写一个前台页面和一个后台服务。它是一个关于咖啡的邮件订阅社区，既然有服务，自然需要数据库层的支持。这是一个很好的开始，学习django让我了解到python开发web应用真的非常快速，但是也有一个很明显的缺点。那就是国内，对django社区的支持度非常不好，这或许跟国内python的有关，不过也不要紧，学习就是这样，要啃难而上。</p>
+<p>说说在django中模型，对应的数据库层，也就是意味着django帮助我们完成了对数据库的访问，操作，通过它的模型类。</p>
+<blockquote>
+<p>django-admin.py startapp sendcloud</p>
+</blockquote>
+<p>通过上述的命令，我们可以完成一个app模块，这个模块中带有views.py models.py test.py，而models.py文件中，就是我们完成模型的一个最主要的文件。</p>
+<blockquote>
+<p>from django.db import models</p>
+</blockquote>
+<p>模型类，都需要继承自django.db.models类。通过它与manage.py来完成初始化等等动作。关于manage.py的命令，未来有时间，我会写写关于它的心得。</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">WeeklySyncList</span><span class="params">(models.Model)</span>:</span>
+    <span class="comment">#do something</span>
+    <span class="keyword">pass</span>
+</code></pre><p>一个模型类对于数据库层中的一个表，在我们定义好模型类之后，可以在命令行中输入：</p>
+<blockquote>
+<p>python manage.py sqlall sendcloud</p>
+</blockquote>
+<p>来完成对创建语法的查看以及错误信息的查看，准确没有错误之后，可以输入：</p>
+<blockquote>
+<p>python manage.py syncdb</p>
+</blockquote>
+<p>来初始数据库，django会帮助我们完成数据库层面的操作。</p>
+
+        
+          <p class="article-more-link">
+            <a href="/2014/11/14/django模型使用的一些心得/#more">more >></a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-携程邮轮开发部django分享" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/11/14/携程邮轮开发部django分享/" class="article-date">
+  	<time datetime="2014-11-14T12:20:19.000Z" itemprop="datePublished">11月 14 2014</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python-django/">python django</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/14/携程邮轮开发部django分享/">携程邮轮开发部django分享</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>使用django快速开发一个web网站</p>
+<p>分享内容（拟）</p>
+<ol>
+<li>介绍django的历史</li>
+<li>安装以及配置django项目</li>
+<li>介绍django对请求的回应机制</li>
+<li>讲解django URL的配置</li>
+<li>讲解django模型的使用</li>
+<li>讲解django view template 的使用</li>
+<li>通过一个例子讲解如何快速的实现一个简单的网站（注册，登录，验证用户状态）</li>
+<li>分享学习Python django的资料，以及说说一些django的web工具</li>
+</ol>
+
+        
+          <p class="article-more-link">
+            <a href="/2014/11/14/携程邮轮开发部django分享/#more">more >></a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-django静态资源配置的问题" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/11/14/django静态资源配置的问题/" class="article-date">
+  	<time datetime="2014-11-14T12:16:20.000Z" itemprop="datePublished">11月 14 2014</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python-django/">python django</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/14/django静态资源配置的问题/">django静态资源配置的问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在初始化一个django项目时，我还遇见了一个比较头疼的问题，静态资源的配置，硬编码问题。其实，按照正常的部署来说，静态资源，比如（.css .js img）等，应该另启动一个服务器，去做静态资源的处理，这样是非常常见的，和语言无关，脱离了动态开发内容，特别的适合做内容分发。但是，考虑到前期，我想能在django中集合这样的资源类型，于是，碰到了比较纠结的问题。另外，在django初始化的项目中，竟然还不能在注释中打中文，是不是很疼，没关系，往下看，能解决这样的问题。</p>
+<p>其实，在django settings.py文件中，我们可以找到三个关于static的内容。STATIC_ROOT，STATIC_URL，STATICFILES_DIRS。于是，我在想，是不是就是配置这三项呢。</p>
+<p><a href="https://docs.djangoproject.com/en/1.5/ref/settings/" target="_blank" rel="external">settings.py 官方给出的配置参数解释</a></p>
+<p>顾名思义，我想在我的项目中利用django内置的服务器来处理静态资源，最能给我合理的参数应该是STATICFILES_DIRS。</p>
+<p><strong>This setting defines the additional locations the staticfiles app will traverse if the FileSystemFinder finder is enabled, e.g. if you use the collectstatic or findstatic management command or use the static file serving view.</strong></p>
+<p>从官方的解释上来看，这个设置，可以通过我的管理命令集来启动这个视图，那不是意味着，它可以读取我的静态资源呢。实践下来，配置上，我项目的绝对路径，成功。</p>
+<p>当然，我看django的官方配置文件中所描述的方式，有多种，而上述是一个最容易搞定的方式，反正是开发，何必纠结呢。不建议，在部署时，也使用django的静态资源服务，这会增加很多压力。合理的安排，是另外启用一个静态资源服务器，专门存储这些静态资源。</p>
+<p>在处理好静态资源之后，我想给这里添加一个注释，并写上中文。于是，我发现，出现了一个编码问题。后来查询了python官方的一个PEP，了解到原来，如果我的不是utf-8或者其他支持中文的编码，直接写上中文，那是报一个大大的错误的。</p>
+<p><a href="http://legacy.python.org/dev/peps/" target="_blank" rel="external">Python 官方关于编码的PEP</a></p>
+<p>在文件的头部写上#coding=utf-8即可，这一项2.7到3.x都是完美兼容的，如果现在学习python，建议最小选择从2.7.3开始，到3.x。2.7除了模块不一样名不一样，有很多内置函数，是继承到了3.x。当然如果，不考虑工作的话，我建议直接从python3.x开始学习。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/archives/2014/page/2/">2</a><a class="extend next" rel="next" href="/archives/2014/page/2/">Next &raquo;</a>
+    </nav>
   
 
       <footer id="footer">

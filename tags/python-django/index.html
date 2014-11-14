@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2014/11 | lcepy</title>
+  <title>Tag: python django | lcepy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="lcepy">
-<meta property="og:url" content="http://lcepy.github.io/archives/2014/11/">
+<meta property="og:url" content="http://lcepy.github.io/tags/python-django/">
 <meta property="og:site_name" content="lcepy">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -152,64 +152,6 @@
 	</div>
 </nav>
       
-  
-    <article id="post-正则的一些理解" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/正则的一些理解/" class="article-date">
-  	<time datetime="2014-11-14T13:50:22.000Z" itemprop="datePublished">11月 14 2014</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/regex/">regex</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/正则的一些理解/">正则的一些理解</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>今天写到这里，是想总结一下，自己重新学习正则表达式之后，对它的一个全新的认识。我想描述一个中心思想，学习任何东西，编程，音乐，基础是非常important的，就好像吉他里基础不在于认识六线谱而是在于节拍。</p>
-<h2 id="从人类的角度来阅读正则">从人类的角度来阅读正则</h2>
-<p>在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。python中也有很多高效处理字符串的方式，比如步距，比如正则，嘿嘿。</p>
-<p>import re</p>
-<p>g = re.search(‘\d+(.\d*)?’,’0.2556223.556655’)</p>
-<p>g.group(0)</p>
-<p>我们来看一个搜索浮点数的正则，我们从右往左看，把这一个正则表达式分割成三分，\d+，(.\d<em>)，?。我们知道?描述的是出现零次或一次，在这里阅读的时候，是描述(.\d</em>)这一个组会出现零次或一次。我们再看这个组中的描述.用来描述.，\d用来描述0-9的数字，而*描述的是出现零次或多次，我们组合起来看，这个组就是来描述.后面的数字会出现零次或多次。\d依然是用来描述0-9的数字，+用来描述出现一次或多次。</p>
-<p>到这里，我们把这三个部分，从右往左看，组合起来，用人类阅读的角度去描述它：小数点后面出现的数字是多次的，而这一个部分只能出现一次或零次，并且在小数点之前可以出现一次或多次的数字。<br>
-        
-          <p class="article-more-link">
-            <a href="/2014/11/14/正则的一些理解/#more">more >></a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-
-
   
     <article id="post-关于django中CSRF开启的问题" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -465,10 +407,6 @@
 
 
   
-  
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/2014/11/page/2/">2</a><a class="extend next" rel="next" href="/archives/2014/11/page/2/">Next &raquo;</a>
-    </nav>
   
 
       <footer id="footer">
