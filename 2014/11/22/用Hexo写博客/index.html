@@ -267,6 +267,10 @@ hexo <span class="keyword">server</span></span>
 </blockquote>
 <p><strong>布局</strong></p>
 <p>基础布局，也就是不带&lt;%- body%&gt;的布局，在这个布局中也可以自定义其他布局，比如link之类的,若找不到自定的布局的话，则会根据 Generator 的不同，使用相对应的布局代替。而带&lt;%- body%&gt;的layout布局，则是把page对象一一传递给最终所使用的模版中。</p>
+<p><strong>注意事项</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="type">Your</span> code <span class="keyword">block</span> <span class="keyword">with</span> {{anything}}</div></pre></td></tr></table></figure>
+
+<p><a href="https://github.com/hexojs/hexo/issues/916" target="_blank" rel="external">#916</a></p>
 <p><strong>额外的学习</strong></p>
 <p>主要是看看ejs模版如何使用，亲，玩转自己的主题去吧。</p>
 
