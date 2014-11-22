@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: 生活 | lcepy</title>
+  <title>Tag: hexo | lcepy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="lcepy">
-<meta property="og:url" content="http://lcepy.github.io/tags/生活/">
+<meta property="og:url" content="http://lcepy.github.io/tags/hexo/">
 <meta property="og:site_name" content="lcepy">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -153,15 +153,15 @@
 </nav>
       
   
-    <article id="post-减肥与训练" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-用Hexo写博客" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2014/11/14/减肥与训练/" class="article-date">
-  	<time datetime="2014-11-14T12:11:56.000Z" itemprop="datePublished">11月 14 2014</time>
+      <a href="/2014/11/22/用Hexo写博客/" class="article-date">
+  	<time datetime="2014-11-21T16:12:00.000Z" itemprop="datePublished">11月 22 2014</time>
 </a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
 
     </div>
   
@@ -174,7 +174,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/减肥与训练/">减肥与训练</a>
+      <a class="article-title" href="/2014/11/22/用Hexo写博客/">用Hexo写博客</a>
     </h1>
   
 
@@ -182,21 +182,27 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>训练的目的在于，训练自身的素质，为长距离骑行做准备。主要是训练意志力，大腿肌肉，胸部肌肉，以及肺活量。</p>
-<p>我的训练计划有参考的价值，如下：</p>
-<ol>
-<li>第一个月每天晚上做20个抱头的仰卧起坐，15个双手水平放直的仰卧起坐。</li>
-<li>第一个月每天晚上做10个俯卧撑。</li>
-<li>每天下班之后来回骑行15-20公里。</li>
-<li>训练之前，做热身运动。</li>
-<li>一周内去健身房三次，听从专业教练的训练。（看情况）</li>
-</ol>
-<p>从目标的第一个月开始，逐月增加5的增量，训练最重要的是坚持，特别是意志力。这样的训练，最重要的是训练意志力，以及身体的素质。</p>
-<p>另外一项属于文化类的训练，需要熟读交通指示牌，以及骑行手语。</p>
-<p>
+        <p>在看下面内容之前，请先确认是否已经安装nodejs，若无则先安装。</p>
+<p>访问<a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>，查看例子：</p>
+<pre><code>npm <span class="operator"><span class="keyword">install</span> hexo -g
+hexo init blog
+cd blog
+npm <span class="keyword">install</span>
+hexo <span class="keyword">server</span></span>
+</code></pre><p>hexo主要有如下几个命令来操作：</p>
+<blockquote>
+<p>hexo init  初始化一个hexo项目</p>
+<p>hexo server 监听4000端口启动一个服务器，可以预览，端口可以在_config.yml文件中修改</p>
+<p>hexo generate 输出静态文件，在public目录下</p>
+<p>hexo new 生成一个md文件，这个文件就是我们要写的博客文件了</p>
+<p>hexo clean 清除public目录以及缓存，其实这个缓存就是db.json文件</p>
+<p>hexo deploy 如果在_conig.yml文件中配置了这项，它会帮助我们发布到网络</p>
+</blockquote>
+<p>一般大项的配置都是在顶层的_config.yml配置文件中配置，比如博客作者名，标题，时间格式，资源文件目录，静态资源文件目录，插件等等。而具体的博客配置，比如菜单之类的都在themes具体的主题_config.yml文件中配置。</p>
+
         
           <p class="article-more-link">
-            <a href="/2014/11/14/减肥与训练/#more">more >></a>
+            <a href="/2014/11/22/用Hexo写博客/#more">more >></a>
           </p>
         
       
