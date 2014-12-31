@@ -86,7 +86,7 @@
 						
 							<li><a href="/">主页</a></li>
 				        
-							<li><a href="/archives">所有文章</a></li>
+							<li><a href="/archives">纪录学习的点滴</a></li>
 				        
 						</ul>
 					</nav>
@@ -106,7 +106,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud">
-						<a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/node-js/" style="font-size: 10.00px;">node&js</a><a href="/tags/python-django/" style="font-size: 20.00px;">python django</a><a href="/tags/regex/" style="font-size: 10.00px;">regex</a><a href="/tags/代码组织/" style="font-size: 10.00px;">代码组织</a><a href="/tags/生活/" style="font-size: 10.00px;">生活</a><a href="/tags/项目经历-长期维护/" style="font-size: 10.00px;">项目经历 长期维护</a><a href="/tags/骑行-户外/" style="font-size: 10.00px;">骑行 户外</a>
+						<a href="/tags/hexo/" style="font-size: 15.00px;">hexo</a><a href="/tags/iOS/" style="font-size: 10.00px;">iOS</a><a href="/tags/node-js/" style="font-size: 15.00px;">node&js</a><a href="/tags/python-django/" style="font-size: 20.00px;">python django</a><a href="/tags/regex/" style="font-size: 15.00px;">regex</a><a href="/tags/代码组织/" style="font-size: 15.00px;">代码组织</a><a href="/tags/生活/" style="font-size: 15.00px;">生活</a><a href="/tags/项目经历-长期维护/" style="font-size: 15.00px;">项目经历 长期维护</a><a href="/tags/骑行-户外/" style="font-size: 15.00px;">骑行 户外</a>
 					</div>
 				</section>
 				
@@ -145,7 +145,7 @@
 				
 					<li><a href="/">主页</a></li>
 		        
-					<li><a href="/archives">所有文章</a></li>
+					<li><a href="/archives">纪录学习的点滴</a></li>
 		        
 		        <div class="clearfix"></div>
 				</ul>
@@ -165,6 +165,60 @@
 	</div>
 </nav>
       
+  
+    <article id="post-使用cocoapods来管理第三方库" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/12/31/使用cocoapods来管理第三方库/" class="article-date">
+  	<time datetime="2014-12-31T15:03:47.000Z" itemprop="datePublished">12月 31 2014</time>
+</a>
+      
+      
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>title: 使用cocoapods来管理第三方库<br>date: 2014-12-31 13:52:58<br>tags:iOS</p>
+<hr>
+<ul>
+<li><a href="http://cocoapods.org/" target="_blank" rel="external">http://cocoapods.org/</a></li>
+<li><a href="http://code4app.com/article/cocoapods-install-usage" target="_blank" rel="external">CocoaPods安装和使用教程</a></li>
+<li><a href="http://blog.jobbole.com/72107/" target="_blank" rel="external">在 Swift 中使用 CocoaPods</a></li>
+<li><a href="http://blog.devtang.com/blog/2014/05/25/use-cocoapod-to-manage-ios-lib-dependency/" target="_blank" rel="external">用CocoaPods做iOS程序的依赖管理</a></li>
+<li><a href="https://github.com/CocoaPods/CocoaPods" target="_blank" rel="external">https://github.com/CocoaPods/CocoaPods</a></li>
+</ul>
+<p><strong>关于配置，可以参考贴出来的上述的文章，唐巧的博客也写的比较详细</strong></p>
+<p>在需要cocoapods来做管理的项目中建立Podfile文件，先通过pod search 来搜索所需要的库是否支持cocoapods，然后pod:(库名)，pod install来安装。</p>
+<h2 id="坑处收集（针对xcode_6-1_实际项目出现的问题）">坑处收集（针对xcode 6.1 实际项目出现的问题）</h2>
+<ul>
+<li>安装时可以把ruby的镜像替换成淘宝的，第一次pod setup时稍微有些慢，需要耐心等待。</li>
+<li>安装库时，如果出现链接阶段的错误，首先要查找一下link search paths 路径的问题，还有libpods.a文件是否添加到了library中。</li>
+<li>安装库时，（最好能开代理就开代理，有时github网络会导致编译或者链接阶段出现莫名其妙的问题）因为文件没有下载全。</li>
+<li>安装之前，最好是先command + shift + k clean一下编译的缓存，安装之后如果出现问题，也可以先clean一下，再编译尝试。</li>
+<li>安装之前，最好先把项目关闭了，pod install 后，会在项目的根目录，生成一个新的xcworkspace文件，以后打开项目使用它，如果还用老的，打开又会出现莫名其妙的问题。</li>
+<li>如果上述都没法解决问题，全部删除，重新来过。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+
   
     <article id="post-用Hexo写博客" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -409,69 +463,6 @@ hexo <span class="keyword">server</span></span>
         
           <p class="article-more-link">
             <a href="/2014/11/14/django模型使用的一些心得/#more">more >></a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-携程邮轮开发部django分享" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/携程邮轮开发部django分享/" class="article-date">
-  	<time datetime="2014-11-14T12:20:19.000Z" itemprop="datePublished">11月 14 2014</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python-django/">python django</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/携程邮轮开发部django分享/">携程邮轮开发部django分享</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>使用django快速开发一个web网站</p>
-<p>分享内容（拟）</p>
-<ol>
-<li>介绍django的历史</li>
-<li>安装以及配置django项目</li>
-<li>介绍django对请求的回应机制</li>
-<li>讲解django URL的配置</li>
-<li>讲解django模型的使用</li>
-<li>讲解django view template 的使用</li>
-<li>通过一个例子讲解如何快速的实现一个简单的网站（注册，登录，验证用户状态）</li>
-<li>分享学习Python django的资料，以及说说一些django的web工具</li>
-</ol>
-
-        
-          <p class="article-more-link">
-            <a href="/2014/11/14/携程邮轮开发部django分享/#more">more >></a>
           </p>
         
       

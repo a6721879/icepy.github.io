@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2014-11-24T10:26:19.232Z</updated>
+  <updated>2014-12-31T15:04:15.662Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -13,6 +13,42 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[]]></title>
+    <link href="http://lcepy.github.io/2014/12/31/%E4%BD%BF%E7%94%A8cocoapods%E6%9D%A5%E7%AE%A1%E7%90%86%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
+    <id>http://lcepy.github.io/2014/12/31/使用cocoapods来管理第三方库/</id>
+    <published>2014-12-31T15:03:47.000Z</published>
+    <updated>2014-12-31T15:03:47.000Z</updated>
+    <content type="html"><![CDATA[<p>title: 使用cocoapods来管理第三方库<br>date: 2014-12-31 13:52:58<br>tags:iOS</p>
+<hr>
+<ul>
+<li><a href="http://cocoapods.org/" target="_blank" rel="external">http://cocoapods.org/</a></li>
+<li><a href="http://code4app.com/article/cocoapods-install-usage" target="_blank" rel="external">CocoaPods安装和使用教程</a></li>
+<li><a href="http://blog.jobbole.com/72107/" target="_blank" rel="external">在 Swift 中使用 CocoaPods</a></li>
+<li><a href="http://blog.devtang.com/blog/2014/05/25/use-cocoapod-to-manage-ios-lib-dependency/" target="_blank" rel="external">用CocoaPods做iOS程序的依赖管理</a></li>
+<li><a href="https://github.com/CocoaPods/CocoaPods" target="_blank" rel="external">https://github.com/CocoaPods/CocoaPods</a></li>
+</ul>
+<p><strong>关于配置，可以参考贴出来的上述的文章，唐巧的博客也写的比较详细</strong></p>
+<p>在需要cocoapods来做管理的项目中建立Podfile文件，先通过pod search 来搜索所需要的库是否支持cocoapods，然后pod:(库名)，pod install来安装。</p>
+<h2 id="坑处收集（针对xcode_6-1_实际项目出现的问题）">坑处收集（针对xcode 6.1 实际项目出现的问题）</h2>
+<ul>
+<li>安装时可以把ruby的镜像替换成淘宝的，第一次pod setup时稍微有些慢，需要耐心等待。</li>
+<li>安装库时，如果出现链接阶段的错误，首先要查找一下link search paths 路径的问题，还有libpods.a文件是否添加到了library中。</li>
+<li>安装库时，（最好能开代理就开代理，有时github网络会导致编译或者链接阶段出现莫名其妙的问题）因为文件没有下载全。</li>
+<li>安装之前，最好是先command + shift + k clean一下编译的缓存，安装之后如果出现问题，也可以先clean一下，再编译尝试。</li>
+<li>安装之前，最好先把项目关闭了，pod install 后，会在项目的根目录，生成一个新的xcworkspace文件，以后打开项目使用它，如果还用老的，打开又会出现莫名其妙的问题。</li>
+<li>如果上述都没法解决问题，全部删除，重新来过。</li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>title: 使用cocoapods来管理第三方库<br>date: 2014-12-31 13:52:58<br>tags:iOS</p>
+<hr>
+<ul>
+<li><a href="http://cocoapods.org/" target="_blank" rel=]]>
+    </summary>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[用Hexo写博客]]></title>
