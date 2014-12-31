@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2014-12-31T15:04:15.662Z</updated>
+  <updated>2014-12-31T15:08:00.942Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -15,14 +15,12 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[]]></title>
+    <title><![CDATA[使用cocoapods来管理第三方库]]></title>
     <link href="http://lcepy.github.io/2014/12/31/%E4%BD%BF%E7%94%A8cocoapods%E6%9D%A5%E7%AE%A1%E7%90%86%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/"/>
     <id>http://lcepy.github.io/2014/12/31/使用cocoapods来管理第三方库/</id>
-    <published>2014-12-31T15:03:47.000Z</published>
-    <updated>2014-12-31T15:03:47.000Z</updated>
-    <content type="html"><![CDATA[<p>title: 使用cocoapods来管理第三方库<br>date: 2014-12-31 13:52:58<br>tags:iOS</p>
-<hr>
-<ul>
+    <published>2014-12-31T05:52:58.000Z</published>
+    <updated>2014-12-31T15:07:47.000Z</updated>
+    <content type="html"><![CDATA[<ul>
 <li><a href="http://cocoapods.org/" target="_blank" rel="external">http://cocoapods.org/</a></li>
 <li><a href="http://code4app.com/article/cocoapods-install-usage" target="_blank" rel="external">CocoaPods安装和使用教程</a></li>
 <li><a href="http://blog.jobbole.com/72107/" target="_blank" rel="external">在 Swift 中使用 CocoaPods</a></li>
@@ -42,11 +40,12 @@
 </ul>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p>title: 使用cocoapods来管理第三方库<br>date: 2014-12-31 13:52:58<br>tags:iOS</p>
-<hr>
-<ul>
-<li><a href="http://cocoapods.org/" target="_blank" rel=]]>
+    <![CDATA[<ul>
+<li><a href="http://cocoapods.org/" target="_blank" rel="external">http://cocoapods.org/</a></li>
+<li><a href="http://code4app.com/arti]]>
     </summary>
+    
+      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
     
   </entry>
   
