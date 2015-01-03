@@ -3,17 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2015 | lcepy</title>
+  <title>iOS学习第一个月心得与总结 | lcepy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="lcepy">
-<meta property="og:url" content="http://lcepy.github.io/archives/2015/">
+  <meta name="description" content="从买来Mac之后，还是看的池建强老师的一篇文章《程序员如何选择技术方向》，就开始自发的学习iOS了，因为我也想做一个自己的应用，想学一门编译型的语言，说来也巧，买Mac电脑，还是看了池老师《Mac Talk人生元编程》才开始真正下定决心入手了一台。
+在开始学习iOS编程之前，我先重新去复习了一下C语言，这个是非常有必要的。虽然现在Swift已经出来了，但是Objective-C还是需要掌握的，而它">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS学习第一个月心得与总结">
+<meta property="og:url" content="http://lcepy.github.io/2015/01/02/iOS学习第一个月心得与总结/">
 <meta property="og:site_name" content="lcepy">
-<meta property="og:description">
+<meta property="og:description" content="从买来Mac之后，还是看的池建强老师的一篇文章《程序员如何选择技术方向》，就开始自发的学习iOS了，因为我也想做一个自己的应用，想学一门编译型的语言，说来也巧，买Mac电脑，还是看了池老师《Mac Talk人生元编程》才开始真正下定决心入手了一台。
+在开始学习iOS编程之前，我先重新去复习了一下C语言，这个是非常有必要的。虽然现在Swift已经出来了，但是Objective-C还是需要掌握的，而它">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="lcepy">
-<meta name="twitter:description">
+<meta name="twitter:title" content="iOS学习第一个月心得与总结">
+<meta name="twitter:description" content="从买来Mac之后，还是看的池建强老师的一篇文章《程序员如何选择技术方向》，就开始自发的学习iOS了，因为我也想做一个自己的应用，想学一门编译型的语言，说来也巧，买Mac电脑，还是看了池老师《Mac Talk人生元编程》才开始真正下定决心入手了一台。
+在开始学习iOS编程之前，我先重新去复习了一下C语言，这个是非常有必要的。虽然现在Swift已经出来了，但是Objective-C还是需要掌握的，而它">
 
   
     <link rel="alternative" href="/atom.xml" title="lcepy" type="application/atom+xml">
@@ -164,9 +167,7 @@
 		</header>				
 	</div>
 </nav>
-      
-  
-    <article id="post-iOS学习第一个月心得与总结" class="article article-type-post" itemscope itemprop="blogPost">
+      <article id="post-iOS学习第一个月心得与总结" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2015/01/02/iOS学习第一个月心得与总结/" class="article-date">
@@ -186,8 +187,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/02/iOS学习第一个月心得与总结/">iOS学习第一个月心得与总结</a>
+    <h1 class="article-title" itemprop="name">
+      iOS学习第一个月心得与总结
     </h1>
   
 
@@ -229,12 +230,33 @@
 <li>@property属性，OC提供了一个快速创建属性并默认实现getter setter方法的东西，主要是配合原子性，retain copy来使用，在开启ARC的环境下，可以用weak strong来使用，这个主要对应UI方面，一般情况下只是赋值用assign，NSString用copy，其他OC对象用retain</li>
 <li>学习copy语法，了解什么是浅拷贝，深拷贝</li>
 </ul>
+<a id="more"></a>
 
-        
-          <p class="article-more-link">
-            <a href="/2015/01/02/iOS学习第一个月心得与总结/#more">more >></a>
-          </p>
-        
+<p>接下来是学习Foundation框架提供的OC类型了，都可以用@来快速实现，比如@””字符串，@[]数组，@{}字典，唯一的缺点是这些创建的是不可变的，如果要创建可变的，就要使用NSMutable …之类的了，前缀名字都一样。每一个类型都有N多方法，而且名字，长的根句子一样，所以就不写了，比如字符串，有创建，格式化，截取，数组，分割，排序等都有，需要学习Foundation提供的这些方法，因为它跟后面编写应用时，处理数据息息相关。</p>
+<p>UIKit学习，到这里就开始进入应用编程的范围了，学习它是关于如何搭建UI界面，比如，如何使用xib，storyboard，用代码实现，认识UIViewController，以及如何监听事件，实现各控件的代理等。</p>
+<p>UIKit学习总结：</p>
+<ul>
+<li>初识MVC</li>
+</ul>
+<p>官方的推荐任何一种对象都分配成三种角色。控制器可以直接访问模型和视图，但是模型跟视图是不允许互相访问。模型不允许直接访问控制器，从设计角度上来看，模型应该是重用的，如果下一个项目或者别的需要使用这个模型，如果模型中包含了控制器，那么就不可以使用了。模型应该关注的自身的数据，究竟这个数据需要放在哪里，则由控制器来控制。在控制中设置数据源datasource，当视图对控制器发送一个消息询问，数据源是啥，来索要数据。而它本身是不知道数据是哪个，而是由控制器来告知。</p>
+<ul>
+<li>清楚UIViewController的生命周期</li>
+</ul>
+<p>先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或storyborad，如果这个也没有则走loadView方法，loadView方法系统调用，也可以重载它。当我们重载它时，可以[super loadView] 父类帮助我们创建一个空的view，如果不调用父类，那么就要自己创建一个UIView，并且self.view = UIView。</p>
+<p>如果在调用loadView时不调用父类，也不创建，如果使用self.view的getter method并且view等于nil，会发生自我循环调用。一般情况下，不要在初始化时做view相当的动作。在viewDiload中调用一些网络访问的动作，可以在初始化方法中做一些关于模型数据的准备工作。</p>
+<p>如果覆盖了loadView，则必须创建UIViewController的view属性。如果没有覆盖该方法，UIViewController会默认调用initWithNibName方法来初始化并加载view。</p>
+<p>viewWillAppear -&gt; viewDidAppear（控制视图显示）viewWillDisappear -&gt; viewDidDisappear （控制视图卸载）</p>
+<ul>
+<li>学习基础UI控件，比如UILabel UIButton等，创建基本上各控件都是一样的，可以用构造方法，也可以alloc，然后指定x y 高 宽，CGRect结构体，然后有些有代理，可以监听各种事件，有些则没有。大部分的基类都是UIView，有些是UIControl，它是继承至UIView，唯一的区别是后者可以监听事件，它是一个控制器。</li>
+<li>学习UIView CAAnimation CATransition等，还有各控件的transform属性，可以做一些基础的动画，大部分是改变x y 高 宽值。然后会使用它们的block版本动画，少写很多代码。</li>
+<li>学习模态视图，以及视图切换，控制器切换等。</li>
+<li>学习UITableView UIPickerView UISlider UIImageView等，还有UIAlertView，太多了，就不一个一个的举例子了，比较重要，用的很多的就是UITableView UISlider UIImageView UIAlertView等，特别是UITableView，三个数据源，N个事件监听代理。</li>
+<li>使用xib做自定义View</li>
+</ul>
+<p>关于UIKit的学习，可以每个多试一试 ，也可以去看看头文件。</p>
+<h2 id="最后的总结">最后的总结</h2>
+<p>一个月下来，也算是进门了，感觉它没有网上人们传的那么困难，凡事用心，一点一点的推进，就容易了，希望今年可以做自己的第一个应用上架App Store。</p>
+
       
     </div>
     <footer class="article-footer">
@@ -243,15 +265,59 @@
     </footer>
   </div>
   
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2014/12/31/使用cocoapods来管理第三方库/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用cocoapods来管理第三方库</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
 </article>
 
 
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
 
 
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="iOS学习第一个月心得与总结" data-title="iOS学习第一个月心得与总结" data-url="http://lcepy.github.io/2015/01/02/iOS学习第一个月心得与总结/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lcepy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
-  
-  
+
+
 
       <footer id="footer">
   <div class="outer">
