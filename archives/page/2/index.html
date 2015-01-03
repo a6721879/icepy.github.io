@@ -106,7 +106,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud">
-						<a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/iOS/" style="font-size: 10.00px;">iOS</a><a href="/tags/node-js/" style="font-size: 10.00px;">node&js</a><a href="/tags/python-django/" style="font-size: 20.00px;">python django</a><a href="/tags/regex/" style="font-size: 10.00px;">regex</a><a href="/tags/代码组织/" style="font-size: 10.00px;">代码组织</a><a href="/tags/生活/" style="font-size: 10.00px;">生活</a><a href="/tags/项目经历-长期维护/" style="font-size: 10.00px;">项目经历 长期维护</a><a href="/tags/骑行-户外/" style="font-size: 10.00px;">骑行 户外</a>
+						<a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/iOS/" style="font-size: 15.00px;">iOS</a><a href="/tags/node-js/" style="font-size: 10.00px;">node&js</a><a href="/tags/python-django/" style="font-size: 20.00px;">python django</a><a href="/tags/regex/" style="font-size: 10.00px;">regex</a><a href="/tags/代码组织/" style="font-size: 10.00px;">代码组织</a><a href="/tags/生活/" style="font-size: 10.00px;">生活</a><a href="/tags/项目经历-长期维护/" style="font-size: 10.00px;">项目经历 长期维护</a><a href="/tags/骑行-户外/" style="font-size: 10.00px;">骑行 户外</a>
 					</div>
 				</section>
 				
@@ -165,6 +165,79 @@
 	</div>
 </nav>
       
+  
+    <article id="post-django模型使用的一些心得" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/11/14/django模型使用的一些心得/" class="article-date">
+  	<time datetime="2014-11-14T12:30:31.000Z" itemprop="datePublished">11月 14 2014</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python-django/">python django</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/14/django模型使用的一些心得/">django模型使用的一些心得</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>近很一直在学习django，因为我需要使用它为自己的项目写一个前台页面和一个后台服务。它是一个关于咖啡的邮件订阅社区，既然有服务，自然需要数据库层的支持。这是一个很好的开始，学习django让我了解到python开发web应用真的非常快速，但是也有一个很明显的缺点。那就是国内，对django社区的支持度非常不好，这或许跟国内python的有关，不过也不要紧，学习就是这样，要啃难而上。</p>
+<p>说说在django中模型，对应的数据库层，也就是意味着django帮助我们完成了对数据库的访问，操作，通过它的模型类。</p>
+<blockquote>
+<p>django-admin.py startapp sendcloud</p>
+</blockquote>
+<p>通过上述的命令，我们可以完成一个app模块，这个模块中带有views.py models.py test.py，而models.py文件中，就是我们完成模型的一个最主要的文件。</p>
+<blockquote>
+<p>from django.db import models</p>
+</blockquote>
+<p>模型类，都需要继承自django.db.models类。通过它与manage.py来完成初始化等等动作。关于manage.py的命令，未来有时间，我会写写关于它的心得。</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">WeeklySyncList</span><span class="params">(models.Model)</span>:</span>
+    <span class="comment">#do something</span>
+    <span class="keyword">pass</span>
+</code></pre><p>一个模型类对于数据库层中的一个表，在我们定义好模型类之后，可以在命令行中输入：</p>
+<blockquote>
+<p>python manage.py sqlall sendcloud</p>
+</blockquote>
+<p>来完成对创建语法的查看以及错误信息的查看，准确没有错误之后，可以输入：</p>
+<blockquote>
+<p>python manage.py syncdb</p>
+</blockquote>
+<p>来初始数据库，django会帮助我们完成数据库层面的操作。</p>
+
+        
+          <p class="article-more-link">
+            <a href="/2014/11/14/django模型使用的一些心得/#more">more >></a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+
   
     <article id="post-携程邮轮开发部django分享" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -404,70 +477,6 @@
 
 
   
-    <article id="post-在实际工作中node开发的一些见解与调试" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/在实际工作中node开发的一些见解与调试/" class="article-date">
-  	<time datetime="2014-11-14T12:04:45.000Z" itemprop="datePublished">11月 14 2014</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/在实际工作中node开发的一些见解与调试/">在实际工作中node开发的一些见解与调试</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>真实情况是这样的</strong> </p>
-<ol>
-<li>开发，前端与后端物理性的隔离，前端通过restful接口请求相应的数据，并在客户端渲染。</li>
-<li>前端的渲染依赖于后端响应的数据，后端开发的进度永远比前端慢。</li>
-<li>需要通过本地模拟数据，约定契约总是会纠结很久。</li>
-<li>联调时，需要改多处代码。</li>
-</ol>
-<p><strong>治标不治本的解决方案</strong></p>
-<p>为了解决工作中的上述问题，于是就想到了网络代理与客户端mock的功能，并且能很好的识别出错误，以及分发请求，<a href="https://github.com/lcepy/glob-proxy" target="_blank" rel="external">glob-proxy</a>。通过一对键值对来描述需要响应的请求，通过GET参数来适配读取本地，还是分发到网络，并对响应的请求response进行内存缓存与物理缓存。本地构建的元数据，可以使用mock来生成。</p>
-<p>但是上述的解决方案，并没有解决工作中出现的问题。反而加重了开发的成本，问题3，依然没有很好的解决，而问题4解决了一半，联调时依然需要更改多处，不然提交到测试的代码，还是键值对中映射的地址，虽然我的本机可以访问，但是测试人员却访问不了。</p>
-<p>上遇到上述问题的时候，我一直在想，是不是需要另外启用一个服务器来做代理的代理。我实现了上述需要解决的几个问题，比如分解model.js中测试地址，将这个测试地址，生成为一个配置文件，提供给代理服务器2，代理服务器1依然是之前的配置文件。在webapp发起请求时，代理服务器1截取请求，提交给代理服务器2，代理服务器2获取完毕后，发送给远程。</p>
-<p>这个问题好像，滚雪球一样，越滚越大。后来，我的同事找到了一个比较好的方案，我编写的一半socket proxy基本上可以废弃了。我们使用了fiddler来做代理服务器1.</p>
-<p>这里的逻辑是这样的，在启动glob-proxy时，我提供了两个API出来，一是：抓取配置文件中的model.js，根据测试URL生成fiddler需要的xml配置文件，并将这个xml导入到fiddler中。如果是local=1，glob-proxy将扫描本地文件，来做响应。如果local为false，请求将通过glob-proxy发送到fiddler中，fiddler去请求远程，来响应node服务器，node服务器再响应给webapp。</p>
-<p>好在上述，难的地方已经处理好了，现在要理清的还是这个请求代理的逻辑顺序。但是这样的绕，是不是有些比较蛋疼呢。<br>
-        
-          <p class="article-more-link">
-            <a href="/2014/11/14/在实际工作中node开发的一些见解与调试/#more">more >></a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/archives/">&laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/3/">Next &raquo;</a>
@@ -478,7 +487,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2014 lcepy
+    		&copy; 2015 lcepy
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
