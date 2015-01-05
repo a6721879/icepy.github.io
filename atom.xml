@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-01-05T12:04:35.326Z</updated>
+  <updated>2015-01-05T12:09:41.082Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://lcepy.github.io/2015/01/05/this%E4%B8%8Eprototype%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
     <id>http://lcepy.github.io/2015/01/05/this与prototype的区别/</id>
     <published>2015-01-05T11:15:53.000Z</published>
-    <updated>2015-01-05T12:02:06.000Z</updated>
+    <updated>2015-01-05T12:08:36.000Z</updated>
     <content type="html"><![CDATA[<ul>
 <li>this可以访问私有成员（用var声明的变量）私有方法（直接function或者内部），prototype无法访问</li>
 <li>Js首先查找自身的静态属性，方法，再查找上下文中可以访问的属性或方法，最后才查找prototype，谁先谁优先</li>
@@ -47,7 +47,7 @@
 <li]]>
     </summary>
     
-      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
+      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
     
   </entry>
   
