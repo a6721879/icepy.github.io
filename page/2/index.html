@@ -106,7 +106,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud">
-						<a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/iOS/" style="font-size: 15.00px;">iOS</a><a href="/tags/node-js/" style="font-size: 10.00px;">node&js</a><a href="/tags/python-django/" style="font-size: 20.00px;">python django</a><a href="/tags/regex/" style="font-size: 10.00px;">regex</a><a href="/tags/代码组织/" style="font-size: 10.00px;">代码组织</a><a href="/tags/生活/" style="font-size: 10.00px;">生活</a><a href="/tags/项目经历-长期维护/" style="font-size: 10.00px;">项目经历 长期维护</a><a href="/tags/骑行-户外/" style="font-size: 10.00px;">骑行 户外</a>
+						<a href="/tags/JavaScript/" style="font-size: 10.00px;">JavaScript</a><a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/iOS/" style="font-size: 15.00px;">iOS</a><a href="/tags/node-js/" style="font-size: 10.00px;">node&js</a><a href="/tags/python-django/" style="font-size: 20.00px;">python django</a><a href="/tags/regex/" style="font-size: 10.00px;">regex</a><a href="/tags/代码组织/" style="font-size: 10.00px;">代码组织</a><a href="/tags/生活/" style="font-size: 10.00px;">生活</a><a href="/tags/项目经历-长期维护/" style="font-size: 10.00px;">项目经历 长期维护</a><a href="/tags/骑行-户外/" style="font-size: 10.00px;">骑行 户外</a>
 					</div>
 				</section>
 				
@@ -165,6 +165,68 @@
 	</div>
 </nav>
       
+  
+    <article id="post-关于django中CSRF开启的问题" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/11/14/关于django中CSRF开启的问题/" class="article-date">
+  	<time datetime="2014-11-14T12:33:12.000Z" itemprop="datePublished">11月 14 2014</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python-django/">python django</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/14/关于django中CSRF开启的问题/">关于django中CSRF开启的问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="django_处理CSRF机制保护下的POST表单提交">django 处理CSRF机制保护下的POST表单提交</h2>
+<p>昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后解决了。其实在解决这个问题之前，我们先要了解一下，CSRF到底是什么东东，为什么django提交一个POST表单这么困难呢。</p>
+<p><a href="http://baike.baidu.com/link?url=OnI0sPQAHpQHhtxWSXvQFhN3kJWI3CU_rP3Fo7MqnPY3rTdhUPpuca-3lzJ651LdMI7ouoLvdnnihhojFyKtva" target="_blank" rel="external">CSRF 是什么</a></p>
+<p><a href="https://docs.djangoproject.com/en/1.5/ref/contrib/csrf/" target="_blank" rel="external">django document CSRF</a></p>
+<p>原来CSRF是为了防止跨站请求伪造用的，当我明白了这个解释之后，我开始找寻django document上如何开启CSRF。</p>
+<p><strong>Add the middleware ‘django.middleware.csrf.CsrfViewMiddleware’ to your list of middleware classes, MIDDLEWARE_CLASSES. (It should come before any view middleware that assume that CSRF attacks have been dealt with.)</strong></p>
+<p>那我在想，如果我把django.middleware.csrf.CsrfViewMiddleware注释掉，是不是就可以不开启CSRF来提交POST表单，人们常说实践是检验真理的唯一标准，试验一下，原来是可以的。但是这并没有解决，我想解决的问题，于是我又把这个中间件，重新写在了MIDDLEWARE_CLASSES上。</p>
+<p>从官方的解释上来看，只要在MIDDLEWARE_CLASSES上加django.middleware.csrf.CsrfViewMiddleware就开启了CSRF机制。</p>
+<p>现在我需要在模板中加入一个tag ｛%csrf_token%｝，来存放一个隐藏的token input。</p>
+<p><strong>In the corresponding view functions, ensure that the ‘django.core.context_processors.csrf’ context processor is being used. Usually, this can be done in one of two ways:</strong></p>
+<p>从这里的解释来看，我还需要django.core.context_processors.csrf，于是我导入这个模块from django.core.context_processors import csrf，运行一下貌似，还不行，接着往下看。我发现django的解释，这里可以用两种方式来处理，最后响应的response，而且django还说了，POST表单提交不要跨链接。</p>
+<p>
+        
+          <p class="article-more-link">
+            <a href="/2014/11/14/关于django中CSRF开启的问题/#more">more >></a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+
   
     <article id="post-django模型使用的一些心得" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -398,66 +460,6 @@
         
           <p class="article-more-link">
             <a href="/2014/11/14/减肥与训练/#more">more >></a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-我的项目经历" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/我的项目经历/" class="article-date">
-  	<time datetime="2014-11-14T12:09:19.000Z" itemprop="datePublished">11月 14 2014</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/项目经历-长期维护/">项目经历 长期维护</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/我的项目经历/">我的项目经历</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><em>开源项目，可以在 github 查看，主要分为两类项目，一类为给公司开发的开源工具，用来前端的编程效率，一类为自己的学习项目，比如桌面端的MVC一套解决方案，移动组件库，以及个人项目。</em></p>
-<p><em>擅长领域，主要为javascript，python，关系型数据库为mysql mongodb 工作中以javascript为主。</em></p>
-<h2 id="个人项目展示">个人项目展示</h2>
-<p><a href="https://github.com/lcepy/glob-proxy" target="_blank" rel="external">HTTP Proxy</a></p>
-<p><a href="https://github.com/lcepy/kalimdor" target="_blank" rel="external">kalimdor MVC</a></p>
-<p><a href="https://github.com/lcepy/Find" target="_blank" rel="external">Find zepto UI</a></p>
-<p><a href="https://github.com/lcepy/nagrand" target="_blank" rel="external">nagrand onload</a></p>
-<p><a href="https://github.com/lcepy/douban-shell-app" target="_blank" rel="external">douban-shell</a></p>
-<p><a href="https://github.com/lcepy/downloadZIP" target="_blank" rel="external">webapp 打包工具</a></p>
-<p>
-        
-          <p class="article-more-link">
-            <a href="/2014/11/14/我的项目经历/#more">more >></a>
           </p>
         
       
