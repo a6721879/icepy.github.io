@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-01-10T08:29:10.386Z</updated>
+  <updated>2015-01-10T08:32:10.349Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://lcepy.github.io/2015/01/10/%E7%A7%BB%E5%8A%A8H5-HybridApp%E5%BC%80%E5%8F%91%E6%80%9D%E8%B7%AF%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/"/>
     <id>http://lcepy.github.io/2015/01/10/移动H5-HybridApp开发思路的一些总结/</id>
     <published>2015-01-10T07:04:24.000Z</published>
-    <updated>2015-01-10T08:28:31.000Z</updated>
+    <updated>2015-01-10T08:31:57.000Z</updated>
     <content type="html"><![CDATA[<p>利用H5来开发移动app时，很大一部分的逻辑处理是在每一个视图的切换上，包括维护生命周期，释放内存，以及维护动画。我们在使用iOS时，基本上当前屏幕中内容显示的区域内就应该算是一个视图，当然H5版的app跟纯粹的iOS开发又有一些不同。</p>
 <ul>
 <li>H5版本的app是一个HTML页面，场景的切换基本上是切换内部的div容器，而当前浏览器内的框架则是它的window</li>
