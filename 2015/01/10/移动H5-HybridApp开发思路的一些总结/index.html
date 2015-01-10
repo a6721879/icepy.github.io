@@ -3,17 +3,26 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: node&amp;js | lcepy</title>
+  <title>移动H5-HybridApp开发思路的一些总结 | lcepy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="lcepy">
-<meta property="og:url" content="http://lcepy.github.io/tags/node-js/">
+  <meta name="description" content="利用H5来开发移动app时，很大一部分的逻辑处理是在每一个视图的切换上，包括维护生命周期，释放内存，以及维护动画。我们在使用iOS时，基本上当前屏幕中内容显示的区域内就应该算是一个视图，当然H5版的app跟纯粹的iOS开发又有一些不同。
+
+H5版本的app是一个HTML页面，场景的切换基本上是切换内部的div容器，而当前浏览器内的框架则是它的window
+H5版本的app还需要监听hashchan">
+<meta property="og:type" content="article">
+<meta property="og:title" content="移动H5-HybridApp开发思路的一些总结">
+<meta property="og:url" content="http://lcepy.github.io/2015/01/10/移动H5-HybridApp开发思路的一些总结/">
 <meta property="og:site_name" content="lcepy">
-<meta property="og:description">
+<meta property="og:description" content="利用H5来开发移动app时，很大一部分的逻辑处理是在每一个视图的切换上，包括维护生命周期，释放内存，以及维护动画。我们在使用iOS时，基本上当前屏幕中内容显示的区域内就应该算是一个视图，当然H5版的app跟纯粹的iOS开发又有一些不同。
+
+H5版本的app是一个HTML页面，场景的切换基本上是切换内部的div容器，而当前浏览器内的框架则是它的window
+H5版本的app还需要监听hashchan">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="lcepy">
-<meta name="twitter:description">
+<meta name="twitter:title" content="移动H5-HybridApp开发思路的一些总结">
+<meta name="twitter:description" content="利用H5来开发移动app时，很大一部分的逻辑处理是在每一个视图的切换上，包括维护生命周期，释放内存，以及维护动画。我们在使用iOS时，基本上当前屏幕中内容显示的区域内就应该算是一个视图，当然H5版的app跟纯粹的iOS开发又有一些不同。
+
+H5版本的app是一个HTML页面，场景的切换基本上是切换内部的div容器，而当前浏览器内的框架则是它的window
+H5版本的app还需要监听hashchan">
 
   
     <link rel="alternative" href="/atom.xml" title="lcepy" type="application/atom+xml">
@@ -164,9 +173,7 @@
 		</header>				
 	</div>
 </nav>
-      
-  
-    <article id="post-移动H5-HybridApp开发思路的一些总结" class="article article-type-post" itemscope itemprop="blogPost">
+      <article id="post-移动H5-HybridApp开发思路的一些总结" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/" class="article-date">
@@ -186,8 +193,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/">移动H5-HybridApp开发思路的一些总结</a>
+    <h1 class="article-title" itemprop="name">
+      移动H5-HybridApp开发思路的一些总结
     </h1>
   
 
@@ -218,77 +225,46 @@
 <li>栈定属于当前视图控制器</li>
 <li>基栈则是根视图控制器</li>
 </ul>
+<a id="more"></a>
 
-        
-          <p class="article-more-link">
-            <a href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/#more">more >></a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-this与prototype的区别" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/05/this与prototype的区别/" class="article-date">
-  	<time datetime="2015-01-05T11:15:53.000Z" itemprop="datePublished">1月 5 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/05/this与prototype的区别/">this与prototype的区别</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>this可以访问私有成员（用var声明的变量）私有方法（直接function或者内部），prototype无法访问</li>
-<li>Js首先查找自身的静态属性，方法，再查找上下文中可以访问的属性或方法，最后才查找prototype，谁先谁优先</li>
-<li>prototype比this要节约分配的空间，因为prototype有一个指向父类的指向，而this，每次实例化时都要分配存储空间</li>
+<h2 id="思路实现的假设">思路实现的假设</h2>
+<p>每一个视图都会对应一个hash，可以监听window的hashchange事件来获取，而这个hash值做为一个唯一标识，用于map映射到对应的视图控制器实例上。</p>
+<p>设计一个大的框架（page）根据功能或者业务划分，每个不同的业务需要使用不同的lcepy.github.io/page1/index.html  lcepy.github.io/page2/index.html，如果hash值为空，则默认为#index。这样的设计主要是考虑内存的消耗，释放的问题。因为业务代码不受约束，如果开发人员没有主动的意识，很可能出现溢出程序崩溃的情况。</p>
+<p>每一个视图控制器最少要存在四个方法用于描述它的生命周期：</p>
+<ul>
+<li><strong>init</strong> 整个视图控制器的入口</li>
+<li><strong>hide</strong> 当离开当前视图时执行</li>
+<li><strong>viewwillapper</strong> 在创建视图容器时先执行</li>
 </ul>
-<pre><code>    <span class="keyword">var</span> Copy = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        <span class="keyword">var</span> d = <span class="string">"123"</span>;
-        <span class="keyword">this</span>._log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-            <span class="built_in">console</span>.log(d);
-        }
-        <span class="keyword">this</span>.log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-            <span class="built_in">console</span>.log(<span class="string">'yes'</span>);
-        }
-    }
-    Copy.prototype.log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        <span class="built_in">console</span>.log(<span class="string">'no'</span>);
-    }
-    <span class="keyword">var</span> c = <span class="keyword">new</span> Copy();
-    c.log();
-</code></pre>
+<p>每一个视图控制器最少要存在四个属性用于描述它的视图，标识，模版等：</p>
+<ul>
+<li><strong>hash</strong> 用于描述它的hash值</li>
+<li><strong>view</strong> 存储视图的容器DOM对象</li>
+<li><strong>didkeys</strong> 用于描述它创建时的唯一标识，hash值+当前时间的毫秒数</li>
+<li><strong>template</strong> 用于描述当前视图的模版</li>
+</ul>
+<blockquote>
+<p>场景假设：用户打开#index，并且点击一个按钮到#push</p>
+<p>框架假设：navigationController 简称NC</p>
+</blockquote>
+<p>最少会执行下面的一些动作，以及可能会使用到下列的一些库：<strong>zepto requrejs template</strong></p>
+<p>当客户端呈现#index页面时，会做如下的一些事情：</p>
+<ul>
+<li>获取hash值index，先检索NC的一个队列中是否存在index，如果不存在则利用requrejs加载index.js文件，map进入NC队列，标示这个文件已经加载，将来不重复加载。</li>
+<li>文件加载成功后，可以获取到index视图控制器类，实例化，并把它压入栈，调用viewwillapper，生成一个视图容器</li>
+<li>视图容器DOM对象赋值给view</li>
+<li>加载的模版字符串赋值给template，并渲染到视图容器中</li>
+<li>执行init方法</li>
+</ul>
+<p>当点击某个按钮，进入#push页面时，会做如下的一些事情：</p>
+<ul>
+<li>获取hash值并检索NC加载文件，实例化，入栈</li>
+<li>调用基栈hide方法，并出栈，然后销毁释放内存</li>
+<li>执行呈现#index时的那些动作</li>
+</ul>
+<p>当然一个比较成熟的项目需要处理的问题，肯定不是现在写的这些。</p>
+<p><strong>总结在携程一年（移动开发）</strong></p>
+
       
     </div>
     <footer class="article-footer">
@@ -297,79 +273,59 @@
     </footer>
   </div>
   
-</article>
-
-
-
-
-
-
-  
-    <article id="post-在实际工作中node开发的一些见解与调试" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/在实际工作中node开发的一些见解与调试/" class="article-date">
-  	<time datetime="2014-11-14T12:04:45.000Z" itemprop="datePublished">11月 14 2014</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
     
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/在实际工作中node开发的一些见解与调试/">在实际工作中node开发的一些见解与调试</a>
-    </h1>
   
+    <a href="/2015/01/05/this与prototype的区别/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">this与prototype的区别</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>真实情况是这样的</strong> </p>
-<ol>
-<li>开发，前端与后端物理性的隔离，前端通过restful接口请求相应的数据，并在客户端渲染。</li>
-<li>前端的渲染依赖于后端响应的数据，后端开发的进度永远比前端慢。</li>
-<li>需要通过本地模拟数据，约定契约总是会纠结很久。</li>
-<li>联调时，需要改多处代码。</li>
-</ol>
-<p><strong>治标不治本的解决方案</strong></p>
-<p>为了解决工作中的上述问题，于是就想到了网络代理与客户端mock的功能，并且能很好的识别出错误，以及分发请求，<a href="https://github.com/lcepy/glob-proxy" target="_blank" rel="external">glob-proxy</a>。通过一对键值对来描述需要响应的请求，通过GET参数来适配读取本地，还是分发到网络，并对响应的请求response进行内存缓存与物理缓存。本地构建的元数据，可以使用mock来生成。</p>
-<p>但是上述的解决方案，并没有解决工作中出现的问题。反而加重了开发的成本，问题3，依然没有很好的解决，而问题4解决了一半，联调时依然需要更改多处，不然提交到测试的代码，还是键值对中映射的地址，虽然我的本机可以访问，但是测试人员却访问不了。</p>
-<p>上遇到上述问题的时候，我一直在想，是不是需要另外启用一个服务器来做代理的代理。我实现了上述需要解决的几个问题，比如分解model.js中测试地址，将这个测试地址，生成为一个配置文件，提供给代理服务器2，代理服务器1依然是之前的配置文件。在webapp发起请求时，代理服务器1截取请求，提交给代理服务器2，代理服务器2获取完毕后，发送给远程。</p>
-<p>这个问题好像，滚雪球一样，越滚越大。后来，我的同事找到了一个比较好的方案，我编写的一半socket proxy基本上可以废弃了。我们使用了fiddler来做代理服务器1.</p>
-<p>这里的逻辑是这样的，在启动glob-proxy时，我提供了两个API出来，一是：抓取配置文件中的model.js，根据测试URL生成fiddler需要的xml配置文件，并将这个xml导入到fiddler中。如果是local=1，glob-proxy将扫描本地文件，来做响应。如果local为false，请求将通过glob-proxy发送到fiddler中，fiddler去请求远程，来响应node服务器，node服务器再响应给webapp。</p>
-<p>好在上述，难的地方已经处理好了，现在要理清的还是这个请求代理的逻辑顺序。但是这样的绕，是不是有些比较蛋疼呢。<br>
-        
-          <p class="article-more-link">
-            <a href="/2014/11/14/在实际工作中node开发的一些见解与调试/#more">more >></a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-    </footer>
-  </div>
   
 </article>
 
 
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
 
 
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="移动H5-HybridApp开发思路的一些总结" data-title="移动H5-HybridApp开发思路的一些总结" data-url="http://lcepy.github.io/2015/01/10/移动H5-HybridApp开发思路的一些总结/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lcepy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
-  
-  
+
+
 
       <footer id="footer">
   <div class="outer">
