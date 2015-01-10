@@ -230,7 +230,7 @@ H5版本的app还需要监听hashchan">
 <h2 id="思路实现的假设">思路实现的假设</h2>
 <p>每一个视图都会对应一个hash，可以监听window的hashchange事件来获取，而这个hash值做为一个唯一标识，用于map映射到对应的视图控制器实例上。</p>
 <p>设计一个大的框架（page）根据功能或者业务划分，每个不同的业务需要使用不同的lcepy.github.io/page1/index.html  lcepy.github.io/page2/index.html，如果hash值为空，则默认为#index。这样的设计主要是考虑内存的消耗，释放的问题。因为业务代码不受约束，如果开发人员没有主动的意识，很可能出现溢出程序崩溃的情况。</p>
-<p>每一个视图控制器最少要存在四个方法用于描述它的生命周期：</p>
+<p>每一个视图控制器最少要存在三个方法用于描述它的生命周期：</p>
 <ul>
 <li><strong>init</strong> 整个视图控制器的入口</li>
 <li><strong>hide</strong> 当离开当前视图时执行</li>
