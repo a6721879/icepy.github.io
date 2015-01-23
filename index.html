@@ -106,7 +106,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud">
-						<a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/iOS/" style="font-size: 13.33px;">iOS</a><a href="/tags/node-js/" style="font-size: 16.67px;">node&js</a><a href="/tags/python-django/" style="font-size: 20.00px;">python django</a><a href="/tags/regex/" style="font-size: 10.00px;">regex</a><a href="/tags/代码组织/" style="font-size: 10.00px;">代码组织</a><a href="/tags/生活/" style="font-size: 10.00px;">生活</a><a href="/tags/项目经历-长期维护/" style="font-size: 10.00px;">项目经历 长期维护</a><a href="/tags/骑行-户外/" style="font-size: 10.00px;">骑行 户外</a>
+						<a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/iOS/" style="font-size: 15.00px;">iOS</a><a href="/tags/node-js/" style="font-size: 20.00px;">node&js</a><a href="/tags/python-django/" style="font-size: 20.00px;">python django</a><a href="/tags/regex/" style="font-size: 10.00px;">regex</a><a href="/tags/代码组织/" style="font-size: 10.00px;">代码组织</a><a href="/tags/生活/" style="font-size: 10.00px;">生活</a><a href="/tags/项目经历-长期维护/" style="font-size: 10.00px;">项目经历 长期维护</a><a href="/tags/骑行-户外/" style="font-size: 10.00px;">骑行 户外</a>
 					</div>
 				</section>
 				
@@ -165,6 +165,88 @@
 	</div>
 </nav>
       
+  
+    <article id="post-复习JavaScript一之Ajax" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/23/复习JavaScript一之Ajax/" class="article-date">
+  	<time datetime="2015-01-23T10:07:54.000Z" itemprop="datePublished">1月 23 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/23/复习JavaScript一之Ajax/">复习JavaScript一之Ajax</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>IE8已上，支持现代XMLHttpRequest</p>
+</blockquote>
+<p>客户端Js与服务器进行网络交互必备的一个玩意，它不支持跨域，若要跨域还需要进行一些额外的处理。</p>
+<pre><code><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();
+</code></pre><p>在使用xhr对象时，要调用的第一个方法是open()，它接受三个参数［发送请求的类型，请求的URL，描述是否同步还是异步的布尔值］false同步，true异步。</p>
+<p>关于Ajax同步异步的个人理解：</p>
+<ul>
+<li>同步，是用数据块的方式来传输的，在Js执行的表现上，当执行到这个Ajax请求时会等待它与服务器交互成功之后才能执行下面一行的代码，也就是阻塞。</li>
+<li>异步，是用字节来传输的，它不等待是否成功，会执行之后的代码</li>
+</ul>
+<p>结束时需要调用xhr.send()，如果没有发送数据的主体，必须要null，做为发送参数。另外在接收到响应之前还可以调用abort()来取消异步请求（不建议调用它）</p>
+<h3 id="HTTP状态验证">HTTP状态验证</h3>
+<p>当收到响应后会自动填充xhr对象，它有几个比较重要的状态，我们必须要了解清楚与处理。</p>
+<ul>
+<li>responseText:作为响应主体返回的文本</li>
+<li>responseXML:如果响应内容的类型是”text/xml”或者”application/xml”，这个属性中保存的就是XML的DOM文档</li>
+<li>status：响应的HTTP状态</li>
+<li>statusText：HTTP状态的说明</li>
+<li>readyState：用于描述请求发送到完成的过程</li>
+</ul>
+<p>正常情况下需要检测status === 200 readyState === 4 这就表示responseText或者responseXML中已经填充了全部的数据可以提供给客户端使用了。</p>
+<pre><code>1 开头的用于描述请求已经发送，需要请求者继续操作才能继续的状态
+2 开头的用于描述请求已经成功
+3 开头的用于描述成功，但是还需要继续操作
+4 开头的用于描述客户端发送了什么数据导致服务器错误
+5 开头的用于描述服务器错误（常见的如，服务端代码抛错了）
+</code></pre><p>readyState状态</p>
+<pre><code><span class="number">0</span> 未初始化，还没有调用<span class="built_in">open</span>方法
+<span class="number">1</span> 已经调用<span class="built_in">open</span>方法，还没有调用<span class="built_in">send</span>方法
+<span class="number">2</span> 已经调用<span class="built_in">send</span>方法，但是还没有接收到响应
+<span class="number">3</span> 已经接收了部分数据
+<span class="number">4</span> 已经接收了全部的数据
+</code></pre><h3 id="xhr对象其他方法或事件">xhr对象其他方法或事件</h3>
+<p>每一个请求和响应都会带有相应的HTTP头信息，其中对开发者是很有用的，而xhr对象提供了一个setRequestHeader方法来设置头信息，它必须在调用open方法之后并且在send方法之前。有设置，必须得有获取，xhr对象也提供了两个方法分别来获取，getResponseHeader传入一个头部字段名来获取，getAllResponseHeaders来获取全部的头信息。</p>
+<p>onreadystatechange事件，每次刷新状态时，系统都会重新调用此事件。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+
   
     <article id="post-移动H5-HybridApp开发思路的一些总结" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -454,77 +536,9 @@
 
 
   
-    <article id="post-用Hexo写博客" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/22/用Hexo写博客/" class="article-date">
-  	<time datetime="2014-11-21T16:12:00.000Z" itemprop="datePublished">11月 22 2014</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/22/用Hexo写博客/">用Hexo写博客</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在看下面内容之前，请先确认是否已经安装nodejs，若无则先安装。</p>
-<p>访问<a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>，查看例子：</p>
-<pre><code>npm <span class="operator"><span class="keyword">install</span> hexo -g
-hexo init blog
-cd blog
-npm <span class="keyword">install</span>
-hexo <span class="keyword">server</span></span>
-</code></pre><p>hexo主要有如下几个命令来操作：</p>
-<blockquote>
-<p>hexo init  初始化一个hexo项目</p>
-<p>hexo server 监听4000端口启动一个服务器，可以预览，端口可以在_config.yml文件中修改</p>
-<p>hexo generate 输出静态文件，在public目录下</p>
-<p>hexo new 生成一个md文件，这个文件就是我们要写的博客文件了</p>
-<p>hexo clean 清除public目录以及缓存，其实这个缓存就是db.json文件</p>
-<p>hexo deploy 如果在_conig.yml文件中配置了这项，它会帮助我们发布到网络</p>
-</blockquote>
-<p>一般大项的配置都是在顶层的_config.yml配置文件中配置，比如博客作者名，标题，时间格式，资源文件目录，静态资源文件目录，插件等等。而具体的博客配置，比如菜单之类的都在themes具体的主题_config.yml文件中配置。</p>
-
-        
-          <p class="article-more-link">
-            <a href="/2014/11/22/用Hexo写博客/#more">more >></a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
