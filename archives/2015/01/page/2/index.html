@@ -166,6 +166,71 @@
 </nav>
       
   
+    <article id="post-this与prototype的区别" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/05/this与prototype的区别/" class="article-date">
+  	<time datetime="2015-01-05T11:15:53.000Z" itemprop="datePublished">1月 5 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/05/this与prototype的区别/">this与prototype的区别</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>this可以访问私有成员（用var声明的变量）私有方法（直接function或者内部），prototype无法访问</li>
+<li>Js首先查找自身的静态属性，方法，再查找上下文中可以访问的属性或方法，最后才查找prototype，谁先谁优先</li>
+<li>prototype比this要节约分配的空间，因为prototype有一个指向父类的指向，而this，每次实例化时都要分配存储空间</li>
+</ul>
+<pre><code>    <span class="keyword">var</span> Copy = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        <span class="keyword">var</span> d = <span class="string">"123"</span>;
+        <span class="keyword">this</span>._log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="built_in">console</span>.log(d);
+        }
+        <span class="keyword">this</span>.log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="built_in">console</span>.log(<span class="string">'yes'</span>);
+        }
+    }
+    Copy.prototype.log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        <span class="built_in">console</span>.log(<span class="string">'no'</span>);
+    }
+    <span class="keyword">var</span> c = <span class="keyword">new</span> Copy();
+    c.log();
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-iOS学习第一个月心得与总结" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
