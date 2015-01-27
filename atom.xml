@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-01-26T06:34:36.834Z</updated>
+  <updated>2015-01-27T10:05:41.020Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -13,6 +13,291 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[复习JavaScript五之面向对象的程序设计]]></title>
+    <link href="http://lcepy.github.io/2015/01/26/%E5%A4%8D%E4%B9%A0JavaScript%E4%BA%94%E4%B9%8B%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
+    <id>http://lcepy.github.io/2015/01/26/复习JavaScript五之面向对象的程序设计/</id>
+    <published>2015-01-26T06:52:39.000Z</published>
+    <updated>2015-01-27T10:04:38.000Z</updated>
+    <content type="html"><![CDATA[<p>面向对象的语言有一个非常明显的标志：类，通过类来创建任意多个具有相同属性和方法的对象，可惜的是Js里没有这样的概念。</p>
+<p>但是Js有一个特性：一切皆是对象。</p>
+<p>聪明的开发者通过这些特性进行摸索，于是迂回发明了一些程序设计，以便更好的组织代码结构。</p>
+<h3 id="工厂模式">工厂模式</h3>
+<p>主要是用来解决有多个相同属性和方法的对象的问题，可以用函数来封装特定的接口来实现</p>
+<pre><code><span class="keyword">var</span> computer = <span class="function"><span class="keyword">function</span><span class="params">(name,version)</span></span>{
+    <span class="keyword">return</span> {
+        <span class="string">'name'</span>:name,
+        <span class="string">'version'</span>:version,
+        <span class="string">'showMessage'</span>:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            alert(<span class="keyword">this</span>.name);
+        }
+    }
+}
+<span class="keyword">var</span> test = computer(<span class="string">'apple'</span>,<span class="string">'11.1'</span>);
+test.showMessage();
+</code></pre><h3 id="构造函数模式">构造函数模式</h3>
+<p>我们知道像原生的构造函数，比如Object，Array等，它们是在运行时自动出现在执行环境中的。因此，为了模仿它，这里也可以通过一个普通的函数，并且new出一个对象，这样就成为了自定义的构造函数，也可以为他们添加自定义的属性和方法。</p>
+<p>但是这样的构造函数有一个缺陷，就是每个方法都会在每个实例上创建一次，因为每次创建都需要分配内存空间，但是有时候这样的特性还是有用的，主要是要控制它们，在不使用的时候释放内存。</p>
+<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name,version)</span></span>{
+    <span class="keyword">this</span>.name = name;
+    <span class="keyword">this</span>.version = version;
+    <span class="keyword">this</span>.showMessage = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        alert(<span class="keyword">this</span>.name);
+    }
+}
+
+<span class="keyword">var</span> apple = <span class="keyword">new</span> Computer(<span class="string">'apple'</span>,<span class="number">2014</span>);
+<span class="keyword">var</span> dell = <span class="keyword">new</span> Computer(<span class="string">'dell'</span>,<span class="number">2010</span>);
+apple.showMessage();
+dell.showMessage();
+</code></pre><p>像apple，dell是通过Computer实例化出来的不同的对象，但是它们的constructor都是指向Computer的。这里也可以使用instanceof来对（对象）进行检测。</p>
+<p>在书写上构造函数跟其他函数是没有什么区别的，主要的区别还是在使用上，构造函数需要使用new操作符。</p>
+<p>其实这样的书写，已经跟类没有什么区别了，表面上来看，而构造函数我个人更倾向于一个类的某个静态方法。</p>
+<h3 id="原型模式">原型模式</h3>
+<p>说到原型模式就不得不提一提关于指针的问题，因为每一个函数都有一个prototype属性，而这个属性是一个指针，指向一个对象。</p>
+<p><strong>C语言描述指针，这个在iOS开发中非常重要</strong></p>
+<p>比如我先定义一个int类型的指针变量和一个普通的int类型数据，然后给指针变量赋值。</p>
+<pre><code><span class="keyword">int</span> *<span class="keyword">p</span>;
+<span class="keyword">int</span> <span class="keyword">pp</span> = <span class="number">123</span>;
+<span class="keyword">p</span> = &amp;<span class="keyword">pp</span>;
+*<span class="keyword">p</span> = <span class="number">999</span>;
+<span class="built_in">printf</span>(<span class="string">'%d'</span>,<span class="keyword">pp</span>);
+</code></pre><p>*是一个特殊符号用于标明它是一个指针变量。</p>
+<p>&amp;是地址符</p>
+<p>分析这个就要说到栈内存和堆内存了，比如*p在栈内存中分配了一个地址假设是ff22x0，它还没有空间。而pp存在一个地址ff23x0，并且分配了一个空间存储着123，这个地址是指向这个空间的。</p>
+<p>p = &amp;pp 这样的赋值操作，也就是把ff23x0取出来，并且给p分配一个空间把ff23x0存储进去，并且ff22x0指向这个空间。</p>
+<p>*p = 999 从这里就可以看出来p操作的是地址，而这个地址不就是ff23x0么，于是pp成了999。</p>
+<p>所谓的指针也就是存储着地址的变量。</p>
+<p>回到原型上，如果每一个函数中的 prototype属性都是一个指针，实际上它只是一个地址引用着一个空间，而这个空间正是我们写的xxx.prototype.xxx = function(){}这样的代码在运行时分配的空间。那么可见，使用原型的好处是空间只分配一次，大家都是共享的，因为它是指针。</p>
+<p>先看一个例子</p>
+<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
+    <span class="keyword">this</span>.name = name;
+}
+Computer.prototype.showMessage = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
+    alert(name);
+}
+
+<span class="keyword">var</span> apple = <span class="keyword">new</span> Computer(<span class="string">'apple'</span>);
+<span class="keyword">var</span> dell = <span class="keyword">new</span> Computer(<span class="string">'dell'</span>);
+Computer.prototype.isPrototypeOf(apple);
+</code></pre><p>在解释这个原型链之前，还要明白Js的一个特性，就是如果自身不存在，它会沿着原型往上查找。它的原理稍微有些绕，Computer自身的prototype是指向它自身的原型对象的，而每一个函数又有一个constructor指向它自身，prototype.constructor又指向它自身。于是Computer的两个实例apple，dell内部有一个<strong>proto</strong>属性是指向Computer.prototype的，最后的结果是它们可以使用showMessage方法。</p>
+<p>当然它们还有一个搜索原则，比如在调用showMessage的时候，引擎先问apple自身有showMessage吗？“没有”，继续搜索，apple的原型有吗，“有”，调用。所以从这里可以看出，this.showMessage是会覆盖prototype.showMessage的。</p>
+<p>另外还可以使用isPrototypeOf来检测一个对象是否在另一个对象的原型链上，上述的代码返回的是true。</p>
+<pre><code>apple.hasOwnProperty(<span class="string">'name'</span>)
+
+apple.hasOwnProperty(<span class="string">'showMessage'</span>)
+</code></pre><p>使用hasOwnProperty来检测到底是对象属性还是原型属性，使用this创建的属性是一个对象属性。<br><a id="more"></a></p>
+<p>从上面可以看出来原型链的好处，但是它也不是万能的，正因为指针的存在，对于某些引用类型来说这个就非常不好了，我需要保持原对象属性值是每一个对象特有的，而不是共享的，于是把之前的构造函数与原型组合起来，也就解决了这样的问题。</p>
+<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
+    <span class="keyword">this</span>.name = name;
+}
+Computer.prototype.showMessage = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    alert(<span class="keyword">this</span>.name);
+}
+
+<span class="keyword">var</span> apple = <span class="keyword">new</span> Computer(<span class="string">'apple'</span>);
+apple.showMessage();
+</code></pre><p>这样的结果是在对象中都会创建一份属于自己的属性，而方法则是共享的。</p>
+<p><strong>动态原型模式</strong></p>
+<p>有时候遇到某些问题需要动态添加原型，但是实例中是不能添加的，所以绕来一下，在初始化构造函数中添加。</p>
+<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    <span class="keyword">if</span>(<span class="keyword">typeof</span> <span class="keyword">this</span>.showMessage !== <span class="string">'function'</span>){
+        Computer.prototype.showMessage = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+
+        }
+    }
+}
+</code></pre><p>只要初始化了一次，以后就不用修改了。</p>
+<h3 id="寄生构造函数模式">寄生构造函数模式</h3>
+<p>这种模式的原理就是在一个函数中封装需要创建对象的代码，然后返回它。</p>
+<pre><code><span class="keyword">var</span> test = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
+    <span class="keyword">return</span> {
+        <span class="string">'name'</span>:name
+    }
+}
+<span class="keyword">var</span> g = <span class="keyword">new</span> test(<span class="string">'apple'</span>);
+<span class="keyword">var</span> f = de(<span class="string">'dell'</span>);
+</code></pre><p>看起来它跟工厂模式还是很像的，</p>
+<h3 id="稳妥模式">稳妥模式</h3>
+<p>这种模式主要是在解决需要安全的环境中使用，一般来说一个类如果不提供getter，setter方法，是不允许直接访问和修改的。</p>
+<pre><code><span class="keyword">var</span> computer = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
+    <span class="keyword">var</span> _name = name;
+    <span class="keyword">return</span> {
+        <span class="string">'getter'</span>:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">return</span> _name;
+        },
+        <span class="string">'setter'</span>:<span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
+            _name = name;
+        }
+    }
+}
+</code></pre><p>这样的方式可以保证属性或者说是数据的安全性，不允许直接随便修改，如果不提供setter方法的话，压根就不允许。</p>
+<h3 id="继承">继承</h3>
+<p>谈到面向对象，那么就不能不谈谈继承的问题了，而在Js中主要是将原型作为实现继承的主要思路。</p>
+<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
+    <span class="comment">//this.name = name;</span>
+}
+Computer.prototype.show = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    alert(<span class="string">'computer'</span>)
+}
+
+<span class="keyword">var</span> Apple = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+
+}
+Apple.prototype = <span class="keyword">new</span> Computer();
+Apple.prototype.hide = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{}
+Apple.prototype.show = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    alert(<span class="string">'apple'</span>)
+}
+<span class="keyword">var</span> apple = <span class="keyword">new</span> Apple();
+apple.show();
+alert(apple <span class="keyword">instanceof</span> Computer);
+</code></pre><p>使用这样的方式，实际上是从Computer的实例中先借它的prototype中所有的方法，但是这里会存在几个问题。</p>
+<ul>
+<li>如果Computer中需要传入参数，比如name，借的时候我根本不知道要传入什么参数。</li>
+<li>在Apple中如果要继续给原型添加方法，那么就不能使用字面量的形式了，它会覆盖掉</li>
+<li>如果要重写父类中的方法必须要在借prototype之后</li>
+<li>那么如何确定原型和实例的关系？貌似用instanceof和isPrototypeOf都会返回true</li>
+</ul>
+<p><strong>解决问题一如何传入参数</strong></p>
+<p>我们知道Js中有两个方法可以改变函数的上下文，apply和call，实际上类就是函数，这里既借属性也借prototype，不就可以解决这样的问题了么。</p>
+<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
+    <span class="comment">//this.name = name;</span>
+}
+Computer.prototype.show = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    alert(<span class="string">'computer'</span>)
+}
+
+<span class="keyword">var</span> Apple = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
+    Computer.call(<span class="keyword">this</span>,name);
+}
+Apple.prototype = <span class="keyword">new</span> Computer();
+
+<span class="keyword">var</span> apple = <span class="keyword">new</span> Apple(<span class="string">'apple'</span>);
+alert(apple <span class="keyword">instanceof</span> Apple);
+alert(apple <span class="keyword">instanceof</span> Computer);
+</code></pre><p>在运行时先借prototype，然后再借子类的this，但是这个也有个问题，那就是会调用两次父类。</p>
+<p><strong>继承的技巧</strong></p>
+<p>还有一种继承是生成一个临时对象，然后临时对象借需要继承的父类的prototype。</p>
+<pre><code><span class="keyword">var</span> extend = <span class="function"><span class="keyword">function</span><span class="params">(o)</span></span>{
+    <span class="keyword">var</span> F = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{}
+    F.prototype = o;
+    <span class="keyword">return</span> <span class="keyword">new</span> F();
+}
+
+<span class="keyword">var</span> <span class="keyword">parent</span> = {
+    <span class="string">'name'</span>:[<span class="string">'lcepy'</span>]
+}
+
+<span class="keyword">var</span> game = extend(<span class="keyword">parent</span>);
+game.name.push(<span class="string">'wow'</span>);
+
+<span class="keyword">var</span> _game = extend(<span class="keyword">parent</span>);
+_game.name.push(<span class="string">'view'</span>);
+</code></pre><p>使用这样的方式有个很大的缺陷，那就是不要借属性之类的数据，因为它们是共享的，这是一个浅拷贝，还是因为指针的原因。不过要是继承方法，这种方式很方便。</p>
+<p>还有一种方式跟上述类似，主要是封装了一层函数，用来返回对象。</p>
+<h3 id="寄生组合继承">寄生组合继承</h3>
+<p>这样的方式主要解决的问题是调用两次父类的问题，避免额外的借来的属性或方法。想想看第一次Computer.call(this)，借来了this上的属性或方法，第二次Apple.prototype = new Computer()，又借来了this上的属性或方法，这里的初衷是想借原型，没办法这个是实例，所以该借的不该借的都借来了。那么要避免这样的问题，就要解决继承属性的继承属性，继承原型的继承原型，也不乱借。</p>
+<pre><code><span class="keyword">var</span> extendPrototype = <span class="function"><span class="keyword">function</span><span class="params">(sub,supers)</span></span>{
+    <span class="keyword">var</span> F = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{}
+    F.prototype = supers.prototype;
+    <span class="keyword">var</span> _f = <span class="keyword">new</span> F();
+    _f.constructor = sub;
+    sub.prototype = _f;
+}
+<span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
+    <span class="keyword">this</span>.name = name;
+}
+Computer.prototype.show = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    alert(<span class="keyword">this</span>.name);
+}
+
+<span class="keyword">var</span> Apple = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
+    Computer.call(<span class="keyword">this</span>,name);
+}
+extendPrototype(Apple,Computer);
+
+<span class="keyword">var</span> apple = <span class="keyword">new</span> Apple(<span class="string">'apple'</span>);
+apple.show();
+</code></pre><p>第一步把supers的原型赋值给F，第二步创建F的实例，第三步把_f实例的constructor属性修改成子类，第四步把_f实例赋值给子类的prototype。</p>
+<p>这样的话就是不该借的也不会继承了</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>面向对象的语言有一个非常明显的标志：类，通过类来创建任意多个具有相同属性和方法的对象，可惜的是Js里没有这样的概念。</p>
+<p>但是Js有一个特性：一切皆是对象。</p>
+<p>聪明的开发者通过这些特性进行摸索，于是迂回发明了一些程序设计，以便更好的组织代码结构。</p>
+<h3 id="工厂模式">工厂模式</h3>
+<p>主要是用来解决有多个相同属性和方法的对象的问题，可以用函数来封装特定的接口来实现</p>
+<pre><code><span class="keyword">var</span> computer = <span class="function"><span class="keyword">function</span><span class="params">(name,version)</span></span>{
+    <span class="keyword">return</span> {
+        <span class="string">'name'</span>:name,
+        <span class="string">'version'</span>:version,
+        <span class="string">'showMessage'</span>:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            alert(<span class="keyword">this</span>.name);
+        }
+    }
+}
+<span class="keyword">var</span> test = computer(<span class="string">'apple'</span>,<span class="string">'11.1'</span>);
+test.showMessage();
+</code></pre><h3 id="构造函数模式">构造函数模式</h3>
+<p>我们知道像原生的构造函数，比如Object，Array等，它们是在运行时自动出现在执行环境中的。因此，为了模仿它，这里也可以通过一个普通的函数，并且new出一个对象，这样就成为了自定义的构造函数，也可以为他们添加自定义的属性和方法。</p>
+<p>但是这样的构造函数有一个缺陷，就是每个方法都会在每个实例上创建一次，因为每次创建都需要分配内存空间，但是有时候这样的特性还是有用的，主要是要控制它们，在不使用的时候释放内存。</p>
+<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name,version)</span></span>{
+    <span class="keyword">this</span>.name = name;
+    <span class="keyword">this</span>.version = version;
+    <span class="keyword">this</span>.showMessage = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        alert(<span class="keyword">this</span>.name);
+    }
+}
+
+<span class="keyword">var</span> apple = <span class="keyword">new</span> Computer(<span class="string">'apple'</span>,<span class="number">2014</span>);
+<span class="keyword">var</span> dell = <span class="keyword">new</span> Computer(<span class="string">'dell'</span>,<span class="number">2010</span>);
+apple.showMessage();
+dell.showMessage();
+</code></pre><p>像apple，dell是通过Computer实例化出来的不同的对象，但是它们的constructor都是指向Computer的。这里也可以使用instanceof来对（对象）进行检测。</p>
+<p>在书写上构造函数跟其他函数是没有什么区别的，主要的区别还是在使用上，构造函数需要使用new操作符。</p>
+<p>其实这样的书写，已经跟类没有什么区别了，表面上来看，而构造函数我个人更倾向于一个类的某个静态方法。</p>
+<h3 id="原型模式">原型模式</h3>
+<p>说到原型模式就不得不提一提关于指针的问题，因为每一个函数都有一个prototype属性，而这个属性是一个指针，指向一个对象。</p>
+<p><strong>C语言描述指针，这个在iOS开发中非常重要</strong></p>
+<p>比如我先定义一个int类型的指针变量和一个普通的int类型数据，然后给指针变量赋值。</p>
+<pre><code><span class="keyword">int</span> *<span class="keyword">p</span>;
+<span class="keyword">int</span> <span class="keyword">pp</span> = <span class="number">123</span>;
+<span class="keyword">p</span> = &amp;<span class="keyword">pp</span>;
+*<span class="keyword">p</span> = <span class="number">999</span>;
+<span class="built_in">printf</span>(<span class="string">'%d'</span>,<span class="keyword">pp</span>);
+</code></pre><p>*是一个特殊符号用于标明它是一个指针变量。</p>
+<p>&amp;是地址符</p>
+<p>分析这个就要说到栈内存和堆内存了，比如*p在栈内存中分配了一个地址假设是ff22x0，它还没有空间。而pp存在一个地址ff23x0，并且分配了一个空间存储着123，这个地址是指向这个空间的。</p>
+<p>p = &amp;pp 这样的赋值操作，也就是把ff23x0取出来，并且给p分配一个空间把ff23x0存储进去，并且ff22x0指向这个空间。</p>
+<p>*p = 999 从这里就可以看出来p操作的是地址，而这个地址不就是ff23x0么，于是pp成了999。</p>
+<p>所谓的指针也就是存储着地址的变量。</p>
+<p>回到原型上，如果每一个函数中的 prototype属性都是一个指针，实际上它只是一个地址引用着一个空间，而这个空间正是我们写的xxx.prototype.xxx = function(){}这样的代码在运行时分配的空间。那么可见，使用原型的好处是空间只分配一次，大家都是共享的，因为它是指针。</p>
+<p>先看一个例子</p>
+<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
+    <span class="keyword">this</span>.name = name;
+}
+Computer.prototype.showMessage = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
+    alert(name);
+}
+
+<span class="keyword">var</span> apple = <span class="keyword">new</span> Computer(<span class="string">'apple'</span>);
+<span class="keyword">var</span> dell = <span class="keyword">new</span> Computer(<span class="string">'dell'</span>);
+Computer.prototype.isPrototypeOf(apple);
+</code></pre><p>在解释这个原型链之前，还要明白Js的一个特性，就是如果自身不存在，它会沿着原型往上查找。它的原理稍微有些绕，Computer自身的prototype是指向它自身的原型对象的，而每一个函数又有一个constructor指向它自身，prototype.constructor又指向它自身。于是Computer的两个实例apple，dell内部有一个<strong>proto</strong>属性是指向Computer.prototype的，最后的结果是它们可以使用showMessage方法。</p>
+<p>当然它们还有一个搜索原则，比如在调用showMessage的时候，引擎先问apple自身有showMessage吗？“没有”，继续搜索，apple的原型有吗，“有”，调用。所以从这里可以看出，this.showMessage是会覆盖prototype.showMessage的。</p>
+<p>另外还可以使用isPrototypeOf来检测一个对象是否在另一个对象的原型链上，上述的代码返回的是true。</p>
+<pre><code>apple.hasOwnProperty(<span class="string">'name'</span>)
+
+apple.hasOwnProperty(<span class="string">'showMessage'</span>)
+</code></pre><p>使用hasOwnProperty来检测到底是对象属性还是原型属性，使用this创建的属性是一个对象属性。<br>]]>
+    
+    </summary>
+    
+      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[复习JavaScript四之Object]]></title>
@@ -1508,209 +1793,6 @@ Sessions
     </summary>
     
       <category term="代码组织" scheme="http://lcepy.github.io/tags/%E4%BB%A3%E7%A0%81%E7%BB%84%E7%BB%87/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[2015年夏天骑行计划安排事项]]></title>
-    <link href="http://lcepy.github.io/2014/11/14/2015%E5%B9%B4%E5%A4%8F%E5%A4%A9%E9%AA%91%E8%A1%8C%E8%AE%A1%E5%88%92%E5%AE%89%E6%8E%92%E4%BA%8B%E9%A1%B9/"/>
-    <id>http://lcepy.github.io/2014/11/14/2015年夏天骑行计划安排事项/</id>
-    <published>2014-11-13T16:30:26.000Z</published>
-    <updated>2014-11-14T19:41:46.000Z</updated>
-    <content type="html"><![CDATA[<p><img src="http://websources.qiniudn.com/img/wow.jpg" alt="回忆是一幅风景"></p>
-<h2 id="装备预算">装备预算</h2>
-<p><strong>骑行必备装预算，计算总价为最低档。</strong></p>
-<p>如果选择捷安特的整车，如XTC750,XTC790的话，预算分别为3300，5300</p>
-<p>如果是自己配置的话，尽量选择高性能的车架，轮胎，以及变速器，预算也在2500-3000左右。</p>
-<p>魔术头巾，大概6-15元</p>
-<p>头盔 120-160元</p>
-<p><em>头盔要选择轻量的，通风口越多的头盔。</em></p>
-<p>骑行太阳镜 100-130元</p>
-<p><em>骑行眼镜要选择对光线处理的比较好的</em></p>
-<p>水壶，水壶架，前后置灯光</p>
-<p>40元  20元  58元</p>
-<p><em>建议是来穿衣要穿白色或五颜六色的衣服，目标比较醒目。</em></p>
-<p>捷安特750，魔术头巾，头盔，骑行太阳眼镜，水壶，水壶架，前后置灯光</p>
-<p>总价：3708元</p>
-<p><strong>不可选项，但为整个车队携带</strong></p>
-<p>山地车维修工具</p>
-<p><em>注明：一个车队带一套即可，配件为三份</em></p>
-<p>山地车链条（3）</p>
-<p>山地刹车（2）</p>
-<p>山地车轮胎（1）</p>
-<p><strong>轮胎的价格大概50-80，刹车如果带一个碟刹，大概400-600，一个V刹车200-300，链条比较便宜，几十块。维护工具选择了一个专业的工具套装大概300元左右，维修工具由某个人单独购买吧，不计入预算。</strong></p>
-<p>总价：740-1070元</p>
-<p>外伤医疗包</p>
-<p>感冒药以及一些必备药品<br><a id="more"></a><br><strong>外伤，主要是双氧水，碘酒，纱布，棉签，这些消毒用品。药物方面，主要携带，感冒药，消食片等等辅助类的。这一类价格在100-200元左右</strong></p>
-<p><strong>不可选的装备预算大概在4700左右，也就是将近5000块钱了。建议项目，选择高性能的车架，车垫，以及骑行裤子，这样会，在出发前，要科学的练习一下骑行姿势的训练，这样能减少骑行过程中所出现的问题。</strong></p>
-<h2 id="游玩预算">游玩预算</h2>
-<p><em>一路大概要经过13个城镇，必须的费用为吃，住宿。吃的方面可以节约一点，晚上可以吃好一点，其他主要是干粮和水，住宿的话，也可以住旅社，不住酒店。</em></p>
-<p>旅社住宿的费用大概一晚100-150</p>
-<p>吃的费用也不贵。</p>
-<p>我的算法是一个人五千的预算，另外再放一个2000的预算为额外的预算。</p>
-<p>5000元主要是走完全程，以及路上去旅游景点的费用，以及可能出现的状况。</p>
-<p>我会分配20%的为一号额外预算，另外放的2000为0号额外预算。</p>
-<p><strong>2000 5000  这个地方没法估算，只能在路上看具体的情况，大概是不会超出5000的。一个人身上带2000的现金，其余的钱都放到一个人的银行卡里，另外在带一张备用的空卡。</strong></p>
-<p><strong>整体的费用估算，只包括所有必选项，预算费用在12000左右</strong></p>
-<p><strong>可选项</strong></p>
-<p><em>可选看个人的需求购买，这里的罗列我已全部装备。</em></p>
-<p>骑行衣裤（两套）</p>
-<p>骑行鞋子</p>
-<p>骑行护手</p>
-<p>骑行护膝</p>
-<p>骑行袜子</p>
-<p>旅行背包</p>
-<p>照相机</p>
-<p>心率仪</p>
-<p>车载摄像仪</p>
-<p>军刀</p>
-<p>红外线测试仪（野外的热能探测）</p>
-<p>匕首</p>
-<p>防水的打火机</p>
-<p>雷朋太阳眼镜</p>
-<p>通信设备</p>
-<p>GPS定位（可以用手机替代）</p>
-<p>低频干扰仪</p>
-<p>对讲机</p>
-<h2 id="路线大纲建议">路线大纲建议</h2>
-<h3 id="这是一份建议性质的计划，路程上完全凭借个人自己的主观意愿来决定骑行哪一条线路，是否要统一思想，待大家讨论决定。骑行具有一定的危险性，而且我们都仅仅是个人爱好一起出发（自助的形式），所以出发前，各自检查身体状况，购买好保险。测试阶段，仅仅是我和我表弟在家中测试我们自己的车的性能与设备能否正常工作，不具备统一性。">这是一份建议性质的计划，路程上完全凭借个人自己的主观意愿来决定骑行哪一条线路，是否要统一思想，待大家讨论决定。骑行具有一定的危险性，而且我们都仅仅是个人爱好一起出发（自助的形式），所以出发前，各自检查身体状况，购买好保险。测试阶段，仅仅是我和我表弟在家中测试我们自己的车的性能与设备能否正常工作，不具备统一性。</h3>
-<p><strong>这份计划建议，主要是规划了行车路线点到点详细的路线图，以及在哪里停留，休整，补给，游玩。另外补充了补给内容与游玩内容的建议，最后总结了为什么要计划一次这么长途跨省的穿越。</strong></p>
-<p><em>游玩路线，根据到达当地再做决定</em></p>
-<h2 id="第一阶段，测试长途距离的车性与整车磨合度（我和我表弟）">第一阶段，测试长途距离的车性与整车磨合度（我和我表弟）</h2>
-<p><strong>注明：这是一项测试。</strong></p>
-<h4 id="第一天，洪江区">第一天，洪江区</h4>
-<p>从鹤鸣洲，小姑姑家出发，沿着之前的怀黔公路，到达安江，中午到向昆家略停休整，全程大概52公里左右。要不要去大年溪爷爷家？看情况。如果去，则在安江休整一日。如果不去，则避开中午高温区间，走222省道，一直沿着沅江到达洪江老区，晚上在此休息，大概34.2公里，晚上到区政府借住。</p>
-<p><em>全程大概86.2公里</em></p>
-<h4 id="第二天，洪江区">第二天，洪江区</h4>
-<p>第二天上午对水，干粮，进行补给（视情况而定对车配件进行补给与维护），中午走一走洪江古商城，考察一下，如果开辟骑行线路，有没有可行性，过深渡苗乡的时候，看看有没有可以利用的中间休整据点。（如果这条线路，可行，中间某个地方肯定需要一个补给点）</p>
-<p><strong>已经被人忘记的中国第一古城，活化石。</strong></p>
-<blockquote>
-<p>洪江老区，主要是古商城</p>
-</blockquote>
-<p>游玩看情况而定一天或者两天</p>
-<h4 id="第三天，洪江市">第三天，洪江市</h4>
-<p>洪江在当地会指三个地方，新建的黔城镇，洪江老区，安江镇，我们从老家过来，最后到达新城黔城。</p>
-<p>选择方案一：沿着沅江向西北方向骑行，一直到达209国道进入黔城。</p>
-<p><em>全程大概24.3公里</em></p>
-<p>选择方案二：清早起床，坐船去黔城。</p>
-<p>晚上在黔城休整一天，去洪江军区老干所外公家里住一晚。</p>
-<p><strong>黔城也是一个旅游风景区，是否游玩看情况而定。</strong></p>
-<blockquote>
-<p>芙蓉楼</p>
-</blockquote>
-<p>返回鹤鸣洲，对车进行一次长期的修检，补给与休整三日。</p>
-<p><em>全程大概42.2公里</em></p>
-<p><strong>测试阶段，主要是为了车自身况与零配件的磨合程度，人与人之间长距离的磨合，协调，以及其他电子设备是否在非正常环境中能够正常工作，其他装备的磨合程度。时间计算大概在五天或者七天之间，全程大概为：157.8公里，不会超过200公里的路程。</strong></p>
-<h2 id="测试项">测试项</h2>
-<p>短期长距离的抗压测试的好处，是能了解整个系统在这样的非正常环境下能否正常的工作，能否维护与维修，路上大家的协调能力，以及身体素质方面的测试。</p>
-<p>变速器是否工作正常，刹车系统是否工作正常，传动系统是否能工作正常，越野轮胎的耐压性，整车抗压性。</p>
-<p>车载测速仪是否工作正常，车载摄像仪是否工作正常，单反相机能否工作正常，地图导航方面是否精准。</p>
-<p>身体抗压能力，路上行车的反应能力</p>
-<h2 id="第二阶段，怀-昆（天数另外计算，这里只规划路线_出发阶段）">第二阶段，怀-昆（天数另外计算，这里只规划路线 出发阶段）</h2>
-<p><strong>注明：不去凤凰，直接走芷江，新晃，穿过贵州到达昆明。另外路途之上，我会用车载摄像仪进行全程录像，不游玩，只过路，一直到达贵阳，昆明两个节点。</strong></p>
-<h4 id="目标_，新晃">目标 ，新晃</h4>
-<p>中午到达芷江，大概41.6公里，一直沿着320国道走，休息一两小时。下午继续沿着320国道，到达新晃，大概64.8公里。</p>
-<blockquote>
-<p>沿途大部分是沿着舞水河，一直到达新晃，晚上吃侗族菜，去看侗族歌舞。 </p>
-<p>到达芷江后，是否去抗日纪念馆，天后宫，中国侗文化城，龙津风雨桥</p>
-<p>到达新晃后，是否去夜郎古乐城，夜郎大峡谷，龙溪古镇</p>
-</blockquote>
-<p><em>全程大概106.4公里</em></p>
-<p><strong>从进入贵州开始，路都不太好走了，因为不是国道，所以行车时一定要注意安全，保持对路况的了解。第二天的行程，可能会延误，如果天黑之前到达不了镇远，去附近的某个苗族村借住一晚。</strong></p>
-<h4 id="目标，镇远">目标，镇远</h4>
-<p>早晨出新晃，就进入贵州境了，一直到达岑巩，大概46.6公里，休息一两小时，下午沿着S306省道，到达镇远，大概52.4公里。晚上主要是进行补给与检查车的状况，注意休息与保暖，另外去吃苗族菜。</p>
-<p><em>全程大概99公里</em></p>
-<blockquote>
-<p>镇远，我建议游玩一下，中国最美的十大古城之一，据称。</p>
-<p>镇远城，青龙洞，舞阳河等等</p>
-</blockquote>
-<h4 id="目标，黄平">目标，黄平</h4>
-<p>到达黄平大概有71公里左右，因为都是山路，另外从镇远到黄平中间，大部分都是森林和山，需要准备干粮，中间会经过一个小县城。晚上就在黄平休息，晚上吃贵州火锅，看苗族歌舞。</p>
-<p>全程大概71公里</p>
-<blockquote>
-<p>浪洞温泉</p>
-</blockquote>
-<h3 id="目标，贵定">目标，贵定</h3>
-<p>从黄平到贵定，中间没有任何城市，而且全是森林与山，需要准备干粮，全程大概有120公里左右，晚上在贵定休息。</p>
-<p>全程大概120公里</p>
-<blockquote>
-<p>黄龙山高原草场景区</p>
-</blockquote>
-<h3 id="目标，贵阳">目标，贵阳</h3>
-<p>从贵定直接到贵阳，路程79公里左右，在贵阳休息三天。 </p>
-<p><em>全程大概79公里</em></p>
-<h2 id="贵阳游玩（待更详细）">贵阳游玩（待更详细）</h2>
-<blockquote>
-<p>青岩古镇，黔灵山，黄果树，晚上逛夜市，弘福寺 酸汤鱼、辣子鸡、丝娃娃、花江狗肉、肠旺面、牛肉粉</p>
-</blockquote>
-<h1 id="只规划贵阳之前的游玩大概，之后的在路上再决定。">只规划贵阳之前的游玩大概，之后的在路上再决定。</h1>
-<h4 id="目标，镇宁">目标，镇宁</h4>
-<p>到达平坝全程58.4公里，中午在此休息，晚间到达镇宁，大概70.7公里，这里看情况，如果可以就走完全程，中间没有可以停留的县城，如果不行就在平坝休息，第二天走镇宁。</p>
-<p><em>全程大概130公里</em></p>
-<blockquote>
-<p>夜郎洞风景区，以及民俗</p>
-</blockquote>
-<h4 id="目标，兴仁">目标，兴仁</h4>
-<p>从贵州进入云南，只有一个县城兴仁，相距大概161.2公里，全程都是森林，山路。</p>
-<p><em>全程大概161.2公里</em></p>
-<h4 id="目标，罗平">目标，罗平</h4>
-<p>从这里开始就进入云南了，到达罗平141公里，这里中间考虑在兴义休息一天，还是直接进入云南。</p>
-<p><em>全程大概141公里</em></p>
-<blockquote>
-<p>腊山湖，九龙瀑布群，多依河景区</p>
-</blockquote>
-<h4 id="目标，石林">目标，石林</h4>
-<p>这里已经接近昆明了，到达石林，大概157.6公里。</p>
-<p><em>全程大概157.6公里</em></p>
-<blockquote>
-<p>云南石林世界地质公园</p>
-</blockquote>
-<h3 id="目标，昆明">目标，昆明</h3>
-<p>到达昆明大概91.7公里</p>
-<h2 id="昆明游玩（待更详细）">昆明游玩（待更详细）</h2>
-<p>计划在昆明游玩三天或五天，主要是吃，风景游玩等等，另外看看能不能找到北上德钦的骑行队伍，如果有则跟随大队伍出发，没有则按如下第三阶段出发。 </p>
-<h2 id="第三阶段：昆-德">第三阶段：昆-德</h2>
-<p><strong>从这里开始，就要进入青藏高原地区了，这边是属于边缘部分了，需要准备御寒的衣物。另外第三阶段的细节问题，待到云南昆明后再做筹备，这里只做一个大概的规划。</strong></p>
-<h3 id="目标，大理">目标，大理</h3>
-<p><em>全程407.1公里，</em>这里可以计划分批次跑完全程，在大理待的天数，看当时情况而定。</p>
-<h3 id="目标，丽江（最后可能到达的最终地点或者到香格里拉）">目标，丽江（最后可能到达的最终地点或者到香格里拉）</h3>
-<p><em>全程182.5公里，</em>这里依然可以计划分批次跑完全程，在丽江待的天数，看当时的情况而定</p>
-<h3 id="目标，德钦（这边已经是高原了，需要穿过一个雪山去不去，看情况）">目标，德钦（这边已经是高原了，需要穿过一个雪山去不去，看情况）</h3>
-<p><em>全程370.9公里，</em>这里依然是计划分批次跑完全程，在德钦待的天数，看当时的情况而定。</p>
-<h2 id="第四阶段：回程_||_进藏（拉萨）">第四阶段：回程 || 进藏（拉萨）</h2>
-<p>对于第四阶段的描述，为看当时大家的情况而定，是否是从德钦开始回程，还是从滇藏南线进入西藏，最后到拉萨，在拉萨游玩一周，从拉萨坐火车，或者飞机回到长沙。</p>
-<p><strong>这一阶段的情况，是一个可选的建议，看当时的情况而定。</strong></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p><img src="http://websources.qiniudn.com/img/wow.jpg" alt="回忆是一幅风景"></p>
-<h2 id="装备预算">装备预算</h2>
-<p><strong>骑行必备装预算，计算总价为最低档。</strong></p>
-<p>如果选择捷安特的整车，如XTC750,XTC790的话，预算分别为3300，5300</p>
-<p>如果是自己配置的话，尽量选择高性能的车架，轮胎，以及变速器，预算也在2500-3000左右。</p>
-<p>魔术头巾，大概6-15元</p>
-<p>头盔 120-160元</p>
-<p><em>头盔要选择轻量的，通风口越多的头盔。</em></p>
-<p>骑行太阳镜 100-130元</p>
-<p><em>骑行眼镜要选择对光线处理的比较好的</em></p>
-<p>水壶，水壶架，前后置灯光</p>
-<p>40元  20元  58元</p>
-<p><em>建议是来穿衣要穿白色或五颜六色的衣服，目标比较醒目。</em></p>
-<p>捷安特750，魔术头巾，头盔，骑行太阳眼镜，水壶，水壶架，前后置灯光</p>
-<p>总价：3708元</p>
-<p><strong>不可选项，但为整个车队携带</strong></p>
-<p>山地车维修工具</p>
-<p><em>注明：一个车队带一套即可，配件为三份</em></p>
-<p>山地车链条（3）</p>
-<p>山地刹车（2）</p>
-<p>山地车轮胎（1）</p>
-<p><strong>轮胎的价格大概50-80，刹车如果带一个碟刹，大概400-600，一个V刹车200-300，链条比较便宜，几十块。维护工具选择了一个专业的工具套装大概300元左右，维修工具由某个人单独购买吧，不计入预算。</strong></p>
-<p>总价：740-1070元</p>
-<p>外伤医疗包</p>
-<p>感冒药以及一些必备药品<br>]]>
-    
-    </summary>
-    
-      <category term="骑行 户外" scheme="http://lcepy.github.io/tags/%E9%AA%91%E8%A1%8C-%E6%88%B7%E5%A4%96/"/>
     
   </entry>
   

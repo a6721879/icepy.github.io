@@ -168,6 +168,120 @@
 </nav>
       
   
+    <article id="post-复习JavaScript五之面向对象的程序设计" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/26/复习JavaScript五之面向对象的程序设计/" class="article-date">
+  	<time datetime="2015-01-26T06:52:39.000Z" itemprop="datePublished">1月 26 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/26/复习JavaScript五之面向对象的程序设计/">复习JavaScript五之面向对象的程序设计</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>面向对象的语言有一个非常明显的标志：类，通过类来创建任意多个具有相同属性和方法的对象，可惜的是Js里没有这样的概念。</p>
+<p>但是Js有一个特性：一切皆是对象。</p>
+<p>聪明的开发者通过这些特性进行摸索，于是迂回发明了一些程序设计，以便更好的组织代码结构。</p>
+<h3 id="工厂模式">工厂模式</h3>
+<p>主要是用来解决有多个相同属性和方法的对象的问题，可以用函数来封装特定的接口来实现</p>
+<pre><code><span class="keyword">var</span> computer = <span class="function"><span class="keyword">function</span><span class="params">(name,version)</span></span>{
+    <span class="keyword">return</span> {
+        <span class="string">'name'</span>:name,
+        <span class="string">'version'</span>:version,
+        <span class="string">'showMessage'</span>:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            alert(<span class="keyword">this</span>.name);
+        }
+    }
+}
+<span class="keyword">var</span> test = computer(<span class="string">'apple'</span>,<span class="string">'11.1'</span>);
+test.showMessage();
+</code></pre><h3 id="构造函数模式">构造函数模式</h3>
+<p>我们知道像原生的构造函数，比如Object，Array等，它们是在运行时自动出现在执行环境中的。因此，为了模仿它，这里也可以通过一个普通的函数，并且new出一个对象，这样就成为了自定义的构造函数，也可以为他们添加自定义的属性和方法。</p>
+<p>但是这样的构造函数有一个缺陷，就是每个方法都会在每个实例上创建一次，因为每次创建都需要分配内存空间，但是有时候这样的特性还是有用的，主要是要控制它们，在不使用的时候释放内存。</p>
+<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name,version)</span></span>{
+    <span class="keyword">this</span>.name = name;
+    <span class="keyword">this</span>.version = version;
+    <span class="keyword">this</span>.showMessage = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        alert(<span class="keyword">this</span>.name);
+    }
+}
+
+<span class="keyword">var</span> apple = <span class="keyword">new</span> Computer(<span class="string">'apple'</span>,<span class="number">2014</span>);
+<span class="keyword">var</span> dell = <span class="keyword">new</span> Computer(<span class="string">'dell'</span>,<span class="number">2010</span>);
+apple.showMessage();
+dell.showMessage();
+</code></pre><p>像apple，dell是通过Computer实例化出来的不同的对象，但是它们的constructor都是指向Computer的。这里也可以使用instanceof来对（对象）进行检测。</p>
+<p>在书写上构造函数跟其他函数是没有什么区别的，主要的区别还是在使用上，构造函数需要使用new操作符。</p>
+<p>其实这样的书写，已经跟类没有什么区别了，表面上来看，而构造函数我个人更倾向于一个类的某个静态方法。</p>
+<h3 id="原型模式">原型模式</h3>
+<p>说到原型模式就不得不提一提关于指针的问题，因为每一个函数都有一个prototype属性，而这个属性是一个指针，指向一个对象。</p>
+<p><strong>C语言描述指针，这个在iOS开发中非常重要</strong></p>
+<p>比如我先定义一个int类型的指针变量和一个普通的int类型数据，然后给指针变量赋值。</p>
+<pre><code><span class="keyword">int</span> *<span class="keyword">p</span>;
+<span class="keyword">int</span> <span class="keyword">pp</span> = <span class="number">123</span>;
+<span class="keyword">p</span> = &amp;<span class="keyword">pp</span>;
+*<span class="keyword">p</span> = <span class="number">999</span>;
+<span class="built_in">printf</span>(<span class="string">'%d'</span>,<span class="keyword">pp</span>);
+</code></pre><p>*是一个特殊符号用于标明它是一个指针变量。</p>
+<p>&amp;是地址符</p>
+<p>分析这个就要说到栈内存和堆内存了，比如*p在栈内存中分配了一个地址假设是ff22x0，它还没有空间。而pp存在一个地址ff23x0，并且分配了一个空间存储着123，这个地址是指向这个空间的。</p>
+<p>p = &amp;pp 这样的赋值操作，也就是把ff23x0取出来，并且给p分配一个空间把ff23x0存储进去，并且ff22x0指向这个空间。</p>
+<p>*p = 999 从这里就可以看出来p操作的是地址，而这个地址不就是ff23x0么，于是pp成了999。</p>
+<p>所谓的指针也就是存储着地址的变量。</p>
+<p>回到原型上，如果每一个函数中的 prototype属性都是一个指针，实际上它只是一个地址引用着一个空间，而这个空间正是我们写的xxx.prototype.xxx = function(){}这样的代码在运行时分配的空间。那么可见，使用原型的好处是空间只分配一次，大家都是共享的，因为它是指针。</p>
+<p>先看一个例子</p>
+<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
+    <span class="keyword">this</span>.name = name;
+}
+Computer.prototype.showMessage = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
+    alert(name);
+}
+
+<span class="keyword">var</span> apple = <span class="keyword">new</span> Computer(<span class="string">'apple'</span>);
+<span class="keyword">var</span> dell = <span class="keyword">new</span> Computer(<span class="string">'dell'</span>);
+Computer.prototype.isPrototypeOf(apple);
+</code></pre><p>在解释这个原型链之前，还要明白Js的一个特性，就是如果自身不存在，它会沿着原型往上查找。它的原理稍微有些绕，Computer自身的prototype是指向它自身的原型对象的，而每一个函数又有一个constructor指向它自身，prototype.constructor又指向它自身。于是Computer的两个实例apple，dell内部有一个<strong>proto</strong>属性是指向Computer.prototype的，最后的结果是它们可以使用showMessage方法。</p>
+<p>当然它们还有一个搜索原则，比如在调用showMessage的时候，引擎先问apple自身有showMessage吗？“没有”，继续搜索，apple的原型有吗，“有”，调用。所以从这里可以看出，this.showMessage是会覆盖prototype.showMessage的。</p>
+<p>另外还可以使用isPrototypeOf来检测一个对象是否在另一个对象的原型链上，上述的代码返回的是true。</p>
+<pre><code>apple.hasOwnProperty(<span class="string">'name'</span>)
+
+apple.hasOwnProperty(<span class="string">'showMessage'</span>)
+</code></pre><p>使用hasOwnProperty来检测到底是对象属性还是原型属性，使用this创建的属性是一个对象属性。<br>
+        
+          <p class="article-more-link">
+            <a href="/2015/01/26/复习JavaScript五之面向对象的程序设计/#more">more >></a>
+          </p>
+        
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-复习JavaScript四之Object" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -507,76 +621,6 @@ iframe.onload = <span class="function"><span class="keyword">function</span><spa
 <p>每一个请求和响应都会带有相应的HTTP头信息，其中对开发者是很有用的，而xhr对象提供了一个setRequestHeader方法来设置头信息，它必须在调用open方法之后并且在send方法之前。有设置，必须得有获取，xhr对象也提供了两个方法分别来获取，getResponseHeader传入一个头部字段名来获取，getAllResponseHeaders来获取全部的头信息。</p>
 <p>onreadystatechange事件，每次刷新状态时，系统都会重新调用此事件。</p>
 
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-移动H5-HybridApp开发思路的一些总结" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/" class="article-date">
-  	<time datetime="2015-01-10T07:04:24.000Z" itemprop="datePublished">1月 10 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/">移动H5-HybridApp开发思路的一些总结</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>利用H5来开发移动app时，很大一部分的逻辑处理是在每一个视图的切换上，包括维护生命周期，释放内存，以及维护动画。我们在使用iOS时，基本上当前屏幕中内容显示的区域内就应该算是一个视图，当然H5版的app跟纯粹的iOS开发又有一些不同。</p>
-<ul>
-<li>H5版本的app是一个HTML页面，场景的切换基本上是切换内部的div容器，而当前浏览器内的框架则是它的window</li>
-<li>H5版本的app还需要监听hashchange或者history，来维护每一个视图控制器js文件的加载，执行</li>
-<li>每一个视图控制器需要维护它自身的生命周期，如创建，渲染视图，添加事件，销毁，以及离开当前视图时等一系列的生命周期</li>
-<li>一个视图控制器对应一个视图，一个模型，视图控制器来控制模型的请求，视图的渲染，模型与视图之间互相不干扰</li>
-<li>H5版本的app还需要维护一个NavigationController的头，用来控制内容区域内的视图控制器的转换以及它的动画</li>
-<li>应用兼容iOS，安卓，WP手持设备的dom兼容库（zepto），以及手势，触摸事件的兼容处理</li>
-<li>关于请求还需要维护本地存储与它之间的联系</li>
-<li>在Hybrid中，要构建起与原生框架的交互桥梁，比如phoneGap</li>
-<li>维护一个UI组件交互的库，比如一些常用的scoll，slider等</li>
-</ul>
-<p>从上述的一些总结中，可以看的出来要开发基于H5的移动端app，需要做的事情还是有很多的，浓缩的总结有三个方面：</p>
-<blockquote>
-<p>代码组织，MVC或者MVVM以及它们的生命周期与文件加载</p>
-<p>DOM 触摸 手势兼容处理</p>
-<p>与Native的交互</p>
-</blockquote>
-<p>在代码实现的思路上，这里都会使用一个栈来实现它。</p>
-<ul>
-<li>栈顶属于当前视图控制器</li>
-<li>基栈则是根视图控制器</li>
-</ul>
-
-        
-          <p class="article-more-link">
-            <a href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/#more">more >></a>
-          </p>
-        
       
     </div>
   </div>
