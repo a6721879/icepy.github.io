@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>复习JavaScript六之事件 | lcepy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="IE浏览器的事件不是复习的重点
+
+事件是JavaScript与HTML进行交互的一个纽带，理解事件可以更好的处理Web应用程序，现在的浏览器中主要支持两种事件流：
+
+事件冒泡
+事件捕获
+DOM事件流
+
+事件冒泡则是指事件开始时由具体的元素接收，然后逐级向上传播。比如：
+&lt;html&gt;
+    &lt;head&gt;&lt;/head&gt;
+    &lt;body&gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="复习JavaScript六之事件">
+<meta property="og:url" content="http://lcepy.github.io/2015/01/27/复习JavaScript六之事件/">
+<meta property="og:site_name" content="lcepy">
+<meta property="og:description" content="IE浏览器的事件不是复习的重点
+
+事件是JavaScript与HTML进行交互的一个纽带，理解事件可以更好的处理Web应用程序，现在的浏览器中主要支持两种事件流：
+
+事件冒泡
+事件捕获
+DOM事件流
+
+事件冒泡则是指事件开始时由具体的元素接收，然后逐级向上传播。比如：
+&lt;html&gt;
+    &lt;head&gt;&lt;/head&gt;
+    &lt;body&gt;">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="复习JavaScript六之事件">
+<meta name="twitter:description" content="IE浏览器的事件不是复习的重点
+
+事件是JavaScript与HTML进行交互的一个纽带，理解事件可以更好的处理Web应用程序，现在的浏览器中主要支持两种事件流：
+
+事件冒泡
+事件捕获
+DOM事件流
+
+事件冒泡则是指事件开始时由具体的元素接收，然后逐级向上传播。比如：
+&lt;html&gt;
+    &lt;head&gt;&lt;/head&gt;
+    &lt;body&gt;">
+
+  
+    <link rel="alternative" href="/atom.xml" title="lcepy" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  
+
+  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<div class="profilepic">
+			<img src="http://websources.qiniudn.com/img/me.jpg">
+		</div>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">lcepy</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟!</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">纪录学习的点滴</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud">
+						<a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/iOS/" style="font-size: 13.33px;">iOS</a><a href="/tags/node-js/" style="font-size: 20.00px;">node&js</a><a href="/tags/python-django/" style="font-size: 16.67px;">python django</a><a href="/tags/regex/" style="font-size: 10.00px;">regex</a><a href="/tags/代码组织/" style="font-size: 10.00px;">代码组织</a><a href="/tags/生活/" style="font-size: 13.33px;">生活</a><a href="/tags/项目经历-长期维护/" style="font-size: 10.00px;">项目经历 长期维护</a><a href="/tags/骑行-户外/" style="font-size: 10.00px;">骑行 户外</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					一个玩js py的小伙子 PS：若有问题可邮件 xiangwenwe@foxmail.com
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay"></div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://websources.qiniudn.com/img/me.jpg">
+			</div>
+
+			<hgroup>
+			  <h1 class="header-author"><a href="/">lcepy</a></h1>
+			</hgroup>
+			
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟!</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">纪录学习的点滴</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <article id="post-复习JavaScript六之事件" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/27/复习JavaScript六之事件/" class="article-date">
+  	<time datetime="2015-01-27T10:08:04.000Z" itemprop="datePublished">1月 27 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      复习JavaScript六之事件
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>IE浏览器的事件不是复习的重点</p>
+</blockquote>
+<p>事件是JavaScript与HTML进行交互的一个纽带，理解事件可以更好的处理Web应用程序，现在的浏览器中主要支持两种事件流：</p>
+<ul>
+<li>事件冒泡</li>
+<li>事件捕获</li>
+<li>DOM事件流</li>
+</ul>
+<p>事件冒泡则是指事件开始时由具体的元素接收，然后逐级向上传播。比如：</p>
+<pre><code><span class="tag">&lt;<span class="title">html</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">head</span>&gt;</span><span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">body</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">p</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</code></pre><p>给p标签监听一个事件，它的流向是p,div,body,html,document，其实细心看来这种流的走向会存在一个问题，给div也监听一个事件，当用户点击P的时候是会触发两次的，好在event对象中有可以阻止事件冒泡的方法。</p>
+<p>事件捕获则是指事件由最上级接收，逐级向下传播到具体的元素上，了解了冒泡之后这个就非常好理解了，正是一个相反的步骤。</p>
+<p>而DOM事件流又正好是冒泡与捕获的结合体，它分为三个阶段：事件捕获，目标事件，事件冒泡，如果在纸上画出来，它的走向就是一个圆形。</p>
+<blockquote>
+<p>对于事件处理程序，写在HTML标签中的，另外一种是直接写一个function的，比如doc.onclick = function(){}，一般来说这些浏览器支持，但是基本上不会使用了。因为前者是跟HTML耦合的，不利代码维护，而且虽然HTML加载了但是Js文件还未加载，用户点击后，是直接报错的。后者虽然也可以删除，比如doc.onclick = null，对于对代码有强迫症的同学，基本上不会使用到它。</p>
+</blockquote>
+<p>那么，我们该怎么给一个元素添加上事件处理程序呢？</p>
+<h3 id="DOM2级事件处理程序">DOM2级事件处理程序</h3>
+<ul>
+<li>addEventLister</li>
+<li>removeEventLister</li>
+</ul>
+<p>所有的DOM节点都具备这两个方法，它接收三个参数：</p>
+<ul>
+<li>要处理的事件名称，比如click（这里跟上述两个以及IE注册事件都不同，不需要on）</li>
+<li>需要事件进行处理的函数</li>
+<li>一个布尔值，表示（true，在捕获阶段调用事件处理函数）（false，在冒泡阶段调用事件处理函数）</li>
+</ul>
+<blockquote>
+<p>一般情况下第三个参数都填false</p>
+</blockquote>
+<p>IE浏览器对应的两个方法，attachEvent，detachEvent，它们只有冒泡，事件名要加上on。</p>
+<h3 id="事件对象">事件对象</h3>
+<p>在注册完事件处理程序后，事件的一个比较重要的对象必须要理解，<strong>event事件对象</strong>。</p>
+<p>一般来说，这个对象中包含着所有与当前元素所监听的事件有关的信息，比如元素监听的事件类型，元素本身等等。</p>
+<p><strong>比较重要的属性和方法（只读）</strong></p>
+<ul>
+<li>currentTarget 真正监听事件的那个元素</li>
+<li>target 事件的目标元素</li>
+<li>type 事件的类型</li>
+<li>perventDefault()  取消事件的默认行为</li>
+<li>stopPropagation()  取消事件的捕获或者冒泡</li>
+<li>bubbles 事件是否冒泡</li>
+<li>eventPhase 事件处理程序的三个阶段，1捕获2处于目标3冒泡</li>
+</ul>
+<p><strong>比较重要的属性和方法（读写）</strong></p>
+<ul>
+<li>clientX 鼠标在窗口中的水平位置</li>
+<li>clientY 鼠标在窗口中的垂直位置</li>
+</ul>
+<h3 id="事件类型">事件类型</h3>
+<blockquote>
+<p>PC端主要是针对鼠标，移动端则是触摸，手势相关的处理</p>
+</blockquote>
+<p>如果在PC端上发生一次click事件，实际上它是发生了三次事件，mousedown当鼠标按下的时候，mouseup当用户放开的时候，click两个加起来就发生了一次click事件。相对于移动，PC上的鼠标事件非常的丰富，例如mouseover当鼠标首次移入一个元素边界时触发，mouseout当鼠标移出元素时触发，这个移出，到子元素上也会触发这个事件，mousemove当鼠标在元素内移动时重复触发。</p>
+<p>总体来说对于文档加载，表单控件，窗口大小改变等事件，比如获取焦点，在失去或者获取焦点是值改变等移动上都是一样的，focus（获得焦点）blur（失去焦点）。</p>
+<p>在做一些视差滚动的效果时scroll事件是非常好用，移动上在css中提供了一个类似的属性。</p>
+<p>唯一的区别是移动端上没有键盘事件。</p>
+<h3 id="移动事件">移动事件</h3>
+<ul>
+<li>touchstart 当手指触摸到屏幕时触发</li>
+<li>touchmove 当手指在屏幕上连续滑动时触发</li>
+<li>touchend 当手指从屏幕上移开时触发</li>
+<li>touchcancel 当系统停止跟踪触摸时触发（这个事件没有确定的触发时间）</li>
+</ul>
+<p>它们都是冒泡的，也可以取消</p>
+<p><strong>三个跟踪触摸事件的属性</strong></p>
+<ul>
+<li>touches 当前跟踪触摸操作的touch数组，在touchend事件中为空</li>
+<li>targetTouchs 特定事件目标的touch数组</li>
+<li>ChangedTouches 上次触摸时发生了什么改变的touch数组</li>
+</ul>
+<p><strong>移动event事件对象</strong></p>
+<p>PC上存在的，在移动上也存在，描述上有差异，比如</p>
+<ul>
+<li>target 触摸的DOM节点目标</li>
+<li>pageX 触摸目标在页面中的X坐标</li>
+<li>pageY 触摸目标在页面中的Y坐标</li>
+</ul>
+<p><strong>一些手势</strong></p>
+<ul>
+<li>gesturestart 当一个手指按在屏幕上另外一个手指又触摸屏幕时触发</li>
+<li>gesturechange 依赖前者当其中的一个手指发生改变时触发</li>
+<li>gestureend 当任何一个手指离开时触发</li>
+</ul>
+<p><strong>移动手势干货三部曲</strong></p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/23/webkit-touch-event-1.html" target="_blank" rel="external">对于Touch的处理</a></p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-2.html" target="_blank" rel="external">处理简单手势</a></p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-3.html" target="_blank" rel="external">处理复杂手势</a></p>
+
+      
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/01/26/复习JavaScript五之面向对象的程序设计/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">复习JavaScript五之面向对象的程序设计</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="复习JavaScript六之事件" data-title="复习JavaScript六之事件" data-url="http://lcepy.github.io/2015/01/27/复习JavaScript六之事件/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lcepy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 lcepy
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+  <script src="/js/main.js" type="text/javascript"></script>
+
+
+  </div>
+</body>
+</html>

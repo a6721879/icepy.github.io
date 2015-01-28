@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-01-27T10:05:41.020Z</updated>
+  <updated>2015-01-28T11:42:39.879Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -13,6 +13,123 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[复习JavaScript六之事件]]></title>
+    <link href="http://lcepy.github.io/2015/01/27/%E5%A4%8D%E4%B9%A0JavaScript%E5%85%AD%E4%B9%8B%E4%BA%8B%E4%BB%B6/"/>
+    <id>http://lcepy.github.io/2015/01/27/复习JavaScript六之事件/</id>
+    <published>2015-01-27T10:08:04.000Z</published>
+    <updated>2015-01-28T11:42:03.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>IE浏览器的事件不是复习的重点</p>
+</blockquote>
+<p>事件是JavaScript与HTML进行交互的一个纽带，理解事件可以更好的处理Web应用程序，现在的浏览器中主要支持两种事件流：</p>
+<ul>
+<li>事件冒泡</li>
+<li>事件捕获</li>
+<li>DOM事件流</li>
+</ul>
+<p>事件冒泡则是指事件开始时由具体的元素接收，然后逐级向上传播。比如：</p>
+<pre><code><span class="tag">&lt;<span class="title">html</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">head</span>&gt;</span><span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">body</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">p</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</code></pre><p>给p标签监听一个事件，它的流向是p,div,body,html,document，其实细心看来这种流的走向会存在一个问题，给div也监听一个事件，当用户点击P的时候是会触发两次的，好在event对象中有可以阻止事件冒泡的方法。</p>
+<p>事件捕获则是指事件由最上级接收，逐级向下传播到具体的元素上，了解了冒泡之后这个就非常好理解了，正是一个相反的步骤。</p>
+<p>而DOM事件流又正好是冒泡与捕获的结合体，它分为三个阶段：事件捕获，目标事件，事件冒泡，如果在纸上画出来，它的走向就是一个圆形。</p>
+<blockquote>
+<p>对于事件处理程序，写在HTML标签中的，另外一种是直接写一个function的，比如doc.onclick = function(){}，一般来说这些浏览器支持，但是基本上不会使用了。因为前者是跟HTML耦合的，不利代码维护，而且虽然HTML加载了但是Js文件还未加载，用户点击后，是直接报错的。后者虽然也可以删除，比如doc.onclick = null，对于对代码有强迫症的同学，基本上不会使用到它。</p>
+</blockquote>
+<p>那么，我们该怎么给一个元素添加上事件处理程序呢？</p>
+<h3 id="DOM2级事件处理程序">DOM2级事件处理程序</h3>
+<ul>
+<li>addEventLister</li>
+<li>removeEventLister</li>
+</ul>
+<p>所有的DOM节点都具备这两个方法，它接收三个参数：</p>
+<ul>
+<li>要处理的事件名称，比如click（这里跟上述两个以及IE注册事件都不同，不需要on）</li>
+<li>需要事件进行处理的函数</li>
+<li>一个布尔值，表示（true，在捕获阶段调用事件处理函数）（false，在冒泡阶段调用事件处理函数）</li>
+</ul>
+<blockquote>
+<p>一般情况下第三个参数都填false</p>
+</blockquote>
+<p>IE浏览器对应的两个方法，attachEvent，detachEvent，它们只有冒泡，事件名要加上on。</p>
+<h3 id="事件对象">事件对象</h3>
+<p>在注册完事件处理程序后，事件的一个比较重要的对象必须要理解，<strong>event事件对象</strong>。</p>
+<p>一般来说，这个对象中包含着所有与当前元素所监听的事件有关的信息，比如元素监听的事件类型，元素本身等等。</p>
+<p><strong>比较重要的属性和方法（只读）</strong></p>
+<ul>
+<li>currentTarget 真正监听事件的那个元素</li>
+<li>target 事件的目标元素</li>
+<li>type 事件的类型</li>
+<li>perventDefault()  取消事件的默认行为</li>
+<li>stopPropagation()  取消事件的捕获或者冒泡</li>
+<li>bubbles 事件是否冒泡</li>
+<li>eventPhase 事件处理程序的三个阶段，1捕获2处于目标3冒泡</li>
+</ul>
+<p><strong>比较重要的属性和方法（读写）</strong></p>
+<ul>
+<li>clientX 鼠标在窗口中的水平位置</li>
+<li>clientY 鼠标在窗口中的垂直位置</li>
+</ul>
+<h3 id="事件类型">事件类型</h3>
+<blockquote>
+<p>PC端主要是针对鼠标，移动端则是触摸，手势相关的处理</p>
+</blockquote>
+<p>如果在PC端上发生一次click事件，实际上它是发生了三次事件，mousedown当鼠标按下的时候，mouseup当用户放开的时候，click两个加起来就发生了一次click事件。相对于移动，PC上的鼠标事件非常的丰富，例如mouseover当鼠标首次移入一个元素边界时触发，mouseout当鼠标移出元素时触发，这个移出，到子元素上也会触发这个事件，mousemove当鼠标在元素内移动时重复触发。</p>
+<p>总体来说对于文档加载，表单控件，窗口大小改变等事件，比如获取焦点，在失去或者获取焦点是值改变等移动上都是一样的，focus（获得焦点）blur（失去焦点）。</p>
+<p>在做一些视差滚动的效果时scroll事件是非常好用，移动上在css中提供了一个类似的属性。</p>
+<p>唯一的区别是移动端上没有键盘事件。</p>
+<h3 id="移动事件">移动事件</h3>
+<ul>
+<li>touchstart 当手指触摸到屏幕时触发</li>
+<li>touchmove 当手指在屏幕上连续滑动时触发</li>
+<li>touchend 当手指从屏幕上移开时触发</li>
+<li>touchcancel 当系统停止跟踪触摸时触发（这个事件没有确定的触发时间）</li>
+</ul>
+<p>它们都是冒泡的，也可以取消</p>
+<p><strong>三个跟踪触摸事件的属性</strong></p>
+<ul>
+<li>touches 当前跟踪触摸操作的touch数组，在touchend事件中为空</li>
+<li>targetTouchs 特定事件目标的touch数组</li>
+<li>ChangedTouches 上次触摸时发生了什么改变的touch数组</li>
+</ul>
+<p><strong>移动event事件对象</strong></p>
+<p>PC上存在的，在移动上也存在，描述上有差异，比如</p>
+<ul>
+<li>target 触摸的DOM节点目标</li>
+<li>pageX 触摸目标在页面中的X坐标</li>
+<li>pageY 触摸目标在页面中的Y坐标</li>
+</ul>
+<p><strong>一些手势</strong></p>
+<ul>
+<li>gesturestart 当一个手指按在屏幕上另外一个手指又触摸屏幕时触发</li>
+<li>gesturechange 依赖前者当其中的一个手指发生改变时触发</li>
+<li>gestureend 当任何一个手指离开时触发</li>
+</ul>
+<p><strong>移动手势干货三部曲</strong></p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/23/webkit-touch-event-1.html" target="_blank" rel="external">对于Touch的处理</a></p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-2.html" target="_blank" rel="external">处理简单手势</a></p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-3.html" target="_blank" rel="external">处理复杂手势</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<blockquote>
+<p>IE浏览器的事件不是复习的重点</p>
+</blockquote>
+<p>事件是JavaScript与HTML进行交互的一个纽带，理解事件可以更好的处理Web应用程序，现在的浏览器中主要支持两种事件流：</p>
+<ul>
+<li>事件冒泡</li>]]>
+    </summary>
+    
+      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[复习JavaScript五之面向对象的程序设计]]></title>
@@ -1737,62 +1854,6 @@ Sessions
     </summary>
     
       <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[对于中小项目我该如何组织我的代码]]></title>
-    <link href="http://lcepy.github.io/2014/11/14/%E5%AF%B9%E4%BA%8E%E4%B8%AD%E5%B0%8F%E9%A1%B9%E7%9B%AE%E6%88%91%E8%AF%A5%E5%A6%82%E4%BD%95%E7%BB%84%E7%BB%87%E6%88%91%E7%9A%84%E4%BB%A3%E7%A0%81/"/>
-    <id>http://lcepy.github.io/2014/11/14/对于中小项目我该如何组织我的代码/</id>
-    <published>2014-11-14T11:19:11.000Z</published>
-    <updated>2014-11-14T19:41:18.000Z</updated>
-    <content type="html"><![CDATA[<p>从三个角度来分析</p>
-<ol>
-<li>我需要什么（need）</li>
-<li>我为什么需要这些（why this）</li>
-<li>我能做些什么（what can）</li>
-</ol>
-<p>在这里讨论的一个命题是为了一个不大不小的项目来组织一套可以应用的移动开发流程，能否达到预期的目标，能否使用于中小公司，以及业务不是企业级复杂的逻辑。对于现在越来越工程化的前端体系，组织好它，我可能需要很多额外的工具，来辅助我效率的开发。</p>
-<p><a id="more"></a><br><strong>移动开发H5版实例</strong></p>
-<h2 id="命题1：我需要什么">命题1：我需要什么</h2>
-<p>我罗列了一部分我能思考到的东西，从如下几个地方来分析：</p>
-<ol>
-<li>我需要一套标准化的UI</li>
-<li>我需要模块化加载来实现对代码模块级别的控制</li>
-<li>我需要对代码风格，以及层级的划分</li>
-<li>我需要对文件操作的自动化</li>
-<li>我需要模板引擎</li>
-<li>我需要工具库</li>
-<li>我需要消除浏览器兼容的选择器，事件系统，ajax，以及动画系统。</li>
-</ol>
-<p>是的，如上七个方向，看看，原来我需要这么些东西，来构建一个移动H5的应用。</p>
-<h2 id="命题2：我为什么需要这些">命题2：我为什么需要这些</h2>
-<p>从上述的七个方向，构成了我基于它的分析，从而来构建自己的应用。但是它仍然抽象，不好理解。比如一套标准的UI，那么什么才是标准？又比如代码风格，以及层级的划分，那么什么样的代码风格和层级划分才比较适合呢？这个命题的讨论，就是把上述的分析方向具体到某些工具的选择，以及实现。</p>
-<ol>
-<li>标准化的UI，这里选择的是ratchet，做为bootstrap原班人马对移动H5的重新实现，它还是值得信赖的。利用它，节省了大量的UI实现以及风格命名，如果需要无法实现，可以在它的基础上来修正视觉，以及利用它的结构，来重新书写UI。虽然它不是标准，但是大量的设计，有参考的价值。</li>
-<li>对于模块化加载器的选择，我更倾向于require.js，浏览器的开发，模块有意义，但是生产分离这么多模块就没有意义了。相比seajs，require.js更加的熟悉，以及它打包工具的使用。</li>
-<li>代码风格的作用，是为了给今后的伙伴或者未来的日子，自己查看阅读使用的。好的风格，在修改bug时，心情可以愉悦。如果几个风格凑合在一起的代码，我想想都比较纠结。所以说到代码风格，又不能不提到层级的划分，以及整个应用业务逻辑实现的规划。你想使用哪些？MVC？MVP？MVVM？这些都有个综合考虑，有些业务场景，也许比较适合MVC，而又有些业务场景又比较适合MVVM，不是说谁比谁更先进，而是谁比谁更适合你的业务。在这里，我选择使用的是MVP。一个非常小巧的库来构建分层系统与代码风格：riot.js。<a href="http://www.oschina.net/translate/riotjs-the-1kb-mvp-framework" target="_blank" rel="external">什么是MVP</a></li>
-<li>自动化的意义，是在于帮助开发者解决琐碎的事情，例如文件的压缩，开发时的静态资源，代码检查，自动重启服务器与清楚缓存等等，现在市面上，有几个关于构建自动化任务的工具，相比之下，这里选择了一个比较稳定而且大众的工具：grunt。</li>
-<li>模板的出现，可以最大限度的复用结构。移动端H5的开发，需要关注渲染的速度，于是这里我选择一款比较小众但是性能非常不错的模板引擎artTemplate，它书写的风格比较类似于Python模板的风格，它甚至可以把一个模板分拆为几个子模板，最大程度的复用。 </li>
-<li>工具类的选择，市面上有几个比较流行的工具库，如underscore。这里的选择，可以把常用的模块抽取出来，并组织进统一的顶层空间中。另外，有些朋友收集了一些，可以替代underscore的工具库，也可以抽取部分，如Lo-Dash。<a href="http://lodash.com/docs" target="_blank" rel="external">lodash DOC</a></li>
-<li>最后我们要消除处理DOM时的兼容，我选择的是zepto，它有15个模块，而常用的模块，我们可以抽取出来。比如选择器引擎，AJAX，事件系统。当然动画系统，我认为，可以利用css3实现一个自己的小helper，它可以更加的小巧，而且可以利用硬件加速来保证流畅度。</li>
-</ol>
-<h2 id="命题3：我能做些什么">命题3：我能做些什么</h2>
-<p>当我们把上述七个方向的东西，整合成一套体系时，能做的事情，可以根据你的想象，而无限扩大。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>从三个角度来分析</p>
-<ol>
-<li>我需要什么（need）</li>
-<li>我为什么需要这些（why this）</li>
-<li>我能做些什么（what can）</li>
-</ol>
-<p>在这里讨论的一个命题是为了一个不大不小的项目来组织一套可以应用的移动开发流程，能否达到预期的目标，能否使用于中小公司，以及业务不是企业级复杂的逻辑。对于现在越来越工程化的前端体系，组织好它，我可能需要很多额外的工具，来辅助我效率的开发。</p>
-<p>]]>
-    
-    </summary>
-    
-      <category term="代码组织" scheme="http://lcepy.github.io/tags/%E4%BB%A3%E7%A0%81%E7%BB%84%E7%BB%87/"/>
     
   </entry>
   
