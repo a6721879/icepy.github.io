@@ -108,7 +108,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud">
-						<a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/iOS/" style="font-size: 13.33px;">iOS</a><a href="/tags/node-js/" style="font-size: 20.00px;">node&js</a><a href="/tags/python-django/" style="font-size: 16.67px;">python django</a><a href="/tags/regex/" style="font-size: 10.00px;">regex</a><a href="/tags/代码组织/" style="font-size: 10.00px;">代码组织</a><a href="/tags/生活/" style="font-size: 13.33px;">生活</a><a href="/tags/项目经历-长期维护/" style="font-size: 10.00px;">项目经历 长期维护</a><a href="/tags/骑行-户外/" style="font-size: 10.00px;">骑行 户外</a>
+						<a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/iOS/" style="font-size: 17.50px;">iOS</a><a href="/tags/node-js/" style="font-size: 20.00px;">node&js</a><a href="/tags/python-django/" style="font-size: 15.00px;">python django</a><a href="/tags/regex/" style="font-size: 10.00px;">regex</a><a href="/tags/代码组织/" style="font-size: 10.00px;">代码组织</a><a href="/tags/生活/" style="font-size: 12.50px;">生活</a><a href="/tags/项目经历-长期维护/" style="font-size: 10.00px;">项目经历 长期维护</a><a href="/tags/骑行-户外/" style="font-size: 10.00px;">骑行 户外</a>
 					</div>
 				</section>
 				
@@ -119,7 +119,7 @@
 				
 				<section class="switch-part switch-part3">
 				
-					一个玩js py的小伙子 PS：若有问题可邮件 xiangwenwe@foxmail.com
+					一个玩js iOS py的小伙子 PS：若有问题可邮件 xiangwenwe@foxmail.com
 				</section>
 				
 			</div>
@@ -168,11 +168,11 @@
 </nav>
       
   
-    <article id="post-复习JavaScript二之跨域" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-复习JavaScript九之客户端存储方案" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/01/23/复习JavaScript二之跨域/" class="article-date">
-  	<time datetime="2015-01-23T14:17:20.000Z" itemprop="datePublished">1月 23 2015</time>
+      <a href="/2015/02/03/复习JavaScript九之客户端存储方案/" class="article-date">
+  	<time datetime="2015-02-03T09:43:48.000Z" itemprop="datePublished">2月 3 2015</time>
 </a>
       
       
@@ -189,7 +189,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/23/复习JavaScript二之跨域/">复习JavaScript二之跨域</a>
+      <a class="article-title" href="/2015/02/03/复习JavaScript九之客户端存储方案/">复习JavaScript九之客户端存储方案</a>
     </h1>
   
 
@@ -197,86 +197,79 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>客户端Js出于安全的考虑，不允许跨域调用其他页面的对象，正是因为这样才给Ajax带来了很多不方便的地方。跨域最简单的理解就是因为Js同源策略的存在，比如a.com域名下的Js不能访问b.com下的Js对象。</p>
+        <p>随着Web应用越来越复杂，总是有很多需求需要在客户端存储一些特定的信息，用来描述访问者或者跟访问者相关的信息。于是，就有了这些客户端存储的方案，供开发者选择以及使用。</p>
+<h3 id="cookie">cookie</h3>
+<p>说起来cookie的出现是非常早的，用于在客户端存储会话信息，它要求服务器对任意的HTTP请求发送Set-Cookie HTTP头作为响应的一部分，例如：</p>
+<pre><code><span class="status">HTTP/1.1 <span class="number">200</span> OK</span>
+<span class="attribute">Content-Type</span>: <span class="string">text/html</span>
+<span class="attribute">Set-Cookie</span>: <span class="string">name=value</span>
+</code></pre><p>cookie虽然好用，但是它在客户端上有很多限制，而去获取也不是很容易。最重要的是关于请求的性能，cookie是对任意HTTP设置，所以也会发送给服务器，这些额外信息有时候不是必需的。</p>
 <ul>
-<li>协议端口没法跨，客户端</li>
-<li>在跨域上，域仅仅是通过首部来识别，window.location.protocol +window.location.host</li>
+<li>cookie是跟特定的域有关系的，也就意味着存储在cookie中的信息只能让特定的域来访问</li>
+<li>cookie的条数是有限制的，大体上来说各浏览器不会超过50个，除了safair chrome</li>
+<li>cookie在客户端只有一个方法可以用document.cookie</li>
+<li>cookie的大小在客户端上也有限制，大体不会超过1MB</li>
+<li>如果在客户端设置了cookie，是没法删除的，只能在同一个cookie上设置name=空字符串或者设置失效时间</li>
+<li>如果设置了secure，cookie只能在SSL链接才能传输</li>
 </ul>
-<h3 id="利用document-domain和iframe来设置">利用document.domain和iframe来设置</h3>
-<p>对于主域相同而子域名不同的情况，可以通过document.domain来处理，比如www.163.com/index.html和wow.163.com/wower.html，在这两个文件中分别加入document.domain = “163.com”，然后在index.html页面中创建一个iframe引入wower.html，获取iframe的contentDocument，这样这两个js就可以交互了。</p>
-<p>index.html</p>
-<pre><code><span class="built_in">document</span>.domain = <span class="string">'163.com'</span>;
-<span class="keyword">var</span> iframe = <span class="built_in">document</span>.createElement(<span class="string">'iframe'</span>);
-iframe.src = <span class="string">'http://wow.163.com/wower.html'</span>;
-iframe.style.display = <span class="string">'none'</span>; 
-<span class="built_in">document</span>.body.appendChild(iframe);
-iframe.onload = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> doc = iframe.contentDocument || iframe.contentWindow.document;
-    <span class="comment">//现在可以通过doc来操作wower.html中的js对象了</span>
+<p>cookie在浏览器上的保存是由几个方面组成的，理解这个对于使用Js操作cookie是一个必备条件，它由名称也就是每一项的key，每一项的值value，域名的限制，路径对于哪一个页面起作用，时间，以及安全标识secure。</p>
+<p>在客户端主要是使用document.cookie来进行操作，获取和设置都是这一个。而去获取是一个全的字符串，还需要进一步的处理才能得到值。如果是设置，也是需要设置一个全的字符串。对于这个，最好都要encodeURIComponent一下，获取的时候decodeURIComponent一下。</p>
+<pre><code><span class="keyword">var</span> setCookie = <span class="function"><span class="keyword">function</span><span class="params">(name,value,expires,path,domain,secure)</span></span>{
+    <span class="keyword">var</span> cookieText = <span class="built_in">encodeURIComponent</span>(name)+<span class="string">'='</span>+<span class="built_in">encodeURIComponent</span>(value);
+
+    <span class="comment">//各项的拼接</span>
+    <span class="built_in">document</span>.cookie = cookieText;
 }
-</code></pre><p>wower.html</p>
-<pre><code><span class="built_in">document</span>.domain = <span class="string">'163.com'</span>;
-</code></pre><p>使用这样的方式来实现的跨域是有限制的</p>
-<ul>
-<li>主域名必须是同一个</li>
-<li>安全性引发的问题，比如第一个页面出现了安全问题，在后面的页面也会出现</li>
-<li>iframe引用过多的话，每一个iframe都必须设置document.domain，比较琐碎</li>
+</code></pre><p>聪明的开发者为了绕开浏览器上对于条数的限制，研究出了一个方式，把真实的值设置在子cookie上。</p>
+<pre><code><span class="variable">name=</span><span class="variable">name=</span>value
+</code></pre><h3 id="IE上的客户端存储userData">IE上的客户端存储userData</h3>
+<p>在IE中引入了一个userData的方案来存储客户端数据，允许每个文档最多128KB，每个域1MB的数据量。想使用它首选在那个元素上应用一个css。</p>
+<pre><code>&lt;<span class="keyword">div</span> style=<span class="string">"behavior:url(#default#userData)"</span>&gt;&lt;/<span class="keyword">div</span>&gt;
+</code></pre><p>使用的时候跟设置dom属性一样，唯一有一个不同的地方是最后要调用save方法，告诉它存储在哪个数据仓库上。</p>
+<pre><code><span class="keyword">var</span> dataStore = <span class="built_in">document</span>.getElementById(<span class="string">'dataStore'</span>);
+dataStore.setAttribute(<span class="string">'name'</span>,<span class="string">'lcepy'</span>);
+dataStore.save(<span class="string">'MyNameInfo'</span>);
+</code></pre><p>获取</p>
+<pre><code>dataStore.<span class="built_in">load</span>(<span class="string">'MyNameInfo'</span>);
+dataStore.getAttribute(<span class="string">'name'</span>);
+</code></pre><h3 id="HTML5的客户端存储方案">HTML5的客户端存储方案</h3>
+<blockquote>
+<p>支持度以及使用比较广泛的是Web Storage API，当然客户端还有本地数据IndexDB等等，这些也是可以存储客户端数据，但是它们支持的很少。在做移动端开发时，localStorage的使用是非常频繁的，还要注意一点是个别比如safair浏览器有隐私模式，本地缓存是不起作用的，无法读取，所以要做一些额外的处理。</p>
+</blockquote>
+<p>主要的是两个sessionStorage和localStorage两套API来应用，它们是有区别的，前者只在浏览器运行时存在，也可以跨页面，前提是页面不能关闭。后者是永久存在的，如果用户不删除，那么它永远不会删除。它们的使用方式都是一样的，包括API。至于分配的空间，要看各浏览器的态度的，一般情况下是5MB，还有一点它是跟域走的。</p>
+<pre><code><span class="title">interface</span> Storage{
+    <span class="title">readonly</span> attribute unsigned long legth;
+    <span class="title">getter</span> DOMString key();
+    <span class="title">getter</span> any getItem();
+    <span class="title">setter</span> creator void setItem();
+    <span class="title">deleter</span> void removeItem();
+    <span class="title">viod</span> clear();
+}
+</code></pre><ul>
+<li>length 描述Storage对象中存储的key=value数量</li>
+<li>key 方法允许获取一个指定位置的键</li>
+<li>getItem方法根据指定的key返回一个value</li>
+<li>setItem方法将数据value存入指定的位置key</li>
+<li>removeItem根据指定的key来删除数据</li>
+<li>clear 删除全部的数据</li>
 </ul>
-<blockquote>
-<p>偶尔可以使用一下</p>
-</blockquote>
-<h3 id="利用window-name">利用window.name</h3>
-<p>稍微有些绕，但是数据量比较大，也比较安全</p>
+<p>使用：</p>
+<pre><code><span class="transposed_variable">localStorage.</span>setItem(<span class="string">'name'</span>,<span class="string">'lcepy'</span>);
+<span class="transposed_variable">localStorage.</span>getItem(<span class="string">'name'</span>);
+<span class="transposed_variable">localStorage.</span>key(<span class="number">0</span>);
+<span class="transposed_variable">localStorage.</span><span class="built_in">length</span>;
+<span class="transposed_variable">localStorage.</span>removeItem(<span class="string">'name'</span>);
+<span class="transposed_variable">localStorage.</span><span class="keyword">clear</span>();
+</code></pre><p>另外API中还有一套事件用于本地存储发生改变时的通知</p>
+<pre><code><span class="built_in">window</span>.addEventLister(<span class="string">'storage'</span>,<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{},<span class="literal">true</span>);
+</code></pre><p>event对象中包含有</p>
 <ul>
-<li>wow.163.com/app.html 应用所在的页面</li>
-<li>wow.163.com/empty.html 中间代理页面，搞个空的即可，但是必须在主域名下</li>
-<li>www.qq.com/data.html 需要交互的数据页面</li>
+<li>key 存储了被更新或者删除的键</li>
+<li>oldValue 包含了更新之前的数据</li>
+<li>url Storage事件发生的源</li>
+<li>newValue 包含了更新之后的数据</li>
+<li>storageArea 包含一个引用，指向发生改变之前的localStorage或者sessionStorage</li>
 </ul>
-<p>在data.html页面中</p>
-<pre><code><span class="attribute">window.name </span>=<span class="string"> 123;</span>
-</code></pre><p>app.html页面中创建一个隐藏的iframe，它的scr指向data.html，在onload事件中，把当前iframe的contentWindow.loaction修改成empty.html，当再次onload时就可以通过contentWindow.name来获取到123了。</p>
-<blockquote>
-<p>偶尔使用</p>
-</blockquote>
-<h3 id="利用iframe和location-hash">利用iframe和location.hash</h3>
-<p>利用这种方式，说实话（不建议），比较绕，而且数据量小，直接暴露在URL上。它的原理主要是这样的，假设wow.163.com/index.html页面，wow.163.com/empty.html（空的，什么内容都没有），需要交换数据的页面在www.qq.com/a.html上。</p>
-<p>在wow.163.com/index.html#（＃号就是我们要传递的数据），创建一个隐藏的iframe，hash值可以当参数传递给www.qq.com/a.html#()，在www.qq.com/a.html中可以获取到hash值，根据它进行处理，然后在www.qq.com/a.html页面中创建一个隐藏iframe，把处理的结果当hash值进行传递，给wow.163.com/empty.html#()这样，在同一个域名下，wow.163.com/empty.html中的js可以通过parent.parent.location.hash = self.location.hash来改变hash值，这样就达到了跨域的目的。</p>
-<blockquote>
-<p>不建议使用，坑爹的思路</p>
-</blockquote>
-<h3 id="JSONP">JSONP</h3>
-<p>这种方式是目前开发时最常用的一种方式，利用动态创建script标签来实现跨域的目的，虽然浏览器有显示Js对象的访问，但是它没有限制Js文件的加载，任何域名下的Js文件都可以加载。</p>
-<p>对客户端而言，文件的加载其实就是发送一次GET请求，在服务端实现时，也就是处理这次的GET请求，并且响应，参数可以通过?来带走，俗称一波流。</p>
-<p>在客户端上对于script文件加载是否已经完毕的判断，IE是判断script标签的readystatechange属性，而其他浏览器是onload事件。</p>
-<blockquote>
-<p>突然感觉做移动端不考虑IE的兼容，果然是杠杠的，建议使用</p>
-</blockquote>
-<h3 id="HTML5_postMessage">HTML5 postMessage</h3>
-<p>主要是利用window.postMessage来发送消息，监听window.message来获取消息，判断origin可以判断消息来源，data获取消息内容，soucre来引用发送方的window对象引用。</p>
-<p>www.b.com/b.html发送消息给www.a.com/a.html</p>
-<pre><code><span class="built_in">window</span>.postMessage(<span class="string">'hello'</span>,<span class="string">'www.a.com/a.html'</span>)
-</code></pre><p>www.a.com/a.html获取消息</p>
-<pre><code><span class="built_in">window</span>.addEventLister(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span><span class="params">(event)</span></span>{
-    <span class="keyword">if</span>(event.origin === <span class="string">'http://b.com'</span>){
-        <span class="comment">//处理</span>
-    }
-})
-</code></pre><p>iframe的发送方式</p>
-<pre><code>contentWindow.postMessage(<span class="string">'data'</span>,<span class="string">'b.com'</span>)
-</code></pre><blockquote>
-<p>话不多说，移动端这种跨域方式也很常用（建议推荐使用）</p>
-</blockquote>
-<h3 id="HTML5_跨域头_XMLHttpRequest2">HTML5 跨域头 XMLHttpRequest2</h3>
-<p>如果是自己产品，又是做移动端可以使用，比上述任何方式都要方便，需要服务端支持响应时也要设置跨域头。</p>
-<p>如果服务器响应此头，浏览器会检查此头，它的值表示请求内容所允许的域名，也就是如果是*号，表示所有域都可以访问，如果这里是a.com，表示除了同源外，只允许来自a.com域的访问。</p>
-<pre><code>Access-<span class="keyword">Control</span>-Allow-Origin：＊
-</code></pre><p>如果需要读取cookie则需要设置它</p>
-<pre><code>Access-Control-Allow-Credentials:<span class="literal">true</span>
-</code></pre><p>设置允许跨域的请求类型</p>
-<pre><code>Access-Control-Allow-Method<span class="variable">s:POST</span>
-</code></pre><blockquote>
-<p>兼容性问题，某些版本的浏览器需要在open之后，设置xhr.withCredentials ＝ true;话不多说，建议推荐使用</p>
-</blockquote>
 
       
     </div>
@@ -290,11 +283,11 @@ iframe.onload = <span class="function"><span class="keyword">function</span><spa
 
 
   
-    <article id="post-复习JavaScript一之Ajax" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-复习JavaScript八之操作XML" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/01/23/复习JavaScript一之Ajax/" class="article-date">
-  	<time datetime="2015-01-23T10:07:54.000Z" itemprop="datePublished">1月 23 2015</time>
+      <a href="/2015/02/02/复习JavaScript八之操作XML/" class="article-date">
+  	<time datetime="2015-02-02T09:50:14.000Z" itemprop="datePublished">2月 2 2015</time>
 </a>
       
       
@@ -311,7 +304,7 @@ iframe.onload = <span class="function"><span class="keyword">function</span><spa
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/23/复习JavaScript一之Ajax/">复习JavaScript一之Ajax</a>
+      <a class="article-title" href="/2015/02/02/复习JavaScript八之操作XML/">复习JavaScript八之操作XML</a>
     </h1>
   
 
@@ -319,113 +312,42 @@ iframe.onload = <span class="function"><span class="keyword">function</span><spa
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>IE8已上，支持现代XMLHttpRequest</p>
-</blockquote>
-<p>客户端Js与服务器进行网络交互必备的一个玩意，它不支持跨域，若要跨域还需要进行一些额外的处理。</p>
-<pre><code><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();
-</code></pre><p>在使用xhr对象时，要调用的第一个方法是open()，它接受三个参数［发送请求的类型，请求的URL，描述是否同步还是异步的布尔值］false同步，true异步。</p>
-<p>关于Ajax同步异步的个人理解：</p>
-<ul>
-<li>同步，是用数据块的方式来传输的，在Js执行的表现上，当执行到这个Ajax请求时会等待它与服务器交互成功之后才能执行下面一行的代码，也就是阻塞。</li>
-<li>异步，是用字节来传输的，它不等待是否成功，会执行之后的代码</li>
-</ul>
-<p>结束时需要调用xhr.send()，如果没有发送数据的主体，必须要null，做为发送参数。另外在接收到响应之前还可以调用abort()来取消异步请求（不建议调用它）</p>
-<h3 id="HTTP状态验证">HTTP状态验证</h3>
-<p>当收到响应后会自动填充xhr对象，它有几个比较重要的状态，我们必须要了解清楚与处理。</p>
-<ul>
-<li>responseText:作为响应主体返回的文本</li>
-<li>responseXML:如果响应内容的类型是”text/xml”或者”application/xml”，这个属性中保存的就是XML的DOM文档</li>
-<li>status：响应的HTTP状态</li>
-<li>statusText：HTTP状态的说明</li>
-<li>readyState：用于描述请求发送到完成的过程</li>
-</ul>
-<p>正常情况下需要检测status === 200 readyState === 4 这就表示responseText或者responseXML中已经填充了全部的数据可以提供给客户端使用了。</p>
-<pre><code>1 开头的用于描述请求已经发送，需要请求者继续操作才能继续的状态
-2 开头的用于描述请求已经成功
-3 开头的用于描述成功，但是还需要继续操作
-4 开头的用于描述客户端发送了什么数据导致服务器错误
-5 开头的用于描述服务器错误（常见的如，服务端代码抛错了）
-</code></pre><p>readyState状态</p>
-<pre><code><span class="number">0</span> 未初始化，还没有调用<span class="built_in">open</span>方法
-<span class="number">1</span> 已经调用<span class="built_in">open</span>方法，还没有调用<span class="built_in">send</span>方法
-<span class="number">2</span> 已经调用<span class="built_in">send</span>方法，但是还没有接收到响应
-<span class="number">3</span> 已经接收了部分数据
-<span class="number">4</span> 已经接收了全部的数据
-</code></pre><h3 id="xhr对象其他方法或事件">xhr对象其他方法或事件</h3>
-<p>每一个请求和响应都会带有相应的HTTP头信息，其中对开发者是很有用的，而xhr对象提供了一个setRequestHeader方法来设置头信息，它必须在调用open方法之后并且在send方法之前。有设置，必须得有获取，xhr对象也提供了两个方法分别来获取，getResponseHeader传入一个头部字段名来获取，getAllResponseHeaders来获取全部的头信息。</p>
-<p>onreadystatechange事件，每次刷新状态时，系统都会重新调用此事件。</p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-移动H5-HybridApp开发思路的一些总结" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/" class="article-date">
-  	<time datetime="2015-01-10T07:04:24.000Z" itemprop="datePublished">1月 10 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/">移动H5-HybridApp开发思路的一些总结</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>利用H5来开发移动app时，很大一部分的逻辑处理是在每一个视图的切换上，包括维护生命周期，释放内存，以及维护动画。我们在使用iOS时，基本上当前屏幕中内容显示的区域内就应该算是一个视图，当然H5版的app跟纯粹的iOS开发又有一些不同。</p>
-<ul>
-<li>H5版本的app是一个HTML页面，场景的切换基本上是切换内部的div容器，而当前浏览器内的框架则是它的window</li>
-<li>H5版本的app还需要监听hashchange或者history，来维护每一个视图控制器js文件的加载，执行</li>
-<li>每一个视图控制器需要维护它自身的生命周期，如创建，渲染视图，添加事件，销毁，以及离开当前视图时等一系列的生命周期</li>
-<li>一个视图控制器对应一个视图，一个模型，视图控制器来控制模型的请求，视图的渲染，模型与视图之间互相不干扰</li>
-<li>H5版本的app还需要维护一个NavigationController的头，用来控制内容区域内的视图控制器的转换以及它的动画</li>
-<li>应用兼容iOS，安卓，WP手持设备的dom兼容库（zepto），以及手势，触摸事件的兼容处理</li>
-<li>关于请求还需要维护本地存储与它之间的联系</li>
-<li>在Hybrid中，要构建起与原生框架的交互桥梁，比如phoneGap</li>
-<li>维护一个UI组件交互的库，比如一些常用的scoll，slider等</li>
-</ul>
-<p>从上述的一些总结中，可以看的出来要开发基于H5的移动端app，需要做的事情还是有很多的，浓缩的总结有三个方面：</p>
+        <p>在以前XML是存储和传输数据的事实标准（客户端没有出现JSON之前），那个时候浏览器还不支持解析XML，于是很多开发者需要自己写一个XML解析器。原理，就是把XML也转化成DOM文档，然后通过DOM API来获取。</p>
+<p>而现在，在客户端（浏览器）编程中几乎很少会使用到XML，数据的交换都应用在JSON上了，了解这个有一个好处，就是在做服务端编程，比如SAOP协议时就会用到，还有桌面的客户端，或者是移动客户端上，比如iOS，它把一些数据，比如NSArray写入到本地，实际上就是一个XML文本，当然在代码层面上，是看不出来有解析的，如果读取这个文件，是直接转成NSArray对象的。</p>
 <blockquote>
-<p>代码组织，MVC或者MVVM以及它们的生命周期与文件加载</p>
-<p>DOM 触摸 手势兼容处理</p>
-<p>与Native的交互</p>
+<p>IE有它自己的实现对XML的支持，下面说的两个类型，在IE中都不支持</p>
 </blockquote>
-<p>在代码实现的思路上，这里都会使用一个栈来实现它。</p>
-<ul>
-<li>栈顶属于当前视图控制器</li>
-<li>基栈则是根视图控制器</li>
-</ul>
+<p>将XML字符串序列化成DOM文档，主要是使用DOMparser类来实现，其他的用法跟获取DOM节点一样。</p>
+<pre><code><span class="keyword">var</span> parser = <span class="keyword">new</span> DOMparser();
+<span class="keyword">var</span> xmlDomObject = parser.parserFromString(<span class="string">'&lt;root&gt;&lt;child/&gt;&lt;/root&gt;'</span>,<span class="string">'text/xml'</span>);
 
-        
-          <p class="article-more-link">
-            <a href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/#more">more >></a>
-          </p>
-        
+xmlDomObject.getElementsByTagName(<span class="string">'child'</span>);
+</code></pre><p>将DOM文档反序列化成XML字符串，主要是使用XMLSerializer类型，使用上述的xmlDomObject对象。</p>
+<pre><code><span class="built_in">var</span> serializer <span class="subst">=</span> <span class="literal">new</span> XMLSerializer();
+<span class="built_in">var</span> <span class="built_in">xml</span> <span class="subst">=</span> serializer<span class="built_in">.</span>serializeToString(xmlDomObject);
+</code></pre><p>如果XML解析有错误都会返回一个parsererror标签，获取的时候就可以判断是否有这个标签来决定解析是否有错误。</p>
+<p>据说DOM3版本的XML操作只有一个浏览器实现了，所以当资料了解就好。</p>
+<h3 id="IE版本">IE版本</h3>
+<blockquote>
+<p>IE版本的XML解析主要是使用它的ActiveXObject类型来实现</p>
+</blockquote>
+<p>在IE中想要解析XML就必须先创建一个空的DOM文档，然后通过这个文档来获取。</p>
+<pre><code>var xmldom = createDocument();
+xmldom.loadXML(<span class="comment">'<span class="xmlDocTag">&lt;root&gt;</span><span class="xmlDocTag">&lt;child/&gt;</span><span class="xmlDocTag">&lt;/root&gt;</span>');</span>
+
+xmldom.getElementsByTagName(<span class="comment">'child');</span>
+</code></pre><p>如果解析有错误，可以检查parseError对象。</p>
+<pre><code><span class="keyword">if</span>(xmldom.parseError !== <span class="number">0</span>){
+    //<span class="keyword">do</span> 
+}
+</code></pre><p>在IE中进行序列化非常的方便，因为它都内置在了DOM文档中，每一个DOM节点都有一个xml属性，它就保存着XML字符串。</p>
+<pre><code>xmldom<span class="built_in">.</span><span class="built_in">xml</span>
+</code></pre><p>最后IE还提供了一个可以加载远程XML文件的方法load，它就接收一个参数，远程XML的URL地址。当然，也可以使用async属性来设置同步还是异步，默认是异步（true）。</p>
+<pre><code><span class="keyword">var</span> xmldom = createDocument();
+xmldom.<span class="keyword">async</span> = <span class="keyword">false</span>;
+xmldom.load(<span class="string">'http://xxx.sss.xml'</span>);
+</code></pre><p>如果是异步还要监听一下onreadystatechange事件，判断readystate状态，这个跟Ajax的使用是一样的。</p>
+
       
     </div>
   </div>
@@ -438,72 +360,11 @@ iframe.onload = <span class="function"><span class="keyword">function</span><spa
 
 
   
-    <article id="post-this与prototype的区别" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-UINavigationController的理解" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/01/05/this与prototype的区别/" class="article-date">
-  	<time datetime="2015-01-05T11:15:53.000Z" itemprop="datePublished">1月 5 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/05/this与prototype的区别/">this与prototype的区别</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>this可以访问私有成员（用var声明的变量）私有方法（直接function或者内部），prototype无法访问</li>
-<li>Js首先查找自身的静态属性，方法，再查找上下文中可以访问的属性或方法，最后才查找prototype，谁先谁优先</li>
-<li>prototype比this要节约分配的空间，因为prototype有一个指向父类的指向，而this，每次实例化时都要分配存储空间</li>
-</ul>
-<pre><code>    <span class="keyword">var</span> Copy = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        <span class="keyword">var</span> d = <span class="string">"123"</span>;
-        <span class="keyword">this</span>._log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-            <span class="built_in">console</span>.log(d);
-        }
-        <span class="keyword">this</span>.log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-            <span class="built_in">console</span>.log(<span class="string">'yes'</span>);
-        }
-    }
-    Copy.prototype.log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        <span class="built_in">console</span>.log(<span class="string">'no'</span>);
-    }
-    <span class="keyword">var</span> c = <span class="keyword">new</span> Copy();
-    c.log();
-</code></pre>
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-iOS学习第一个月心得与总结" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/02/iOS学习第一个月心得与总结/" class="article-date">
-  	<time datetime="2015-01-02T15:45:14.000Z" itemprop="datePublished">1月 2 2015</time>
+      <a href="/2015/02/01/UINavigationController的理解/" class="article-date">
+  	<time datetime="2015-02-01T11:23:41.000Z" itemprop="datePublished">2月 1 2015</time>
 </a>
       
       
@@ -520,7 +381,7 @@ iframe.onload = <span class="function"><span class="keyword">function</span><spa
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/02/iOS学习第一个月心得与总结/">iOS学习第一个月心得与总结</a>
+      <a class="article-title" href="/2015/02/01/UINavigationController的理解/">UINavigationController的理解</a>
     </h1>
   
 
@@ -528,46 +389,327 @@ iframe.onload = <span class="function"><span class="keyword">function</span><spa
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>从买来Mac之后，还是看的池建强老师的一篇文章《程序员如何选择技术方向》，就开始自发的学习iOS了，因为我也想做一个自己的应用，想学一门编译型的语言，说来也巧，买Mac电脑，还是看了池老师《Mac Talk人生元编程》才开始真正下定决心入手了一台。</p>
-<p>在开始学习iOS编程之前，我先重新去复习了一下C语言，这个是非常有必要的。虽然现在Swift已经出来了，但是Objective-C还是需要掌握的，而它又是C的超集，无可厚非，于是从头开始。</p>
-<p>C语言总结：</p>
-<ul>
-<li>学习它的基本类型，比如int float等</li>
-<li>学习数组，了解C语言数组是没有边界的，以及数组的指针是如何指向的</li>
-<li>学习C语言的函数，了解它的一些传参，返回值等等，C语言中的函数如果想改变参数的值，那么必须传入指针类型</li>
-<li>学习内存分配，以及如何分析问题</li>
-<li>学习指针*，地址符&amp;</li>
-<li>学习结构体，静态类型</li>
-<li>学习宏定义，文件包含，条件编译</li>
-<li>学习typedef</li>
-<li>学习指向一维，二维数组的指针，指针字符串，以及指向函数的指针与返回指针的函数</li>
-<li>枚举</li>
-<li>个别C语言函数库</li>
-</ul>
-<p>总体来说学习完C语言之后，再学习OC非常的轻松，很多东西都可以command + 鼠标左键 去h文件中自己看，苹果的方法长的跟句子一样，真的很难记住，所以必须要看头文件了。而且学习完C语言，对于内存的分配，更加的清楚了。</p>
-<p>Objective-C语言语法总结：</p>
-<ul>
-<li>学习OC后的结果第一条就是要学习如何看源代码</li>
-<li>@interface定义一个类，在h文件中，以及如何在m文件中实现这个类@implementation，它们都有@end来结尾</li>
-<li>了解OC是单继承，所以一个类只能继承一个父类，但可以有多个子类，OC中的继承是在头文件定义的类名后面:UIViewController 写上需要继承父类的类名</li>
-<li>OC里也有成员变量，可以用一个大括号括起来，它也有如@public @private等，如果没有显示的声明，那么默认都是@protected</li>
-<li>接着是学习如何定义方法，- + 以及self的作用，－表示实例方法，+表示静态方法，self表示当前谁用就指向谁</li>
-<li>学习如何传入参数-(int)number:(int)num; 第一个括号表示返回值，冒号也算方法名，后面跟着的括号，表示传入一个int类型的参数</li>
-<li>在成员变量中，可以显示的声明getter，setter方法，而在OC中这两种可以使用点语法来使用</li>
-<li>学习分类category，在xcode中创建的文件一般都是类＋分类名比如@interface Game:(Test)，通过它可以实现对类的扩展</li>
-<li>学习协议protocol，这玩意在做实际项目时会大量的运用到，它跟接口非常的类似，OC不强制要求实现全部的协议，使用的时候在类名后面加上尖括号<xxxdelegate>要求实现这个协议</xxxdelegate></li>
-<li>block语法，^{}，这玩意跟Js中的callback函数非常的类似，只是OC实现的语法会非常的奇怪int(^number)(int,int)第一个int表示返回值，中间括号表示block的名字，最后一个括号表示传入参数的类型，这玩意字符多的时候看起来会有些怪异和费解</li>
-<li>一些循环，for for in 或者block</li>
-<li>内存管理，OC是使用引用计数的方式来管理内存的，所以创建就必须对应有释放，现在因为已经有了ARC所以这部分代码可以不用写了，编译器会帮助我们自动补全。alloc retain copy ＋1 relese -1 0的时候系统释放，一般情况下，谁使用，谁释放的原则，比如我现在用alloc创建一个对象，那么我就需要在relese它，如果我把这个对象setter给另一个对象当属性，那么这个对象就要retain一次，在dealloc这个方法中对它relese，原则就是这样的，谁使用，谁释放。</li>
-<li>@property属性，OC提供了一个快速创建属性并默认实现getter setter方法的东西，主要是配合原子性，retain copy来使用，在开启ARC的环境下，可以用weak strong来使用，这个主要对应UI方面，一般情况下只是赋值用assign，NSString用copy，其他OC对象用retain</li>
-<li>学习copy语法，了解什么是浅拷贝，深拷贝</li>
-</ul>
+        <p>在做iOS开发的时候，<strong>UINavigationController</strong>可以说使用跟那个UITableView一样非常的常见。在学习这个之前，需要了解一下在iOS开发中的层级关系。</p>
+<p>我把它想象成一本书，虽然这么描述非常的不精准，但是却很像。每一个UIViewController就像书页，最外面的一个是封页，当然它就是我们的启动UI界面了，而目录就相当于是UINavigationController，通过它可以精准的翻到每一页。在iOS应用中，这样的层级关系就像书页一页。</p>
+<blockquote>
+<p>实际上这里可能描述的有些错误，但是我只能这么想象了，当我翻到某一页时，这一页（UIViewController）就是在顶端的，而其他页（UIViewController）是在下面的。当然，对于导航控制，它想要控制每一页（对于书来说是人在控制）就必需在每一个视图控制器的根部。</p>
+</blockquote>
+<p>UINavigationController是一个栈结构，所谓的栈结构也就是一个顺序（先进后出的顺序），因为当前的书页我们要看见，它永远都必须在第一的位置，我们才能看见，也就决定了它是我们人看完之后才能出去的顺序。</p>
+<p>如何创建一个UINavigationController？</p>
+<pre><code> ViewController *<span class="variable">view =</span> [[ViewController alloc] init];
+UINavigationController *<span class="variable">navigation =</span> [[UINavigationController alloc]
+initWithRootViewController:view];
+self.window.<span class="variable">rootViewController =</span> navigation;
+</code></pre><p>这里会要求加入一个根视图控制器，也就是初始化时我们看见的那一页。</p>
+<p>从官方的.h文件中可以看的出来用来进行导航的就四个方法，协议的不算。</p>
+<pre><code>- (<span class="keyword">void</span>)pushViewController:(<span class="built_in">UIViewController</span> *)viewController animated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Uses a horizontal slide transition. Has no effect if the view controller is already in the stack.</span>
 
+- (<span class="built_in">UIViewController</span> *)popViewControllerAnimated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Returns the popped controller.</span>
+- (<span class="built_in">NSArray</span> *)popToViewController:(<span class="built_in">UIViewController</span> *)viewController animated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Pops view controllers until the one specified is on top. Returns the popped controllers.</span>
+- (<span class="built_in">NSArray</span> *)popToRootViewControllerAnimated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Pops until there's only a single view controller left on the stack. Returns the popped controllers.</span>
+</code></pre><p>分别是添加到视图控制器入栈，移出最后一个视图控制器，移出到跟视图控制器上，移出到任意位置上的视图控制器。</p>
+<p>除了上述的方法外，还有几个属性需要掌握，在写到这个之前，还需要理解导航控制上的一些概念问题。对于管理多个内容视图的push和pop，导航控制器自身提供了视图切换的动画效果。一般来说一个app中的内容区域就相当于视图控制器，而这个框就是导航控制器，当然这个框又是在另一个框上的，比如window。假设一下，当我们切换了内容后，有些app是上部的一个工具条不会变中间的内容变，也有可能中间和上部都会变。从这里，其实可以看的出来，导航控制存在着这些toolBar，也控制着视图控制器，但是这些toolBar的真正控制权是在每一个视图控制器上的。</p>
+<p>总结起来</p>
+<blockquote>
+<p>一个navigationController对应一个navigationBar，一个navigationController包含多个UIViewController，每个UIViewController对应一个UINavigationItem，UINavigationItem控制着多个UIBarButtonItem，一个UINavigationController控制一个UIToolBar，UIToolBar中的UIBarButtonItem由当前视图控制器管理，而不是导航控制器来控制。需要注意的是，一个UINavigationItem不是由navigationbar或者是导航控制器来控制，而是由当前视图控制器来控制。</p>
+</blockquote>
+<p>对于生成一个系统自带的UIBarButtonItem，从代码上就可以看的出来它不是self.navigationController在控制，当然有系统的一般来说肯定有自定义的。</p>
+<pre><code><span class="built_in">UIBarButtonItem</span> *leftbutton = [[<span class="built_in">UIBarButtonItem</span> alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(leftEvent)];
+<span class="keyword">self</span><span class="variable">.navigationItem</span><span class="variable">.leftBarButtonItem</span> = leftbutton;
+
+<span class="built_in">UIButton</span> *button1 = [<span class="built_in">UIButton</span> buttonWithType:UIButtonTypeRoundedRect];
+[button1 setTitle:<span class="string">@"view"</span> forState:UIControlStateNormal];
+[button1 setTitleColor:[<span class="built_in">UIColor</span> blackColor] forState:UIControlStateNormal];
+[button1 setFrame:CGRectMake(<span class="number">0</span>, <span class="number">0</span>, <span class="number">40</span>, <span class="number">40</span>)];
+[button1 addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(customviews:) forControlEvents:UIControlEventTouchUpInside];
+<span class="built_in">UIBarButtonItem</span> *right = [[<span class="built_in">UIBarButtonItem</span> alloc] initWithCustomView:button1];
+
+<span class="keyword">self</span><span class="variable">.navigationItem</span><span class="variable">.rightBarButtonItem</span> = right;
+</code></pre><p>自定义一个button放到navigationItem的右边的bar中</p>
+<pre><code><span class="built_in">UIButton</span> *button = [<span class="built_in">UIButton</span> buttonWithType:UIButtonTypeRoundedRect];
+[button setTitle:<span class="string">@"Push"</span> forState:UIControlStateNormal];
+[button setTitleColor:[<span class="built_in">UIColor</span> blackColor] forState:UIControlStateNormal];
+[button setFrame:CGRectMake(<span class="number">90</span>, <span class="number">100</span>, <span class="number">140</span>, <span class="number">40</span>)];
+[button addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(pushview:) forControlEvents:UIControlEventTouchUpInside];
+[<span class="keyword">self</span><span class="variable">.view</span> addSubview:button];
+
+-(<span class="keyword">void</span>)pushview:(<span class="built_in">UIButton</span> *)sender
+{
+    SecondViewController *secoundVC = [[SecondViewController alloc] init];
+    [<span class="keyword">self</span><span class="variable">.navigationController</span> pushViewController:secoundVC animated:<span class="literal">YES</span>];
+}
+</code></pre><p>然后创建一个按钮，导航到第二个视图控制器上。</p>
+<p><a href="https://github.com/lcepy/geekObjective-C/tree/master/NavigationControllerDemo" target="_blank" rel="external">源代码查看</a></p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-复习JavaScript七之DOM" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/28/复习JavaScript七之DOM/" class="article-date">
+  	<time datetime="2015-01-28T11:51:01.000Z" itemprop="datePublished">1月 28 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
         
-          <p class="article-more-link">
-            <a href="/2015/01/02/iOS学习第一个月心得与总结/#more">more >></a>
-          </p>
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/28/复习JavaScript七之DOM/">复习JavaScript七之DOM</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。</p>
+<p><strong>理解层级结构与关系</strong></p>
+<p>在浏览器中比如HTML页面是由很多有层次结构的标签组成的，而为这些标签提供查询，添加，删除等等方法主要就是DOM在提供支持。</p>
+<p>（页面又称为文档）文档中所有的节点之间都存在这样或那样的关系，比如下面一个经典的HTML：</p>
+<pre><code><span class="tag">&lt;<span class="title">html</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">head</span>&gt;</span><span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">body</span>&gt;</span><span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</code></pre><p>一个标签又可以称为一个元素，head和body那就是兄弟关系，它们都来自一个父系html，又可以说html的子元素是head和body，可能这样描述还不太明显，这样就用原生Js操作DOM来的方式来看看层级结构。</p>
+<pre><code><span class="keyword">var</span> html = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'html'</span>)[<span class="number">0</span>];
+</code></pre><p>先通过getElementsByTagName获取html根元素的节点，每一个元素都有一个childNodes集合和一个parentNode分别代表子节点集合和父节点，<strong>如果不存在，则都是null，如果是集合不存在，则是一个[]</strong>。</p>
+<blockquote>
+<p>html的childNodes //[head,body] html的parentNode // document</p>
+</blockquote>
+<p>每一个元素也都有一个firstChild和lastChild来分别代表第一个子元素和最后一个子元素</p>
+<p>每一个元素也都有一个nextSibling和previousSibling分别代表前面一个元素和后面一个元素，以当前自己为参照物。</p>
+<p>从这样可以看出来，它就像族谱一样对元素的关系进行了定义，通过理解这些层级关系，利用DOM提供的API可以很顺利的进行操作。</p>
+<h3 id="操作DOM">操作DOM</h3>
+<p><strong>常见的获取方式</strong></p>
+<ul>
+<li>document.getElementById （通过ID来获取到节点）</li>
+<li>document.getElementsByTagName （通过节点标签来获取）</li>
+<li>document.querySelector  </li>
+<li>document.querySelectorAll</li>
+</ul>
+<p>后面两个属于HTML5提供的新API，在移动端会用的比较多，前者是获取单个，后者获取集合。</p>
+<p><strong>常见添加，删除</strong></p>
+<ul>
+<li>appendChild</li>
+<li>insterBefore</li>
+<li>replaceChild</li>
+<li>removeChild</li>
+</ul>
+<p>appendChild主要是向childNodes集合的末尾添加一条元素，insterBefore可以用来插入特定位置，两个参数，要插入的节点和作为参照的节点，更新成功后插入的节点会在参照节点之前，也就是参照节点的previousSibling。replaceChild和insterBefore有些类似，两个参数，要插入的节点和参照节点，更新成功后，要插入的节点会替换参照节点，removeChild就比较好理解了，删除一个节点，这四个方法都有返回值。</p>
+<p><strong>常见元素属性</strong></p>
+<p>一般来说，如果var doc = document.getElementById(‘doc’);doc.id = ‘xx’;这样的方式也是可以更新或者获取到元素的属性的，不过不推荐这么使用，要获取元素的属性，DOM API也提供了三个方法来使用。</p>
+<ul>
+<li>getAttribute</li>
+<li>setAttribute</li>
+<li>removeAttribute</li>
+</ul>
+<p>getAttribute可以获取元素的属性，setAttribute可以对元素的属性进行设置，如果属性名不存在，则创建该属性。removeAttribute则是完全删除此属性。</p>
+<p>还有一个属性attributes，主要是获取元素属性集合，这个不是很常用，主要是在遍历元素属性时会使用到，它是一个集合。</p>
+<p><strong>常见创建元素或文本</strong></p>
+<p>一般情况下创建元素都会使用字符串的形式，innerHTML进去。不过，某些情况下，会用到createElement来创建一个元素，如果用到它，那么创建的文本也必须使用createTextNode了。</p>
+<p>对于文本节点，注释节点等开发真的很少用，可以当一个子类大概了解即可。</p>
+<blockquote>
+<p>关于模式的讨论，主要可以用document.compatMode来判断，如果是CSS1Compat就是标准模式，移动端不会出现这样的情况，IE上可能有别的模式，模式主要是影响到CSS布局上，Js影响非常少。</p>
+<p>在移动端上滚动是一个比较要处理的问题，一般来说会使用scrollIntoView，scrollIntoViewIfNeeded，scrollByLines，scrollByPages，这四个方法safari chrome都有实现，意味着在iOS和安卓平台都是良好的。</p>
+</blockquote>
+<ul>
+<li>scrollByPages 将元素的内容滚动到指定的页面高度，具体的高度是由元素的高度来决定的。</li>
+<li>scrollByLines 将元素的内容滚动到知道的行数高度，参数可正可负。</li>
+<li>scrollIntoViewIfNeeded，当元素在视窗（viewport）不可见，会滚动容器元素或者浏览器窗口让其可见。如果是可见的，这个方法不起任何作用。如果参数为true，可能是垂直居中的可见。</li>
+<li>scrollIntoView 滚动容器元素或者浏览器窗口，让元素可见。</li>
+</ul>
+<p><strong>一些小技巧</strong></p>
+<p>每一个元素都存在一个contains方法，用来检测传入的节点是不是当前节点的子节点，火狐对于的方法名叫compareDocumentPosition。</p>
+<p>如果要获取一个文本节点可以使用innerText（纯文本）来获取字符串，如果要获取所有的包括标签的字符串可以使用innerHTML。它们还有一种outer系列对应的方法，主要的区别是前者（outerText）会替换节点，后者(outerHTML)会修改调用它的元素，一般基本没人使用。它们可以获取，也可以通过赋值来设置新的节点。</p>
+<h3 id="DOM2和DOM3">DOM2和DOM3</h3>
+<p>对于这两级在DOM中基本上IE没啥支持，或者说支持的非常少，像style对象，CSS的一些对象外。</p>
+<p>这里最大的变化是增加了对XML命名空间的支持，元素样式的访问，节点的遍历以及range。当然目前来看，节点的遍历，range，XML命名空间在开发中使用的非常少，可以当资料来阅读，了解有这么回事，用到的时候再查询。而元素样式的访问，这个在开发中普遍使用的较多，因为在没法使用css3动画的浏览器中，可以通过改变样式来到达动画的目的。</p>
+<pre><code><span class="keyword">var</span> doc = <span class="built_in">document</span>.getElementById(<span class="string">'doc'</span>);
+doc.style.width = <span class="string">'100px'</span>;
+</code></pre><p>对于iframe的访问这里增加了一个contentDocument对象来进行引用，还有节点的比较，isSameNode和isEqualNode，这两个的区别在于，前者是否引用的同一个节点对象，后者是指两个节点是否是相同的类型。不过，它们使用的也不多，了解就好。</p>
+<p><strong>元素的大小</strong></p>
+<p>这个部分需要理解，因为关乎到元素在浏览器上的位置显示，跟动画有关系，四个属性。</p>
+<ul>
+<li>offsetWidth 元素在水平方向占用的空间大小</li>
+<li>offsetHeight 元素在垂直方向占用的空间大小</li>
+<li>offsetLeft 元素的左外边框到内边框的距离</li>
+<li>offsetTop 元素的上外边框到内边框的距离</li>
+</ul>
+<p><strong>滚动大小</strong></p>
+<p>这个在视察滚动或者处理滚动条的时候用的上，也是四个属性</p>
+<ul>
+<li>scrollHeight 在没有滚动的情况下，元素的总高度</li>
+<li>scrollWidth 在没有滚动的情况下，元素的总宽度</li>
+<li>scrollLeft 被隐藏在内容区域左侧的像素度</li>
+<li>scrollTop 被隐藏在内容区域上侧的像素度</li>
+</ul>
+<blockquote>
+<p>下面这些IE全部不支持，range支持一种叫做文本范围的东西</p>
+</blockquote>
+<p><strong>元素遍历</strong></p>
+<p>关于遍历其实有两个方法可用createNodeIterator和createTreeWalker，不过这些在开发中几乎不会使用到，谁没事去遍历节点完呢。</p>
+<p><strong>关于range</strong></p>
+<p>这个也是非常少会使用到，除非是做那种编辑器应用或者在线编辑器等等，不过使用它可以更精准的控制的DOM，主要是使用createRange方法。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-复习JavaScript六之事件" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/27/复习JavaScript六之事件/" class="article-date">
+  	<time datetime="2015-01-27T10:08:04.000Z" itemprop="datePublished">1月 27 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
         
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/27/复习JavaScript六之事件/">复习JavaScript六之事件</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>IE浏览器的事件不是复习的重点</p>
+</blockquote>
+<p>事件是JavaScript与HTML进行交互的一个纽带，理解事件可以更好的处理Web应用程序，现在的浏览器中主要支持两种事件流：</p>
+<ul>
+<li>事件冒泡</li>
+<li>事件捕获</li>
+<li>DOM事件流</li>
+</ul>
+<p>事件冒泡则是指事件开始时由具体的元素接收，然后逐级向上传播。比如：</p>
+<pre><code><span class="tag">&lt;<span class="title">html</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">head</span>&gt;</span><span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">body</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">p</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</code></pre><p>给p标签监听一个事件，它的流向是p,div,body,html,document，其实细心看来这种流的走向会存在一个问题，给div也监听一个事件，当用户点击P的时候是会触发两次的，好在event对象中有可以阻止事件冒泡的方法。</p>
+<p>事件捕获则是指事件由最上级接收，逐级向下传播到具体的元素上，了解了冒泡之后这个就非常好理解了，正是一个相反的步骤。</p>
+<p>而DOM事件流又正好是冒泡与捕获的结合体，它分为三个阶段：事件捕获，目标事件，事件冒泡，如果在纸上画出来，它的走向就是一个圆形。</p>
+<blockquote>
+<p>对于事件处理程序，写在HTML标签中的，另外一种是直接写一个function的，比如doc.onclick = function(){}，一般来说这些浏览器支持，但是基本上不会使用了。因为前者是跟HTML耦合的，不利代码维护，而且虽然HTML加载了但是Js文件还未加载，用户点击后，是直接报错的。后者虽然也可以删除，比如doc.onclick = null，对于对代码有强迫症的同学，基本上不会使用到它。</p>
+</blockquote>
+<p>那么，我们该怎么给一个元素添加上事件处理程序呢？</p>
+<h3 id="DOM2级事件处理程序">DOM2级事件处理程序</h3>
+<ul>
+<li>addEventLister</li>
+<li>removeEventLister</li>
+</ul>
+<p>所有的DOM节点都具备这两个方法，它接收三个参数：</p>
+<ul>
+<li>要处理的事件名称，比如click（这里跟上述两个以及IE注册事件都不同，不需要on）</li>
+<li>需要事件进行处理的函数</li>
+<li>一个布尔值，表示（true，在捕获阶段调用事件处理函数）（false，在冒泡阶段调用事件处理函数）</li>
+</ul>
+<blockquote>
+<p>一般情况下第三个参数都填false</p>
+</blockquote>
+<p>IE浏览器对应的两个方法，attachEvent，detachEvent，它们只有冒泡，事件名要加上on。</p>
+<h3 id="事件对象">事件对象</h3>
+<p>在注册完事件处理程序后，事件的一个比较重要的对象必须要理解，<strong>event事件对象</strong>。</p>
+<p>一般来说，这个对象中包含着所有与当前元素所监听的事件有关的信息，比如元素监听的事件类型，元素本身等等。</p>
+<p><strong>比较重要的属性和方法（只读）</strong></p>
+<ul>
+<li>currentTarget 真正监听事件的那个元素</li>
+<li>target 事件的目标元素</li>
+<li>type 事件的类型</li>
+<li>perventDefault()  取消事件的默认行为</li>
+<li>stopPropagation()  取消事件的捕获或者冒泡</li>
+<li>bubbles 事件是否冒泡</li>
+<li>eventPhase 事件处理程序的三个阶段，1捕获2处于目标3冒泡</li>
+</ul>
+<p><strong>比较重要的属性和方法（读写）</strong></p>
+<ul>
+<li>clientX 鼠标在窗口中的水平位置</li>
+<li>clientY 鼠标在窗口中的垂直位置</li>
+</ul>
+<h3 id="事件类型">事件类型</h3>
+<blockquote>
+<p>PC端主要是针对鼠标，移动端则是触摸，手势相关的处理</p>
+</blockquote>
+<p>如果在PC端上发生一次click事件，实际上它是发生了三次事件，mousedown当鼠标按下的时候，mouseup当用户放开的时候，click两个加起来就发生了一次click事件。相对于移动，PC上的鼠标事件非常的丰富，例如mouseover当鼠标首次移入一个元素边界时触发，mouseout当鼠标移出元素时触发，这个移出，到子元素上也会触发这个事件，mousemove当鼠标在元素内移动时重复触发。</p>
+<p>总体来说对于文档加载，表单控件，窗口大小改变等事件，比如获取焦点，在失去或者获取焦点是值改变等移动上都是一样的，focus（获得焦点）blur（失去焦点）。</p>
+<p>在做一些视差滚动的效果时scroll事件是非常好用，移动上在css中提供了一个类似的属性。</p>
+<p>唯一的区别是移动端上没有键盘事件。</p>
+<h3 id="移动事件">移动事件</h3>
+<ul>
+<li>touchstart 当手指触摸到屏幕时触发</li>
+<li>touchmove 当手指在屏幕上连续滑动时触发</li>
+<li>touchend 当手指从屏幕上移开时触发</li>
+<li>touchcancel 当系统停止跟踪触摸时触发（这个事件没有确定的触发时间）</li>
+</ul>
+<p>它们都是冒泡的，也可以取消</p>
+<p><strong>三个跟踪触摸事件的属性</strong></p>
+<ul>
+<li>touches 当前跟踪触摸操作的touch数组，在touchend事件中为空</li>
+<li>targetTouchs 特定事件目标的touch数组</li>
+<li>ChangedTouches 上次触摸时发生了什么改变的touch数组</li>
+</ul>
+<p><strong>移动event事件对象</strong></p>
+<p>PC上存在的，在移动上也存在，描述上有差异，比如</p>
+<ul>
+<li>target 触摸的DOM节点目标</li>
+<li>pageX 触摸目标在页面中的X坐标</li>
+<li>pageY 触摸目标在页面中的Y坐标</li>
+</ul>
+<p><strong>一些手势</strong></p>
+<ul>
+<li>gesturestart 当一个手指按在屏幕上另外一个手指又触摸屏幕时触发</li>
+<li>gesturechange 依赖前者当其中的一个手指发生改变时触发</li>
+<li>gestureend 当任何一个手指离开时触发</li>
+</ul>
+<p><strong>移动手势干货三部曲</strong></p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/23/webkit-touch-event-1.html" target="_blank" rel="external">对于Touch的处理</a></p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-2.html" target="_blank" rel="external">处理简单手势</a></p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-3.html" target="_blank" rel="external">处理复杂手势</a></p>
+
       
     </div>
   </div>
@@ -582,7 +724,7 @@ iframe.onload = <span class="function"><span class="keyword">function</span><spa
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/">&laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="page-number" href="/archives/page/4/">4</a><a class="page-number" href="/archives/page/5/">5</a><a class="extend next" rel="next" href="/archives/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/archives/">&laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="page-number" href="/archives/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/7/">7</a><a class="extend next" rel="next" href="/archives/page/3/">Next &raquo;</a>
     </nav>
   
 

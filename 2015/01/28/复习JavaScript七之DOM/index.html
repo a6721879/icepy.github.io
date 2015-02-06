@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>复习JavaScript七之DOM | lcepy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。
+理解层级结构与关系
+在浏览器中比如HTML页面是由很多有层次结构的标签组成的，而为这些标签提供查询，添加，删除等等方法主要就是DOM在提供支持。
+（页面又称为文档）文档中所有的节点之间">
+<meta property="og:type" content="article">
+<meta property="og:title" content="复习JavaScript七之DOM">
+<meta property="og:url" content="http://lcepy.github.io/2015/01/28/复习JavaScript七之DOM/">
+<meta property="og:site_name" content="lcepy">
+<meta property="og:description" content="DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。
+理解层级结构与关系
+在浏览器中比如HTML页面是由很多有层次结构的标签组成的，而为这些标签提供查询，添加，删除等等方法主要就是DOM在提供支持。
+（页面又称为文档）文档中所有的节点之间">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="复习JavaScript七之DOM">
+<meta name="twitter:description" content="DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。
+理解层级结构与关系
+在浏览器中比如HTML页面是由很多有层次结构的标签组成的，而为这些标签提供查询，添加，删除等等方法主要就是DOM在提供支持。
+（页面又称为文档）文档中所有的节点之间">
+
+  
+    <link rel="alternative" href="/atom.xml" title="lcepy" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  
+
+  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<div class="profilepic">
+			<img src="http://websources.qiniudn.com/img/me.jpg">
+		</div>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">lcepy</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟!</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">纪录学习的点滴</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud">
+						<a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/iOS/" style="font-size: 17.50px;">iOS</a><a href="/tags/node-js/" style="font-size: 20.00px;">node&js</a><a href="/tags/python-django/" style="font-size: 15.00px;">python django</a><a href="/tags/regex/" style="font-size: 10.00px;">regex</a><a href="/tags/代码组织/" style="font-size: 10.00px;">代码组织</a><a href="/tags/生活/" style="font-size: 12.50px;">生活</a><a href="/tags/项目经历-长期维护/" style="font-size: 10.00px;">项目经历 长期维护</a><a href="/tags/骑行-户外/" style="font-size: 10.00px;">骑行 户外</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					一个玩js iOS py的小伙子 PS：若有问题可邮件 xiangwenwe@foxmail.com
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay"></div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://websources.qiniudn.com/img/me.jpg">
+			</div>
+
+			<hgroup>
+			  <h1 class="header-author"><a href="/">lcepy</a></h1>
+			</hgroup>
+			
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟!</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">纪录学习的点滴</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <article id="post-复习JavaScript七之DOM" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/28/复习JavaScript七之DOM/" class="article-date">
+  	<time datetime="2015-01-28T11:51:01.000Z" itemprop="datePublished">1月 28 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      复习JavaScript七之DOM
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。</p>
+<p><strong>理解层级结构与关系</strong></p>
+<p>在浏览器中比如HTML页面是由很多有层次结构的标签组成的，而为这些标签提供查询，添加，删除等等方法主要就是DOM在提供支持。</p>
+<p>（页面又称为文档）文档中所有的节点之间都存在这样或那样的关系，比如下面一个经典的HTML：</p>
+<pre><code><span class="tag">&lt;<span class="title">html</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">head</span>&gt;</span><span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">body</span>&gt;</span><span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</code></pre><p>一个标签又可以称为一个元素，head和body那就是兄弟关系，它们都来自一个父系html，又可以说html的子元素是head和body，可能这样描述还不太明显，这样就用原生Js操作DOM来的方式来看看层级结构。</p>
+<pre><code><span class="keyword">var</span> html = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'html'</span>)[<span class="number">0</span>];
+</code></pre><p>先通过getElementsByTagName获取html根元素的节点，每一个元素都有一个childNodes集合和一个parentNode分别代表子节点集合和父节点，<strong>如果不存在，则都是null，如果是集合不存在，则是一个[]</strong>。</p>
+<blockquote>
+<p>html的childNodes //[head,body] html的parentNode // document</p>
+</blockquote>
+<p>每一个元素也都有一个firstChild和lastChild来分别代表第一个子元素和最后一个子元素</p>
+<p>每一个元素也都有一个nextSibling和previousSibling分别代表前面一个元素和后面一个元素，以当前自己为参照物。</p>
+<p>从这样可以看出来，它就像族谱一样对元素的关系进行了定义，通过理解这些层级关系，利用DOM提供的API可以很顺利的进行操作。</p>
+<h3 id="操作DOM">操作DOM</h3>
+<p><strong>常见的获取方式</strong></p>
+<ul>
+<li>document.getElementById （通过ID来获取到节点）</li>
+<li>document.getElementsByTagName （通过节点标签来获取）</li>
+<li>document.querySelector  </li>
+<li>document.querySelectorAll</li>
+</ul>
+<p>后面两个属于HTML5提供的新API，在移动端会用的比较多，前者是获取单个，后者获取集合。</p>
+<p><strong>常见添加，删除</strong></p>
+<ul>
+<li>appendChild</li>
+<li>insterBefore</li>
+<li>replaceChild</li>
+<li>removeChild</li>
+</ul>
+<p>appendChild主要是向childNodes集合的末尾添加一条元素，insterBefore可以用来插入特定位置，两个参数，要插入的节点和作为参照的节点，更新成功后插入的节点会在参照节点之前，也就是参照节点的previousSibling。replaceChild和insterBefore有些类似，两个参数，要插入的节点和参照节点，更新成功后，要插入的节点会替换参照节点，removeChild就比较好理解了，删除一个节点，这四个方法都有返回值。</p>
+<p><strong>常见元素属性</strong></p>
+<p>一般来说，如果var doc = document.getElementById(‘doc’);doc.id = ‘xx’;这样的方式也是可以更新或者获取到元素的属性的，不过不推荐这么使用，要获取元素的属性，DOM API也提供了三个方法来使用。</p>
+<ul>
+<li>getAttribute</li>
+<li>setAttribute</li>
+<li>removeAttribute</li>
+</ul>
+<p>getAttribute可以获取元素的属性，setAttribute可以对元素的属性进行设置，如果属性名不存在，则创建该属性。removeAttribute则是完全删除此属性。</p>
+<p>还有一个属性attributes，主要是获取元素属性集合，这个不是很常用，主要是在遍历元素属性时会使用到，它是一个集合。</p>
+<p><strong>常见创建元素或文本</strong></p>
+<p>一般情况下创建元素都会使用字符串的形式，innerHTML进去。不过，某些情况下，会用到createElement来创建一个元素，如果用到它，那么创建的文本也必须使用createTextNode了。</p>
+<p>对于文本节点，注释节点等开发真的很少用，可以当一个子类大概了解即可。</p>
+<blockquote>
+<p>关于模式的讨论，主要可以用document.compatMode来判断，如果是CSS1Compat就是标准模式，移动端不会出现这样的情况，IE上可能有别的模式，模式主要是影响到CSS布局上，Js影响非常少。</p>
+<p>在移动端上滚动是一个比较要处理的问题，一般来说会使用scrollIntoView，scrollIntoViewIfNeeded，scrollByLines，scrollByPages，这四个方法safari chrome都有实现，意味着在iOS和安卓平台都是良好的。</p>
+</blockquote>
+<ul>
+<li>scrollByPages 将元素的内容滚动到指定的页面高度，具体的高度是由元素的高度来决定的。</li>
+<li>scrollByLines 将元素的内容滚动到知道的行数高度，参数可正可负。</li>
+<li>scrollIntoViewIfNeeded，当元素在视窗（viewport）不可见，会滚动容器元素或者浏览器窗口让其可见。如果是可见的，这个方法不起任何作用。如果参数为true，可能是垂直居中的可见。</li>
+<li>scrollIntoView 滚动容器元素或者浏览器窗口，让元素可见。</li>
+</ul>
+<p><strong>一些小技巧</strong></p>
+<p>每一个元素都存在一个contains方法，用来检测传入的节点是不是当前节点的子节点，火狐对于的方法名叫compareDocumentPosition。</p>
+<p>如果要获取一个文本节点可以使用innerText（纯文本）来获取字符串，如果要获取所有的包括标签的字符串可以使用innerHTML。它们还有一种outer系列对应的方法，主要的区别是前者（outerText）会替换节点，后者(outerHTML)会修改调用它的元素，一般基本没人使用。它们可以获取，也可以通过赋值来设置新的节点。</p>
+<h3 id="DOM2和DOM3">DOM2和DOM3</h3>
+<p>对于这两级在DOM中基本上IE没啥支持，或者说支持的非常少，像style对象，CSS的一些对象外。</p>
+<p>这里最大的变化是增加了对XML命名空间的支持，元素样式的访问，节点的遍历以及range。当然目前来看，节点的遍历，range，XML命名空间在开发中使用的非常少，可以当资料来阅读，了解有这么回事，用到的时候再查询。而元素样式的访问，这个在开发中普遍使用的较多，因为在没法使用css3动画的浏览器中，可以通过改变样式来到达动画的目的。</p>
+<pre><code><span class="keyword">var</span> doc = <span class="built_in">document</span>.getElementById(<span class="string">'doc'</span>);
+doc.style.width = <span class="string">'100px'</span>;
+</code></pre><p>对于iframe的访问这里增加了一个contentDocument对象来进行引用，还有节点的比较，isSameNode和isEqualNode，这两个的区别在于，前者是否引用的同一个节点对象，后者是指两个节点是否是相同的类型。不过，它们使用的也不多，了解就好。</p>
+<p><strong>元素的大小</strong></p>
+<p>这个部分需要理解，因为关乎到元素在浏览器上的位置显示，跟动画有关系，四个属性。</p>
+<ul>
+<li>offsetWidth 元素在水平方向占用的空间大小</li>
+<li>offsetHeight 元素在垂直方向占用的空间大小</li>
+<li>offsetLeft 元素的左外边框到内边框的距离</li>
+<li>offsetTop 元素的上外边框到内边框的距离</li>
+</ul>
+<p><strong>滚动大小</strong></p>
+<p>这个在视察滚动或者处理滚动条的时候用的上，也是四个属性</p>
+<ul>
+<li>scrollHeight 在没有滚动的情况下，元素的总高度</li>
+<li>scrollWidth 在没有滚动的情况下，元素的总宽度</li>
+<li>scrollLeft 被隐藏在内容区域左侧的像素度</li>
+<li>scrollTop 被隐藏在内容区域上侧的像素度</li>
+</ul>
+<blockquote>
+<p>下面这些IE全部不支持，range支持一种叫做文本范围的东西</p>
+</blockquote>
+<p><strong>元素遍历</strong></p>
+<p>关于遍历其实有两个方法可用createNodeIterator和createTreeWalker，不过这些在开发中几乎不会使用到，谁没事去遍历节点完呢。</p>
+<p><strong>关于range</strong></p>
+<p>这个也是非常少会使用到，除非是做那种编辑器应用或者在线编辑器等等，不过使用它可以更精准的控制的DOM，主要是使用createRange方法。</p>
+
+      
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/02/01/UINavigationController的理解/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">&lt;</strong>
+      <div class="article-nav-title">
+        
+          UINavigationController的理解
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/01/27/复习JavaScript六之事件/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">复习JavaScript六之事件</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="复习JavaScript七之DOM" data-title="复习JavaScript七之DOM" data-url="http://lcepy.github.io/2015/01/28/复习JavaScript七之DOM/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lcepy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 lcepy
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+  <script src="/js/main.js" type="text/javascript"></script>
+
+
+  </div>
+</body>
+</html>

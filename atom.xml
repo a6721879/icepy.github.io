@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-01-28T11:42:39.879Z</updated>
+  <updated>2015-02-06T12:50:31.622Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -13,6 +13,722 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[复习JavaScript十二之理解作用域]]></title>
+    <link href="http://lcepy.github.io/2015/02/05/%E5%A4%8D%E4%B9%A0JavaScript%E5%8D%81%E4%BA%8C%E4%B9%8B%E7%90%86%E8%A7%A3%E4%BD%9C%E7%94%A8%E5%9F%9F/"/>
+    <id>http://lcepy.github.io/2015/02/05/复习JavaScript十二之理解作用域/</id>
+    <published>2015-02-05T10:17:09.000Z</published>
+    <updated>2015-02-05T13:19:53.000Z</updated>
+    <content type="html"><![CDATA[<p>理解作用域链是Js编程中一个必须要具备的，作用域决定了变量和函数有权力访问哪些数据。在Web浏览器中，全局执行环境是window对象，这也意味着所有的全局变量或者方法都是window对象的属性或方法。当个函数在被调用的时候都会创建自己的执行环境，而这个函数中所写的代码就开始进入这个函数的执行环境，于是由变量对象构建起了一个作用域链。</p>
+<pre><code><span class="keyword">var</span> wow = <span class="string">'魔兽世界'</span>;
+<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> _wow = <span class="string">'123'</span>;
+}
+</code></pre><p>在这个例子中全局环境中包含了两个对象（全局环境的变量对象不算），window.wow和window.message，而这个message函数中又包含了两个对象，它自己的变量对象（其中定义了arguments对象）和全局环境的变量对象。当这个函数开始执行时，message自己的变量对象中定义了_wow，而它的全局环境的变量对象有wow，假设在message中alert一下wow，实际上是message中包含的全局环境的变量对象.wow，于是可以访问。</p>
+<pre><code><span class="keyword">var</span> wow = <span class="string">'123'</span>;
+<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> wow = <span class="string">'456'</span>;
+}
+</code></pre><p>如果执行message函数alert一下wow，它的作用域是这样开始搜索的，先搜索message自己的变量对象中是否存在wow，如果有就访问并且立马停止搜索，如果没有则继续往上访问它，有wow，则访问并且立马停止搜索，以此类推一直搜索到全局环境上的变量对象，如果这里都没，恭喜你，这里要抛错了。</p>
+<pre><code><span class="keyword">var</span> c = <span class="string">'123'</span>;
+<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> g = <span class="string">'123'</span>;
+    <span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        <span class="keyword">var</span> d = <span class="string">'123'</span>;
+    }
+}
+</code></pre><p>在这个例子中包含有三个执行环境，全局环境，message的环境，a的环境。从这里可以看出message自身包含两个对象，自己的变量对象和全局环境中的变量对象，而函数a则包含了三个，自身的变量对象，message的变量对象和全局变量对象。</p>
+<p>当开始执行这函数时，在函数a中可以访问到变量g，那是因为函数a包含了message的变量对象，于是在自身没有开始搜索上一级的变量对象时发现了，于是可以访问。那么访问c的原理也是如此，当自身和上一级的message的变量对象都没有，但是全局变量对象中存在，于是访问成功。</p>
+<p>了解这个作用域，对于Js编程是至关重要的，不然可能会出现，明明想要的预期结果是123，但是变成了456，为什么？那就是因为一级一级的搜索，可能会存在覆盖，或者搜索到别的地方就立即停止搜索了。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>理解作用域链是Js编程中一个必须要具备的，作用域决定了变量和函数有权力访问哪些数据。在Web浏览器中，全局执行环境是window对象，这也意味着所有的全局变量或者方法都是window对象的属性或方法。当个函数在被调用的时候都会创建自己的执行环境，而这个函数中所写的代码就开始]]>
+    </summary>
+    
+      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[iOS的copy语法]]></title>
+    <link href="http://lcepy.github.io/2015/02/05/iOS%E7%9A%84copy%E8%AF%AD%E6%B3%95/"/>
+    <id>http://lcepy.github.io/2015/02/05/iOS的copy语法/</id>
+    <published>2015-02-05T10:01:43.000Z</published>
+    <updated>2015-02-06T12:50:11.000Z</updated>
+    <content type="html"><![CDATA[<p>这是一个关于深拷贝和浅拷贝的问题，OC设计这个语法的目的就是创建一个副本，修改副本的时候不会改变原来的对象。</p>
+<blockquote>
+<p>对于这两个问题可以这么理解，浅拷贝也就是把指针赋值，大家用的都是地址。而深拷贝，则是创建了一个新的空间，虽然内容可能是一样的，但是大家使用的空间，地址都是不同的。</p>
+</blockquote>
+<p>在OC中可以使用copy或者mutableCopy语法来实现深拷贝和浅拷贝，要求实现NSCopying或者NSMutableCopying协议。</p>
+<p>copy和mutableCopy是有区别的，区别在于NSString和NSMutableString的区别，如果使用NSString调用copy创建出来的新对象那就是NSString，如果是使用NSString的mutableCopy创建出来的新对象那就是NSMutableString。前者是不可变的，后者是可变的，它的空间不是固定的。</p>
+<pre><code>NSString *<span class="typename">string</span> = [[NSString alloc] initWithFormat:@<span class="string">"123"</span>,<span class="number">10</span>];
+
+NSMutableString *str = [<span class="typename">string</span> mutableCopy];
+
+[<span class="typename">string</span> <span class="keyword">release</span>];
+[str <span class="keyword">release</span>];
+</code></pre><p>遵守上面所说的创建一个副本，修改副本的时候不会改变原来的对象，其实这里可以看内存地址就可以看出来，它们是不同的。</p>
+<pre><code><span class="attr_selector">[str appendString:@"123"]</span>;
+
+<span class="function">NSlog</span>(<span class="at_rule">@<span class="string">"%@"</span>,string);</span>
+<span class="function">NSlog</span>(<span class="at_rule">@<span class="string">"%@"</span>,str);</span>
+</code></pre><p>从打印的结果可以很明显的看的出来，从内存的角度上来看，因为是新对象，所以它的引用计数是加1的，所以copy或者mutableCopy都需要release。</p>
+<p>如果使用copy语法，因为有一个机制不可变的元素，所以OC就直接把原来的对象返回，并且引用计数加1，于是这就是浅拷贝了，而mutableCopy就是深拷贝了。</p>
+<p>如果在OC中反过来又是什么样的情况呢？比如使用NSMutableString调用它的copy方法，会产生什么样的情况呢？</p>
+<pre><code>NSMutableString *<span class="built_in">string</span> = [[NSMutableString alloc]stringWithForma<span class="variable">t:</span>@<span class="string">"123"</span>,<span class="number">10</span>];
+NSString *str = [<span class="built_in">string</span> <span class="built_in">copy</span>];
+</code></pre><p>如果从可变成不可变使用的copy却是一个深拷贝，产生一个新的对象，它的引用计数为1。如果可变的使用mutableCopy产生一个对象，它也是深拷贝，产生一个新对象，引用计数为1，所以都需要release。</p>
+<blockquote>
+<p>总结一下，只有一种情况是浅拷贝，不可变对象调用它的copy方法为浅拷贝，再原对象上计数加1.而其他的不管是调用copy还是mutableCopy都是深拷贝，产生一个新的对象，计数为1。</p>
+</blockquote>
+<h3 id="如何自定义的类提供copy或者mutableCopy">如何自定义的类提供copy或者mutableCopy</h3>
+<p>如果要自己实现自定义对象的copy或者mutableCopy语法，首先要实现NSCopying或者NSMutableCopying协议，它们的原理都是一样的，按NSCopying来讲解一个例子。</p>
+<pre><code>-(<span class="property">id</span>)copyWithZone:(NSZone *)zone
+{
+    Pser *<span class="keyword">copy</span> = [[[self <span class="type">class</span>] allocWithZone:zone] init];
+    <span class="keyword">copy</span>.<span class="property">name</span> = _name;
+<span class="command">    return</span> <span class="keyword">copy</span>;
+}
+</code></pre><p>主要是实现copyWithZone方法，系统会为copy分配一个空间，以存储创建出来的副本。它不要求在copyWithZone内部进行内存管理，因为外部还需要使用。一般来说，使用copy还需要注意一些问题，也就是父子的问题。假设父类有实现copyWithZone方法，一般来说在子类中需要覆盖一下，然后调用它的父类的copyWithZone。而且在需要使用self class来实例对象，谁使用self就是谁，这样才能说子类调用之后，接收的还是子类，而不是父类。</p>
+<pre><code> <span class="title">[super copyWithZone:zone]</span><span class="comment">;</span>
+</code></pre><p>然后再进一步的操作。</p>
+<p>NSMutableCopying的操作步骤是一模一样的，注意的问题也是如同。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>这是一个关于深拷贝和浅拷贝的问题，OC设计这个语法的目的就是创建一个副本，修改副本的时候不会改变原来的对象。</p>
+<blockquote>
+<p>对于这两个问题可以这么理解，浅拷贝也就是把指针赋值，大家用的都是地址。而深拷贝，则是创建了一个新的空间，虽然内容可能是一样的]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[iOS的内存管理]]></title>
+    <link href="http://lcepy.github.io/2015/02/04/iOS%E7%9A%84%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
+    <id>http://lcepy.github.io/2015/02/04/iOS的内存管理/</id>
+    <published>2015-02-04T15:00:33.000Z</published>
+    <updated>2015-02-06T11:56:21.000Z</updated>
+    <content type="html"><![CDATA[<p>在iOS开发中使用的是引用计数的方式来管理内存，也就是跟踪记录每个值被引用的次数。当声明一个变量来接收一个指针对象，引用次数就＋1，如果指针对象被添加到数组，字典，或者被其他指针对象所使用又＋1.如果使用完毕之后对它进行－1，一直到0，系统会立马释放这段内存。</p>
+<blockquote>
+<p>如果开启了ARC机制，编译器会帮助我们在代码中添加上内存管理的代码，而且在Xcode中比如retain这些都是不可以使用的</p>
+</blockquote>
+<p>在OC中可以使用retainCount来查看指针对象的引用次数。</p>
+<pre><code><span class="variable">Wower</span> *wower = [[<span class="variable">Wower</span> alloc] init<span class="variable">WithName</span>:@<span class="string">"lcepy"</span> <span class="keyword">and</span><span class="variable">T</span>:@<span class="string">"魔兽世界"</span>];
+<span class="variable">NSLog</span>(@<span class="string">"%zi"</span>,[wower retain<span class="variable">Count</span>]);
+</code></pre><p>一般来说如果在代码中使用了alloc，copy，retain，引用计数都是加一，而release则是引用计数减一，又比如把指针对象添加到数组，字典，内部的引用计数也会加一，但是这个的话，系统是会来管理的。又比如一些静态方法，也会由系统来管理，内部是会加一的。还有一种叫做自动释放池的玩意，autorelease，它的功能是整个执行过程结束，系统来管理释放的工作。</p>
+<p>一般来说基本类型的数据也就是C语言的如int这样的，直接赋值即可不用管理，在iOS中主要是对OC指针对象进行内存管理。在使用@property的时候，根据参数retain，copy，编译器会帮助我们生成getter，setter方法，而且还会帮助我们进行一下内存管理，比如：</p>
+<pre><code><span class="pp">-<span class="params">(void)</span>setterFound:<span class="params">(<span class="variable">Found</span> *)</span>found
+{
+    if <span class="params">(<span class="variable">_</span>found != found)</span> {
+        [_found release];
+        _found = found;
+        [_found retain];
+    }
+}</span>
+</code></pre><p>有一点要注意的是如果是retain，copy一般来说接收的都是OC对象，基本类型可以用assign。</p>
+<p>实例：</p>
+<pre><code><span class="comment">//.h文件</span>
+<span class="class"><span class="keyword">@interface</span> <span class="title">Found</span> : <span class="title">NSObject</span></span>
+
+<span class="keyword">@end</span>
+
+
+<span class="class"><span class="keyword">@interface</span> <span class="title">Wower</span> : <span class="title">NSObject</span></span>
+{
+    Found *_found;
+}
+
+<span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *name;
+<span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *game;
+
+-(<span class="keyword">id</span>)initWithName:(<span class="built_in">NSString</span> *)name andT:(<span class="built_in">NSString</span> *)game;
+-(<span class="keyword">void</span>)setterFound:(Found *)found;
+
+<span class="keyword">@end</span>
+<span class="comment">//.m文件</span>
+<span class="class"><span class="keyword">@implementation</span> <span class="title">Wower</span></span>
+
+-(<span class="keyword">id</span>)initWithName:(<span class="built_in">NSString</span> *)name andT:(<span class="built_in">NSString</span> *)game
+{
+    <span class="keyword">self</span> = [<span class="keyword">super</span> init];
+    <span class="keyword">if</span> (<span class="keyword">self</span>) {
+        _name = name;
+        _game = game;
+    }
+    <span class="keyword">return</span> <span class="keyword">self</span>;
+}
+
+
+-(<span class="keyword">void</span>)dealloc
+{
+
+    <span class="built_in">NSLog</span>(<span class="string">@"Found的引用计数%zi"</span>,[_found retainCount]);
+    [_found release];
+    <span class="built_in">NSLog</span>(<span class="string">@"Found的引用计数%zi"</span>,[_found retainCount]);
+    [<span class="keyword">super</span> dealloc];
+
+}
+
+-(<span class="keyword">void</span>)showMessage
+{
+
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,_name);
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,_game);
+}
+
+-(<span class="keyword">void</span>)setterFound:(Found *)found
+{
+    <span class="keyword">if</span> (_found != found) {
+        [_found release];
+        _found = found;
+        [_found retain];
+    }
+}
+<span class="keyword">@end</span>
+
+<span class="class"><span class="keyword">@implementation</span> <span class="title">Found</span></span>
+
+-(<span class="keyword">void</span>)dealloc
+{
+    [<span class="keyword">super</span> dealloc];
+    <span class="built_in">NSLog</span>(<span class="string">@"释放"</span>);
+}
+
+<span class="keyword">@end</span>
+
+<span class="comment">//main文件</span>
+
+<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {
+    <span class="keyword">@autoreleasepool</span> {
+        Wower *wower = [[Wower alloc] initWithName:<span class="string">@"lcepy"</span> andT:<span class="string">@"魔兽世界"</span>];
+        <span class="built_in">NSLog</span>(<span class="string">@"%zi"</span>,[wower retainCount]);
+        Found *f = [[Found alloc] init];
+        [wower setterFound:f];
+        [wower release];
+        [f release];
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><p>dealloc是OC对象释放之后，系统会自动调用，这里一般都是来释放一些其他对象。在Wower类的dealloc中只释放了_found，而copy的那个却没有释放，那是因为@””快速创建的，一般来说这些都不需要自己来管理而是系统。</p>
+<blockquote>
+<p>关于OC的内存管理，其实有一个原则，就是谁创建谁释放，谁使用谁释放。在之前，创建了wower,f对象，于是它们要在外部释放，而我使用了setFound方法来把f对象设置到成员变量中，于是这里就成了wower对象的_found成员变量在使用，于是它有责任在dealloc的时候来把f对象的引用计数减1。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>在iOS开发中使用的是引用计数的方式来管理内存，也就是跟踪记录每个值被引用的次数。当声明一个变量来接收一个指针对象，引用次数就＋1，如果指针对象被添加到数组，字典，或者被其他指针对象所使用又＋1.如果使用完毕之后对它进行－1，一直到0，系统会立马释放这段内存。</p>
+<b]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[复习JavaScript十一之理解内存管理]]></title>
+    <link href="http://lcepy.github.io/2015/02/04/%E5%A4%8D%E4%B9%A0JavaScript%E5%8D%81%E4%B8%80%E4%B9%8B%E7%90%86%E8%A7%A3%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
+    <id>http://lcepy.github.io/2015/02/04/复习JavaScript十一之理解内存管理/</id>
+    <published>2015-02-04T10:53:09.000Z</published>
+    <updated>2015-02-04T15:00:09.000Z</updated>
+    <content type="html"><![CDATA[<p>一般来说内存管理主要有这么几种方式，引用计数和标记，而JavaScript采用的就是标记管理的方式。Js的内存管理是自动的，但是并不是说执行完后立马销毁，而是有时间周期性，相隔一段时间执行一下垃圾回收，把没有引用的内存全部销毁。</p>
+<p>OC中采用的是引用计数来手动管理内存，这样的方式比较好，可以让开发者自己来管理。当然也有不好的地方，如果遗忘了释放，很可能引起应用的崩溃。</p>
+<p>总体来看在IE中因为COM组件的原因，可能会发生循环引用的问题，这个问题在引用计数的内存管理都会遇见。所谓的循环引用是指在对象A中包含了一个指向B的指针，然后再对象B中包含一个指向A的指针，于是悲剧了。</p>
+<pre><code>var element = document.getElementById(<span class="string">'doc'</span>);
+var <span class="keyword">my</span> = {};
+<span class="keyword">my</span>.element = element;
+element.<span class="keyword">my</span> = <span class="keyword">my</span>;
+</code></pre><p>大家都引用，于是，可想而知。要避免这种问题，一定要在不使用的时候my.element = null，把它断开。</p>
+<p>那么，其他浏览器呢？还是标记清理的机制，比如一个函数的变量，在进入环境时标记上“进入环境”，执行完之后标记上“离开环境”，然后等待系统来释放。</p>
+<p>IE有一个手动释放的方法，window.CollectGarbage，调用它就立马释放已经标记离开环境的变量，不过很多文章都不建议这样做。</p>
+<p>那么一般都这样做，引用类型的释放</p>
+<pre><code><span class="keyword">var</span> my = {};
+<span class="comment">//使用完毕之后</span>
+my = <span class="literal">null</span>;
+</code></pre><p>让my脱离执行环境，标记上已经离开环境，然后等待系统执行垃圾回收，释放内存。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>一般来说内存管理主要有这么几种方式，引用计数和标记，而JavaScript采用的就是标记管理的方式。Js的内存管理是自动的，但是并不是说执行完后立马销毁，而是有时间周期性，相隔一段时间执行一下垃圾回收，把没有引用的内存全部销毁。</p>
+<p>OC中采用的是引用计数来手动管]]>
+    </summary>
+    
+      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[复习JavaScript十之理解引用类型和匿名函数闭包]]></title>
+    <link href="http://lcepy.github.io/2015/02/03/%E5%A4%8D%E4%B9%A0JavaScript%E5%8D%81%E4%B9%8B%E7%90%86%E8%A7%A3%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E9%97%AD%E5%8C%85/"/>
+    <id>http://lcepy.github.io/2015/02/03/复习JavaScript十之理解引用类型和匿名函数闭包/</id>
+    <published>2015-02-03T11:02:01.000Z</published>
+    <updated>2015-02-04T10:51:00.000Z</updated>
+    <content type="html"><![CDATA[<p>引用类型虽然看起来很类很相似，但是它们却是不同的概念，引用类型的值，也就是对象是引用类型的一个实例。在Js中引用类型主要有Object，Array，Date，正则，Function等。</p>
+<p>Object之前已经复习过了，Array是用的非常频繁的一个引用类型。</p>
+<p><strong>Array</strong></p>
+<p>在Js中数组可以存储任意的数据，而且它的大小是可以动态调整的类似于OC中的NSMutableArray。创建数组可以使用构造函数的方式也可以使用字面量的形式，另外可以使用concat从一个数组中复制一个副本出来。数组本身提供了很多方法让开发者使用来操作数组。</p>
+<ul>
+<li>length 数组的长度</li>
+<li>toString  可以返回一个以，拼接的字符串，相当于是调用了下join(‘,’)</li>
+<li>join 可以用一个分割符来拼接成一个字符串</li>
+<li>push 添加一个数据到数组的末端</li>
+<li>pop 删除数组中的最后一项，有返回值</li>
+<li>shift 删除数组的第一项，有返回值</li>
+<li>unshift 添加一个数据到数组的首端</li>
+<li>reverse 倒序</li>
+<li>sort 可以传入一个排序的函数</li>
+<li>slice 可以基于当前数组返回一个新的数组，接收两个参数，返回项的起始位置和结束位置</li>
+<li>splice 可以传入N个参数，第一个参数表示要删除，插入或则替换的位置，第二个参数表示要删除的项数，第三个到第N个表示要插入或则替换的数据</li>
+</ul>
+<p><strong>Date</strong></p>
+<p>时间对象也是使用非常多的玩意，它是使用GMT时间来描述，而且时间对象是可以直接比对大小的。</p>
+<pre><code><span class="keyword">var</span> date1 = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2015</span>,<span class="number">1</span>,<span class="number">2</span>);
+<span class="keyword">var</span> date2 = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2015</span>,<span class="number">1</span>,<span class="number">10</span>);
+
+date1 &lt; date2  
+</code></pre><p>常用的方法</p>
+<ul>
+<li>getTime 获取时间对象的毫秒数</li>
+<li>setTime 设置时间对象的毫秒数，会改变日期</li>
+<li>getFullYear 获取时间对象的年（2015）</li>
+<li>getMonth 获取时间对象的月（需要加1）</li>
+<li>getDay 获取日期的星期几（0-6）星期天到星期六</li>
+<li>getDate 获取日期的天数</li>
+<li>getHours 获取当前日期的小时</li>
+<li>getMinutes 获取当前日期的分钟数</li>
+<li>getSeconds 获取当然日期的秒数</li>
+</ul>
+<p>上面看起来都是获取，当然也有设置，只是相应的get置换成set即可。</p>
+<p><strong>正则表达式</strong></p>
+<p>在Js里正则表达式是用RegExp类型来支持的，关于正则可以看看之前写的一篇文章，用python来描述的如何读懂正则。</p>
+<p>Js也支持三种模式，gim，表示全局，不区分大小写，多行。</p>
+<p>一般来说很少有人这么使用var xxx = new RegExp()，而是用字面量的方式，比如var xx = /[bc]/gi;像用的比较多的方法有exec用于捕获包含第一个匹配项的数组，没有则返回null。test，用于判断，如果匹配返回true，不匹配返回false。</p>
+<p><strong>Function</strong></p>
+<p>说起来Js的核心是什么？那就是函数了。对于函数主要是理解它的几个概念，它可以当值来传递，没有重栽。而且声明的时候，比如function a(){} var a = function(){} 执行时会有区别。函数内部的参数arguments包含了传入的所有参数，this，表示在这个函数内的作用域，以及prototype。</p>
+<p><strong>处理字符串</strong></p>
+<p>在Js中还有一种叫做包装类型的玩意，正因为此所以处理一些基本数据类型，比如字符串时，有很多方法可以使用。</p>
+<ul>
+<li>concat 可以将一个或者多个字符串拼接起来，返回一个新的字符串</li>
+<li>slice 接收两个参数，起始位置和结束位置，返回一个新的字符串</li>
+<li>substr和substring和slice一样，唯一的不同是substr第二个参数是返回字符串的个数</li>
+<li>indexOf 从头开始查询字符串，存在会返回它所在的位置，没有返回－1</li>
+<li>lastIndexOf 从最后开始查询字符串</li>
+<li>toUpperCase 转大写</li>
+<li>toLowerCase 转小写</li>
+<li>match 正则表达式使用跟exec一样</li>
+<li>search 正则表达式使用，查询到返回一个位置，没有返回－1</li>
+<li>replace 替换，第一个参数可以是正则表达式也可以是字符串，第二个参数是要替换的字符串</li>
+<li>localeCompare比较字符串，如果字符串相等返回0，如果字符串的字母排在参数字符串之前，返回负数，如果是之后，返回正数。</li>
+</ul>
+<h3 id="理解匿名函数和闭包">理解匿名函数和闭包</h3>
+<p>匿名函数又叫拉姆达函数，主要是在把函数当值传递的时候用，或者是把函数当返回值，比如：</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">d</span><span class="params">(callback)</span></span>{
+    <span class="keyword">callback</span>();
+}
+d(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    alert(<span class="string">'123'</span>)
+});
+
+<span class="comment">//或者</span>
+
+<span class="function"><span class="keyword">function</span> <span class="title">b</span><span class="params">()</span></span>{
+    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        alert(<span class="string">'123'</span>);
+    }
+}
+<span class="keyword">var</span> g = b();
+g();
+</code></pre><p>其实第二种方式跟闭包的意义一样了，所谓的闭包书面的解释是可以访问另一个函数作用域内变量的函数，稍微改写一下可能会更明显。</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">b</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> name = <span class="string">'123'</span>;
+    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        alert(name);
+    }
+}
+<span class="keyword">var</span> g = b();
+g();
+</code></pre><p>从这里可以看出来return的函数可以访问到name，而外部却不行，这个返回值的函数就可以理解为闭包。理解闭包还可以看一个经典的求值的例子。</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">save_i</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> a = [];
+    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
+        a[i] = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">return</span> i;
+        }
+    }
+    <span class="keyword">return</span> a;    
+}
+
+<span class="keyword">var</span> c = save_i();
+<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
+    alert(c[i]());
+}
+</code></pre><p>从这个例子上来看，我们想得到的结果是10次循环a[i]保存着一个闭包，然后alert出从0到10，但是结果很出人意料，全部是10，为什么？哪里理解的不对呢？a[i]明明是内部函数，然后让它访问另外一个函数作用域内的变量i。</p>
+<p>个人觉得可以这样去分析问题，在客户端执行Js时有一个全局执行环境，指向的是window对象。而所谓的对象也就是引用类型，实际上在后台执行环境中，它就是一个指针。</p>
+<p>回到Js当代码在执行的时候，会创建变量对象并且构建一个作用域链，而这个对象保存着当前函数可以访问的对象。</p>
+<pre><code>window
+    -<span class="ruby">&gt;save_i
+</span>        -<span class="ruby">&gt;this|argument
+</span>        -<span class="ruby">&gt;a
+</span>        -<span class="ruby">&gt;i
+</span>        -<span class="ruby">&gt;看不见的a[<span class="number">0</span>]-a[<span class="number">10</span>]
+</span>        -<span class="ruby">&gt;a[<span class="number">0</span>]function(){}
+</span>            -<span class="ruby">&gt;i
+</span>    -<span class="ruby">&gt;c</span>
+</code></pre><p>上述的i和a[0]里的i是同一个i，那么结果就是10。</p>
+<p>进一步处理</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">save_i</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> a = [];
+    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
+        a[i] = <span class="function"><span class="keyword">function</span><span class="params">(k)</span></span>{
+            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+                <span class="keyword">return</span> k;
+            };
+        }(i)
+    }
+    <span class="keyword">return</span> a;    
+}
+
+<span class="keyword">var</span> c = save_i();
+<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
+    <span class="built_in">console</span>.log(c[i]());
+}
+</code></pre><p>接着按上面的节奏来分析</p>
+<pre><code>window
+    -<span class="ruby">&gt;save_i
+</span>        -<span class="ruby">&gt;this|argument
+</span>        -<span class="ruby">&gt;a
+</span>        -<span class="ruby">&gt;i
+</span>        -<span class="ruby">&gt;看不见的a[<span class="number">0</span>]-a[<span class="number">10</span>]
+</span>        -<span class="ruby">&gt;a[<span class="number">0</span>]function(){}
+</span>            -<span class="ruby">&gt;k
+</span>            -<span class="ruby">&gt;function(){}
+</span>                -<span class="ruby">&gt;k
+</span>
+    -<span class="ruby">&gt;c</span>
+</code></pre><p>什么是传参？按值传递，相当于是在那个立即执行的函数中创建了一个新的地址和空间，虽然值是一样的，但是每一个k又是不同的，所以得到的结果正好满足了我们的预期。</p>
+<p>本来正常情况下save_i执行完毕后就要销毁，但是内部的闭包被包含在这个作用域内了，所以save_i没法销毁，从这里可以看的出来闭包会带来内存的问题，因为用完之后没法销毁，如果不注意的话。</p>
+<p>那么用完之后只能设置为null来解除引用，等着自动销毁把内存回收。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>引用类型虽然看起来很类很相似，但是它们却是不同的概念，引用类型的值，也就是对象是引用类型的一个实例。在Js中引用类型主要有Object，Array，Date，正则，Function等。</p>
+<p>Object之前已经复习过了，Array是用的非常频繁的一个引用类型。</]]>
+    </summary>
+    
+      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[复习JavaScript九之客户端存储方案]]></title>
+    <link href="http://lcepy.github.io/2015/02/03/%E5%A4%8D%E4%B9%A0JavaScript%E4%B9%9D%E4%B9%8B%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%AD%98%E5%82%A8%E6%96%B9%E6%A1%88/"/>
+    <id>http://lcepy.github.io/2015/02/03/复习JavaScript九之客户端存储方案/</id>
+    <published>2015-02-03T09:43:48.000Z</published>
+    <updated>2015-02-03T11:00:43.000Z</updated>
+    <content type="html"><![CDATA[<p>随着Web应用越来越复杂，总是有很多需求需要在客户端存储一些特定的信息，用来描述访问者或者跟访问者相关的信息。于是，就有了这些客户端存储的方案，供开发者选择以及使用。</p>
+<h3 id="cookie">cookie</h3>
+<p>说起来cookie的出现是非常早的，用于在客户端存储会话信息，它要求服务器对任意的HTTP请求发送Set-Cookie HTTP头作为响应的一部分，例如：</p>
+<pre><code><span class="status">HTTP/1.1 <span class="number">200</span> OK</span>
+<span class="attribute">Content-Type</span>: <span class="string">text/html</span>
+<span class="attribute">Set-Cookie</span>: <span class="string">name=value</span>
+</code></pre><p>cookie虽然好用，但是它在客户端上有很多限制，而去获取也不是很容易。最重要的是关于请求的性能，cookie是对任意HTTP设置，所以也会发送给服务器，这些额外信息有时候不是必需的。</p>
+<ul>
+<li>cookie是跟特定的域有关系的，也就意味着存储在cookie中的信息只能让特定的域来访问</li>
+<li>cookie的条数是有限制的，大体上来说各浏览器不会超过50个，除了safair chrome</li>
+<li>cookie在客户端只有一个方法可以用document.cookie</li>
+<li>cookie的大小在客户端上也有限制，大体不会超过1MB</li>
+<li>如果在客户端设置了cookie，是没法删除的，只能在同一个cookie上设置name=空字符串或者设置失效时间</li>
+<li>如果设置了secure，cookie只能在SSL链接才能传输</li>
+</ul>
+<p>cookie在浏览器上的保存是由几个方面组成的，理解这个对于使用Js操作cookie是一个必备条件，它由名称也就是每一项的key，每一项的值value，域名的限制，路径对于哪一个页面起作用，时间，以及安全标识secure。</p>
+<p>在客户端主要是使用document.cookie来进行操作，获取和设置都是这一个。而去获取是一个全的字符串，还需要进一步的处理才能得到值。如果是设置，也是需要设置一个全的字符串。对于这个，最好都要encodeURIComponent一下，获取的时候decodeURIComponent一下。</p>
+<pre><code><span class="keyword">var</span> setCookie = <span class="function"><span class="keyword">function</span><span class="params">(name,value,expires,path,domain,secure)</span></span>{
+    <span class="keyword">var</span> cookieText = <span class="built_in">encodeURIComponent</span>(name)+<span class="string">'='</span>+<span class="built_in">encodeURIComponent</span>(value);
+
+    <span class="comment">//各项的拼接</span>
+    <span class="built_in">document</span>.cookie = cookieText;
+}
+</code></pre><p>聪明的开发者为了绕开浏览器上对于条数的限制，研究出了一个方式，把真实的值设置在子cookie上。</p>
+<pre><code><span class="variable">name=</span><span class="variable">name=</span>value
+</code></pre><h3 id="IE上的客户端存储userData">IE上的客户端存储userData</h3>
+<p>在IE中引入了一个userData的方案来存储客户端数据，允许每个文档最多128KB，每个域1MB的数据量。想使用它首选在那个元素上应用一个css。</p>
+<pre><code>&lt;<span class="keyword">div</span> style=<span class="string">"behavior:url(#default#userData)"</span>&gt;&lt;/<span class="keyword">div</span>&gt;
+</code></pre><p>使用的时候跟设置dom属性一样，唯一有一个不同的地方是最后要调用save方法，告诉它存储在哪个数据仓库上。</p>
+<pre><code><span class="keyword">var</span> dataStore = <span class="built_in">document</span>.getElementById(<span class="string">'dataStore'</span>);
+dataStore.setAttribute(<span class="string">'name'</span>,<span class="string">'lcepy'</span>);
+dataStore.save(<span class="string">'MyNameInfo'</span>);
+</code></pre><p>获取</p>
+<pre><code>dataStore.<span class="built_in">load</span>(<span class="string">'MyNameInfo'</span>);
+dataStore.getAttribute(<span class="string">'name'</span>);
+</code></pre><h3 id="HTML5的客户端存储方案">HTML5的客户端存储方案</h3>
+<blockquote>
+<p>支持度以及使用比较广泛的是Web Storage API，当然客户端还有本地数据IndexDB等等，这些也是可以存储客户端数据，但是它们支持的很少。在做移动端开发时，localStorage的使用是非常频繁的，还要注意一点是个别比如safair浏览器有隐私模式，本地缓存是不起作用的，无法读取，所以要做一些额外的处理。</p>
+</blockquote>
+<p>主要的是两个sessionStorage和localStorage两套API来应用，它们是有区别的，前者只在浏览器运行时存在，也可以跨页面，前提是页面不能关闭。后者是永久存在的，如果用户不删除，那么它永远不会删除。它们的使用方式都是一样的，包括API。至于分配的空间，要看各浏览器的态度的，一般情况下是5MB，还有一点它是跟域走的。</p>
+<pre><code><span class="title">interface</span> Storage{
+    <span class="title">readonly</span> attribute unsigned long legth;
+    <span class="title">getter</span> DOMString key();
+    <span class="title">getter</span> any getItem();
+    <span class="title">setter</span> creator void setItem();
+    <span class="title">deleter</span> void removeItem();
+    <span class="title">viod</span> clear();
+}
+</code></pre><ul>
+<li>length 描述Storage对象中存储的key=value数量</li>
+<li>key 方法允许获取一个指定位置的键</li>
+<li>getItem方法根据指定的key返回一个value</li>
+<li>setItem方法将数据value存入指定的位置key</li>
+<li>removeItem根据指定的key来删除数据</li>
+<li>clear 删除全部的数据</li>
+</ul>
+<p>使用：</p>
+<pre><code><span class="transposed_variable">localStorage.</span>setItem(<span class="string">'name'</span>,<span class="string">'lcepy'</span>);
+<span class="transposed_variable">localStorage.</span>getItem(<span class="string">'name'</span>);
+<span class="transposed_variable">localStorage.</span>key(<span class="number">0</span>);
+<span class="transposed_variable">localStorage.</span><span class="built_in">length</span>;
+<span class="transposed_variable">localStorage.</span>removeItem(<span class="string">'name'</span>);
+<span class="transposed_variable">localStorage.</span><span class="keyword">clear</span>();
+</code></pre><p>另外API中还有一套事件用于本地存储发生改变时的通知</p>
+<pre><code><span class="built_in">window</span>.addEventLister(<span class="string">'storage'</span>,<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{},<span class="literal">true</span>);
+</code></pre><p>event对象中包含有</p>
+<ul>
+<li>key 存储了被更新或者删除的键</li>
+<li>oldValue 包含了更新之前的数据</li>
+<li>url Storage事件发生的源</li>
+<li>newValue 包含了更新之后的数据</li>
+<li>storageArea 包含一个引用，指向发生改变之前的localStorage或者sessionStorage</li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>随着Web应用越来越复杂，总是有很多需求需要在客户端存储一些特定的信息，用来描述访问者或者跟访问者相关的信息。于是，就有了这些客户端存储的方案，供开发者选择以及使用。</p>
+<h3 id="cookie">cookie</h3>
+<p>说起来cookie的出现是非常早的，]]>
+    </summary>
+    
+      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[复习JavaScript八之操作XML]]></title>
+    <link href="http://lcepy.github.io/2015/02/02/%E5%A4%8D%E4%B9%A0JavaScript%E5%85%AB%E4%B9%8B%E6%93%8D%E4%BD%9CXML/"/>
+    <id>http://lcepy.github.io/2015/02/02/复习JavaScript八之操作XML/</id>
+    <published>2015-02-02T09:50:14.000Z</published>
+    <updated>2015-02-02T10:53:39.000Z</updated>
+    <content type="html"><![CDATA[<p>在以前XML是存储和传输数据的事实标准（客户端没有出现JSON之前），那个时候浏览器还不支持解析XML，于是很多开发者需要自己写一个XML解析器。原理，就是把XML也转化成DOM文档，然后通过DOM API来获取。</p>
+<p>而现在，在客户端（浏览器）编程中几乎很少会使用到XML，数据的交换都应用在JSON上了，了解这个有一个好处，就是在做服务端编程，比如SAOP协议时就会用到，还有桌面的客户端，或者是移动客户端上，比如iOS，它把一些数据，比如NSArray写入到本地，实际上就是一个XML文本，当然在代码层面上，是看不出来有解析的，如果读取这个文件，是直接转成NSArray对象的。</p>
+<blockquote>
+<p>IE有它自己的实现对XML的支持，下面说的两个类型，在IE中都不支持</p>
+</blockquote>
+<p>将XML字符串序列化成DOM文档，主要是使用DOMparser类来实现，其他的用法跟获取DOM节点一样。</p>
+<pre><code><span class="keyword">var</span> parser = <span class="keyword">new</span> DOMparser();
+<span class="keyword">var</span> xmlDomObject = parser.parserFromString(<span class="string">'&lt;root&gt;&lt;child/&gt;&lt;/root&gt;'</span>,<span class="string">'text/xml'</span>);
+
+xmlDomObject.getElementsByTagName(<span class="string">'child'</span>);
+</code></pre><p>将DOM文档反序列化成XML字符串，主要是使用XMLSerializer类型，使用上述的xmlDomObject对象。</p>
+<pre><code><span class="built_in">var</span> serializer <span class="subst">=</span> <span class="literal">new</span> XMLSerializer();
+<span class="built_in">var</span> <span class="built_in">xml</span> <span class="subst">=</span> serializer<span class="built_in">.</span>serializeToString(xmlDomObject);
+</code></pre><p>如果XML解析有错误都会返回一个parsererror标签，获取的时候就可以判断是否有这个标签来决定解析是否有错误。</p>
+<p>据说DOM3版本的XML操作只有一个浏览器实现了，所以当资料了解就好。</p>
+<h3 id="IE版本">IE版本</h3>
+<blockquote>
+<p>IE版本的XML解析主要是使用它的ActiveXObject类型来实现</p>
+</blockquote>
+<p>在IE中想要解析XML就必须先创建一个空的DOM文档，然后通过这个文档来获取。</p>
+<pre><code>var xmldom = createDocument();
+xmldom.loadXML(<span class="comment">'<span class="xmlDocTag">&lt;root&gt;</span><span class="xmlDocTag">&lt;child/&gt;</span><span class="xmlDocTag">&lt;/root&gt;</span>');</span>
+
+xmldom.getElementsByTagName(<span class="comment">'child');</span>
+</code></pre><p>如果解析有错误，可以检查parseError对象。</p>
+<pre><code><span class="keyword">if</span>(xmldom.parseError !== <span class="number">0</span>){
+    //<span class="keyword">do</span> 
+}
+</code></pre><p>在IE中进行序列化非常的方便，因为它都内置在了DOM文档中，每一个DOM节点都有一个xml属性，它就保存着XML字符串。</p>
+<pre><code>xmldom<span class="built_in">.</span><span class="built_in">xml</span>
+</code></pre><p>最后IE还提供了一个可以加载远程XML文件的方法load，它就接收一个参数，远程XML的URL地址。当然，也可以使用async属性来设置同步还是异步，默认是异步（true）。</p>
+<pre><code><span class="keyword">var</span> xmldom = createDocument();
+xmldom.<span class="keyword">async</span> = <span class="keyword">false</span>;
+xmldom.load(<span class="string">'http://xxx.sss.xml'</span>);
+</code></pre><p>如果是异步还要监听一下onreadystatechange事件，判断readystate状态，这个跟Ajax的使用是一样的。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>在以前XML是存储和传输数据的事实标准（客户端没有出现JSON之前），那个时候浏览器还不支持解析XML，于是很多开发者需要自己写一个XML解析器。原理，就是把XML也转化成DOM文档，然后通过DOM API来获取。</p>
+<p>而现在，在客户端（浏览器）编程中几乎很少会使]]>
+    </summary>
+    
+      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[UINavigationController的理解]]></title>
+    <link href="http://lcepy.github.io/2015/02/01/UINavigationController%E7%9A%84%E7%90%86%E8%A7%A3/"/>
+    <id>http://lcepy.github.io/2015/02/01/UINavigationController的理解/</id>
+    <published>2015-02-01T11:23:41.000Z</published>
+    <updated>2015-02-06T10:42:45.000Z</updated>
+    <content type="html"><![CDATA[<p>在做iOS开发的时候，<strong>UINavigationController</strong>可以说使用跟那个UITableView一样非常的常见。在学习这个之前，需要了解一下在iOS开发中的层级关系。</p>
+<p>我把它想象成一本书，虽然这么描述非常的不精准，但是却很像。每一个UIViewController就像书页，最外面的一个是封页，当然它就是我们的启动UI界面了，而目录就相当于是UINavigationController，通过它可以精准的翻到每一页。在iOS应用中，这样的层级关系就像书页一页。</p>
+<blockquote>
+<p>实际上这里可能描述的有些错误，但是我只能这么想象了，当我翻到某一页时，这一页（UIViewController）就是在顶端的，而其他页（UIViewController）是在下面的。当然，对于导航控制，它想要控制每一页（对于书来说是人在控制）就必需在每一个视图控制器的根部。</p>
+</blockquote>
+<p>UINavigationController是一个栈结构，所谓的栈结构也就是一个顺序（先进后出的顺序），因为当前的书页我们要看见，它永远都必须在第一的位置，我们才能看见，也就决定了它是我们人看完之后才能出去的顺序。</p>
+<p>如何创建一个UINavigationController？</p>
+<pre><code> ViewController *<span class="variable">view =</span> [[ViewController alloc] init];
+UINavigationController *<span class="variable">navigation =</span> [[UINavigationController alloc]
+initWithRootViewController:view];
+self.window.<span class="variable">rootViewController =</span> navigation;
+</code></pre><p>这里会要求加入一个根视图控制器，也就是初始化时我们看见的那一页。</p>
+<p>从官方的.h文件中可以看的出来用来进行导航的就四个方法，协议的不算。</p>
+<pre><code>- (<span class="keyword">void</span>)pushViewController:(<span class="built_in">UIViewController</span> *)viewController animated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Uses a horizontal slide transition. Has no effect if the view controller is already in the stack.</span>
+
+- (<span class="built_in">UIViewController</span> *)popViewControllerAnimated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Returns the popped controller.</span>
+- (<span class="built_in">NSArray</span> *)popToViewController:(<span class="built_in">UIViewController</span> *)viewController animated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Pops view controllers until the one specified is on top. Returns the popped controllers.</span>
+- (<span class="built_in">NSArray</span> *)popToRootViewControllerAnimated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Pops until there's only a single view controller left on the stack. Returns the popped controllers.</span>
+</code></pre><p>分别是添加到视图控制器入栈，移出最后一个视图控制器，移出到跟视图控制器上，移出到任意位置上的视图控制器。</p>
+<p>除了上述的方法外，还有几个属性需要掌握，在写到这个之前，还需要理解导航控制上的一些概念问题。对于管理多个内容视图的push和pop，导航控制器自身提供了视图切换的动画效果。一般来说一个app中的内容区域就相当于视图控制器，而这个框就是导航控制器，当然这个框又是在另一个框上的，比如window。假设一下，当我们切换了内容后，有些app是上部的一个工具条不会变中间的内容变，也有可能中间和上部都会变。从这里，其实可以看的出来，导航控制存在着这些toolBar，也控制着视图控制器，但是这些toolBar的真正控制权是在每一个视图控制器上的。</p>
+<p>总结起来</p>
+<blockquote>
+<p>一个navigationController对应一个navigationBar，一个navigationController包含多个UIViewController，每个UIViewController对应一个UINavigationItem，UINavigationItem控制着多个UIBarButtonItem，一个UINavigationController控制一个UIToolBar，UIToolBar中的UIBarButtonItem由当前视图控制器管理，而不是导航控制器来控制。需要注意的是，一个UINavigationItem不是由navigationbar或者是导航控制器来控制，而是由当前视图控制器来控制。</p>
+</blockquote>
+<p>对于生成一个系统自带的UIBarButtonItem，从代码上就可以看的出来它不是self.navigationController在控制，当然有系统的一般来说肯定有自定义的。</p>
+<pre><code><span class="built_in">UIBarButtonItem</span> *leftbutton = [[<span class="built_in">UIBarButtonItem</span> alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(leftEvent)];
+<span class="keyword">self</span><span class="variable">.navigationItem</span><span class="variable">.leftBarButtonItem</span> = leftbutton;
+
+<span class="built_in">UIButton</span> *button1 = [<span class="built_in">UIButton</span> buttonWithType:UIButtonTypeRoundedRect];
+[button1 setTitle:<span class="string">@"view"</span> forState:UIControlStateNormal];
+[button1 setTitleColor:[<span class="built_in">UIColor</span> blackColor] forState:UIControlStateNormal];
+[button1 setFrame:CGRectMake(<span class="number">0</span>, <span class="number">0</span>, <span class="number">40</span>, <span class="number">40</span>)];
+[button1 addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(customviews:) forControlEvents:UIControlEventTouchUpInside];
+<span class="built_in">UIBarButtonItem</span> *right = [[<span class="built_in">UIBarButtonItem</span> alloc] initWithCustomView:button1];
+
+<span class="keyword">self</span><span class="variable">.navigationItem</span><span class="variable">.rightBarButtonItem</span> = right;
+</code></pre><p>自定义一个button放到navigationItem的右边的bar中</p>
+<pre><code><span class="built_in">UIButton</span> *button = [<span class="built_in">UIButton</span> buttonWithType:UIButtonTypeRoundedRect];
+[button setTitle:<span class="string">@"Push"</span> forState:UIControlStateNormal];
+[button setTitleColor:[<span class="built_in">UIColor</span> blackColor] forState:UIControlStateNormal];
+[button setFrame:CGRectMake(<span class="number">90</span>, <span class="number">100</span>, <span class="number">140</span>, <span class="number">40</span>)];
+[button addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(pushview:) forControlEvents:UIControlEventTouchUpInside];
+[<span class="keyword">self</span><span class="variable">.view</span> addSubview:button];
+
+-(<span class="keyword">void</span>)pushview:(<span class="built_in">UIButton</span> *)sender
+{
+    SecondViewController *secoundVC = [[SecondViewController alloc] init];
+    [<span class="keyword">self</span><span class="variable">.navigationController</span> pushViewController:secoundVC animated:<span class="literal">YES</span>];
+}
+</code></pre><p>然后创建一个按钮，导航到第二个视图控制器上。</p>
+<p><a href="https://github.com/lcepy/geekObjective-C/tree/master/NavigationControllerDemo" target="_blank" rel="external">源代码查看</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>在做iOS开发的时候，<strong>UINavigationController</strong>可以说使用跟那个UITableView一样非常的常见。在学习这个之前，需要了解一下在iOS开发中的层级关系。</p>
+<p>我把它想象成一本书，虽然这么描述非常的不精准，但是]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[复习JavaScript七之DOM]]></title>
+    <link href="http://lcepy.github.io/2015/01/28/%E5%A4%8D%E4%B9%A0JavaScript%E4%B8%83%E4%B9%8BDOM/"/>
+    <id>http://lcepy.github.io/2015/01/28/复习JavaScript七之DOM/</id>
+    <published>2015-01-28T11:51:01.000Z</published>
+    <updated>2015-02-01T11:53:05.000Z</updated>
+    <content type="html"><![CDATA[<p>DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。</p>
+<p><strong>理解层级结构与关系</strong></p>
+<p>在浏览器中比如HTML页面是由很多有层次结构的标签组成的，而为这些标签提供查询，添加，删除等等方法主要就是DOM在提供支持。</p>
+<p>（页面又称为文档）文档中所有的节点之间都存在这样或那样的关系，比如下面一个经典的HTML：</p>
+<pre><code><span class="tag">&lt;<span class="title">html</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">head</span>&gt;</span><span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">body</span>&gt;</span><span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</code></pre><p>一个标签又可以称为一个元素，head和body那就是兄弟关系，它们都来自一个父系html，又可以说html的子元素是head和body，可能这样描述还不太明显，这样就用原生Js操作DOM来的方式来看看层级结构。</p>
+<pre><code><span class="keyword">var</span> html = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'html'</span>)[<span class="number">0</span>];
+</code></pre><p>先通过getElementsByTagName获取html根元素的节点，每一个元素都有一个childNodes集合和一个parentNode分别代表子节点集合和父节点，<strong>如果不存在，则都是null，如果是集合不存在，则是一个[]</strong>。</p>
+<blockquote>
+<p>html的childNodes //[head,body] html的parentNode // document</p>
+</blockquote>
+<p>每一个元素也都有一个firstChild和lastChild来分别代表第一个子元素和最后一个子元素</p>
+<p>每一个元素也都有一个nextSibling和previousSibling分别代表前面一个元素和后面一个元素，以当前自己为参照物。</p>
+<p>从这样可以看出来，它就像族谱一样对元素的关系进行了定义，通过理解这些层级关系，利用DOM提供的API可以很顺利的进行操作。</p>
+<h3 id="操作DOM">操作DOM</h3>
+<p><strong>常见的获取方式</strong></p>
+<ul>
+<li>document.getElementById （通过ID来获取到节点）</li>
+<li>document.getElementsByTagName （通过节点标签来获取）</li>
+<li>document.querySelector  </li>
+<li>document.querySelectorAll</li>
+</ul>
+<p>后面两个属于HTML5提供的新API，在移动端会用的比较多，前者是获取单个，后者获取集合。</p>
+<p><strong>常见添加，删除</strong></p>
+<ul>
+<li>appendChild</li>
+<li>insterBefore</li>
+<li>replaceChild</li>
+<li>removeChild</li>
+</ul>
+<p>appendChild主要是向childNodes集合的末尾添加一条元素，insterBefore可以用来插入特定位置，两个参数，要插入的节点和作为参照的节点，更新成功后插入的节点会在参照节点之前，也就是参照节点的previousSibling。replaceChild和insterBefore有些类似，两个参数，要插入的节点和参照节点，更新成功后，要插入的节点会替换参照节点，removeChild就比较好理解了，删除一个节点，这四个方法都有返回值。</p>
+<p><strong>常见元素属性</strong></p>
+<p>一般来说，如果var doc = document.getElementById(‘doc’);doc.id = ‘xx’;这样的方式也是可以更新或者获取到元素的属性的，不过不推荐这么使用，要获取元素的属性，DOM API也提供了三个方法来使用。</p>
+<ul>
+<li>getAttribute</li>
+<li>setAttribute</li>
+<li>removeAttribute</li>
+</ul>
+<p>getAttribute可以获取元素的属性，setAttribute可以对元素的属性进行设置，如果属性名不存在，则创建该属性。removeAttribute则是完全删除此属性。</p>
+<p>还有一个属性attributes，主要是获取元素属性集合，这个不是很常用，主要是在遍历元素属性时会使用到，它是一个集合。</p>
+<p><strong>常见创建元素或文本</strong></p>
+<p>一般情况下创建元素都会使用字符串的形式，innerHTML进去。不过，某些情况下，会用到createElement来创建一个元素，如果用到它，那么创建的文本也必须使用createTextNode了。</p>
+<p>对于文本节点，注释节点等开发真的很少用，可以当一个子类大概了解即可。</p>
+<blockquote>
+<p>关于模式的讨论，主要可以用document.compatMode来判断，如果是CSS1Compat就是标准模式，移动端不会出现这样的情况，IE上可能有别的模式，模式主要是影响到CSS布局上，Js影响非常少。</p>
+<p>在移动端上滚动是一个比较要处理的问题，一般来说会使用scrollIntoView，scrollIntoViewIfNeeded，scrollByLines，scrollByPages，这四个方法safari chrome都有实现，意味着在iOS和安卓平台都是良好的。</p>
+</blockquote>
+<ul>
+<li>scrollByPages 将元素的内容滚动到指定的页面高度，具体的高度是由元素的高度来决定的。</li>
+<li>scrollByLines 将元素的内容滚动到知道的行数高度，参数可正可负。</li>
+<li>scrollIntoViewIfNeeded，当元素在视窗（viewport）不可见，会滚动容器元素或者浏览器窗口让其可见。如果是可见的，这个方法不起任何作用。如果参数为true，可能是垂直居中的可见。</li>
+<li>scrollIntoView 滚动容器元素或者浏览器窗口，让元素可见。</li>
+</ul>
+<p><strong>一些小技巧</strong></p>
+<p>每一个元素都存在一个contains方法，用来检测传入的节点是不是当前节点的子节点，火狐对于的方法名叫compareDocumentPosition。</p>
+<p>如果要获取一个文本节点可以使用innerText（纯文本）来获取字符串，如果要获取所有的包括标签的字符串可以使用innerHTML。它们还有一种outer系列对应的方法，主要的区别是前者（outerText）会替换节点，后者(outerHTML)会修改调用它的元素，一般基本没人使用。它们可以获取，也可以通过赋值来设置新的节点。</p>
+<h3 id="DOM2和DOM3">DOM2和DOM3</h3>
+<p>对于这两级在DOM中基本上IE没啥支持，或者说支持的非常少，像style对象，CSS的一些对象外。</p>
+<p>这里最大的变化是增加了对XML命名空间的支持，元素样式的访问，节点的遍历以及range。当然目前来看，节点的遍历，range，XML命名空间在开发中使用的非常少，可以当资料来阅读，了解有这么回事，用到的时候再查询。而元素样式的访问，这个在开发中普遍使用的较多，因为在没法使用css3动画的浏览器中，可以通过改变样式来到达动画的目的。</p>
+<pre><code><span class="keyword">var</span> doc = <span class="built_in">document</span>.getElementById(<span class="string">'doc'</span>);
+doc.style.width = <span class="string">'100px'</span>;
+</code></pre><p>对于iframe的访问这里增加了一个contentDocument对象来进行引用，还有节点的比较，isSameNode和isEqualNode，这两个的区别在于，前者是否引用的同一个节点对象，后者是指两个节点是否是相同的类型。不过，它们使用的也不多，了解就好。</p>
+<p><strong>元素的大小</strong></p>
+<p>这个部分需要理解，因为关乎到元素在浏览器上的位置显示，跟动画有关系，四个属性。</p>
+<ul>
+<li>offsetWidth 元素在水平方向占用的空间大小</li>
+<li>offsetHeight 元素在垂直方向占用的空间大小</li>
+<li>offsetLeft 元素的左外边框到内边框的距离</li>
+<li>offsetTop 元素的上外边框到内边框的距离</li>
+</ul>
+<p><strong>滚动大小</strong></p>
+<p>这个在视察滚动或者处理滚动条的时候用的上，也是四个属性</p>
+<ul>
+<li>scrollHeight 在没有滚动的情况下，元素的总高度</li>
+<li>scrollWidth 在没有滚动的情况下，元素的总宽度</li>
+<li>scrollLeft 被隐藏在内容区域左侧的像素度</li>
+<li>scrollTop 被隐藏在内容区域上侧的像素度</li>
+</ul>
+<blockquote>
+<p>下面这些IE全部不支持，range支持一种叫做文本范围的东西</p>
+</blockquote>
+<p><strong>元素遍历</strong></p>
+<p>关于遍历其实有两个方法可用createNodeIterator和createTreeWalker，不过这些在开发中几乎不会使用到，谁没事去遍历节点完呢。</p>
+<p><strong>关于range</strong></p>
+<p>这个也是非常少会使用到，除非是做那种编辑器应用或者在线编辑器等等，不过使用它可以更精准的控制的DOM，主要是使用createRange方法。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。</p>
+<p><strong>理解层级结构与关系</str]]>
+    </summary>
+    
+      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[复习JavaScript六之事件]]></title>
@@ -1021,839 +1737,6 @@ iframe.onload = <span class="function"><span class="keyword">function</span><spa
     </summary>
     
       <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[用Hexo写博客]]></title>
-    <link href="http://lcepy.github.io/2014/11/22/%E7%94%A8Hexo%E5%86%99%E5%8D%9A%E5%AE%A2/"/>
-    <id>http://lcepy.github.io/2014/11/22/用Hexo写博客/</id>
-    <published>2014-11-21T16:12:00.000Z</published>
-    <updated>2014-11-22T12:01:39.000Z</updated>
-    <content type="html"><![CDATA[<p>在看下面内容之前，请先确认是否已经安装nodejs，若无则先安装。</p>
-<p>访问<a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>，查看例子：</p>
-<pre><code>npm <span class="operator"><span class="keyword">install</span> hexo -g
-hexo init blog
-cd blog
-npm <span class="keyword">install</span>
-hexo <span class="keyword">server</span></span>
-</code></pre><p>hexo主要有如下几个命令来操作：</p>
-<blockquote>
-<p>hexo init  初始化一个hexo项目</p>
-<p>hexo server 监听4000端口启动一个服务器，可以预览，端口可以在_config.yml文件中修改</p>
-<p>hexo generate 输出静态文件，在public目录下</p>
-<p>hexo new 生成一个md文件，这个文件就是我们要写的博客文件了</p>
-<p>hexo clean 清除public目录以及缓存，其实这个缓存就是db.json文件</p>
-<p>hexo deploy 如果在_conig.yml文件中配置了这项，它会帮助我们发布到网络</p>
-</blockquote>
-<p>一般大项的配置都是在顶层的_config.yml配置文件中配置，比如博客作者名，标题，时间格式，资源文件目录，静态资源文件目录，插件等等。而具体的博客配置，比如菜单之类的都在themes具体的主题_config.yml文件中配置。</p>
-<a id="more"></a>
-
-<h3 id="具体的操作步骤">具体的操作步骤</h3>
-<p>建立一个名为myblog的目录。</p>
-<p>cd ~/myblog</p>
-<p>输入：hexo init 初始化一下</p>
-<p>然后npm install 安装所需要的模块</p>
-<p>输入hexo server 可以先进行一下预览，看看是否已经安装成功</p>
-<p>subl _config.yml 打开这个文件先修改一下配置，比如title，author之类的</p>
-<p><strong>在配置文件中:后要空一格再输入</strong></p>
-<p>接着在主题<a href="https://github.com/hexojs/hexo/wiki/Themes" target="_blank" rel="external">themes</a>中查看自己中意的主题，在插件<a href="https://github.com/hexojs/hexo/wiki/Plugins" target="_blank" rel="external">plugins</a>中查看自己需要的插件。具体的配置，主题要git clone 在themes目录中，然后修改_config.yml配置文件中的theme:[主题名]。而插件则可以用npm来安装，例如安装feed插件，npm install hexo-generator-feed —save，然后在_config.yml文件中任意位置配置：</p>
-<pre><code>feed:
-    <span class="class"><span class="keyword">type</span>: <span class="title">atom</span></span>
-    path: atom.xml
-    limit: <span class="number">20</span>
-</code></pre><p>基本上hexo渲染是可以用md来进行的，在配置好主题，插件之后，hexo new hello生成一个新的文章，然后开始你的写作之旅吧。</p>
-<h2 id="开发主题">开发主题</h2>
-<p>因为自己打算做一个关于订阅的项目，又不想自己写后台，于是根据hexo的特性，做了一部分修改，让主题不在局限于博客类型了，订阅主题可以使用<a href="https://github.com/lcepy/orange" target="_blank" rel="external">orange</a>，orange是完全参考的<a href="http://weekly.ios-wiki.com/" target="_blank" rel="external">http://weekly.ios-wiki.com/</a>而制作的基于hexo 2.4+的主题，它可以用于订阅类型的网站。</p>
-<p>在开发自己的主题之前，可以先准备好静态文件。主题的开发主要依赖几个layout目录中的模版，除了布局模版，其他的可以根据自己的需求来修改。</p>
-<p>访问<a href="http://hexo.io/docs/" target="_blank" rel="external">hexo docs</a>来获取具体的参考信息</p>
-<blockquote>
-<p>layout.ejs 是主题的一个基础框架模版</p>
-<p>index.ejs 是主题的首页</p>
-<p>post.ejs  是主题的内容页</p>
-<p>archive.ejs 是主题的分类页</p>
-</blockquote>
-<p>这些相当于，手脚架，用户访问首页实际上访问的是layout.ejs + index.ejs 渲染出来的页面，而内容页则是layout.ejs + post.ejs 渲染出来的页面，当然，不仅仅只有这么四项，还有标签页等等，其他具体可以访问文档去参考。在这些模版中，可以使用&lt;%- partial() %&gt;来加载一个小模版，小模版可以放置在_partial目录下。</p>
-<p><strong>全局变量</strong></p>
-<blockquote>
-<p>config 主要是可以获取到顶层的_config.yml中的配置项，比如想获取标题，&lt;%= config.title%&gt;</p>
-<p>theme 主要是可以获取主题_config.yml中的配置项，使用&lt;%= theme.name%&gt;</p>
-<p>site  在任何手脚架中都可以引用，site对象包含了posts（所有文章）pages（所有页面）tags（所有标签）categories（所有分类）可以each</p>
-</blockquote>
-<p><strong>具体变量</strong></p>
-<blockquote>
-<p>page 个对象中包含了具体内容，这所有的内容。如果不是在post.ejs中使用，则可以each。若是，则是一篇具体文章的所有对象 &lt;%= page.title%&gt;</p>
-<p>post 包含所有文章的一个对象，可以each</p>
-</blockquote>
-<p><strong>布局</strong></p>
-<p>基础布局，也就是不带&lt;%- body%&gt;的布局，在这个布局中也可以自定义其他布局，比如link之类的,若找不到自定的布局的话，则会根据 Generator 的不同，使用相对应的布局代替。而带&lt;%- body%&gt;的layout布局，则是把page对象一一传递给最终所使用的模版中。</p>
-<p><strong>注意事项</strong></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="type">Your</span> code <span class="keyword">block</span> <span class="keyword">with</span> {{anything}}</div></pre></td></tr></table></figure>
-
-<p><a href="https://github.com/hexojs/hexo/issues/916" target="_blank" rel="external">#916</a></p>
-<p><strong>额外的学习</strong></p>
-<p>主要是看看ejs模版如何使用，亲，玩转自己的主题去吧。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>在看下面内容之前，请先确认是否已经安装nodejs，若无则先安装。</p>
-<p>访问<a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>，查看例子：</p>
-<pre><code>npm <span class="operator"><span class="keyword">install</span> hexo -g
-hexo init blog
-cd blog
-npm <span class="keyword">install</span>
-hexo <span class="keyword">server</span></span>
-</code></pre><p>hexo主要有如下几个命令来操作：</p>
-<blockquote>
-<p>hexo init  初始化一个hexo项目</p>
-<p>hexo server 监听4000端口启动一个服务器，可以预览，端口可以在_config.yml文件中修改</p>
-<p>hexo generate 输出静态文件，在public目录下</p>
-<p>hexo new 生成一个md文件，这个文件就是我们要写的博客文件了</p>
-<p>hexo clean 清除public目录以及缓存，其实这个缓存就是db.json文件</p>
-<p>hexo deploy 如果在_conig.yml文件中配置了这项，它会帮助我们发布到网络</p>
-</blockquote>
-<p>一般大项的配置都是在顶层的_config.yml配置文件中配置，比如博客作者名，标题，时间格式，资源文件目录，静态资源文件目录，插件等等。而具体的博客配置，比如菜单之类的都在themes具体的主题_config.yml文件中配置。</p>
-]]>
-    
-    </summary>
-    
-      <category term="hexo" scheme="http://lcepy.github.io/tags/hexo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[正则的一些理解]]></title>
-    <link href="http://lcepy.github.io/2014/11/14/%E6%AD%A3%E5%88%99%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%86%E8%A7%A3/"/>
-    <id>http://lcepy.github.io/2014/11/14/正则的一些理解/</id>
-    <published>2014-11-14T13:50:22.000Z</published>
-    <updated>2014-11-14T19:41:37.000Z</updated>
-    <content type="html"><![CDATA[<p>今天写到这里，是想总结一下，自己重新学习正则表达式之后，对它的一个全新的认识。我想描述一个中心思想，学习任何东西，编程，音乐，基础是非常important的，就好像吉他里基础不在于认识六线谱而是在于节拍。</p>
-<h2 id="从人类的角度来阅读正则">从人类的角度来阅读正则</h2>
-<p>在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。python中也有很多高效处理字符串的方式，比如步距，比如正则，嘿嘿。</p>
-<p>import re</p>
-<p>g = re.search(‘\d+(.\d*)?’,’0.2556223.556655’)</p>
-<p>g.group(0)</p>
-<p>我们来看一个搜索浮点数的正则，我们从右往左看，把这一个正则表达式分割成三分，\d+，(.\d<em>)，?。我们知道?描述的是出现零次或一次，在这里阅读的时候，是描述(.\d</em>)这一个组会出现零次或一次。我们再看这个组中的描述.用来描述.，\d用来描述0-9的数字，而*描述的是出现零次或多次，我们组合起来看，这个组就是来描述.后面的数字会出现零次或多次。\d依然是用来描述0-9的数字，+用来描述出现一次或多次。</p>
-<p>到这里，我们把这三个部分，从右往左看，组合起来，用人类阅读的角度去描述它：小数点后面出现的数字是多次的，而这一个部分只能出现一次或零次，并且在小数点之前可以出现一次或多次的数字。<br><a id="more"></a><br>那么让我们看一个搜索邮件的正则：</p>
-<p>import re</p>
-<p>g = re.search(‘\w+@\w+.com’,’ww@ww.com’)</p>
-<p>g.group(0)</p>
-<p>依然在描述它时，分割开来，从右往左去描述，.com的字符串，\w描述任意字符，+的左边为\w，描述为出现一次或多次的字符。@的字符串，+的左边为\w，描述为出现一次或则多次的字符。</p>
-<p>我依然把这三个部分，组合起来阅读，描述为：.com的左侧允许出现一次或多次的字符，左侧连接@，并且@的左侧允许出现一次或多次的字符。</p>
-<p>升级一下，匹配存在子域的邮件：</p>
-<p>import re</p>
-<p>g = re.search(‘\w+@\w+(.\w+)?.com’,’ww@ww.ww.com’)</p>
-<p>g.group(0)</p>
-<p>从右往左来描述：.com的字符串，?左侧的(.\w+)描述为：(.后的字符可能出现一次或多次)但是它只能出现一次或零次。\w+，描述为字符串一次或多次。@的字符串，\w+，依然描述为字符串出现一次或多次。</p>
-<p>把这几个部分合起来，描述：.com的左侧允许出现[.一次或多次的字符]= a，而a左侧[允许出一次或多次的字符] = b，b的左侧为@，@的左侧允许出现一次或多次的字符。</p>
-<p>这样，一段复杂的表达式，往往可以通过分解的步骤来阅读它，但是，它需要基础，基础在于对这些特殊字符，元，的了解。再复杂的正则，也可以从左往右来阅读它，并用人类的语言，写在纸上，这会是一个非常棒的方式。</p>
-<p>我喜欢，写在纸上，它让我对这一个部分，非常的清晰，了解，不信，可以试试？</p>
-<p><strong>注释：因为是python的正则，所以去掉了一些特殊的</strong></p>
-<h2 id="认识常用的基础">认识常用的基础</h2>
-<p>字符 | 描述</p>
-<p>.|匹配任意字符，除(\n)之外的字符</p>
-<p>\ | 转意字符</p>
-<p>[…] | 字符集</p>
-<p>0-9|匹配0-9的数字</p>
-<p>a-z A-Z|匹配从a到z的字符</p>
-<p>预定义字符集 | 描述</p>
-<p>\d | 匹配数字</p>
-<p>\w | 匹配字符</p>
-<p>\s | 匹配空格符</p>
-<p>数量词 | 描述</p>
-<p>* | 出现零次或多次</p>
-<p>+ | 出现一次或多次</p>
-<p>? | 出现零次或一次</p>
-<p>{n} | 出现n次</p>
-<p>{n,m} | 出现n次或m次</p>
-<p>边界匹配 | 描述</p>
-<p>^ | 在开始位置</p>
-<p>$ | 在结束位置</p>
-<p>逻辑 | 描述</p>
-<p>|  逻辑或</p>
-<p>()组 为一个子组，必须存在，才匹配</p>
-<p>[]列 可以为出现任意一个，都匹配</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>今天写到这里，是想总结一下，自己重新学习正则表达式之后，对它的一个全新的认识。我想描述一个中心思想，学习任何东西，编程，音乐，基础是非常important的，就好像吉他里基础不在于认识六线谱而是在于节拍。</p>
-<h2 id="从人类的角度来阅读正则">从人类的角度来阅读正则</h2>
-<p>在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。python中也有很多高效处理字符串的方式，比如步距，比如正则，嘿嘿。</p>
-<p>import re</p>
-<p>g = re.search(‘\d+(.\d*)?’,’0.2556223.556655’)</p>
-<p>g.group(0)</p>
-<p>我们来看一个搜索浮点数的正则，我们从右往左看，把这一个正则表达式分割成三分，\d+，(.\d<em>)，?。我们知道?描述的是出现零次或一次，在这里阅读的时候，是描述(.\d</em>)这一个组会出现零次或一次。我们再看这个组中的描述.用来描述.，\d用来描述0-9的数字，而*描述的是出现零次或多次，我们组合起来看，这个组就是来描述.后面的数字会出现零次或多次。\d依然是用来描述0-9的数字，+用来描述出现一次或多次。</p>
-<p>到这里，我们把这三个部分，从右往左看，组合起来，用人类阅读的角度去描述它：小数点后面出现的数字是多次的，而这一个部分只能出现一次或零次，并且在小数点之前可以出现一次或多次的数字。<br>]]>
-    
-    </summary>
-    
-      <category term="regex" scheme="http://lcepy.github.io/tags/regex/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[关于django中CSRF开启的问题]]></title>
-    <link href="http://lcepy.github.io/2014/11/14/%E5%85%B3%E4%BA%8Edjango%E4%B8%ADCSRF%E5%BC%80%E5%90%AF%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>http://lcepy.github.io/2014/11/14/关于django中CSRF开启的问题/</id>
-    <published>2014-11-14T12:33:12.000Z</published>
-    <updated>2014-11-14T19:40:59.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="django_处理CSRF机制保护下的POST表单提交">django 处理CSRF机制保护下的POST表单提交</h2>
-<p>昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后解决了。其实在解决这个问题之前，我们先要了解一下，CSRF到底是什么东东，为什么django提交一个POST表单这么困难呢。</p>
-<p><a href="http://baike.baidu.com/link?url=OnI0sPQAHpQHhtxWSXvQFhN3kJWI3CU_rP3Fo7MqnPY3rTdhUPpuca-3lzJ651LdMI7ouoLvdnnihhojFyKtva" target="_blank" rel="external">CSRF 是什么</a></p>
-<p><a href="https://docs.djangoproject.com/en/1.5/ref/contrib/csrf/" target="_blank" rel="external">django document CSRF</a></p>
-<p>原来CSRF是为了防止跨站请求伪造用的，当我明白了这个解释之后，我开始找寻django document上如何开启CSRF。</p>
-<p><strong>Add the middleware ‘django.middleware.csrf.CsrfViewMiddleware’ to your list of middleware classes, MIDDLEWARE_CLASSES. (It should come before any view middleware that assume that CSRF attacks have been dealt with.)</strong></p>
-<p>那我在想，如果我把django.middleware.csrf.CsrfViewMiddleware注释掉，是不是就可以不开启CSRF来提交POST表单，人们常说实践是检验真理的唯一标准，试验一下，原来是可以的。但是这并没有解决，我想解决的问题，于是我又把这个中间件，重新写在了MIDDLEWARE_CLASSES上。</p>
-<p>从官方的解释上来看，只要在MIDDLEWARE_CLASSES上加django.middleware.csrf.CsrfViewMiddleware就开启了CSRF机制。</p>
-<p>现在我需要在模板中加入一个tag ｛%csrf_token%｝，来存放一个隐藏的token input。</p>
-<p><strong>In the corresponding view functions, ensure that the ‘django.core.context_processors.csrf’ context processor is being used. Usually, this can be done in one of two ways:</strong></p>
-<p>从这里的解释来看，我还需要django.core.context_processors.csrf，于是我导入这个模块from django.core.context_processors import csrf，运行一下貌似，还不行，接着往下看。我发现django的解释，这里可以用两种方式来处理，最后响应的response，而且django还说了，POST表单提交不要跨链接。</p>
-<p><a id="more"></a><br><strong>Use RequestContext, which always uses ‘django.core.context_processors.csrf’ (no matter what your TEMPLATE_CONTEXT_PROCESSORS setting). If you are using generic views or contrib apps, you are covered already, since these apps use RequestContext throughout.</strong></p>
-<p>方式一，是使用RequestContext来代替你模板的Context，并且你的apps必须都要使用它，而不是Context。</p>
-<p><strong>Manually import and use the processor to generate the CSRF token and add it to the template context. e.g.</strong></p>
-<p>方式二，手动的导入这个模块并调用此函数生成的token，并把它传入你模板的上下文中。</p>
-<p>我使用的是方式二，在这里也许刚刚接触django的朋友会卡在这里，因为没法明白，怎么传入这个上下文。这里可以使用一个通用的方式去解决这个问题。请原谅我，我将脱离CSRF的内容，帮助你解决一下模板设置的问题，解决它才能解决它。回到django-admin.py startproject xxx初始化的项目中，打开settings.py文件，它是整个django项目的配置文件。找到TEMPLATE_DIRS配置上你模板目录的绝对路径，也可以是os.path生成出来的路径。然后通过from django.shortcuts import render_to_response来导入render_to_response。</p>
-<pre><code>xxx.html结构
-
-&lt;html&gt;
-    &lt;head&gt;&lt;/head&gt;
-    &lt;body&gt;
-        &lt;h1&gt;&lt;/h1&gt;
-        &lt;form action=<span class="string">"/"</span> <span class="keyword">method</span>=<span class="string">"post"</span>&gt;
-             ｛%csrf_token%｝
-            &lt;input <span class="keyword">type</span>=<span class="string">"email"</span> name=<span class="string">"address"</span>&gt;
-            &lt;button <span class="keyword">type</span>=<span class="string">"submit"</span> class=<span class="string">"btn btn-default"</span>&gt;send&lt;/button&gt;
-        &lt;/form&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-
-
-
-views.py <span class="comment">##视图文件</span>
-
-<span class="keyword">from</span> django.<span class="keyword">template</span> <span class="keyword">import</span> <span class="type">Context</span>
-<span class="keyword">from</span> django.core.context_processors <span class="keyword">import</span> csrf
-<span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render_to_response
-<span class="keyword">import</span> models
-
-def index(request):
-    dicts = {'we':'i send <span class="type">string</span>'}
-    token = {}
-    token.update(csrf(request))
-    <span class="keyword">if</span> request.<span class="keyword">method</span> == '<span class="type">POST</span>':
-        address = request.<span class="type">POST</span>.get('address')
-        <span class="comment">## 可以用address来做其他验证或者其他处理程序</span>
-        <span class="comment">## 此处省略其他处理函数</span>
-    data = <span class="type">Context</span>(dicts)
-    <span class="keyword">return</span> render_to_response('xxx.html',c,data)
-    pass
-
-urls.py <span class="comment">##路由配置文件，我的views是一个app所以需要导入xxx.views</span>
-<span class="keyword">import</span> xxx.views
-urlpatterns = patterns('',
-    <span class="comment"># Examples:</span>
-    <span class="comment"># url(r'^$', 'atomcoffee.views.home', name='home'),</span>
-    <span class="comment"># url(r'^atomcoffee/', include('atomcoffee.foo.urls')),</span>
-    url(r'^$',xxx.views.index),
-    <span class="comment"># Uncomment the admin/doc line below to enable admin documentation:</span>
-    <span class="comment"># url(r'^admin/doc/', include('django.contrib.admindocs.urls')),</span>
-
-    <span class="comment"># Uncomment the next line to enable the admin:</span>
-    <span class="comment"># url(r'^admin/', include(admin.site.urls)),</span>
-)
-</code></pre><p>大家可以尝试运行一下这个文件，你会发现，原来开启CSRF机制后的POST表单提交，成功了。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="django_处理CSRF机制保护下的POST表单提交">django 处理CSRF机制保护下的POST表单提交</h2>
-<p>昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后解决了。其实在解决这个问题之前，我们先要了解一下，CSRF到底是什么东东，为什么django提交一个POST表单这么困难呢。</p>
-<p><a href="http://baike.baidu.com/link?url=OnI0sPQAHpQHhtxWSXvQFhN3kJWI3CU_rP3Fo7MqnPY3rTdhUPpuca-3lzJ651LdMI7ouoLvdnnihhojFyKtva" target="_blank" rel="external">CSRF 是什么</a></p>
-<p><a href="https://docs.djangoproject.com/en/1.5/ref/contrib/csrf/" target="_blank" rel="external">django document CSRF</a></p>
-<p>原来CSRF是为了防止跨站请求伪造用的，当我明白了这个解释之后，我开始找寻django document上如何开启CSRF。</p>
-<p><strong>Add the middleware ‘django.middleware.csrf.CsrfViewMiddleware’ to your list of middleware classes, MIDDLEWARE_CLASSES. (It should come before any view middleware that assume that CSRF attacks have been dealt with.)</strong></p>
-<p>那我在想，如果我把django.middleware.csrf.CsrfViewMiddleware注释掉，是不是就可以不开启CSRF来提交POST表单，人们常说实践是检验真理的唯一标准，试验一下，原来是可以的。但是这并没有解决，我想解决的问题，于是我又把这个中间件，重新写在了MIDDLEWARE_CLASSES上。</p>
-<p>从官方的解释上来看，只要在MIDDLEWARE_CLASSES上加django.middleware.csrf.CsrfViewMiddleware就开启了CSRF机制。</p>
-<p>现在我需要在模板中加入一个tag ｛%csrf_token%｝，来存放一个隐藏的token input。</p>
-<p><strong>In the corresponding view functions, ensure that the ‘django.core.context_processors.csrf’ context processor is being used. Usually, this can be done in one of two ways:</strong></p>
-<p>从这里的解释来看，我还需要django.core.context_processors.csrf，于是我导入这个模块from django.core.context_processors import csrf，运行一下貌似，还不行，接着往下看。我发现django的解释，这里可以用两种方式来处理，最后响应的response，而且django还说了，POST表单提交不要跨链接。</p>
-<p>]]>
-    
-    </summary>
-    
-      <category term="python django" scheme="http://lcepy.github.io/tags/python-django/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[django模型使用的一些心得]]></title>
-    <link href="http://lcepy.github.io/2014/11/14/django%E6%A8%A1%E5%9E%8B%E4%BD%BF%E7%94%A8%E7%9A%84%E4%B8%80%E4%BA%9B%E5%BF%83%E5%BE%97/"/>
-    <id>http://lcepy.github.io/2014/11/14/django模型使用的一些心得/</id>
-    <published>2014-11-14T12:30:31.000Z</published>
-    <updated>2014-11-14T19:41:53.000Z</updated>
-    <content type="html"><![CDATA[<p>近很一直在学习django，因为我需要使用它为自己的项目写一个前台页面和一个后台服务。它是一个关于咖啡的邮件订阅社区，既然有服务，自然需要数据库层的支持。这是一个很好的开始，学习django让我了解到python开发web应用真的非常快速，但是也有一个很明显的缺点。那就是国内，对django社区的支持度非常不好，这或许跟国内python的有关，不过也不要紧，学习就是这样，要啃难而上。</p>
-<p>说说在django中模型，对应的数据库层，也就是意味着django帮助我们完成了对数据库的访问，操作，通过它的模型类。</p>
-<blockquote>
-<p>django-admin.py startapp sendcloud</p>
-</blockquote>
-<p>通过上述的命令，我们可以完成一个app模块，这个模块中带有views.py models.py test.py，而models.py文件中，就是我们完成模型的一个最主要的文件。</p>
-<blockquote>
-<p>from django.db import models</p>
-</blockquote>
-<p>模型类，都需要继承自django.db.models类。通过它与manage.py来完成初始化等等动作。关于manage.py的命令，未来有时间，我会写写关于它的心得。</p>
-<pre><code><span class="class"><span class="keyword">class</span> <span class="title">WeeklySyncList</span><span class="params">(models.Model)</span>:</span>
-    <span class="comment">#do something</span>
-    <span class="keyword">pass</span>
-</code></pre><p>一个模型类对于数据库层中的一个表，在我们定义好模型类之后，可以在命令行中输入：</p>
-<blockquote>
-<p>python manage.py sqlall sendcloud</p>
-</blockquote>
-<p>来完成对创建语法的查看以及错误信息的查看，准确没有错误之后，可以输入：</p>
-<blockquote>
-<p>python manage.py syncdb</p>
-</blockquote>
-<p>来初始数据库，django会帮助我们完成数据库层面的操作。</p>
-<a id="more"></a>
-
-<h2 id="说说我的应用中使用到的东西">说说我的应用中使用到的东西</h2>
-<p>我的应用是一个关于咖啡资料的邮件订阅社区，前台页面主要是输入email完成订阅，激活订阅，退订，历史期刊的分页查看，最新一期查看。这里，我使用了三个表来描述它，（这个数据库中还有另外的表，在描述后台服务，这里仅仅用前台来说说我学习的过程。）用户订阅表，用户退订表，期刊表。在语言层面，就需要三个模型类，来描述它了。</p>
-<p>另外：这个应用，已经开源在github上，大家通过它可以访问到<a href="https://github.com/lcepy/AtomCoffee-Client" target="_blank" rel="external">点击这里</a></p>
-<p>我用到的字段类型，主要是三个字段varchar date int，主要是用于订阅的email，订阅时间，激活时间，是否激活的状态。</p>
-<p>在django中，因为我们不是使用原始查询，所以还需要在模型类中定义相应的字段，这一部分需要学习，对应的就是数据库中的字段类型，但是django有它自己的描述。</p>
-<p><strong>用户订阅时插入数据库</strong></p>
-<pre><code>models.WeeklyActivation(<span class="variable">activation_email=</span>address,<span class="variable">activation_key=</span>_ac_sha_key)
-</code></pre><p>用户条件的一条email，会经过在后台的验证，验证成功之后就插入一条新的纪录。从代码上来看，基本上实例化一个类。</p>
-<p><strong>查询数据库</strong></p>
-<p>在验证email之后，我会根据提交的信息，先去数据库中查询一下是否有这个email地址，另外它是否是激活的状态。</p>
-<pre><code><span class="attribute">models.WeeklyActivation.objects.filter(activation_email</span>=<span class="string">address)</span>
-</code></pre><p>如果存在，并且已经激活，自然就不用插入一条新的纪录了。如果订阅时间，超过了两个小时，系统就需要发送一封信的订阅激活邮件了。</p>
-<p>在django模型类中，objects叫做管理器，通过它，可以完成一些不同的操作，比如查询，过滤，等等。</p>
-<p><strong>更新数据</strong></p>
-<p>当用户收到一封激活email时，用户点击URL过来，需要更新一下激活状态，初始化状态都是0。</p>
-<pre><code><span class="variable">week =</span> models.WeeklyActivation.objects.filter(<span class="variable">activation_key=</span>offset)
-</code></pre><p>根据用户点击过来的URL获取到激活key，根据激活KEY查询一条记录，如果存在则通过week完成其他的操作。</p>
-<p>这里还有地方要注意，查询返回的结果是一个list，要week = week[0]，然后再来操作，更新完成之后不要忘记调用week.save()方法，不然更新不会成功。</p>
-<p><strong>原生查询</strong></p>
-<p>在查看最新一期期刊的这个地方，我纠结了大概一个小时，因为我不清楚django模型，是怎样完成数据库函数的调用的，比如一个表中，我只需要某个列的最大值，这里如果是原生SQL，我一般都会用MAX函数来完成。</p>
-<p>在没有找到django关于这方面的信息之前，我用了原始查询，django支持这个。</p>
-<pre><code>模型类.raw('<span class="operator"><span class="keyword">SELECT</span> id,<span class="keyword">MAX</span>(sync_number) <span class="keyword">AS</span> max_number <span class="keyword">FROM</span> sendcloud_weeklysynclist<span class="string">')</span></span>
-</code></pre><p>另外这里也需要关注一个问题，如果要原始查询，必须要带上主键，不然django会抛一个错误出来。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>近很一直在学习django，因为我需要使用它为自己的项目写一个前台页面和一个后台服务。它是一个关于咖啡的邮件订阅社区，既然有服务，自然需要数据库层的支持。这是一个很好的开始，学习django让我了解到python开发web应用真的非常快速，但是也有一个很明显的缺点。那就是国内，对django社区的支持度非常不好，这或许跟国内python的有关，不过也不要紧，学习就是这样，要啃难而上。</p>
-<p>说说在django中模型，对应的数据库层，也就是意味着django帮助我们完成了对数据库的访问，操作，通过它的模型类。</p>
-<blockquote>
-<p>django-admin.py startapp sendcloud</p>
-</blockquote>
-<p>通过上述的命令，我们可以完成一个app模块，这个模块中带有views.py models.py test.py，而models.py文件中，就是我们完成模型的一个最主要的文件。</p>
-<blockquote>
-<p>from django.db import models</p>
-</blockquote>
-<p>模型类，都需要继承自django.db.models类。通过它与manage.py来完成初始化等等动作。关于manage.py的命令，未来有时间，我会写写关于它的心得。</p>
-<pre><code><span class="class"><span class="keyword">class</span> <span class="title">WeeklySyncList</span><span class="params">(models.Model)</span>:</span>
-    <span class="comment">#do something</span>
-    <span class="keyword">pass</span>
-</code></pre><p>一个模型类对于数据库层中的一个表，在我们定义好模型类之后，可以在命令行中输入：</p>
-<blockquote>
-<p>python manage.py sqlall sendcloud</p>
-</blockquote>
-<p>来完成对创建语法的查看以及错误信息的查看，准确没有错误之后，可以输入：</p>
-<blockquote>
-<p>python manage.py syncdb</p>
-</blockquote>
-<p>来初始数据库，django会帮助我们完成数据库层面的操作。</p>
-]]>
-    
-    </summary>
-    
-      <category term="python django" scheme="http://lcepy.github.io/tags/python-django/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[携程邮轮开发部django分享]]></title>
-    <link href="http://lcepy.github.io/2014/11/14/%E6%90%BA%E7%A8%8B%E9%82%AE%E8%BD%AE%E5%BC%80%E5%8F%91%E9%83%A8django%E5%88%86%E4%BA%AB/"/>
-    <id>http://lcepy.github.io/2014/11/14/携程邮轮开发部django分享/</id>
-    <published>2014-11-14T12:20:19.000Z</published>
-    <updated>2014-11-14T19:41:28.000Z</updated>
-    <content type="html"><![CDATA[<p>使用django快速开发一个web网站</p>
-<p>分享内容（拟）</p>
-<ol>
-<li>介绍django的历史</li>
-<li>安装以及配置django项目</li>
-<li>介绍django对请求的回应机制</li>
-<li>讲解django URL的配置</li>
-<li>讲解django模型的使用</li>
-<li>讲解django view template 的使用</li>
-<li>通过一个例子讲解如何快速的实现一个简单的网站（注册，登录，验证用户状态）</li>
-<li>分享学习Python django的资料，以及说说一些django的web工具</li>
-</ol>
-<a id="more"></a>
-
-<h2 id="django的历史">django的历史</h2>
-<p>django是一个开放源代码的Web应用框架，由Python写成。采用了MVC的软件设计模式，即模型M，视图V和控制器C。它最初是被开发来用于管理劳伦斯出版集团旗下的一些以新闻内容为主的网站的，即是CMS（内容管理系统）软件。并于2005年7月在BSD许可证下发布。这套框架是以比利时的吉普赛爵士吉他手django reinhardt来命名的。</p>
-<p><strong>人生苦短，我用Python。</strong></p>
-<h2 id="安装以及配置django项目">安装以及配置django项目</h2>
-<p>安装方式一：</p>
-<p>下载<a href="https://github.com/django/django" target="_blank" rel="external">django</a>源代码到本地，进入这个目录，执行命令：python install setup.py</p>
-<p>安装方式二：</p>
-<p>下载<a href="https://pip.pypa.io/en/latest/" target="_blank" rel="external">pip</a>模块管理器到本地，执行命令：python install get-pip.py</p>
-<p>然后使用pip进行安装，pip install django。</p>
-<p>使用pip安装，可以很方便的删除，选择需要安装的django版本，例如：pip install django==1.5.2安装1.5.2版本的django。</p>
-<p>个人推荐，使用方式二。</p>
-<p>在安装完成好django之后，可以在python shell 交互控制台中测试django是否安装成功。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> django</div><div class="line"></div><div class="line">print(django.get_version()) <span class="comment">#1.5.2</span></div></pre></td></tr></table></figure>
-
-<p>django-admin.py是django提供了一个强大的shell命令行工具，比如建立项目，建立项目内应用，启动开发服务器，测试模型SQL语句，同步模型到数据库等等，用好django出了需要具备python标准库，语法知识，以及django定义的类，组件之外，还需要学习好它的shell命令行工具，admin管理系统等，因为它们会让开发一个web应用，变得非常简单与快速。</p>
-<p>新建立一个项目：cruise</p>
-<pre><code>某目录内 ~/ django.<span class="literal">admin</span>.py startproject cruise
-</code></pre><p>cruise项目目录：</p>
-<pre><code>cruise (dir)
-    wsgi.<span class="keyword">py</span>
-    setting.<span class="keyword">py</span>
-    urls.<span class="keyword">py</span>
-manage.<span class="keyword">py</span>
-</code></pre><p>建立一个应用：login</p>
-<pre><code>cruise目录内 ~/ <span class="keyword">python</span> manage.<span class="keyword">py</span> startapp login
-</code></pre><p>login应用目录：</p>
-<pre><code>login（dir）
-    views.<span class="keyword">py</span>
-    models.<span class="keyword">py</span>
-    test.<span class="keyword">py</span>
-</code></pre><p><strong>概念</strong> django项目中，各种服务类的功能，可以分离成一个个应用，而外层才是项目的配置文件。</p>
-<p>wsgi.py 是一个符合wsgi标准的文件，由django实现，<a href="http://wsgi.readthedocs.org/en/latest/" target="_blank" rel="external">WSGI资料可查看</a></p>
-<p>setting.py 为django项目的配置文件，django实现的组件，以及开发时模板，静态资源等等都在此配置。</p>
-<p>urls.py 可以理解为django为view实现的路由系统。</p>
-<h2 id="介绍django对请求的回应机制（3）">介绍django对请求的回应机制（3）</h2>
-<p>当服务器接收到一个HTTP请求后，一个服务器特定的handler会创建HTTpRequest并传递给下一个处理程序，这个处理程序，会处理URLConf，并调用相应的view，把REQUEST传递给view 处理程序。</p>
-<p>view处理程序，当处理完成之后，进行响应给客户端。另外django的中间件会，增强这些响应的作用。</p>
-<h2 id="django_URL的配置（4）">django URL的配置（4）</h2>
-<p>首先需要先导入django.conf.urls.defaults下的所有模块，它是django URLConf的基本构造，包含了一个patterns函数，调用patterns函数并将返回结果保存到 urlpatterns 变量。实际在建立项目时，django生成的文件中，已经帮助我们做好了这件事情。</p>
-<p>它所需要的参数是一个元组，用来映射视图与URL的关系。</p>
-<p><strong>额外：Python路径搜索规则，建议查看资料。</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"><span class="keyword">from</span> django.conf.urls <span class="keyword">import</span> patterns, include, url</div><div class="line"><span class="comment"># Uncomment the next two lines to enable the admin:</span></div><div class="line"><span class="comment"># from django.contrib import admin</span></div><div class="line"><span class="comment"># admin.autodiscover()</span></div><div class="line"><span class="keyword">import</span> login.views</div><div class="line"><span class="keyword">import</span> home.views</div><div class="line"><span class="comment">#在django中urls.py的作用有点类似于C，实际上它就是一个分发程序，帮助我们对每一项URL进行分发到具体的视图程序中。</span></div><div class="line">urlpatterns = patterns(<span class="string">''</span>,</div><div class="line">    <span class="comment"># Examples:</span></div><div class="line">    <span class="comment"># url(r'^$', 'cruise.views.home', name='home'),</span></div><div class="line">    <span class="comment"># url(r'^cruise/', include('cruise.foo.urls')),</span></div><div class="line">    url(<span class="string">r'^login/$'</span>,login.views.sign_in),</div><div class="line">    url(<span class="string">r'^logout/$'</span>,login.views.sign_out),</div><div class="line">    url(<span class="string">r'^register/$'</span>,login.views.register),</div><div class="line">    url(<span class="string">r'^$'</span>,home.views.mypage),</div><div class="line">    <span class="comment"># Uncomment the admin/doc line below to enable admin documentation:</span></div><div class="line">    <span class="comment"># url(r'^admin/doc/', include('django.contrib.admindocs.urls')),</span></div><div class="line">    <span class="comment">#URL配置例子</span></div><div class="line">    <span class="comment"># Uncomment the next line to enable the admin:</span></div><div class="line">    <span class="comment"># url(r'^admin/', include(admin.site.urls)),</span></div><div class="line">)</div></pre></td></tr></table></figure>
-
-<p><strong>URL正则表：</strong></p>
-<blockquote>
-<p>符号    匹配<br>. (dot)    任意单一字符<br>\d    任意一位数字<br>[A-Z]    A 到 Z中任意一个字符（大写）<br>[a-z]    a 到 z中任意一个字符（小写）<br>[A-Za-z]    a 到 z中任意一个字符（不区分大小写）</p>
-<ul>
-<li>匹配一个或更多 (例如, \d+ 匹配一个或 多个数字字符)<br>[^/]+    一个或多个不为‘/’的字符</li>
-</ul>
-<ul>
-<li>零个或一个之前的表达式（例如：\d? 匹配零个或一个数字）</li>
-<li>匹配0个或更多 (例如, \d* 匹配0个 或更多数字字符)<br>{1,3}    介于一个和三个（包含）之前的表达式（例如，\d{1,3}匹配一个或两个或三个数字）</li>
-</ul>
-</blockquote>
-<h3 id="简单思路">简单思路</h3>
-<p>导入视图模块</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> login.views</div><div class="line"><span class="keyword">import</span> home.views</div></pre></td></tr></table></figure>
-
-<p>django URLConf 的配置，有多种多样的形式，这里主要是介绍一下简单的URL规则，在Python风格中URL应该是双斜杠//，例如：127.0.0.1/home/或者127.0.0.1/home/1/ 。</p>
-<p>一般情况下一个URL是对应一个视图的，例如127.0.01/home/可能对于的就是视图home.views.home。而在URL中也可以动态，比如情况是书籍的详细情况，一本书有一个唯一的书籍号ID，而书籍号ID就可以描述为：127.0.0.1/book/1/，这是ID为1的书籍，又如127.0.0.1/book/2/，这是ID为2的书籍。</p>
-<p>如何实现动态URL？</p>
-<p>之前，有看过URL正则表达式，django URLConf是支持正则表达式，来描述URL的。它会成第二个参数，传递给视图处理程序。例如，我想获取书籍号ID，来显示不同本书籍，那么URL：^book/(\d+)/$，而在视图处理程序中第二个参数，就是GET请求时，获取的book/(\d+)/，这样的数字ID。</p>
-<p>总之URLConf可以通过这些组合来映射相应的视图处理程序，来满足业务需求。</p>
-<h2 id="django模型的使用（5）">django模型的使用（5）</h2>
-<p>在使用模型之前，需要先配置数据库，django支持的数据库类型表：</p>
-<p><code>postgresql</code>    PostgreSQL    psycopg 1.x版， <a href="http://www.djangoproject.com/r/python-pgsql/1/。" target="_blank" rel="external">http://www.djangoproject.com/r/python-pgsql/1/。</a></p>
-<p>postgresql_psycopg2    PostgreSQL    psycopg 2.x版， <a href="http://www.djangoproject.com/r/python-pgsql/。" target="_blank" rel="external">http://www.djangoproject.com/r/python-pgsql/。</a></p>
-<p>mysql    MySQL    MySQLdb , <a href="http://www.djangoproject.com/r/python-mysql/" target="_blank" rel="external">http://www.djangoproject.com/r/python-mysql/</a>.</p>
-<p>sqlite3    SQLite    如果使用Python 2.5+则不需要适配器。 否则就使用 pysqlite ， <a href="http://www.djangoproject.com/r/python-sqlite/。" target="_blank" rel="external">http://www.djangoproject.com/r/python-sqlite/。</a></p>
-<p>oracle    Oracle    cx_Oracle , <a href="http://www.djangoproject.com/r/python-oracle/" target="_blank" rel="external">http://www.djangoproject.com/r/python-oracle/</a>.</p>
-<p>主要为：mysql oracle sqlite等等。</p>
-<p>打开setting.py文件，在起始位置出，默认情况下，这些都是无配置的，需要手动配置好。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 配置数据库模型</span></div><div class="line">DATABASES = {</div><div class="line">    <span class="string">'default'</span>: {</div><div class="line">        <span class="string">'ENGINE'</span>: mydb.DB_ENGINE, <span class="comment"># Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.</span></div><div class="line">        <span class="string">'NAME'</span>: mydb.DB_NAME,                      <span class="comment"># Or path to database file if using sqlite3.</span></div><div class="line">        <span class="comment"># The following settings are not used with sqlite3:</span></div><div class="line">        <span class="string">'USER'</span>: mydb.DB_USER,</div><div class="line">        <span class="string">'PASSWORD'</span>: mydb.DB_PASSWORD,</div><div class="line">        <span class="string">'HOST'</span>: mydb.DB_HOST,                      <span class="comment"># Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.</span></div><div class="line">        <span class="string">'PORT'</span>: mydb.DB_PORT,                      <span class="comment"># Set to empty string for default.</span></div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
-
-<p><strong>技巧</strong></p>
-<p>可以使用python manage.py shell 进入一个交互环境，在这里可以测试一下增删改查等等。</p>
-<p>django模型的使用是django框架学习比重非常大的一个地方，它实现了一套属于django自己的方式来操作数据库，包括增删改查，以及字段类型的定义，查询的技巧等等方式。</p>
-<p>django中一个模型对应的是一张表，需要继承django.db中models类。</p>
-<p>定义一个模型：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">x</span><span class="params">(models.Model)</span>:</span></div><div class="line">    u_name = models.CharField(max_length=<span class="number">45</span>)</div><div class="line">    u_pass = models.CharField(max_length=<span class="number">45</span>)</div><div class="line">    u_session = models.CharField(max_length=<span class="number">45</span>)</div><div class="line">	u_status = models.IntegerField(max_length=<span class="number">1</span>,default=<span class="number">0</span>)</div><div class="line">   	<span class="keyword">pass</span></div></pre></td></tr></table></figure>
-
-<p>CharField对应的是数据库中的varchar类型，而IntegerField对应的是int类型，自增主键，django为每一个模型定义了一个主键id。</p>
-<p><strong>增</strong></p>
-<p>要往表中插入一条数据，SQL的语句是INSERT INTO。而django则是实例一下定义的模型类，比如这里定义的x。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">y = x(u_name=<span class="string">'123'</span>,u_pass=<span class="string">'a123'</span>,u_session=<span class="string">'123'</span>)</div><div class="line">y.save()</div></pre></td></tr></table></figure>
-
-<p>最后调用一下save方法，来真正插入一条新的记录。</p>
-<p><strong>查</strong></p>
-<pre><code><span class="keyword">y</span> = <span class="keyword">x</span>.objects.<span class="built_in">filter</span>(u_name=<span class="string">'123'</span>)
-
-<span class="keyword">y</span> = <span class="keyword">y</span>[<span class="number">0</span>]
-
-<span class="keyword">print</span>(<span class="keyword">y</span>.u_name)
-</code></pre><p><strong>改</strong></p>
-<pre><code><span class="variable">y =</span> x.objects.filter(<span class="variable">u_name=</span>'<span class="number">123</span>')
-
-<span class="variable">y =</span> y[<span class="number">0</span>]
-
-y.<span class="variable">u_name =</span> <span class="number">456</span>
-
-y.save()
-</code></pre><p><strong>删</strong></p>
-<pre><code><span class="keyword">y</span> = <span class="keyword">x</span>.objects.<span class="built_in">filter</span>(u_name=<span class="string">'123'</span>)
-
-<span class="keyword">y</span> = <span class="keyword">y</span>[<span class="number">0</span>]
-
-<span class="keyword">y</span>.<span class="built_in">delete</span>()
-</code></pre><p><strong>其他，比如过滤，排序，更新多条数据，限制返回数据，连锁查询，获取单个对象等等，这些需要学习时间</strong></p>
-<h2 id="django_view_template_的使用（6）">django view template 的使用（6）</h2>
-<p>也许我们认为django是一个MTV框架，更加适合。M：模型 T：模板 V：视图。C的管理，由django内部去实现了。</p>
-<p>在视图中文件中，需要导入视图相关的django组件，比如django.http 中的各类响应类，django.template中的与模板相关的类。</p>
-<pre><code><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse
-<span class="keyword">from</span> django.template <span class="keyword">import</span> Context,Template
-<span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">(request)</span>:</span>
-    <span class="keyword">return</span> HttpResonse(<span class="string">'&lt;h1&gt;Hello&lt;/h1&gt;'</span>)
-    <span class="keyword">pass</span>
-</code></pre><p>这里写了一个hello视图函数，并在URLConf中配置好这个视图函数，即可在浏览器中查看这个页面了。</p>
-<p><strong>视图函数中所使用的各种类，需要一定的时间学习。</strong></p>
-<p>它不是最重要的，T才最重要的。</p>
-<p><strong>简单基础</strong></p>
-<p>django模板系统，对于逻辑的操作，需要用百分号，必须有结束语句。而赋值则是两个大括号。django的模板系统，是可以切换的。如果觉得原生自带的模板系统不够好用，可以在setting文件中重新配置要使用的模板系统。</p>
-<p><strong>简单例子</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</div><div class="line"><span class="keyword">from</span> django.template <span class="keyword">import</span> Context,Template</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">(request)</span>:</span></div><div class="line">	t_html = Template(<span class="string">'''</span></div><div class="line">		&lt;h1&gt;&lt;/h1&gt;</div><div class="line">		</div><div class="line">	''')</div><div class="line">	c = Context({<span class="string">"wow"</span>:<span class="keyword">True</span>,<span class="string">"page"</span>:<span class="string">"Hello"</span>})</div><div class="line">	t_html = t_html.render(c)</div><div class="line">	<span class="keyword">return</span> HttpResponse(t_html)</div><div class="line">	<span class="keyword">pass</span></div></pre></td></tr></table></figure>
-
-<p><strong>扩展：模板系统也是一个学习重点，中间有很多技巧性的问题，比如：导入，同一个模板多个上下文，过滤器等等</strong></p>
-<h2 id="扩展部分">扩展部分</h2>
-<ol>
-<li>通过一个例子讲解如何快速的实现一个简单的网站（注册，登录，验证用户状态）</li>
-<li>简单django中几个常用的组件</li>
-<li>分享学习Python django的资料</li>
-</ol>
-<p>django提供了N多的web工具，例如：</p>
-<pre><code>认证
-缓存
-日志
-发送电子邮件
-聚合供稿(RSS/Atom)
-评论, 评论审核 和 自定义评论
-分页
-消息框架
-序列化
-Sessions
-站点地图
-静态文件管理
-数据验证
-</code></pre><p>django是一个大而全的框架，它提供了很多很多基本上包括了web开发中所需要的功能，学习它需要大量的时间。</p>
-<p>学习django的基础，是学习好Python。</p>
-<p><strong>人生苦短 我用Python</strong></p>
-<p><a href="https://docs.python.org/3/library/index.html" target="_blank" rel="external">Python 标准库</a> </p>
-<p><a href="http://docs.pythonsprints.com/python3_porting/py-porting.html" target="_blank" rel="external">Python2x与Python3x对照表</a></p>
-<p><a href="https://docs.djangoproject.com/en/1.6/" target="_blank" rel="external">Django API</a></p>
-<p><a href="http://djangobook.py3k.cn/2.0/" target="_blank" rel="external">一本django1.5电子书</a></p>
-<p><a href="http://uliweb.clkg.org/tutorial/read/20" target="_blank" rel="external">简单的django学习</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>使用django快速开发一个web网站</p>
-<p>分享内容（拟）</p>
-<ol>
-<li>介绍django的历史</li>
-<li>安装以及配置django项目</li>
-<li>介绍django对请求的回应机制</li>
-<li>讲解django URL的配置</li>
-<li>讲解django模型的使用</li>
-<li>讲解django view template 的使用</li>
-<li>通过一个例子讲解如何快速的实现一个简单的网站（注册，登录，验证用户状态）</li>
-<li>分享学习Python django的资料，以及说说一些django的web工具</li>
-</ol>
-]]>
-    
-    </summary>
-    
-      <category term="python django" scheme="http://lcepy.github.io/tags/python-django/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[django静态资源配置的问题]]></title>
-    <link href="http://lcepy.github.io/2014/11/14/django%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>http://lcepy.github.io/2014/11/14/django静态资源配置的问题/</id>
-    <published>2014-11-14T12:16:20.000Z</published>
-    <updated>2014-11-14T19:41:56.000Z</updated>
-    <content type="html"><![CDATA[<p>在初始化一个django项目时，我还遇见了一个比较头疼的问题，静态资源的配置，硬编码问题。其实，按照正常的部署来说，静态资源，比如（.css .js img）等，应该另启动一个服务器，去做静态资源的处理，这样是非常常见的，和语言无关，脱离了动态开发内容，特别的适合做内容分发。但是，考虑到前期，我想能在django中集合这样的资源类型，于是，碰到了比较纠结的问题。另外，在django初始化的项目中，竟然还不能在注释中打中文，是不是很疼，没关系，往下看，能解决这样的问题。</p>
-<a id="more"></a>
-
-<p>其实，在django settings.py文件中，我们可以找到三个关于static的内容。STATIC_ROOT，STATIC_URL，STATICFILES_DIRS。于是，我在想，是不是就是配置这三项呢。</p>
-<p><a href="https://docs.djangoproject.com/en/1.5/ref/settings/" target="_blank" rel="external">settings.py 官方给出的配置参数解释</a></p>
-<p>顾名思义，我想在我的项目中利用django内置的服务器来处理静态资源，最能给我合理的参数应该是STATICFILES_DIRS。</p>
-<p><strong>This setting defines the additional locations the staticfiles app will traverse if the FileSystemFinder finder is enabled, e.g. if you use the collectstatic or findstatic management command or use the static file serving view.</strong></p>
-<p>从官方的解释上来看，这个设置，可以通过我的管理命令集来启动这个视图，那不是意味着，它可以读取我的静态资源呢。实践下来，配置上，我项目的绝对路径，成功。</p>
-<p>当然，我看django的官方配置文件中所描述的方式，有多种，而上述是一个最容易搞定的方式，反正是开发，何必纠结呢。不建议，在部署时，也使用django的静态资源服务，这会增加很多压力。合理的安排，是另外启用一个静态资源服务器，专门存储这些静态资源。</p>
-<p>在处理好静态资源之后，我想给这里添加一个注释，并写上中文。于是，我发现，出现了一个编码问题。后来查询了python官方的一个PEP，了解到原来，如果我的不是utf-8或者其他支持中文的编码，直接写上中文，那是报一个大大的错误的。</p>
-<p><a href="http://legacy.python.org/dev/peps/" target="_blank" rel="external">Python 官方关于编码的PEP</a></p>
-<p>在文件的头部写上#coding=utf-8即可，这一项2.7到3.x都是完美兼容的，如果现在学习python，建议最小选择从2.7.3开始，到3.x。2.7除了模块不一样名不一样，有很多内置函数，是继承到了3.x。当然如果，不考虑工作的话，我建议直接从python3.x开始学习。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>在初始化一个django项目时，我还遇见了一个比较头疼的问题，静态资源的配置，硬编码问题。其实，按照正常的部署来说，静态资源，比如（.css .js img）等，应该另启动一个服务器，去做静态资源的处理，这样是非常常见的，和语言无关，脱离了动态开发内容，特别的适合做内容分发。但是，考虑到前期，我想能在django中集合这样的资源类型，于是，碰到了比较纠结的问题。另外，在django初始化的项目中，竟然还不能在注释中打中文，是不是很疼，没关系，往下看，能解决这样的问题。</p>
-]]>
-    
-    </summary>
-    
-      <category term="python django" scheme="http://lcepy.github.io/tags/python-django/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[减肥与训练]]></title>
-    <link href="http://lcepy.github.io/2014/11/14/%E5%87%8F%E8%82%A5%E4%B8%8E%E8%AE%AD%E7%BB%83/"/>
-    <id>http://lcepy.github.io/2014/11/14/减肥与训练/</id>
-    <published>2014-11-14T12:11:56.000Z</published>
-    <updated>2014-11-14T19:41:07.000Z</updated>
-    <content type="html"><![CDATA[<p>训练的目的在于，训练自身的素质，为长距离骑行做准备。主要是训练意志力，大腿肌肉，胸部肌肉，以及肺活量。</p>
-<p>我的训练计划有参考的价值，如下：</p>
-<ol>
-<li>第一个月每天晚上做20个抱头的仰卧起坐，15个双手水平放直的仰卧起坐。</li>
-<li>第一个月每天晚上做10个俯卧撑。</li>
-<li>每天下班之后来回骑行15-20公里。</li>
-<li>训练之前，做热身运动。</li>
-<li>一周内去健身房三次，听从专业教练的训练。（看情况）</li>
-</ol>
-<p>从目标的第一个月开始，逐月增加5的增量，训练最重要的是坚持，特别是意志力。这样的训练，最重要的是训练意志力，以及身体的素质。</p>
-<p>另外一项属于文化类的训练，需要熟读交通指示牌，以及骑行手语。</p>
-<p><a id="more"></a></p>
-<h2 id="07-12">07-12</h2>
-<p>从今天开始我准备了一项比较长久的减肥与训练计划，也是从今天开始我去健身房办理了一张健身卡，教练给我的建议有两项，一是减肥，二是练肌肉。基本同意这样的建议，于是开始着手这方面的准备。</p>
-<p>第一次去训练，最开始10分钟在跑步机上热身，然后开始练器材，分三组，一组十个，包括了有仰卧起坐，练胸拉伸，练手臂的拉伸，做下来，真的很痛，第一次训练这些。</p>
-<p>就是这样，第一次训练一起花了一个小时二十分钟的样子。</p>
-<h2 id="07-13">07-13</h2>
-<p>因为昨天的开始训练，把身上特别是手臂到胸的那个关节处，特别的痛，所以只在跑步机上跑了二十分钟。本来各项要练习三组，但是今天只练了一组，就练不起来了。</p>
-<h2 id="07-16">07-16</h2>
-<p>距上次在健身房练习，有三天没有去了，因为周一加班，周二又发布，所以周三才去。几天没有健身，感觉不是那么痛了，于是像第一次一样的开始练，感觉好像适应了一般，三组下来，没有任何的不适感，这倒是个好消息。</p>
-<h2 id="07-17到07-20">07-17到07-20</h2>
-<p>这几天都像往常一样，没有什么特别的事情，于是去了健身房，依然跟第一次一样，各三组，但是我发现好像没有什么效果，还是65公斤，想想，这不科学啊，是不是哪里出了什么问题，问了问教练，也去知乎上搜了大量的资料，原来发现减肥除了运动还跟吃，也就是食物有关系。</p>
-<h2 id="07-22">07-22</h2>
-<p>在考虑了两天之后，我重新制定了一份计划，包括健身，食物。也从8月开始，就不跟大家一起吃饭了。健身计划按月为一个分界线，开始往上逐渐递增。我的计划就是，在七月份的最后一周内，仰卧起坐三十个，分三组。练手臂肌肉拉伸，50个分四组，前两组15，后两组10.练胸肌肉拉伸（扩胸）为35个，前一组为15个，后两组为10个，另外还多了一项，虽然我暂时不知道它叫什么，依然是35个，前一组15个，后两组为10.并且我重新调整的训练秩序，从家里走到健身房为热身，先练器材，最后跑步。而跑步我的分钟为25分钟连续跑。</p>
-<h2 id="07-23到07-24">07-23到07-24</h2>
-<p>这两天我在研究食物，到底怎么吃才能配合健身能到达更好的效果，初步出了一个方案，这两天的健身从22开始，持续。怎么吃，我写在最后。</p>
-<h2 id="07-25">07-25</h2>
-<p>从今天开始，我跑又重新做了一份调整，时间为25分钟并且增加了10分钟练习自行车。</p>
-<h2 id="07-26到07-27">07-26到07-27</h2>
-<p>07-22的计划未变，持续。去看重量的时候，感觉少了2斤，我吃了饭。</p>
-<h2 id="07-28">07-28</h2>
-<p>今天去健身房本来打算依然像昨天那样训练，只是练完器材之后，跑步机真心不爽，跑了5分钟就走了。</p>
-<h2 id="08-03">08-03</h2>
-<p>上周一周的时间都在加班，所以没有进行训练，今天去训练，为了适应，跑步做了时间上的减少，为15分钟，其他照就。</p>
-<h1 id="附件：怎么吃才能配合健身达到更好的效果">附件：怎么吃才能配合健身达到更好的效果</h1>
-<p>07-28今天花了一天的时间在琢磨食谱，到底怎么吃才能达到效果，于是有了这些减肥食物的控制理论，蔬菜水果粗粮为主，并且辅助大量的运动与器材训练，另外还要戒烟戒酒，特别是烟和啤酒，烟中有大量的尼古丁，啤酒特别容易肥肚子，我的食物安排是这样的，而且是一日多餐。</p>
-<p>早餐的食物，为脱脂牛奶，燕麦片或者无糖黑芝麻糊。牛奶就不用说了，不充蛋白质。而燕麦片是粗粮，主要来促进肠胃。</p>
-<p>中午的食物，为粗粮，如玉米，大麦等。如果有玉米则吃玉米，另外西红柿一个，黄瓜三到四根，玉米两个。下午三点半左右，吃一个水果，一些坚果。</p>
-<p>晚餐则是食谱类的，主要是汤，炒，凉拌，这里我做了一下分类，原则上，晚餐才吃米饭和菜。搭配上为一炒一汤，或者一凉拌一汤。汤主要为清煮类，全部少量盐。</p>
-<p>青菜豆腐汤，材料为青菜，豆腐，葱花，少量盐与胡椒，清煮。</p>
-<p>冬瓜肉丝汤（原则上，一周只能一次），材料为冬瓜，猪肉，猪肉切成丝，少量，先要用热开水沸煮，去掉脂肪等，然后搭配冬瓜，少量盐，胡椒，葱花。</p>
-<p>西红柿豆腐汤，材料为西红柿，豆腐，少量盐，清水煮，配上葱花。</p>
-<p>魔芋汤，魔芋切片，清煮，不放盐。</p>
-<p>爆辣椒，材料为青辣椒，生姜，大蒜，辣椒拍烂，配上生姜，大蒜，爆炒。</p>
-<p>大蒜炒空心菜，材料为空心菜，大蒜，爆炒。</p>
-<p>闷南瓜，材料为南瓜，少量水煮，一直闷熟。</p>
-<p>凉拌黄瓜，材料为黄瓜，大蒜，生姜，葱花，豆豉辣椒油，少量盐，少量鸡精，凉拌。</p>
-<p>凉拌海带，材料为海带，大蒜，生姜，葱花，豆豉辣椒油，少量盐，少量鸡精，凉拌。</p>
-<p>凉拌莴笋，材料为莴笋，大蒜，生姜，葱花，豆豉辣椒油，少量盐，少量鸡精，凉拌。</p>
-<p>清炒长豆角，或者清炒四季豆，清炒，少量盐。</p>
-<p>家常豆腐皮，材料为豆腐皮，青辣椒，少量玉米油清炒。</p>
-<p>酸辣土豆丝，配少量醋，豆豉辣椒油，青红辣椒丝，清炒。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>训练的目的在于，训练自身的素质，为长距离骑行做准备。主要是训练意志力，大腿肌肉，胸部肌肉，以及肺活量。</p>
-<p>我的训练计划有参考的价值，如下：</p>
-<ol>
-<li>第一个月每天晚上做20个抱头的仰卧起坐，15个双手水平放直的仰卧起坐。</li>
-<li>第一个月每天晚上做10个俯卧撑。</li>
-<li>每天下班之后来回骑行15-20公里。</li>
-<li>训练之前，做热身运动。</li>
-<li>一周内去健身房三次，听从专业教练的训练。（看情况）</li>
-</ol>
-<p>从目标的第一个月开始，逐月增加5的增量，训练最重要的是坚持，特别是意志力。这样的训练，最重要的是训练意志力，以及身体的素质。</p>
-<p>另外一项属于文化类的训练，需要熟读交通指示牌，以及骑行手语。</p>
-<p>]]>
-    
-    </summary>
-    
-      <category term="生活" scheme="http://lcepy.github.io/tags/%E7%94%9F%E6%B4%BB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[我的项目经历]]></title>
-    <link href="http://lcepy.github.io/2014/11/14/%E6%88%91%E7%9A%84%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/"/>
-    <id>http://lcepy.github.io/2014/11/14/我的项目经历/</id>
-    <published>2014-11-14T12:09:19.000Z</published>
-    <updated>2015-01-09T10:48:08.000Z</updated>
-    <content type="html"><![CDATA[<p><em>开源项目，可以在 github 查看，主要分为两类项目，一类为给公司开发的开源工具，用来前端的编程效率，一类为自己的学习项目，比如桌面端的MVC一套解决方案，移动组件库，以及个人项目。</em></p>
-<p><em>擅长领域，主要为javascript，python，关系型数据库为mysql mongodb 工作中以javascript为主。</em></p>
-<h2 id="个人项目展示">个人项目展示</h2>
-<p><a href="https://github.com/lcepy/glob-proxy" target="_blank" rel="external">HTTP Proxy</a></p>
-<p><a href="https://github.com/lcepy/kalimdor" target="_blank" rel="external">kalimdor MVC</a></p>
-<p><a href="https://github.com/lcepy/Find" target="_blank" rel="external">Find zepto UI</a></p>
-<p><a href="https://github.com/lcepy/nagrand" target="_blank" rel="external">nagrand onload</a></p>
-<p><a href="https://github.com/lcepy/douban-shell-app" target="_blank" rel="external">douban-shell</a></p>
-<p><a href="https://github.com/lcepy/downloadZIP" target="_blank" rel="external">webapp 打包工具</a></p>
-<p><a id="more"></a></p>
-<h2 id="携程">携程</h2>
-<p><em>在线项目为携程H5站点，hybrid app。H5站点地址 : </em><a href="http://m.ctrip.com/webapp/cruise/index.html" target="_blank" rel="external">H5</a><em> hybrid app IOS可以在app store中下载，安卓可以在各大安卓市场下载，负责cruise的移动端开发</em></p>
-<h5 id="2014年10月15日到2014年11月18日_CRUISE_H5_Hybrid_6-0（邮轮）">2014年10月15日到2014年11月18日 CRUISE H5 Hybrid 6.0（邮轮）</h5>
-<p>主要邮轮产品详情页，邮轮岸上游详情页，修复H5跳Hybrid，增加在搜索页定位图标，增加常见问题页FAQ。迁移首页，列表，搜索页三个页面到新版2.1框架，支持首页，列表页的SEO</p>
-<h5 id="2014年9月15日到2014年10月9日_CRUISE_H5_Hybrid_5-10（邮轮）">2014年9月15日到2014年10月9日 CRUISE H5 Hybrid 5.10（邮轮）</h5>
-<p>主要负责把搜索与筛选的业务逻辑全部修改为联调机制，并且在搜索中，增加途径国家，增加多级的搜索，列表页需要支持URL参数并且支持SEO，修改首页的地理位置定位与默认参数的逻辑，制作一个新的营销CR页面。</p>
-<p><strong>让用户从之前的单个搜索，筛选，变更为在同一个view中进行搜索与筛选，不切换view在体检上就不会感觉到很麻烦。</strong></p>
-<h5 id="2014年8月9日到9月11日_CRUISE_H5_Hybrid_5-9（邮轮）">2014年8月9日到9月11日 CRUISE H5 Hybrid 5.9（邮轮）</h5>
-<p>主要负责重构邮轮首页，列表页，搜索页以及筛选的业务逻辑，中间修改了广告营销，预定咨询页，修复5.8bug以及新增需求。</p>
-<p><strong>帮助同事进行源代码重构，分享一些过往的开发经验。</strong></p>
-<h5 id="2014年7月7日到2014年8月5日_CRUISE_H5_Hybrid_5-8（邮轮）">2014年7月7日到2014年8月5日 CRUISE H5 Hybrid 5.8（邮轮）</h5>
-<p>主要是新接手同事的列表，搜索排序，筛选排序，新做了订单意向单，邮轮详情页中的行程介绍，岸上游详情介绍，修复5.7bug以及新增需求。</p>
-<h5 id="2014年5月21日到2014年6月27日_CRUISE_H5_Hybrid_5-7（邮轮）">2014年5月21日到2014年6月27日 CRUISE H5 Hybrid 5.7（邮轮）</h5>
-<p>主要是负责邮轮的整个订单部分，分为订单第一步，选择班期。订单第二步，选择房型。订单第三步，填写常用联系人，并核算消费明细等。配套的有，常用旅客的选择，编辑，新增，另外两项功能性选择，为保险多选选择，岸上游单选选择，并且提交支付。<br>中间的逻辑（不复述了）</p>
-<p><strong>解决了携程邮轮在无线端下订单从无到有的开始。</strong></p>
-<h5 id="2014年4月25日到2014年5月19日_CRUISE_H5_Hybrid_5-6（邮轮）编写了两个工具">2014年4月25日到2014年5月19日 CRUISE H5 Hybrid 5.6（邮轮）编写了两个工具</h5>
-<p>主要是负责了第一版邮轮的订单意向单，预定须知，签证签出。在当时的开发环境下为其他开发人员编写了两个工具，一个工具是HTTP代理服务器用来模拟数据（nodejs）这个已经提交在个人github中，项目名为glob-proxy，另外一个是给组长编写的excels导入工具（python）</p>
-<p>时间：<strong>2014(04-25到05-02)</strong></p>
-<h4 id="excels导出工具">excels导出工具</h4>
-<p><em>基于python编写的excels导出GUI工具，根据SOAP协议远程调用query，生成excels报表。</em></p>
-<p><strong>是帮助当时的开发经理从项目日志中，导出excels表。</strong></p>
-<p>时间：<strong>2014(05-5到05-10)</strong> </p>
-<h4 id="glob-proxy">glob-proxy</h4>
-<p><em>基于nodejs的HTTP请求代理服务器，根据映射表，实现在本地的mock，提交远程GET POST请求，支持H5跨域，支持对远程请求数据的内存缓存与物理缓存，实现对内存缓存的管理，根据打分机制来自动释放，使用度不高的请求缓存。</em></p>
-<p><strong>解决了当时开发团队在开发方式上的困难，因为前后不同步的原因，需要经常在模型层中修改请求地址，或是在本地自己模拟假数据。这个工具的出现，则统一由代理服务器去切换请求地址或者在本地生成mock数据。</strong></p>
-<p>源代码仓库：<a href="https://github.com/lcepy/glob-proxy" target="_blank" rel="external">glob-proxy</a></p>
-<p><strong>2014年3月10日到4月11日 门票 H5 Hybrid 5.5</strong></p>
-<p>当时主要是负责了门票详情页，预定须知，点评，地图交互，景点介绍</p>
-<p><strong>2014年2月12日到3月3日  机票 H5 Hybrid 5.5  编写了一个工具</strong></p>
-<p>当时在机票主要是负责从用户订取机票的时间与航空公司的上下班时间中分析出一个合理的时间区间数组来。<br>打包工具主要是根据SOAP协议来调取webapp包地址，多线程下载完成之后重新打包。现工具已经在提交在个人github上，项目名为downloadZIP</p>
-<p><strong>关于时间区间的分析，根据航空公司上下班时间与用户自己期望的时间分析出一个合理的时间数组，让用户可以清晰的了解到取票的时间范围。</strong></p>
-<p>时间：<strong>2014(02-12到02-18)</strong></p>
-<h4 id="downloadZIP">downloadZIP</h4>
-<p><em>说明：基于python编写的webapp打包工具，根据SOAP协议来远程调用query查询获取webapp包地址，根据包地址下载，解压，重新打包为一个webapp zip文件。此工具为GUI工具，下载为多线程后台下载。</em></p>
-<p><strong>解决了不同版本的APP打包的问题</strong></p>
-<p>源代码仓库：<a href="https://github.com/lcepy/downloadZIP" target="_blank" rel="external">downloadZIP</a></p>
-<h2 id="万言网（兼职）">万言网（兼职）</h2>
-<p>2013年11月15日-2013年12月24日：设计移动端体系，并负责开发第一版，万言网投票达人触屏版<br>应用参考地址：（开发测试地址） <a href="http://m.wanyan.com" target="_blank" rel="external">http://m.wanyan.com</a> （投票，数据分析功能需要注册登录）</p>
-<p>2013年10月13日-2013年11月10：重新设计桌面前端体系，并负责开发言交所项目。<br>应用参考地址： <a href="http://www.wanyan.com/yanex" target="_blank" rel="external">http://www.wanyan.com/yanex</a> (需注册登录)</p>
-<p><em>万言项目的在线地址：</em><a href="http://www.wanyan.com/" target="_blank" rel="external">wanyan</a></p>
-<p>万言网投票H5移动端，桌面版 时间：<strong>2013(10-13)-2014(01-10)</strong></p>
-<p><em>说明：重新设计了桌面端的架构实现，组织了模块化，以及客户端MVC对应的RESTFU路由请求模块，应用自动化打包，检测等工具。此项目设计，应用在万言网的言交所项目，其他需要SEO页面，则组织了通用模板，一套模板应用在服务端，客户端两端。而万言网的移动触屏版，投票达人应用，在桌面版架构实现的基础上，简化了代码量与性能提升，增加了UI组件库，本地存储系统，单页实现。SEO依然是通用模板，根据URL请求来识别是否是搜索引擎，还是用户正常点击，来切换模板。</em></p>
-<p>内部打分收集系统 时间 <strong>2013(12-10)-2014(01-10)</strong></p>
-<p><em>说明：基于python django mysql的后台打分收集系统，根据用户的反馈情况，来评分。提供给运营人员查看，编辑，分析。主要的业务逻辑，在于整套数据的评分，以及优质内容的评定。</em></p>
-<p><strong>在兼职期间把万言网的PC端的架构重写，并且运用在投票达人，言交所这两个大的板块中。另解决了移动浏览器项目的开发选型，组织框架，应用了投票达人的移动试用版。</strong></p>
-<h2 id="回湖南时">回湖南时</h2>
-<p><strong>2013年9月-2013年10月：开发了一套可以应用在企业级应用中的mvc框架与解决方案</strong></p>
-<p>主要根据之前两年左右的企业级应用开发经验，做了这么一套东西，可以适用在财务报表，财务分析，等报表类企业级b/s应用中。<br>源代码仓库：<a href="https://github.com/lcepy/kalimdor" target="_blank" rel="external">kalimdor</a></p>
-<h2 id="远光软件">远光软件</h2>
-<p><em>在远光软件的工作，主要是企业级开发，管理，报表分析系统，均部署在两网五大发电集团内部，无在线地址。</em></p>
-<p>项目：<strong>基于EAP2.0平台重构费用报销系统</strong> 时间：<strong>2013年8月初－8月底</strong></p>
-<p><em>费用报销系统</em>：费用报销系统是以单据为节点，用于费用的报销，领导审批，会签，查看等。主要负责了界面UI开发，数据表渲染，单据绘画，基础存储模块，待办事项模块，单据查询模块。工具栏中的查看单据，上载资料，审批传递。单据中的样式表部分。</p>
-<p>项目：<strong>EAP2.0平台seeker2.0平台框架开发与迁移旧系统到新平台框架下</strong> 时间：<strong>2013(03-08)</strong> </p>
-<h4 id="平台开发说明">平台开发说明</h4>
-<p>主要负责</p>
-<ol>
-<li>平台下的各个产品通用存储控制层。</li>
-<li>MVC中的模型解析引擎，模型解析引擎，是以原始定义的元数据为基础，匹配框架自动填充的容器，来对应每一项。此项工作，还包括基础定义，与服务端取数，主要用于模型层的的解析以及存储各项提供给框架内部使用的存储容器。</li>
-<li>用于数据表与样式表中触发是否有联级关系的项目，当存在联级项目时，触发此引擎工作。存储在公共容器中，多事件触发器组成，比如关闭单据时，触发此事件，以检测单据中的样式表与数据是否有数据变更的检测机制。</li>
-<li>平台下各产品通用的基础消息用于统一的消息提示api，以及各项操作之后的动作返回。</li>
-<li>用于平台框架下各控件的统一api调用，以及各控件之间的交互的UI基类。</li>
-<li>用于各项单据中的验证，比如输入长度，是否为数据等各项在存储之前的验证检索验证机制。</li>
-<li>控件开发，包括组合的对象控件：业务对象，部门对象，选择对象，银行对象，对话框，样式表数据表的隐藏域，基于父子关系的上下级模块。</li>
-<li>基于seeker2.0框架，费用报销系统改造与升级工程。</li>
-</ol>
-<p><strong>在seeker2.0中，主要是将模型更加的通用化，平衡了在SMB所有产品关于调用API的规范化，并且把组件全部重写。另外把费用报销系统改造升级后，写了关于升级应用的PPT，和同事两个人，在评审中给领导讲解，以及给其他小组的同事培训如何运用。</strong></p>
-<p>项目：<strong>费用报销系统，工程管理系统，核算系统</strong> 时间：<strong>2012（07-12）</strong></p>
-<h4 id="负责开发说明">负责开发说明</h4>
-<p><em>费用报销系统开发：</em>费用报销系统是以单据为节点，用于费用的报销，领导审批，会签，查看等。主要负责了界面UI开发，数据表渲染，单据绘画，基础存储模块，待办事项模块，单据查询模块。工具栏中的查看单据，上载资料，审批传递。单据中的样式表部分。</p>
-<p><em>工程管理系统开发：</em>以费用报销系统为模版，增加了科目，预算体系，账目汇总等功能。主要负责了科目体系，与账目汇总。其余由，费用报销系统改动。</p>
-<p><em>核算系统：</em>以费用报销系统为模版，增加了工程合同，审批等功能。主要负责了，会签审批这个功能。</p>
-<p><strong>在这三个业务系统的开发中，最主要的贡献是解决了单据报表的绘画工作，主要是扩展和改进了当时的百度编辑器，让它更加的适应于企业财务人员的使用习惯。</strong></p>
-<p>项目：<strong>seeker1.0框架开发</strong> 时间：<strong>2012(05-07)</strong></p>
-<h4 id="负责开发说明-1">负责开发说明</h4>
-<p>基于jqGrid的网格系统二次开发，开发单据设计器，比如：一键应用，选择单据项目，单据选择器，单据绘制等等，此部分应用在核算桌面软件中。seeker1.0主要是负责MVC，模型解析引擎的开发，与UI插件库的开发。此版本框架只应用于1.0版本的费用报销系统与其相应改动的其他系统。</p>
-<p><strong>解决了当时在报表系统中，网格化表格的应用。加入SMB团队之后，加速了seeker1.0的开发进程，利用这个框架，三个人写了初版的费用报销系统，奠定了seeker1.0应用的模板。</strong></p>
-<h2 id="湖南日报华声在线-教育频道">湖南日报华声在线-教育频道</h2>
-<p><em>几年过去了，在线地址以及开发内容已经变更，这里不在提供。</em></p>
-<p>项目：<strong>快乐学习网社交空间 新闻频道，作文频道，视频频道</strong> 时间：<strong>2011(08)-2012(04)</strong></p>
-<h4 id="负责说明">负责说明</h4>
-<p>快乐学习网社交空间，工作的内容是负责了全站的前端开发任务，空间类似于2011年的QQ空间。负责教育产品，社交空间的前端开发，培训组内的前端技术，并提供教育系列产品的前端解决方案，并负责一定的服务端开发工作，主要是拼写模板。</p>
-<p>当时的站点，是基于jQuery编写的，使用的是jQuery1.4。</p>
-<p><strong>第一次参加工作，这个阶段皆以学习琢磨为主，在当时的团队中，是主要的程序开发者，根据python的模板的特点，引入了jQuery_Template模板，改变了团队开发程序的形式，模板从服务端移到了在前端实现。</strong></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p><em>开源项目，可以在 github 查看，主要分为两类项目，一类为给公司开发的开源工具，用来前端的编程效率，一类为自己的学习项目，比如桌面端的MVC一套解决方案，移动组件库，以及个人项目。</em></p>
-<p><em>擅长领域，主要为javascript，python，关系型数据库为mysql mongodb 工作中以javascript为主。</em></p>
-<h2 id="个人项目展示">个人项目展示</h2>
-<p><a href="https://github.com/lcepy/glob-proxy" target="_blank" rel="external">HTTP Proxy</a></p>
-<p><a href="https://github.com/lcepy/kalimdor" target="_blank" rel="external">kalimdor MVC</a></p>
-<p><a href="https://github.com/lcepy/Find" target="_blank" rel="external">Find zepto UI</a></p>
-<p><a href="https://github.com/lcepy/nagrand" target="_blank" rel="external">nagrand onload</a></p>
-<p><a href="https://github.com/lcepy/douban-shell-app" target="_blank" rel="external">douban-shell</a></p>
-<p><a href="https://github.com/lcepy/downloadZIP" target="_blank" rel="external">webapp 打包工具</a></p>
-<p>]]>
-    
-    </summary>
-    
-      <category term="项目经历 长期维护" scheme="http://lcepy.github.io/tags/%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86-%E9%95%BF%E6%9C%9F%E7%BB%B4%E6%8A%A4/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[在实际工作中node开发的一些见解与调试]]></title>
-    <link href="http://lcepy.github.io/2014/11/14/%E5%9C%A8%E5%AE%9E%E9%99%85%E5%B7%A5%E4%BD%9C%E4%B8%ADnode%E5%BC%80%E5%8F%91%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%81%E8%A7%A3%E4%B8%8E%E8%B0%83%E8%AF%95/"/>
-    <id>http://lcepy.github.io/2014/11/14/在实际工作中node开发的一些见解与调试/</id>
-    <published>2014-11-14T12:04:45.000Z</published>
-    <updated>2014-11-14T19:40:38.000Z</updated>
-    <content type="html"><![CDATA[<p><strong>真实情况是这样的</strong> </p>
-<ol>
-<li>开发，前端与后端物理性的隔离，前端通过restful接口请求相应的数据，并在客户端渲染。</li>
-<li>前端的渲染依赖于后端响应的数据，后端开发的进度永远比前端慢。</li>
-<li>需要通过本地模拟数据，约定契约总是会纠结很久。</li>
-<li>联调时，需要改多处代码。</li>
-</ol>
-<p><strong>治标不治本的解决方案</strong></p>
-<p>为了解决工作中的上述问题，于是就想到了网络代理与客户端mock的功能，并且能很好的识别出错误，以及分发请求，<a href="https://github.com/lcepy/glob-proxy" target="_blank" rel="external">glob-proxy</a>。通过一对键值对来描述需要响应的请求，通过GET参数来适配读取本地，还是分发到网络，并对响应的请求response进行内存缓存与物理缓存。本地构建的元数据，可以使用mock来生成。</p>
-<p>但是上述的解决方案，并没有解决工作中出现的问题。反而加重了开发的成本，问题3，依然没有很好的解决，而问题4解决了一半，联调时依然需要更改多处，不然提交到测试的代码，还是键值对中映射的地址，虽然我的本机可以访问，但是测试人员却访问不了。</p>
-<p>上遇到上述问题的时候，我一直在想，是不是需要另外启用一个服务器来做代理的代理。我实现了上述需要解决的几个问题，比如分解model.js中测试地址，将这个测试地址，生成为一个配置文件，提供给代理服务器2，代理服务器1依然是之前的配置文件。在webapp发起请求时，代理服务器1截取请求，提交给代理服务器2，代理服务器2获取完毕后，发送给远程。</p>
-<p>这个问题好像，滚雪球一样，越滚越大。后来，我的同事找到了一个比较好的方案，我编写的一半socket proxy基本上可以废弃了。我们使用了fiddler来做代理服务器1.</p>
-<p>这里的逻辑是这样的，在启动glob-proxy时，我提供了两个API出来，一是：抓取配置文件中的model.js，根据测试URL生成fiddler需要的xml配置文件，并将这个xml导入到fiddler中。如果是local=1，glob-proxy将扫描本地文件，来做响应。如果local为false，请求将通过glob-proxy发送到fiddler中，fiddler去请求远程，来响应node服务器，node服务器再响应给webapp。</p>
-<p>好在上述，难的地方已经处理好了，现在要理清的还是这个请求代理的逻辑顺序。但是这样的绕，是不是有些比较蛋疼呢。<br><a id="more"></a><br><strong>好好整理了资料，并思考了一个问题</strong></p>
-<p>通常情况下，我们的webapp还需要解决SEO的问题，基本上来说这是一个无解的过程。ajax请求在客户端渲染的webapp，对搜索引擎并不友好。而且与后端的约定契约问题，也让人头疼。我在想，既然nodejs的出现，为什么不能把职能划分的更加请求，把契约留给前端的开发人员不是更加的合理？</p>
-<p>带着这样的疑问，上网搜索了很多资料，包括淘宝那边提出并实现的<a href="http://ued.taobao.org/blog/category/bowen/frontend/" target="_blank" rel="external">前后端分离</a>比较受到启发。</p>
-<p><strong>说说我的感觉</strong></p>
-<p>我们的公司是.net做的基础平台，如果能让.net去更加的专注于数据模型，而前端开发人员通过请求代理，或者socket编程来访问数据模型，自己定义相应的数据，自己选择是否在客户端渲染，还是在服务端渲染，这样的形式，岂不是更加的合理？中间消除了，大量的问题。</p>
-<ol>
-<li>与后端沟通的问题</li>
-<li>再也不需要契约，或者glob-proxy了</li>
-<li>解决了SEO的问题</li>
-<li>根据模板，跨终端。因为javascript的模板，可以在客户端，服务端两处进行渲染工作。</li>
-</ol>
-<p>web安全性与性能方面的考虑，或许是对前端开发人员的一种制约。请求=消耗，这样的消耗是不是用户能接受的？这样的工作方式，是不是能节约成本，并且对整体项目是不是有益处的。而且安全性方面，可以考虑把node这一层，在前期做为一个代理层，node只处理表面的数据，最终通过SOAP或者SOCKET提交给.net平台去做验证？而web上的安全性考虑，比如CSRF XSS这些都可以放在node这一层来做。</p>
-<p>我觉得这样的方式，是可行的。对于公司而言，那4个问题最大的成本，而对开发者来说，那4个问题很烦。</p>
-<h1 id="node_debug">node debug</h1>
-<blockquote>
-<p>npm install -g supervisor</p>
-<p>npm install -g node-inspector</p>
-</blockquote>
-<p>这两个工具，在nodejs开发中是非常有用的，debug并不是太难，写这个的原因，是想记录下来。首先，安装这两个模块，全局模式。如果是linux或mac系统，输入sudo给予权限即可。</p>
-<p>一般情况下node-inspector使用默认端口8080，当然也可以改变端口。输入node-inspector —help，可以查看命令行的帮助信息，如：『截取了部分帮助信息』</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby">-help</span></div><div class="line"></div><div class="line">-<span class="ruby">-version</span></div><div class="line"></div><div class="line">-<span class="ruby">-web-port={number}</span></div><div class="line"></div><div class="line">-<span class="ruby">-web-host={string}</span></div><div class="line"></div><div class="line">-<span class="ruby">-debug-port={number}</span></div></pre></td></tr></table></figure>
-
-<p>如果想要改变端口，可以在命令行中输入node-inspector —web-port=xxx —debug-port=xx。<br>而supervisor，则是一个非常有用的监听工具，能帮助我们重启node服务。我一般的做法是与node-inspector配合使用。比如，我会先开启一个debug的端口。node-inspector —web-port=8055 默认的debug端口依然是5858。然后在chrome中打开<a href="http://127.0.0.1:8080/debug?prot=5858，调出debug页面。然后另外启用一个命令行，输入supervisor" target="_blank" rel="external">http://127.0.0.1:8080/debug?prot=5858，调出debug页面。然后另外启用一个命令行，输入supervisor</a> —debug xx.js来运行这份debug监听。</p>
-<p><em>主题配置采用的是 theme flatland</em></p>
-<ol>
-<li>配置SublimeREPL编译器环境，运行在编辑器内运行PYTHON，编译器环境可选，不一定是PYTHON。<a href="https://github.com/wuub/SublimeREPL" target="_blank" rel="external">下载</a></li>
-<li>配置python语法智能提示，当然也不仅仅是PYTHON的语法智能提示<a href="https://github.com/SublimeCodeIntel/SublimeCodeIntel" target="_blank" rel="external">下载</a></li>
-</ol>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p><strong>真实情况是这样的</strong> </p>
-<ol>
-<li>开发，前端与后端物理性的隔离，前端通过restful接口请求相应的数据，并在客户端渲染。</li>
-<li>前端的渲染依赖于后端响应的数据，后端开发的进度永远比前端慢。</li>
-<li>需要通过本地模拟数据，约定契约总是会纠结很久。</li>
-<li>联调时，需要改多处代码。</li>
-</ol>
-<p><strong>治标不治本的解决方案</strong></p>
-<p>为了解决工作中的上述问题，于是就想到了网络代理与客户端mock的功能，并且能很好的识别出错误，以及分发请求，<a href="https://github.com/lcepy/glob-proxy" target="_blank" rel="external">glob-proxy</a>。通过一对键值对来描述需要响应的请求，通过GET参数来适配读取本地，还是分发到网络，并对响应的请求response进行内存缓存与物理缓存。本地构建的元数据，可以使用mock来生成。</p>
-<p>但是上述的解决方案，并没有解决工作中出现的问题。反而加重了开发的成本，问题3，依然没有很好的解决，而问题4解决了一半，联调时依然需要更改多处，不然提交到测试的代码，还是键值对中映射的地址，虽然我的本机可以访问，但是测试人员却访问不了。</p>
-<p>上遇到上述问题的时候，我一直在想，是不是需要另外启用一个服务器来做代理的代理。我实现了上述需要解决的几个问题，比如分解model.js中测试地址，将这个测试地址，生成为一个配置文件，提供给代理服务器2，代理服务器1依然是之前的配置文件。在webapp发起请求时，代理服务器1截取请求，提交给代理服务器2，代理服务器2获取完毕后，发送给远程。</p>
-<p>这个问题好像，滚雪球一样，越滚越大。后来，我的同事找到了一个比较好的方案，我编写的一半socket proxy基本上可以废弃了。我们使用了fiddler来做代理服务器1.</p>
-<p>这里的逻辑是这样的，在启动glob-proxy时，我提供了两个API出来，一是：抓取配置文件中的model.js，根据测试URL生成fiddler需要的xml配置文件，并将这个xml导入到fiddler中。如果是local=1，glob-proxy将扫描本地文件，来做响应。如果local为false，请求将通过glob-proxy发送到fiddler中，fiddler去请求远程，来响应node服务器，node服务器再响应给webapp。</p>
-<p>好在上述，难的地方已经处理好了，现在要理清的还是这个请求代理的逻辑顺序。但是这样的绕，是不是有些比较蛋疼呢。<br>]]>
-    
-    </summary>
-    
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
     
   </entry>
   
