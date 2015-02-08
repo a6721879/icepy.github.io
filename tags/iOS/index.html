@@ -168,6 +168,99 @@
 </nav>
       
   
+    <article id="post-理解UITableView" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/06/理解UITableView/" class="article-date">
+  	<time datetime="2015-02-06T13:06:07.000Z" itemprop="datePublished">2月 6 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/06/理解UITableView/">理解UITableView</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>UITableView是在iOS开发中使用非常频繁的一个控件，比如QQ的消息人列表，淘宝的商品，微信等等都会使用到它，对于它的理解有一个前提，那就是要理解iOS MVC的设计思路。</p>
+<p>创建一个UITableView可以使用代码的方式，也可以使用xib或者storyboard。</p>
+<pre><code><span class="built_in">UITableView</span> *tableView = [[<span class="built_in">UITableView</span> alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
+</code></pre><p>在MVC的设计思想中控制器控制着要从模型中拿数据，然后把数据装载给视图。在UITableView中模型主要是实现在UITableViewDataSource数据源中，也就是UITableView有几行，分组么，然后每一行装载什么？数据源的目的就是想问开发者这些问题。</p>
+<pre><code><span class="pp">-<span class="params">(<span class="variable">NSInteger</span>)</span>numberOfSectionsInTableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView
+{
+
+}</span>
+</code></pre><p>这个方法如果存在有分组，系统就会询问，有几个分组？如果不是分组的，可以不实现这个方法，系统默认是1。</p>
+<p>有了分组之后，然后系统会询问会有几行？</p>
+<pre><code><span class="pp">-<span class="params">(<span class="variable">NSInteger</span>)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView numberOfRowsInSection:<span class="params">(<span class="variable">NSInteger</span>)</span>section
+{
+
+}</span>
+</code></pre><p>section跟分组有关</p>
+<p>最后系统询问，每一行实现什么？</p>
+<pre><code><span class="pp">-<span class="params">(<span class="variable">UITableViewCell</span> *)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView cellForRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
+{
+
+}</span>
+</code></pre><p>这个方法的实现可以说是核心的核心，在UITableView中每一行是要求实现一个cell，可以想象每一个cell相当于就是一个容器，这个容器里面装载着很多其他UI对象，当然cell也可以自定义。</p>
+<p>考虑到性能，其实每一个cell可以从缓存中读取</p>
+<pre><code><span class="built_in">UITableViewCell</span> *cell = [tableView dequeueReusableCellWithIdentifier:<span class="string">@"cell"</span>];
+<span class="keyword">if</span> (!cell) {
+    cell = [[<span class="built_in">UITableViewCell</span> alloc] initWithStyle:UITableViewStylePlain reuseIdentifier:<span class="string">@"cell"</span>];
+}
+
+<span class="comment">//do</span>
+</code></pre><p>indexPath是一个类，看看头文件就可以明白，它这个里面装载着row，section等，这些数值非常有意义，在从模型里获取数据的时候。数据源还有一些其他的方法可以实现，比如编辑模式，这个东西一般用于删除每一条消息，从右向左滑动的时候。</p>
+<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView commitEditingStyle:<span class="params">(<span class="variable">UITableViewCellEditingStyle</span>)</span>editingStyle forRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
+{
+
+}</span>
+</code></pre><p>排序</p>
+<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView moveRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>sourceIndexPath toIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>destinationIndexPath
+{
+
+}</span>
+</code></pre><p>有了数据源，当然也会存在一些代理，这些代理就是一些动作，比如实现了某些代理方法之后，系统会询问，你点了？一个手指按下不动了？等等，然后再doing什么，就是写在这些代理的方法中，主要是实现UITableViewDelegate。</p>
+<p>常用的比如按下的时候，放开的时候：</p>
+<p>点击了每一行时做的动作</p>
+<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView didSelectRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
+{
+
+}</span>
+</code></pre><p>放开每一行时做的动作</p>
+<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView didDeselectRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
+{
+
+}</span>
+</code></pre><p>协议中有很多在某些情况下会非常有用，细节就要慢慢在学习中积累了。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-iOS的copy语法" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -569,66 +662,10 @@ self.window.<span class="variable">rootViewController =</span> navigation;
 
 
   
-    <article id="post-使用cocoapods来管理第三方库" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <div class="article-meta">
-      <a href="/2014/12/31/使用cocoapods来管理第三方库/" class="article-date">
-  	<time datetime="2014-12-31T05:52:58.000Z" itemprop="datePublished">12月 31 2014</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/12/31/使用cocoapods来管理第三方库/">使用cocoapods来管理第三方库</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li><a href="http://cocoapods.org/" target="_blank" rel="external">http://cocoapods.org/</a></li>
-<li><a href="http://code4app.com/article/cocoapods-install-usage" target="_blank" rel="external">CocoaPods安装和使用教程</a></li>
-<li><a href="http://blog.jobbole.com/72107/" target="_blank" rel="external">在 Swift 中使用 CocoaPods</a></li>
-<li><a href="http://blog.devtang.com/blog/2014/05/25/use-cocoapod-to-manage-ios-lib-dependency/" target="_blank" rel="external">用CocoaPods做iOS程序的依赖管理</a></li>
-<li><a href="https://github.com/CocoaPods/CocoaPods" target="_blank" rel="external">https://github.com/CocoaPods/CocoaPods</a></li>
-</ul>
-<p><strong>关于配置，可以参考贴出来的上述的文章，唐巧的博客也写的比较详细</strong></p>
-<p>在需要cocoapods来做管理的项目中建立Podfile文件，先通过pod search 来搜索所需要的库是否支持cocoapods，然后pod:(库名)，pod install来安装。</p>
-<h2 id="坑处收集（针对xcode_6-1_实际项目出现的问题）">坑处收集（针对xcode 6.1 实际项目出现的问题）</h2>
-<ul>
-<li>安装时可以把ruby的镜像替换成淘宝的，第一次pod setup时稍微有些慢，需要耐心等待。</li>
-<li>安装库时，如果出现链接阶段的错误，首先要查找一下link search paths 路径的问题，还有libpods.a文件是否添加到了library中。</li>
-<li>安装库时，（最好能开代理就开代理，有时github网络会导致编译或者链接阶段出现莫名其妙的问题）因为文件没有下载全。</li>
-<li>安装之前，最好是先command + shift + k clean一下编译的缓存，安装之后如果出现问题，也可以先clean一下，再编译尝试。</li>
-<li>安装之前，最好先把项目关闭了，pod install 后，会在项目的根目录，生成一个新的xcworkspace文件，以后打开项目使用它，如果还用老的，打开又会出现莫名其妙的问题。</li>
-<li>如果上述都没法解决问题，全部删除，重新来过。</li>
-</ul>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/tags/iOS/page/2/">2</a><a class="extend next" rel="next" href="/tags/iOS/page/2/">Next &raquo;</a>
+    </nav>
   
 
       <footer id="footer">
