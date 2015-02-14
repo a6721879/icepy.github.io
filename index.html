@@ -168,6 +168,70 @@
 </nav>
       
   
+    <article id="post-每天zepto源代码学习片段一之Js类型函数库" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/14/每天zepto源代码学习片段一之Js类型函数库/" class="article-date">
+  	<time datetime="2015-02-14T14:55:51.000Z" itemprop="datePublished">2月 14 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/14/每天zepto源代码学习片段一之Js类型函数库/">每天zepto源代码学习片段一之Js类型函数库</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在平时的开发中对于类型的判断是使用的很多的东西，我们可能需要对数据的类型进行检查，以满足预期的结果，而zepto中也提供了一揽子的解决方案，用于类型的判断，函数，字符串，对象，数组等。</p>
+<pre><code>$.each(<span class="string">"Boolean Number String Function Array Date RegExp Object Error"</span>.split(<span class="string">" "</span>),    <span class="function"><span class="keyword">function</span><span class="params">(i, name)</span> </span>{
+class2type[ <span class="string">"[object "</span> + name + <span class="string">"]"</span> ] = name.toLowerCase()
+  })
+</code></pre><p>其实从这里就可以看的出来zepto使用的是什么方式来检索数据类型，借用的就是Object对象的toString方法把全类型字符串打印出来，然后再根据这些字符串来分别处理。在zepto的源代码中，它没有这么写，Object.prototype.toString.call(obj)，而是直接toString.call(obj)，这是因为这个toString是一个内置对象，作用域我想我们都明白，在客户端它是如何搜索的。</p>
+<p>在得到了全类型的字符串后，可以去class2type的map中取出值来进行比对，来返回正确的类型。</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">isObject</span><span class="params">(obj)</span>     </span>{ <span class="keyword">return</span> type(obj) == <span class="string">"object"</span> }
+<span class="function"><span class="keyword">function</span> <span class="title">isFunction</span><span class="params">(value)</span> </span>{ <span class="keyword">return</span> type(value) == <span class="string">"function"</span> }
+<span class="function"><span class="keyword">function</span> <span class="title">type</span><span class="params">(obj)</span> </span>{
+<span class="keyword">return</span> obj == <span class="literal">null</span> ? <span class="built_in">String</span>(obj) :
+  class2type[toString.call(obj)] || <span class="string">"object"</span>
+  }
+</code></pre><p>数组zepto使用的最新的API，Array提供的isArray方法。</p>
+<pre><code>isArray = <span class="built_in">Array</span>.isArray ||
+  <span class="function"><span class="keyword">function</span><span class="params">(object)</span></span>{ <span class="keyword">return</span> object <span class="keyword">instanceof</span> <span class="built_in">Array</span> }
+</code></pre><p>zepto还提供了检测document，window等。</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">isWindow</span><span class="params">(obj)</span>     </span>{ <span class="keyword">return</span> obj != <span class="literal">null</span> &amp;&amp; obj == obj.window }
+  <span class="function"><span class="keyword">function</span> <span class="title">isDocument</span><span class="params">(obj)</span>   </span>{ <span class="keyword">return</span> obj != <span class="literal">null</span> &amp;&amp; obj.nodeType == obj.DOCUMENT_NODE }
+  <span class="function"><span class="keyword">function</span> <span class="title">isPlainObject</span><span class="params">(obj)</span> </span>{
+ <span class="comment">//getPrototypeOf 返回一个对象的原型 ，这里是不是跟Object.prototype相等</span>
+ <span class="keyword">return</span> isObject(obj) &amp;&amp; !isWindow(obj) &amp;&amp; <span class="built_in">Object</span>.getPrototypeOf(obj) == <span class="built_in">Object</span>.prototype
+}
+</code></pre>
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-理解UITableView" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -538,63 +602,6 @@ NSString *str = [<span class="built_in">string</span> <span class="built_in">cop
 <blockquote>
 <p>关于OC的内存管理，其实有一个原则，就是谁创建谁释放，谁使用谁释放。在之前，创建了wower,f对象，于是它们要在外部释放，而我使用了setFound方法来把f对象设置到成员变量中，于是这里就成了wower对象的_found成员变量在使用，于是它有责任在dealloc的时候来把f对象的引用计数减1。</p>
 </blockquote>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript十一之理解内存管理" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/04/复习JavaScript十一之理解内存管理/" class="article-date">
-  	<time datetime="2015-02-04T10:53:09.000Z" itemprop="datePublished">2月 4 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/04/复习JavaScript十一之理解内存管理/">复习JavaScript十一之理解内存管理</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一般来说内存管理主要有这么几种方式，引用计数和标记，而JavaScript采用的就是标记管理的方式。Js的内存管理是自动的，但是并不是说执行完后立马销毁，而是有时间周期性，相隔一段时间执行一下垃圾回收，把没有引用的内存全部销毁。</p>
-<p>OC中采用的是引用计数来手动管理内存，这样的方式比较好，可以让开发者自己来管理。当然也有不好的地方，如果遗忘了释放，很可能引起应用的崩溃。</p>
-<p>总体来看在IE中因为COM组件的原因，可能会发生循环引用的问题，这个问题在引用计数的内存管理都会遇见。所谓的循环引用是指在对象A中包含了一个指向B的指针，然后再对象B中包含一个指向A的指针，于是悲剧了。</p>
-<pre><code>var element = document.getElementById(<span class="string">'doc'</span>);
-var <span class="keyword">my</span> = {};
-<span class="keyword">my</span>.element = element;
-element.<span class="keyword">my</span> = <span class="keyword">my</span>;
-</code></pre><p>大家都引用，于是，可想而知。要避免这种问题，一定要在不使用的时候my.element = null，把它断开。</p>
-<p>那么，其他浏览器呢？还是标记清理的机制，比如一个函数的变量，在进入环境时标记上“进入环境”，执行完之后标记上“离开环境”，然后等待系统来释放。</p>
-<p>IE有一个手动释放的方法，window.CollectGarbage，调用它就立马释放已经标记离开环境的变量，不过很多文章都不建议这样做。</p>
-<p>那么一般都这样做，引用类型的释放</p>
-<pre><code><span class="keyword">var</span> my = {};
-<span class="comment">//使用完毕之后</span>
-my = <span class="literal">null</span>;
-</code></pre><p>让my脱离执行环境，标记上已经离开环境，然后等待系统执行垃圾回收，释放内存。</p>
 
       
     </div>

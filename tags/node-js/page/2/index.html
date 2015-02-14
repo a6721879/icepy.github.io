@@ -168,6 +168,83 @@
 </nav>
       
   
+    <article id="post-复习JavaScript八之操作XML" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/02/复习JavaScript八之操作XML/" class="article-date">
+  	<time datetime="2015-02-02T09:50:14.000Z" itemprop="datePublished">2月 2 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/02/复习JavaScript八之操作XML/">复习JavaScript八之操作XML</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在以前XML是存储和传输数据的事实标准（客户端没有出现JSON之前），那个时候浏览器还不支持解析XML，于是很多开发者需要自己写一个XML解析器。原理，就是把XML也转化成DOM文档，然后通过DOM API来获取。</p>
+<p>而现在，在客户端（浏览器）编程中几乎很少会使用到XML，数据的交换都应用在JSON上了，了解这个有一个好处，就是在做服务端编程，比如SAOP协议时就会用到，还有桌面的客户端，或者是移动客户端上，比如iOS，它把一些数据，比如NSArray写入到本地，实际上就是一个XML文本，当然在代码层面上，是看不出来有解析的，如果读取这个文件，是直接转成NSArray对象的。</p>
+<blockquote>
+<p>IE有它自己的实现对XML的支持，下面说的两个类型，在IE中都不支持</p>
+</blockquote>
+<p>将XML字符串序列化成DOM文档，主要是使用DOMparser类来实现，其他的用法跟获取DOM节点一样。</p>
+<pre><code><span class="keyword">var</span> parser = <span class="keyword">new</span> DOMparser();
+<span class="keyword">var</span> xmlDomObject = parser.parserFromString(<span class="string">'&lt;root&gt;&lt;child/&gt;&lt;/root&gt;'</span>,<span class="string">'text/xml'</span>);
+
+xmlDomObject.getElementsByTagName(<span class="string">'child'</span>);
+</code></pre><p>将DOM文档反序列化成XML字符串，主要是使用XMLSerializer类型，使用上述的xmlDomObject对象。</p>
+<pre><code><span class="built_in">var</span> serializer <span class="subst">=</span> <span class="literal">new</span> XMLSerializer();
+<span class="built_in">var</span> <span class="built_in">xml</span> <span class="subst">=</span> serializer<span class="built_in">.</span>serializeToString(xmlDomObject);
+</code></pre><p>如果XML解析有错误都会返回一个parsererror标签，获取的时候就可以判断是否有这个标签来决定解析是否有错误。</p>
+<p>据说DOM3版本的XML操作只有一个浏览器实现了，所以当资料了解就好。</p>
+<h3 id="IE版本">IE版本</h3>
+<blockquote>
+<p>IE版本的XML解析主要是使用它的ActiveXObject类型来实现</p>
+</blockquote>
+<p>在IE中想要解析XML就必须先创建一个空的DOM文档，然后通过这个文档来获取。</p>
+<pre><code>var xmldom = createDocument();
+xmldom.loadXML(<span class="comment">'<span class="xmlDocTag">&lt;root&gt;</span><span class="xmlDocTag">&lt;child/&gt;</span><span class="xmlDocTag">&lt;/root&gt;</span>');</span>
+
+xmldom.getElementsByTagName(<span class="comment">'child');</span>
+</code></pre><p>如果解析有错误，可以检查parseError对象。</p>
+<pre><code><span class="keyword">if</span>(xmldom.parseError !== <span class="number">0</span>){
+    //<span class="keyword">do</span> 
+}
+</code></pre><p>在IE中进行序列化非常的方便，因为它都内置在了DOM文档中，每一个DOM节点都有一个xml属性，它就保存着XML字符串。</p>
+<pre><code>xmldom<span class="built_in">.</span><span class="built_in">xml</span>
+</code></pre><p>最后IE还提供了一个可以加载远程XML文件的方法load，它就接收一个参数，远程XML的URL地址。当然，也可以使用async属性来设置同步还是异步，默认是异步（true）。</p>
+<pre><code><span class="keyword">var</span> xmldom = createDocument();
+xmldom.<span class="keyword">async</span> = <span class="keyword">false</span>;
+xmldom.load(<span class="string">'http://xxx.sss.xml'</span>);
+</code></pre><p>如果是异步还要监听一下onreadystatechange事件，判断readystate状态，这个跟Ajax的使用是一样的。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-复习JavaScript七之DOM" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -630,81 +707,9 @@ Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="keywo
 
 
   
-    <article id="post-复习JavaScript三之BOM" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/24/复习JavaScript三之BOM/" class="article-date">
-  	<time datetime="2015-01-24T14:14:04.000Z" itemprop="datePublished">1月 24 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/24/复习JavaScript三之BOM/">复习JavaScript三之BOM</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>BOM提供了很多对象，它的核心是window，表示它是浏览器的一个实例，在ECMAScript中又是Global对象。它提供了很多访问浏览器的功能，这些功能与网页无关，所以缺少事实标准的BOM既有意思又有些坑。复习它，主要是复习几个比较有用的对象，其他可以了解一二。</p>
-<h3 id="location">location</h3>
-<blockquote>
-<p>算起来它是我用的最多的一个对象</p>
-</blockquote>
-<p>它提供了当前窗口加载的页面有关的信息，也对URL进行了片段分解，既是window的属性，也是document的属性。</p>
-<ul>
-<li>hash 返回URL的散列（#号后面跟着的零个或多个值）</li>
-<li>host 返回服务器名称和端口号</li>
-<li>hostname 返回不带端口号的服务器名称</li>
-<li>href 返回当前加载页面的完整URL</li>
-<li>pathname 返回URL中的目录或文件名</li>
-<li>port 返回URL中指定的端口号</li>
-<li>protocol 返回页面使用的协议</li>
-<li>search 返回URL中的查询字符串，它以问好（?）开头</li>
-</ul>
-<p>上述的属性基本上都可以直接使用，search除外，它返回的是一个完整的查询字符串，没有办法访问其中的每个查询字符串参数，还需要额外的进行处理。</p>
-<p>一般来说根据它的特点，?开头&amp;拼接，key=value的形式来展现，最好是key和value都要decodeURIComponent一下。</p>
-<p>在location中除了上述的属性外，还有一些比较有用的方法和技巧，主要是用来控制页面跳转的问题。</p>
-<ul>
-<li>assign方法接收一个参数，表示立即打开一个新的页面并在历史纪录中生成一条记录，它的效果等同于window.location.href = ‘’或者location.href = ‘’</li>
-<li>修改location对象的属性比如href，hash，search等也可以来改变URL</li>
-<li>replace方法接收一个参数，既跳转到新的URL上，并且不会在历史纪录中增加一条新的纪录</li>
-<li>reload表示重新加载当前页面</li>
-</ul>
-
-        
-          <p class="article-more-link">
-            <a href="/2015/01/24/复习JavaScript三之BOM/#more">more >></a>
-          </p>
-        
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/tags/node-js/">&laquo; Prev</a><a class="page-number" href="/tags/node-js/">1</a><span class="page-number current">2</span><a class="page-number" href="/tags/node-js/page/3/">3</a><a class="extend next" rel="next" href="/tags/node-js/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/tags/node-js/">&laquo; Prev</a><a class="page-number" href="/tags/node-js/">1</a><span class="page-number current">2</span><a class="page-number" href="/tags/node-js/page/3/">3</a><a class="page-number" href="/tags/node-js/page/4/">4</a><a class="extend next" rel="next" href="/tags/node-js/page/3/">Next &raquo;</a>
     </nav>
   
 
