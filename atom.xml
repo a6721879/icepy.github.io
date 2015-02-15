@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-02-14T15:32:09.262Z</updated>
+  <updated>2015-02-15T08:46:17.246Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -13,6 +13,123 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[每天zepto源代码学习片段二之初始化]]></title>
+    <link href="http://lcepy.github.io/2015/02/15/%E6%AF%8F%E5%A4%A9zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%89%87%E6%AE%B5%E4%BA%8C%E4%B9%8B%E5%88%9D%E5%A7%8B%E5%8C%96/"/>
+    <id>http://lcepy.github.io/2015/02/15/每天zepto源代码学习片段二之初始化/</id>
+    <published>2015-02-15T06:11:30.000Z</published>
+    <updated>2015-02-15T08:42:43.000Z</updated>
+    <content type="html"><![CDATA[<p>基本上是个人都知道在使用zepto时，是$符号来获取元素对象，如果是空会返回一个数组。从源代码上面来看，是这样的。</p>
+<pre><code>$ = <span class="function"><span class="keyword">function</span><span class="params">(selector, context)</span></span>{
+    <span class="keyword">return</span> zepto.init(selector, context)
+  }
+</code></pre><p>可以传入两个参数，一个selector，一个context，在这个函数内部会调用zepto.init方法。</p>
+<pre><code>zepto.init = <span class="function"><span class="keyword">function</span><span class="params">(selector, context)</span> </span>{
+<span class="keyword">var</span> dom
+<span class="comment">// If nothing given, return an empty Zepto collection</span>
+<span class="keyword">if</span> (!selector) <span class="keyword">return</span> zepto.Z()
+<span class="comment">// Optimize for string selectors</span>
+<span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> selector == <span class="string">'string'</span>) {
+  selector = selector.trim()
+  <span class="comment">// If it's a html fragment, create nodes from it</span>
+  <span class="comment">// Note: In both Chrome 21 and Firefox 15, DOM error 12</span>
+  <span class="comment">// is thrown if the fragment doesn't begin with &lt;</span>
+  <span class="keyword">if</span> (selector[<span class="number">0</span>] == <span class="string">'&lt;'</span> &amp;&amp; fragmentRE.test(selector))
+    dom = zepto.fragment(selector, <span class="built_in">RegExp</span>.$<span class="number">1</span>, context), selector = <span class="literal">null</span>
+  <span class="comment">// If there's a context, create a collection on that context first, and select</span>
+  <span class="comment">// nodes from there</span>
+  <span class="keyword">else</span> <span class="keyword">if</span> (context !== <span class="literal">undefined</span>) <span class="keyword">return</span> $(context).find(selector)
+  <span class="comment">// If it's a CSS selector, use it to select nodes.</span>
+  <span class="keyword">else</span> dom = zepto.qsa(<span class="built_in">document</span>, selector)
+}
+<span class="comment">// If a function is given, call it when the DOM is ready</span>
+<span class="keyword">else</span> <span class="keyword">if</span> (isFunction(selector)) <span class="keyword">return</span> $(<span class="built_in">document</span>).ready(selector)
+<span class="comment">// If a Zepto collection is given, just return it</span>
+<span class="keyword">else</span> <span class="keyword">if</span> (zepto.isZ(selector)) <span class="keyword">return</span> selector
+<span class="keyword">else</span> {
+  <span class="comment">// normalize array if an array of nodes is given</span>
+  <span class="keyword">if</span> (isArray(selector)) dom = compact(selector)
+  <span class="comment">// Wrap DOM nodes.```</span>
+  <span class="keyword">else</span> <span class="keyword">if</span> (isObject(selector))
+    dom = [selector], selector = <span class="literal">null</span>
+  <span class="comment">// If it's a html fragment, create nodes from it</span>
+  <span class="keyword">else</span> <span class="keyword">if</span> (fragmentRE.test(selector))
+    dom = zepto.fragment(selector.trim(), <span class="built_in">RegExp</span>.$<span class="number">1</span>, context), selector = <span class="literal">null</span>
+  <span class="comment">// If there's a context, create a collection on that context first, and select</span>
+  <span class="comment">// nodes from there</span>
+  <span class="keyword">else</span> <span class="keyword">if</span> (context !== <span class="literal">undefined</span>) <span class="keyword">return</span> $(context).find(selector)
+  <span class="comment">// And last but no least, if it's a CSS selector, use it to select nodes.</span>
+  <span class="keyword">else</span> dom = zepto.qsa(<span class="built_in">document</span>, selector)
+}
+<span class="comment">// create a new Zepto collection from the nodes found</span>
+<span class="keyword">return</span> zepto.Z(dom, selector)
+
+  }
+
+zepto.Z = <span class="function"><span class="keyword">function</span><span class="params">(dom, selector)</span> </span>{
+    dom = dom || []
+    dom.__proto__ = $.fn
+    dom.selector = selector || <span class="string">''</span>
+    <span class="keyword">return</span> dom
+  }
+</code></pre><p>如果什么都不传入，它在init内部会调用Z，并且返回一个空的数组，这个数组的原型会指向$.fn，$.fn是一个字面量的对象，全部是zepto的一些其他方法。</p>
+<p>如果context有值，它会指定一个上下文，也就是范围$(context).find(selector)，如果context没有值，则会对selector的值进行检索，如果selector是一个标签字符串，则调用zepto.fragment方法来获取dom对象。如果selector不是标签字符串，则调用zepto.qsa方法，得到DOM对象，在qsa方法中会检查#，.也就是id和class，如果id有返回的是从getElementById中获取的dom对象，如果是class则调用数组的slice方法call一下比如querySelectorAll等，在获取dom对象时，就已经进行了装载，最后调用zepto.Z方法，返回这个数组。</p>
+<pre><code>zepto.qsa = <span class="function"><span class="keyword">function</span><span class="params">(element, selector)</span></span>{
+<span class="keyword">var</span> found,
+    maybeID = selector[<span class="number">0</span>] == <span class="string">'#'</span>,
+    maybeClass = !maybeID &amp;&amp; selector[<span class="number">0</span>] == <span class="string">'.'</span>,
+    nameOnly = maybeID || maybeClass ? selector.slice(<span class="number">1</span>) : selector, <span class="comment">// Ensure that a 1 char tag name still gets checked</span>
+    isSimple = simpleSelectorRE.test(nameOnly)
+<span class="keyword">return</span> (isDocument(element) &amp;&amp; isSimple &amp;&amp; maybeID) ?
+  ( (found = element.getElementById(nameOnly)) ? [found] : [] ) :
+  (element.nodeType !== <span class="number">1</span> &amp;&amp; element.nodeType !== <span class="number">9</span>) ? [] :
+  slice.call(
+    isSimple &amp;&amp; !maybeID ?
+      maybeClass ? element.getElementsByClassName(nameOnly) : <span class="comment">// If it's simple, it could be a class</span>
+      element.getElementsByTagName(selector) : <span class="comment">// Or a tag</span>
+      element.querySelectorAll(selector) <span class="comment">// Or it's not simple, and we need to query all</span>
+  )
+  }
+
+  zepto.fragment = <span class="function"><span class="keyword">function</span><span class="params">(html, name, properties)</span> </span>{
+<span class="keyword">var</span> dom, nodes, container
+
+<span class="comment">// A special case optimization for a single tag</span>
+<span class="keyword">if</span> (singleTagRE.test(html)) dom = $(<span class="built_in">document</span>.createElement(<span class="built_in">RegExp</span>.$<span class="number">1</span>))
+
+<span class="keyword">if</span> (!dom) {
+  <span class="keyword">if</span> (html.replace) html = html.replace(tagExpanderRE, <span class="string">"&lt;$1&gt;&lt;/$2&gt;"</span>)
+  <span class="keyword">if</span> (name === <span class="literal">undefined</span>) name = fragmentRE.test(html) &amp;&amp; <span class="built_in">RegExp</span>.$<span class="number">1</span>
+  <span class="keyword">if</span> (!(name <span class="keyword">in</span> containers)) name = <span class="string">'*'</span>
+
+  container = containers[name]
+  container.innerHTML = <span class="string">''</span> + html
+  dom = $.each(slice.call(container.childNodes), <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    container.removeChild(<span class="keyword">this</span>)
+  })
+}
+
+<span class="keyword">if</span> (isPlainObject(properties)) {
+  nodes = $(dom)
+  $.each(properties, <span class="function"><span class="keyword">function</span><span class="params">(key, value)</span> </span>{
+    <span class="keyword">if</span> (methodAttributes.indexOf(key) &gt; -<span class="number">1</span>) nodes[key](value)
+    <span class="keyword">else</span> nodes.attr(key, value)
+  })
+}
+
+<span class="keyword">return</span> dom
+  }
+</code></pre><p>其实这个数组，就是我们使用到的真正的东西了，在Z方法内部，主要就是两个动作，把dom的原型指向$.fn，把dom的selector属性指向selector，这样就可以使用到zepto中的其他可以使用的方法了。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>基本上是个人都知道在使用zepto时，是$符号来获取元素对象，如果是空会返回一个数组。从源代码上面来看，是这样的。</p>
+<pre><code>$ = <span class="function"><span class="keyword">function</span>]]>
+    </summary>
+    
+      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[每天zepto源代码学习片段一之Js类型函数库]]></title>
@@ -1653,43 +1770,6 @@ iframe.onload = <span class="function"><span class="keyword">function</span><spa
 </ul>
 ]]>
     
-    </summary>
-    
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[this与prototype的区别]]></title>
-    <link href="http://lcepy.github.io/2015/01/05/this%E4%B8%8Eprototype%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
-    <id>http://lcepy.github.io/2015/01/05/this与prototype的区别/</id>
-    <published>2015-01-05T11:15:53.000Z</published>
-    <updated>2015-01-05T12:08:36.000Z</updated>
-    <content type="html"><![CDATA[<ul>
-<li>this可以访问私有成员（用var声明的变量）私有方法（直接function或者内部），prototype无法访问</li>
-<li>Js首先查找自身的静态属性，方法，再查找上下文中可以访问的属性或方法，最后才查找prototype，谁先谁优先</li>
-<li>prototype比this要节约分配的空间，因为prototype有一个指向父类的指向，而this，每次实例化时都要分配存储空间</li>
-</ul>
-<pre><code>    <span class="keyword">var</span> Copy = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        <span class="keyword">var</span> d = <span class="string">"123"</span>;
-        <span class="keyword">this</span>._log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-            <span class="built_in">console</span>.log(d);
-        }
-        <span class="keyword">this</span>.log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-            <span class="built_in">console</span>.log(<span class="string">'yes'</span>);
-        }
-    }
-    Copy.prototype.log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        <span class="built_in">console</span>.log(<span class="string">'no'</span>);
-    }
-    <span class="keyword">var</span> c = <span class="keyword">new</span> Copy();
-    c.log();
-</code></pre>]]></content>
-    <summary type="html">
-    <![CDATA[<ul>
-<li>this可以访问私有成员（用var声明的变量）私有方法（直接function或者内部），prototype无法访问</li>
-<li>Js首先查找自身的静态属性，方法，再查找上下文中可以访问的属性或方法，最后才查找prototype，谁先谁优先</li>
-<li]]>
     </summary>
     
       <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>

@@ -168,6 +168,149 @@
 </nav>
       
   
+    <article id="post-每天zepto源代码学习片段二之初始化" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/15/每天zepto源代码学习片段二之初始化/" class="article-date">
+  	<time datetime="2015-02-15T06:11:30.000Z" itemprop="datePublished">2月 15 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/15/每天zepto源代码学习片段二之初始化/">每天zepto源代码学习片段二之初始化</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>基本上是个人都知道在使用zepto时，是$符号来获取元素对象，如果是空会返回一个数组。从源代码上面来看，是这样的。</p>
+<pre><code>$ = <span class="function"><span class="keyword">function</span><span class="params">(selector, context)</span></span>{
+    <span class="keyword">return</span> zepto.init(selector, context)
+  }
+</code></pre><p>可以传入两个参数，一个selector，一个context，在这个函数内部会调用zepto.init方法。</p>
+<pre><code>zepto.init = <span class="function"><span class="keyword">function</span><span class="params">(selector, context)</span> </span>{
+<span class="keyword">var</span> dom
+<span class="comment">// If nothing given, return an empty Zepto collection</span>
+<span class="keyword">if</span> (!selector) <span class="keyword">return</span> zepto.Z()
+<span class="comment">// Optimize for string selectors</span>
+<span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> selector == <span class="string">'string'</span>) {
+  selector = selector.trim()
+  <span class="comment">// If it's a html fragment, create nodes from it</span>
+  <span class="comment">// Note: In both Chrome 21 and Firefox 15, DOM error 12</span>
+  <span class="comment">// is thrown if the fragment doesn't begin with &lt;</span>
+  <span class="keyword">if</span> (selector[<span class="number">0</span>] == <span class="string">'&lt;'</span> &amp;&amp; fragmentRE.test(selector))
+    dom = zepto.fragment(selector, <span class="built_in">RegExp</span>.$<span class="number">1</span>, context), selector = <span class="literal">null</span>
+  <span class="comment">// If there's a context, create a collection on that context first, and select</span>
+  <span class="comment">// nodes from there</span>
+  <span class="keyword">else</span> <span class="keyword">if</span> (context !== <span class="literal">undefined</span>) <span class="keyword">return</span> $(context).find(selector)
+  <span class="comment">// If it's a CSS selector, use it to select nodes.</span>
+  <span class="keyword">else</span> dom = zepto.qsa(<span class="built_in">document</span>, selector)
+}
+<span class="comment">// If a function is given, call it when the DOM is ready</span>
+<span class="keyword">else</span> <span class="keyword">if</span> (isFunction(selector)) <span class="keyword">return</span> $(<span class="built_in">document</span>).ready(selector)
+<span class="comment">// If a Zepto collection is given, just return it</span>
+<span class="keyword">else</span> <span class="keyword">if</span> (zepto.isZ(selector)) <span class="keyword">return</span> selector
+<span class="keyword">else</span> {
+  <span class="comment">// normalize array if an array of nodes is given</span>
+  <span class="keyword">if</span> (isArray(selector)) dom = compact(selector)
+  <span class="comment">// Wrap DOM nodes.```</span>
+  <span class="keyword">else</span> <span class="keyword">if</span> (isObject(selector))
+    dom = [selector], selector = <span class="literal">null</span>
+  <span class="comment">// If it's a html fragment, create nodes from it</span>
+  <span class="keyword">else</span> <span class="keyword">if</span> (fragmentRE.test(selector))
+    dom = zepto.fragment(selector.trim(), <span class="built_in">RegExp</span>.$<span class="number">1</span>, context), selector = <span class="literal">null</span>
+  <span class="comment">// If there's a context, create a collection on that context first, and select</span>
+  <span class="comment">// nodes from there</span>
+  <span class="keyword">else</span> <span class="keyword">if</span> (context !== <span class="literal">undefined</span>) <span class="keyword">return</span> $(context).find(selector)
+  <span class="comment">// And last but no least, if it's a CSS selector, use it to select nodes.</span>
+  <span class="keyword">else</span> dom = zepto.qsa(<span class="built_in">document</span>, selector)
+}
+<span class="comment">// create a new Zepto collection from the nodes found</span>
+<span class="keyword">return</span> zepto.Z(dom, selector)
+
+  }
+
+zepto.Z = <span class="function"><span class="keyword">function</span><span class="params">(dom, selector)</span> </span>{
+    dom = dom || []
+    dom.__proto__ = $.fn
+    dom.selector = selector || <span class="string">''</span>
+    <span class="keyword">return</span> dom
+  }
+</code></pre><p>如果什么都不传入，它在init内部会调用Z，并且返回一个空的数组，这个数组的原型会指向$.fn，$.fn是一个字面量的对象，全部是zepto的一些其他方法。</p>
+<p>如果context有值，它会指定一个上下文，也就是范围$(context).find(selector)，如果context没有值，则会对selector的值进行检索，如果selector是一个标签字符串，则调用zepto.fragment方法来获取dom对象。如果selector不是标签字符串，则调用zepto.qsa方法，得到DOM对象，在qsa方法中会检查#，.也就是id和class，如果id有返回的是从getElementById中获取的dom对象，如果是class则调用数组的slice方法call一下比如querySelectorAll等，在获取dom对象时，就已经进行了装载，最后调用zepto.Z方法，返回这个数组。</p>
+<pre><code>zepto.qsa = <span class="function"><span class="keyword">function</span><span class="params">(element, selector)</span></span>{
+<span class="keyword">var</span> found,
+    maybeID = selector[<span class="number">0</span>] == <span class="string">'#'</span>,
+    maybeClass = !maybeID &amp;&amp; selector[<span class="number">0</span>] == <span class="string">'.'</span>,
+    nameOnly = maybeID || maybeClass ? selector.slice(<span class="number">1</span>) : selector, <span class="comment">// Ensure that a 1 char tag name still gets checked</span>
+    isSimple = simpleSelectorRE.test(nameOnly)
+<span class="keyword">return</span> (isDocument(element) &amp;&amp; isSimple &amp;&amp; maybeID) ?
+  ( (found = element.getElementById(nameOnly)) ? [found] : [] ) :
+  (element.nodeType !== <span class="number">1</span> &amp;&amp; element.nodeType !== <span class="number">9</span>) ? [] :
+  slice.call(
+    isSimple &amp;&amp; !maybeID ?
+      maybeClass ? element.getElementsByClassName(nameOnly) : <span class="comment">// If it's simple, it could be a class</span>
+      element.getElementsByTagName(selector) : <span class="comment">// Or a tag</span>
+      element.querySelectorAll(selector) <span class="comment">// Or it's not simple, and we need to query all</span>
+  )
+  }
+
+  zepto.fragment = <span class="function"><span class="keyword">function</span><span class="params">(html, name, properties)</span> </span>{
+<span class="keyword">var</span> dom, nodes, container
+
+<span class="comment">// A special case optimization for a single tag</span>
+<span class="keyword">if</span> (singleTagRE.test(html)) dom = $(<span class="built_in">document</span>.createElement(<span class="built_in">RegExp</span>.$<span class="number">1</span>))
+
+<span class="keyword">if</span> (!dom) {
+  <span class="keyword">if</span> (html.replace) html = html.replace(tagExpanderRE, <span class="string">"&lt;$1&gt;&lt;/$2&gt;"</span>)
+  <span class="keyword">if</span> (name === <span class="literal">undefined</span>) name = fragmentRE.test(html) &amp;&amp; <span class="built_in">RegExp</span>.$<span class="number">1</span>
+  <span class="keyword">if</span> (!(name <span class="keyword">in</span> containers)) name = <span class="string">'*'</span>
+
+  container = containers[name]
+  container.innerHTML = <span class="string">''</span> + html
+  dom = $.each(slice.call(container.childNodes), <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    container.removeChild(<span class="keyword">this</span>)
+  })
+}
+
+<span class="keyword">if</span> (isPlainObject(properties)) {
+  nodes = $(dom)
+  $.each(properties, <span class="function"><span class="keyword">function</span><span class="params">(key, value)</span> </span>{
+    <span class="keyword">if</span> (methodAttributes.indexOf(key) &gt; -<span class="number">1</span>) nodes[key](value)
+    <span class="keyword">else</span> nodes.attr(key, value)
+  })
+}
+
+<span class="keyword">return</span> dom
+  }
+</code></pre><p>其实这个数组，就是我们使用到的真正的东西了，在Z方法内部，主要就是两个动作，把dom的原型指向$.fn，把dom的selector属性指向selector，这样就可以使用到zepto中的其他可以使用的方法了。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-每天zepto源代码学习片段一之Js类型函数库" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -468,156 +611,9 @@ NSString *str = [<span class="built_in">string</span> <span class="built_in">cop
 
 
   
-    <article id="post-iOS的内存管理" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/04/iOS的内存管理/" class="article-date">
-  	<time datetime="2015-02-04T15:00:33.000Z" itemprop="datePublished">2月 4 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/04/iOS的内存管理/">iOS的内存管理</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在iOS开发中使用的是引用计数的方式来管理内存，也就是跟踪记录每个值被引用的次数。当声明一个变量来接收一个指针对象，引用次数就＋1，如果指针对象被添加到数组，字典，或者被其他指针对象所使用又＋1.如果使用完毕之后对它进行－1，一直到0，系统会立马释放这段内存。</p>
-<blockquote>
-<p>如果开启了ARC机制，编译器会帮助我们在代码中添加上内存管理的代码，而且在Xcode中比如retain这些都是不可以使用的</p>
-</blockquote>
-<p>在OC中可以使用retainCount来查看指针对象的引用次数。</p>
-<pre><code><span class="variable">Wower</span> *wower = [[<span class="variable">Wower</span> alloc] init<span class="variable">WithName</span>:@<span class="string">"lcepy"</span> <span class="keyword">and</span><span class="variable">T</span>:@<span class="string">"魔兽世界"</span>];
-<span class="variable">NSLog</span>(@<span class="string">"%zi"</span>,[wower retain<span class="variable">Count</span>]);
-</code></pre><p>一般来说如果在代码中使用了alloc，copy，retain，引用计数都是加一，而release则是引用计数减一，又比如把指针对象添加到数组，字典，内部的引用计数也会加一，但是这个的话，系统是会来管理的。又比如一些静态方法，也会由系统来管理，内部是会加一的。还有一种叫做自动释放池的玩意，autorelease，它的功能是整个执行过程结束，系统来管理释放的工作。</p>
-<p>一般来说基本类型的数据也就是C语言的如int这样的，直接赋值即可不用管理，在iOS中主要是对OC指针对象进行内存管理。在使用@property的时候，根据参数retain，copy，编译器会帮助我们生成getter，setter方法，而且还会帮助我们进行一下内存管理，比如：</p>
-<pre><code><span class="pp">-<span class="params">(void)</span>setterFound:<span class="params">(<span class="variable">Found</span> *)</span>found
-{
-    if <span class="params">(<span class="variable">_</span>found != found)</span> {
-        [_found release];
-        _found = found;
-        [_found retain];
-    }
-}</span>
-</code></pre><p>有一点要注意的是如果是retain，copy一般来说接收的都是OC对象，基本类型可以用assign。</p>
-<p>实例：</p>
-<pre><code><span class="comment">//.h文件</span>
-<span class="class"><span class="keyword">@interface</span> <span class="title">Found</span> : <span class="title">NSObject</span></span>
-
-<span class="keyword">@end</span>
-
-
-<span class="class"><span class="keyword">@interface</span> <span class="title">Wower</span> : <span class="title">NSObject</span></span>
-{
-    Found *_found;
-}
-
-<span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *name;
-<span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *game;
-
--(<span class="keyword">id</span>)initWithName:(<span class="built_in">NSString</span> *)name andT:(<span class="built_in">NSString</span> *)game;
--(<span class="keyword">void</span>)setterFound:(Found *)found;
-
-<span class="keyword">@end</span>
-<span class="comment">//.m文件</span>
-<span class="class"><span class="keyword">@implementation</span> <span class="title">Wower</span></span>
-
--(<span class="keyword">id</span>)initWithName:(<span class="built_in">NSString</span> *)name andT:(<span class="built_in">NSString</span> *)game
-{
-    <span class="keyword">self</span> = [<span class="keyword">super</span> init];
-    <span class="keyword">if</span> (<span class="keyword">self</span>) {
-        _name = name;
-        _game = game;
-    }
-    <span class="keyword">return</span> <span class="keyword">self</span>;
-}
-
-
--(<span class="keyword">void</span>)dealloc
-{
-
-    <span class="built_in">NSLog</span>(<span class="string">@"Found的引用计数%zi"</span>,[_found retainCount]);
-    [_found release];
-    <span class="built_in">NSLog</span>(<span class="string">@"Found的引用计数%zi"</span>,[_found retainCount]);
-    [<span class="keyword">super</span> dealloc];
-
-}
-
--(<span class="keyword">void</span>)showMessage
-{
-
-    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,_name);
-    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,_game);
-}
-
--(<span class="keyword">void</span>)setterFound:(Found *)found
-{
-    <span class="keyword">if</span> (_found != found) {
-        [_found release];
-        _found = found;
-        [_found retain];
-    }
-}
-<span class="keyword">@end</span>
-
-<span class="class"><span class="keyword">@implementation</span> <span class="title">Found</span></span>
-
--(<span class="keyword">void</span>)dealloc
-{
-    [<span class="keyword">super</span> dealloc];
-    <span class="built_in">NSLog</span>(<span class="string">@"释放"</span>);
-}
-
-<span class="keyword">@end</span>
-
-<span class="comment">//main文件</span>
-
-<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {
-    <span class="keyword">@autoreleasepool</span> {
-        Wower *wower = [[Wower alloc] initWithName:<span class="string">@"lcepy"</span> andT:<span class="string">@"魔兽世界"</span>];
-        <span class="built_in">NSLog</span>(<span class="string">@"%zi"</span>,[wower retainCount]);
-        Found *f = [[Found alloc] init];
-        [wower setterFound:f];
-        [wower release];
-        [f release];
-    }
-    <span class="keyword">return</span> <span class="number">0</span>;
-}
-</code></pre><p>dealloc是OC对象释放之后，系统会自动调用，这里一般都是来释放一些其他对象。在Wower类的dealloc中只释放了_found，而copy的那个却没有释放，那是因为@””快速创建的，一般来说这些都不需要自己来管理而是系统。</p>
-<blockquote>
-<p>关于OC的内存管理，其实有一个原则，就是谁创建谁释放，谁使用谁释放。在之前，创建了wower,f对象，于是它们要在外部释放，而我使用了setFound方法来把f对象设置到成员变量中，于是这里就成了wower对象的_found成员变量在使用，于是它有责任在dealloc的时候来把f对象的引用计数减1。</p>
-</blockquote>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/2015/02/page/2/">2</a><a class="extend next" rel="next" href="/archives/2015/02/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/archives/2015/02/page/2/">2</a><a class="page-number" href="/archives/2015/02/page/3/">3</a><a class="extend next" rel="next" href="/archives/2015/02/page/2/">Next &raquo;</a>
     </nav>
   
 
