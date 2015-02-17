@@ -168,6 +168,193 @@
 </nav>
       
   
+    <article id="post-每天zepto源代码学习片段四之each" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/17/每天zepto源代码学习片段四之each/" class="article-date">
+  	<time datetime="2015-02-17T09:41:49.000Z" itemprop="datePublished">2月 17 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/17/每天zepto源代码学习片段四之each/">每天zepto源代码学习片段四之each</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>each顾名思义是用来遍历的</p>
+<pre><code>$.each = <span class="function"><span class="keyword">function</span><span class="params">(elements, callback)</span></span>{
+<span class="keyword">var</span> i, key
+<span class="keyword">if</span> (likeArray(elements)) {
+  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; elements.length; i++)
+    <span class="comment">//函数的默认返回值是undefined ，那么什么情况下会成 false  ?</span>
+    <span class="keyword">if</span> (<span class="keyword">callback</span>.call(elements[i], i, elements[i]) === <span class="literal">false</span>) <span class="keyword">return</span> elements
+} <span class="keyword">else</span> {
+  <span class="keyword">for</span> (key <span class="keyword">in</span> elements)
+    <span class="keyword">if</span> (<span class="keyword">callback</span>.call(elements[key], key, elements[key]) === <span class="literal">false</span>) <span class="keyword">return</span> elements
+}
+
+<span class="keyword">return</span> elements
+  } 
+</code></pre><p>唯一有个问题，看看有其他朋友知晓不，什么情况下callback.call会等于false？按道理来说，如果检查typeof callback === ‘function’，这样的情况，我认为可以理解。毕竟函数的默认返回值就是undefined，但是它也不是“强类型”相等的，所以我不明白它的意义何在？</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-每天zepto源代码学习片段三之map" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/16/每天zepto源代码学习片段三之map/" class="article-date">
+  	<time datetime="2015-02-16T13:57:58.000Z" itemprop="datePublished">2月 16 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/16/每天zepto源代码学习片段三之map/">每天zepto源代码学习片段三之map</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在学习map函数之前，先学习几个比较有用的方法，比如判断一个对象是否是空对象，给字符串两边去空白等。判断空对象，主要是利用了in语法，它可以遍历对象的属性，如果是空对象for循环会直接跳过。</p>
+<pre><code>$.isEmptyObject = <span class="function"><span class="keyword">function</span><span class="params">(obj)</span> </span>{
+    <span class="keyword">var</span> name
+    <span class="keyword">for</span> (name <span class="keyword">in</span> obj) <span class="keyword">return</span> <span class="literal">false</span>
+    <span class="keyword">return</span> <span class="literal">true</span>
+  }
+</code></pre><p>判断一个元素是否在数组中，借用了在最上面申明的一个空数组的indexOf。</p>
+<pre><code>$.inArray = <span class="function"><span class="keyword">function</span><span class="params">(elem, array, i)</span></span>{
+    <span class="keyword">return</span> emptyArray.indexOf.call(array, elem, i)
+  }
+</code></pre><p>给字符串左右两边去空白，这个是借用了String包装对象的trim方法。</p>
+<pre><code>$.trim = <span class="function"><span class="keyword">function</span><span class="params">(str)</span> </span>{
+    <span class="keyword">return</span> str == <span class="literal">null</span> ? <span class="string">""</span> : <span class="built_in">String</span>.prototype.trim.call(str)
+  }
+</code></pre><p>map函数是一个很有意思很有用的函数，它可以帮助开发者进行映射到每一个元素上，新版的数组也提供了map方法，考虑到某些浏览器没有实现这个，所以zepto帮助我们实现了它。</p>
+<pre><code>$.map = <span class="function"><span class="keyword">function</span>(<span class="title">elements</span>, <span class="title">callback</span>){</span>
+var <span class="built_in">value</span>, values = [], i, key
+<span class="keyword">if</span> (likeArray(elements))
+  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; elements.<span class="built_in">length</span>; i++) {
+    <span class="built_in">value</span> = callback(elements[i], i)
+    <span class="keyword">if</span> (<span class="built_in">value</span> != <span class="constant">null</span>) values.push(<span class="built_in">value</span>)
+  }
+<span class="keyword">else</span>
+      <span class="keyword">for</span> (key <span class="operator">in</span> elements) {
+        <span class="built_in">value</span> = callback(elements[key], key)
+        <span class="keyword">if</span> (<span class="built_in">value</span> != <span class="constant">null</span>) values.push(<span class="built_in">value</span>)
+      }
+    <span class="constant">return</span> flatten(values)
+  }
+</code></pre><p>likeArray是判断了下length属性是不是number，如果是，遍历，然后装载到values数组中，如果是对象就用for in，最后的flatten是借用一下concat，copy一个副本出来返回。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-UIViewController的生命周期" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/16/UIViewController的生命周期/" class="article-date">
+  	<time datetime="2015-02-16T13:54:06.000Z" itemprop="datePublished">2月 16 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/16/UIViewController的生命周期/">UIViewController的生命周期</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理。</p>
+<p><strong>呈现视图的顺序</strong></p>
+<p>它内部的顺序是这样的，先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或storyborad，如果这个也没有则走loadView方法，loadView方法系统调用，也可以重载它。当我们重载它时，可以[super loadView] 父类帮助我们创建一个空的view，如果不调用父类，那么就要自己创建一个UIView，并且self.view = UIView。</p>
+<p>如果在调用loadView时不调用父类，也不创建，如果使用self.view的getter method并且view等于nil，会发生自我循环调用。一般情况下，不要在初始化时做view相当的动作。在viewDiload中调用一些网络访问的动作，可以在初始化方法中做一些关于模型数据的准备工作。</p>
+<p>如果覆盖了loadView，则必须创建UIViewController的view属性。如果没有覆盖该方法，UIViewController会默认调用initWithNibName方法来初始化并加载view。</p>
+<p><strong>生命周期</strong></p>
+<p>一般来说我们需要知道应用程序什么时候在屏幕上，什么时候从屏幕上消失，这个就是生命周期了。初始化的方法可以在viewDidLoad，这个方法在生命周期中只会调用一次，当然不要忘记了调用它的父类的viewDidLoad方法，[super viewDidLoad]。在调用这个方法时，实际上视图并没有在屏幕上确定下来，于是一般来说，如果视图的几何操作，不要放在这个方法中执行。</p>
+<p>viewWillAppear，这个方法会被多次调用，一般来说一次性的初始化不要放在这个方法中实现，但是如果是基于模型的动态初始化，可以放置在这个方法中实现。这个方法会在视图即将要在屏幕上呈现之前调用。</p>
+<p>当视图从屏幕上消失时，也会得到通知，viewWillDisappear方法。这个方法是在视图将要从屏幕消失之前调用。</p>
+<p>viewDidAppear视图已经呈现在屏幕上调用 viewDidDisappear视图已经从屏幕上消失调用。</p>
+<p>viewWillLayoutSubviews  viewDidLayoutSubviews 这两个方法可以在，比如从竖屏到横屏，系统会自动元素的位置，第一个方法是在移动之前调用，第二个方法是在移动完成之后调用，需要设置Autorotation属性。</p>
+<p>didReceiveMemoryWarning 当内存不足时，系统会调用这个方法，发送警告。 </p>
+<h2 id="顺序">顺序</h2>
+<p>viewDidLoad -&gt; viewWillAppear -&gt; viewDidAppear -&gt; viewWillDisappear -&gt; viewDidDisappear</p>
+<p>关于layout的顺序</p>
+<p>viewWillLayoutSubviews -&gt; viewDidLayoutSubviews</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-每天zepto源代码学习片段二之初始化" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -363,242 +550,6 @@ class2type[ <span class="string">"[object "</span> + name + <span class="string"
  <span class="keyword">return</span> isObject(obj) &amp;&amp; !isWindow(obj) &amp;&amp; <span class="built_in">Object</span>.getPrototypeOf(obj) == <span class="built_in">Object</span>.prototype
 }
 </code></pre>
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-理解UITableView" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/06/理解UITableView/" class="article-date">
-  	<time datetime="2015-02-06T13:06:07.000Z" itemprop="datePublished">2月 6 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/06/理解UITableView/">理解UITableView</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>UITableView是在iOS开发中使用非常频繁的一个控件，比如QQ的消息人列表，淘宝的商品，微信等等都会使用到它，对于它的理解有一个前提，那就是要理解iOS MVC的设计思路。</p>
-<p>创建一个UITableView可以使用代码的方式，也可以使用xib或者storyboard。</p>
-<pre><code><span class="built_in">UITableView</span> *tableView = [[<span class="built_in">UITableView</span> alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
-</code></pre><p>在MVC的设计思想中控制器控制着要从模型中拿数据，然后把数据装载给视图。在UITableView中模型主要是实现在UITableViewDataSource数据源中，也就是UITableView有几行，分组么，然后每一行装载什么？数据源的目的就是想问开发者这些问题。</p>
-<pre><code><span class="pp">-<span class="params">(<span class="variable">NSInteger</span>)</span>numberOfSectionsInTableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView
-{
-
-}</span>
-</code></pre><p>这个方法如果存在有分组，系统就会询问，有几个分组？如果不是分组的，可以不实现这个方法，系统默认是1。</p>
-<p>有了分组之后，然后系统会询问会有几行？</p>
-<pre><code><span class="pp">-<span class="params">(<span class="variable">NSInteger</span>)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView numberOfRowsInSection:<span class="params">(<span class="variable">NSInteger</span>)</span>section
-{
-
-}</span>
-</code></pre><p>section跟分组有关</p>
-<p>最后系统询问，每一行实现什么？</p>
-<pre><code><span class="pp">-<span class="params">(<span class="variable">UITableViewCell</span> *)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView cellForRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
-{
-
-}</span>
-</code></pre><p>这个方法的实现可以说是核心的核心，在UITableView中每一行是要求实现一个cell，可以想象每一个cell相当于就是一个容器，这个容器里面装载着很多其他UI对象，当然cell也可以自定义。</p>
-<p>考虑到性能，其实每一个cell可以从缓存中读取</p>
-<pre><code><span class="built_in">UITableViewCell</span> *cell = [tableView dequeueReusableCellWithIdentifier:<span class="string">@"cell"</span>];
-<span class="keyword">if</span> (!cell) {
-    cell = [[<span class="built_in">UITableViewCell</span> alloc] initWithStyle:UITableViewStylePlain reuseIdentifier:<span class="string">@"cell"</span>];
-}
-
-<span class="comment">//do</span>
-</code></pre><p>indexPath是一个类，看看头文件就可以明白，它这个里面装载着row，section等，这些数值非常有意义，在从模型里获取数据的时候。数据源还有一些其他的方法可以实现，比如编辑模式，这个东西一般用于删除每一条消息，从右向左滑动的时候。</p>
-<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView commitEditingStyle:<span class="params">(<span class="variable">UITableViewCellEditingStyle</span>)</span>editingStyle forRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
-{
-
-}</span>
-</code></pre><p>排序</p>
-<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView moveRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>sourceIndexPath toIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>destinationIndexPath
-{
-
-}</span>
-</code></pre><p>有了数据源，当然也会存在一些代理，这些代理就是一些动作，比如实现了某些代理方法之后，系统会询问，你点了？一个手指按下不动了？等等，然后再doing什么，就是写在这些代理的方法中，主要是实现UITableViewDelegate。</p>
-<p>常用的比如按下的时候，放开的时候：</p>
-<p>点击了每一行时做的动作</p>
-<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView didSelectRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
-{
-
-}</span>
-</code></pre><p>放开每一行时做的动作</p>
-<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView didDeselectRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
-{
-
-}</span>
-</code></pre><p>协议中有很多在某些情况下会非常有用，细节就要慢慢在学习中积累了。</p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript十二之理解作用域" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/05/复习JavaScript十二之理解作用域/" class="article-date">
-  	<time datetime="2015-02-05T10:17:09.000Z" itemprop="datePublished">2月 5 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/05/复习JavaScript十二之理解作用域/">复习JavaScript十二之理解作用域</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>理解作用域链是Js编程中一个必须要具备的，作用域决定了变量和函数有权力访问哪些数据。在Web浏览器中，全局执行环境是window对象，这也意味着所有的全局变量或者方法都是window对象的属性或方法。当个函数在被调用的时候都会创建自己的执行环境，而这个函数中所写的代码就开始进入这个函数的执行环境，于是由变量对象构建起了一个作用域链。</p>
-<pre><code><span class="keyword">var</span> wow = <span class="string">'魔兽世界'</span>;
-<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> _wow = <span class="string">'123'</span>;
-}
-</code></pre><p>在这个例子中全局环境中包含了两个对象（全局环境的变量对象不算），window.wow和window.message，而这个message函数中又包含了两个对象，它自己的变量对象（其中定义了arguments对象）和全局环境的变量对象。当这个函数开始执行时，message自己的变量对象中定义了_wow，而它的全局环境的变量对象有wow，假设在message中alert一下wow，实际上是message中包含的全局环境的变量对象.wow，于是可以访问。</p>
-<pre><code><span class="keyword">var</span> wow = <span class="string">'123'</span>;
-<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> wow = <span class="string">'456'</span>;
-}
-</code></pre><p>如果执行message函数alert一下wow，它的作用域是这样开始搜索的，先搜索message自己的变量对象中是否存在wow，如果有就访问并且立马停止搜索，如果没有则继续往上访问它，有wow，则访问并且立马停止搜索，以此类推一直搜索到全局环境上的变量对象，如果这里都没，恭喜你，这里要抛错了。</p>
-<pre><code><span class="keyword">var</span> c = <span class="string">'123'</span>;
-<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> g = <span class="string">'123'</span>;
-    <span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        <span class="keyword">var</span> d = <span class="string">'123'</span>;
-    }
-}
-</code></pre><p>在这个例子中包含有三个执行环境，全局环境，message的环境，a的环境。从这里可以看出message自身包含两个对象，自己的变量对象和全局环境中的变量对象，而函数a则包含了三个，自身的变量对象，message的变量对象和全局变量对象。</p>
-<p>当开始执行这函数时，在函数a中可以访问到变量g，那是因为函数a包含了message的变量对象，于是在自身没有开始搜索上一级的变量对象时发现了，于是可以访问。那么访问c的原理也是如此，当自身和上一级的message的变量对象都没有，但是全局变量对象中存在，于是访问成功。</p>
-<p>了解这个作用域，对于Js编程是至关重要的，不然可能会出现，明明想要的预期结果是123，但是变成了456，为什么？那就是因为一级一级的搜索，可能会存在覆盖，或者搜索到别的地方就立即停止搜索了。</p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-iOS的copy语法" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/05/iOS的copy语法/" class="article-date">
-  	<time datetime="2015-02-05T10:01:43.000Z" itemprop="datePublished">2月 5 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/05/iOS的copy语法/">iOS的copy语法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这是一个关于深拷贝和浅拷贝的问题，OC设计这个语法的目的就是创建一个副本，修改副本的时候不会改变原来的对象。</p>
-<blockquote>
-<p>对于这两个问题可以这么理解，浅拷贝也就是把指针赋值，大家用的都是地址。而深拷贝，则是创建了一个新的空间，虽然内容可能是一样的，但是大家使用的空间，地址都是不同的。</p>
-</blockquote>
-<p>在OC中可以使用copy或者mutableCopy语法来实现深拷贝和浅拷贝，要求实现NSCopying或者NSMutableCopying协议。</p>
-<p>copy和mutableCopy是有区别的，区别在于NSString和NSMutableString的区别，如果使用NSString调用copy创建出来的新对象那就是NSString，如果是使用NSString的mutableCopy创建出来的新对象那就是NSMutableString。前者是不可变的，后者是可变的，它的空间不是固定的。</p>
-<pre><code>NSString *<span class="typename">string</span> = [[NSString alloc] initWithFormat:@<span class="string">"123"</span>,<span class="number">10</span>];
-
-NSMutableString *str = [<span class="typename">string</span> mutableCopy];
-
-[<span class="typename">string</span> <span class="keyword">release</span>];
-[str <span class="keyword">release</span>];
-</code></pre><p>遵守上面所说的创建一个副本，修改副本的时候不会改变原来的对象，其实这里可以看内存地址就可以看出来，它们是不同的。</p>
-<pre><code><span class="attr_selector">[str appendString:@"123"]</span>;
-
-<span class="function">NSlog</span>(<span class="at_rule">@<span class="string">"%@"</span>,string);</span>
-<span class="function">NSlog</span>(<span class="at_rule">@<span class="string">"%@"</span>,str);</span>
-</code></pre><p>从打印的结果可以很明显的看的出来，从内存的角度上来看，因为是新对象，所以它的引用计数是加1的，所以copy或者mutableCopy都需要release。</p>
-<p>如果使用copy语法，因为有一个机制不可变的元素，所以OC就直接把原来的对象返回，并且引用计数加1，于是这就是浅拷贝了，而mutableCopy就是深拷贝了。</p>
-<p>如果在OC中反过来又是什么样的情况呢？比如使用NSMutableString调用它的copy方法，会产生什么样的情况呢？</p>
-<pre><code>NSMutableString *<span class="built_in">string</span> = [[NSMutableString alloc]stringWithForma<span class="variable">t:</span>@<span class="string">"123"</span>,<span class="number">10</span>];
-NSString *str = [<span class="built_in">string</span> <span class="built_in">copy</span>];
-</code></pre><p>如果从可变成不可变使用的copy却是一个深拷贝，产生一个新的对象，它的引用计数为1。如果可变的使用mutableCopy产生一个对象，它也是深拷贝，产生一个新对象，引用计数为1，所以都需要release。</p>
-<blockquote>
-<p>总结一下，只有一种情况是浅拷贝，不可变对象调用它的copy方法为浅拷贝，再原对象上计数加1.而其他的不管是调用copy还是mutableCopy都是深拷贝，产生一个新的对象，计数为1。</p>
-</blockquote>
-<h3 id="如何自定义的类提供copy或者mutableCopy">如何自定义的类提供copy或者mutableCopy</h3>
-<p>如果要自己实现自定义对象的copy或者mutableCopy语法，首先要实现NSCopying或者NSMutableCopying协议，它们的原理都是一样的，按NSCopying来讲解一个例子。</p>
-<pre><code>-(<span class="property">id</span>)copyWithZone:(NSZone *)zone
-{
-    Pser *<span class="keyword">copy</span> = [[[self <span class="type">class</span>] allocWithZone:zone] init];
-    <span class="keyword">copy</span>.<span class="property">name</span> = _name;
-<span class="command">    return</span> <span class="keyword">copy</span>;
-}
-</code></pre><p>主要是实现copyWithZone方法，系统会为copy分配一个空间，以存储创建出来的副本。它不要求在copyWithZone内部进行内存管理，因为外部还需要使用。一般来说，使用copy还需要注意一些问题，也就是父子的问题。假设父类有实现copyWithZone方法，一般来说在子类中需要覆盖一下，然后调用它的父类的copyWithZone。而且在需要使用self class来实例对象，谁使用self就是谁，这样才能说子类调用之后，接收的还是子类，而不是父类。</p>
-<pre><code> <span class="title">[super copyWithZone:zone]</span><span class="comment">;</span>
-</code></pre><p>然后再进一步的操作。</p>
-<p>NSMutableCopying的操作步骤是一模一样的，注意的问题也是如同。</p>
-
       
     </div>
   </div>

@@ -168,6 +168,385 @@
 </nav>
       
   
+    <article id="post-复习JavaScript十之理解引用类型和匿名函数闭包" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/03/复习JavaScript十之理解引用类型和匿名函数闭包/" class="article-date">
+  	<time datetime="2015-02-03T11:02:01.000Z" itemprop="datePublished">2月 3 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/03/复习JavaScript十之理解引用类型和匿名函数闭包/">复习JavaScript十之理解引用类型和匿名函数闭包</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>引用类型虽然看起来很类很相似，但是它们却是不同的概念，引用类型的值，也就是对象是引用类型的一个实例。在Js中引用类型主要有Object，Array，Date，正则，Function等。</p>
+<p>Object之前已经复习过了，Array是用的非常频繁的一个引用类型。</p>
+<p><strong>Array</strong></p>
+<p>在Js中数组可以存储任意的数据，而且它的大小是可以动态调整的类似于OC中的NSMutableArray。创建数组可以使用构造函数的方式也可以使用字面量的形式，另外可以使用concat从一个数组中复制一个副本出来。数组本身提供了很多方法让开发者使用来操作数组。</p>
+<ul>
+<li>length 数组的长度</li>
+<li>toString  可以返回一个以，拼接的字符串，相当于是调用了下join(‘,’)</li>
+<li>join 可以用一个分割符来拼接成一个字符串</li>
+<li>push 添加一个数据到数组的末端</li>
+<li>pop 删除数组中的最后一项，有返回值</li>
+<li>shift 删除数组的第一项，有返回值</li>
+<li>unshift 添加一个数据到数组的首端</li>
+<li>reverse 倒序</li>
+<li>sort 可以传入一个排序的函数</li>
+<li>slice 可以基于当前数组返回一个新的数组，接收两个参数，返回项的起始位置和结束位置</li>
+<li>splice 可以传入N个参数，第一个参数表示要删除，插入或则替换的位置，第二个参数表示要删除的项数，第三个到第N个表示要插入或则替换的数据</li>
+</ul>
+<p><strong>Date</strong></p>
+<p>时间对象也是使用非常多的玩意，它是使用GMT时间来描述，而且时间对象是可以直接比对大小的。</p>
+<pre><code><span class="keyword">var</span> date1 = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2015</span>,<span class="number">1</span>,<span class="number">2</span>);
+<span class="keyword">var</span> date2 = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2015</span>,<span class="number">1</span>,<span class="number">10</span>);
+
+date1 &lt; date2  
+</code></pre><p>常用的方法</p>
+<ul>
+<li>getTime 获取时间对象的毫秒数</li>
+<li>setTime 设置时间对象的毫秒数，会改变日期</li>
+<li>getFullYear 获取时间对象的年（2015）</li>
+<li>getMonth 获取时间对象的月（需要加1）</li>
+<li>getDay 获取日期的星期几（0-6）星期天到星期六</li>
+<li>getDate 获取日期的天数</li>
+<li>getHours 获取当前日期的小时</li>
+<li>getMinutes 获取当前日期的分钟数</li>
+<li>getSeconds 获取当然日期的秒数</li>
+</ul>
+<p>上面看起来都是获取，当然也有设置，只是相应的get置换成set即可。</p>
+<p><strong>正则表达式</strong></p>
+<p>在Js里正则表达式是用RegExp类型来支持的，关于正则可以看看之前写的一篇文章，用python来描述的如何读懂正则。</p>
+<p>Js也支持三种模式，gim，表示全局，不区分大小写，多行。</p>
+<p>一般来说很少有人这么使用var xxx = new RegExp()，而是用字面量的方式，比如var xx = /[bc]/gi;像用的比较多的方法有exec用于捕获包含第一个匹配项的数组，没有则返回null。test，用于判断，如果匹配返回true，不匹配返回false。</p>
+<p><strong>Function</strong></p>
+<p>说起来Js的核心是什么？那就是函数了。对于函数主要是理解它的几个概念，它可以当值来传递，没有重栽。而且声明的时候，比如function a(){} var a = function(){} 执行时会有区别。函数内部的参数arguments包含了传入的所有参数，this，表示在这个函数内的作用域，以及prototype。</p>
+<p><strong>处理字符串</strong></p>
+<p>在Js中还有一种叫做包装类型的玩意，正因为此所以处理一些基本数据类型，比如字符串时，有很多方法可以使用。</p>
+<ul>
+<li>concat 可以将一个或者多个字符串拼接起来，返回一个新的字符串</li>
+<li>slice 接收两个参数，起始位置和结束位置，返回一个新的字符串</li>
+<li>substr和substring和slice一样，唯一的不同是substr第二个参数是返回字符串的个数</li>
+<li>indexOf 从头开始查询字符串，存在会返回它所在的位置，没有返回－1</li>
+<li>lastIndexOf 从最后开始查询字符串</li>
+<li>toUpperCase 转大写</li>
+<li>toLowerCase 转小写</li>
+<li>match 正则表达式使用跟exec一样</li>
+<li>search 正则表达式使用，查询到返回一个位置，没有返回－1</li>
+<li>replace 替换，第一个参数可以是正则表达式也可以是字符串，第二个参数是要替换的字符串</li>
+<li>localeCompare比较字符串，如果字符串相等返回0，如果字符串的字母排在参数字符串之前，返回负数，如果是之后，返回正数。</li>
+</ul>
+<h3 id="理解匿名函数和闭包">理解匿名函数和闭包</h3>
+<p>匿名函数又叫拉姆达函数，主要是在把函数当值传递的时候用，或者是把函数当返回值，比如：</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">d</span><span class="params">(callback)</span></span>{
+    <span class="keyword">callback</span>();
+}
+d(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    alert(<span class="string">'123'</span>)
+});
+
+<span class="comment">//或者</span>
+
+<span class="function"><span class="keyword">function</span> <span class="title">b</span><span class="params">()</span></span>{
+    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        alert(<span class="string">'123'</span>);
+    }
+}
+<span class="keyword">var</span> g = b();
+g();
+</code></pre><p>其实第二种方式跟闭包的意义一样了，所谓的闭包书面的解释是可以访问另一个函数作用域内变量的函数，稍微改写一下可能会更明显。</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">b</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> name = <span class="string">'123'</span>;
+    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        alert(name);
+    }
+}
+<span class="keyword">var</span> g = b();
+g();
+</code></pre><p>从这里可以看出来return的函数可以访问到name，而外部却不行，这个返回值的函数就可以理解为闭包。理解闭包还可以看一个经典的求值的例子。</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">save_i</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> a = [];
+    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
+        a[i] = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">return</span> i;
+        }
+    }
+    <span class="keyword">return</span> a;    
+}
+
+<span class="keyword">var</span> c = save_i();
+<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
+    alert(c[i]());
+}
+</code></pre><p>从这个例子上来看，我们想得到的结果是10次循环a[i]保存着一个闭包，然后alert出从0到10，但是结果很出人意料，全部是10，为什么？哪里理解的不对呢？a[i]明明是内部函数，然后让它访问另外一个函数作用域内的变量i。</p>
+<p>个人觉得可以这样去分析问题，在客户端执行Js时有一个全局执行环境，指向的是window对象。而所谓的对象也就是引用类型，实际上在后台执行环境中，它就是一个指针。</p>
+<p>回到Js当代码在执行的时候，会创建变量对象并且构建一个作用域链，而这个对象保存着当前函数可以访问的对象。</p>
+<pre><code>window
+    -<span class="ruby">&gt;save_i
+</span>        -<span class="ruby">&gt;this|argument
+</span>        -<span class="ruby">&gt;a
+</span>        -<span class="ruby">&gt;i
+</span>        -<span class="ruby">&gt;看不见的a[<span class="number">0</span>]-a[<span class="number">10</span>]
+</span>        -<span class="ruby">&gt;a[<span class="number">0</span>]function(){}
+</span>            -<span class="ruby">&gt;i
+</span>    -<span class="ruby">&gt;c</span>
+</code></pre><p>上述的i和a[0]里的i是同一个i，那么结果就是10。</p>
+<p>进一步处理</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">save_i</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> a = [];
+    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
+        a[i] = <span class="function"><span class="keyword">function</span><span class="params">(k)</span></span>{
+            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+                <span class="keyword">return</span> k;
+            };
+        }(i)
+    }
+    <span class="keyword">return</span> a;    
+}
+
+<span class="keyword">var</span> c = save_i();
+<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
+    <span class="built_in">console</span>.log(c[i]());
+}
+</code></pre><p>接着按上面的节奏来分析</p>
+<pre><code>window
+    -<span class="ruby">&gt;save_i
+</span>        -<span class="ruby">&gt;this|argument
+</span>        -<span class="ruby">&gt;a
+</span>        -<span class="ruby">&gt;i
+</span>        -<span class="ruby">&gt;看不见的a[<span class="number">0</span>]-a[<span class="number">10</span>]
+</span>        -<span class="ruby">&gt;a[<span class="number">0</span>]function(){}
+</span>            -<span class="ruby">&gt;k
+</span>            -<span class="ruby">&gt;function(){}
+</span>                -<span class="ruby">&gt;k
+</span>
+    -<span class="ruby">&gt;c</span>
+</code></pre><p>什么是传参？按值传递，相当于是在那个立即执行的函数中创建了一个新的地址和空间，虽然值是一样的，但是每一个k又是不同的，所以得到的结果正好满足了我们的预期。</p>
+<p>本来正常情况下save_i执行完毕后就要销毁，但是内部的闭包被包含在这个作用域内了，所以save_i没法销毁，从这里可以看的出来闭包会带来内存的问题，因为用完之后没法销毁，如果不注意的话。</p>
+<p>那么用完之后只能设置为null来解除引用，等着自动销毁把内存回收。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-复习JavaScript九之客户端存储方案" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/03/复习JavaScript九之客户端存储方案/" class="article-date">
+  	<time datetime="2015-02-03T09:43:48.000Z" itemprop="datePublished">2月 3 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/03/复习JavaScript九之客户端存储方案/">复习JavaScript九之客户端存储方案</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>随着Web应用越来越复杂，总是有很多需求需要在客户端存储一些特定的信息，用来描述访问者或者跟访问者相关的信息。于是，就有了这些客户端存储的方案，供开发者选择以及使用。</p>
+<h3 id="cookie">cookie</h3>
+<p>说起来cookie的出现是非常早的，用于在客户端存储会话信息，它要求服务器对任意的HTTP请求发送Set-Cookie HTTP头作为响应的一部分，例如：</p>
+<pre><code><span class="status">HTTP/1.1 <span class="number">200</span> OK</span>
+<span class="attribute">Content-Type</span>: <span class="string">text/html</span>
+<span class="attribute">Set-Cookie</span>: <span class="string">name=value</span>
+</code></pre><p>cookie虽然好用，但是它在客户端上有很多限制，而去获取也不是很容易。最重要的是关于请求的性能，cookie是对任意HTTP设置，所以也会发送给服务器，这些额外信息有时候不是必需的。</p>
+<ul>
+<li>cookie是跟特定的域有关系的，也就意味着存储在cookie中的信息只能让特定的域来访问</li>
+<li>cookie的条数是有限制的，大体上来说各浏览器不会超过50个，除了safair chrome</li>
+<li>cookie在客户端只有一个方法可以用document.cookie</li>
+<li>cookie的大小在客户端上也有限制，大体不会超过1MB</li>
+<li>如果在客户端设置了cookie，是没法删除的，只能在同一个cookie上设置name=空字符串或者设置失效时间</li>
+<li>如果设置了secure，cookie只能在SSL链接才能传输</li>
+</ul>
+<p>cookie在浏览器上的保存是由几个方面组成的，理解这个对于使用Js操作cookie是一个必备条件，它由名称也就是每一项的key，每一项的值value，域名的限制，路径对于哪一个页面起作用，时间，以及安全标识secure。</p>
+<p>在客户端主要是使用document.cookie来进行操作，获取和设置都是这一个。而去获取是一个全的字符串，还需要进一步的处理才能得到值。如果是设置，也是需要设置一个全的字符串。对于这个，最好都要encodeURIComponent一下，获取的时候decodeURIComponent一下。</p>
+<pre><code><span class="keyword">var</span> setCookie = <span class="function"><span class="keyword">function</span><span class="params">(name,value,expires,path,domain,secure)</span></span>{
+    <span class="keyword">var</span> cookieText = <span class="built_in">encodeURIComponent</span>(name)+<span class="string">'='</span>+<span class="built_in">encodeURIComponent</span>(value);
+
+    <span class="comment">//各项的拼接</span>
+    <span class="built_in">document</span>.cookie = cookieText;
+}
+</code></pre><p>聪明的开发者为了绕开浏览器上对于条数的限制，研究出了一个方式，把真实的值设置在子cookie上。</p>
+<pre><code><span class="variable">name=</span><span class="variable">name=</span>value
+</code></pre><h3 id="IE上的客户端存储userData">IE上的客户端存储userData</h3>
+<p>在IE中引入了一个userData的方案来存储客户端数据，允许每个文档最多128KB，每个域1MB的数据量。想使用它首选在那个元素上应用一个css。</p>
+<pre><code>&lt;<span class="keyword">div</span> style=<span class="string">"behavior:url(#default#userData)"</span>&gt;&lt;/<span class="keyword">div</span>&gt;
+</code></pre><p>使用的时候跟设置dom属性一样，唯一有一个不同的地方是最后要调用save方法，告诉它存储在哪个数据仓库上。</p>
+<pre><code><span class="keyword">var</span> dataStore = <span class="built_in">document</span>.getElementById(<span class="string">'dataStore'</span>);
+dataStore.setAttribute(<span class="string">'name'</span>,<span class="string">'lcepy'</span>);
+dataStore.save(<span class="string">'MyNameInfo'</span>);
+</code></pre><p>获取</p>
+<pre><code>dataStore.<span class="built_in">load</span>(<span class="string">'MyNameInfo'</span>);
+dataStore.getAttribute(<span class="string">'name'</span>);
+</code></pre><h3 id="HTML5的客户端存储方案">HTML5的客户端存储方案</h3>
+<blockquote>
+<p>支持度以及使用比较广泛的是Web Storage API，当然客户端还有本地数据IndexDB等等，这些也是可以存储客户端数据，但是它们支持的很少。在做移动端开发时，localStorage的使用是非常频繁的，还要注意一点是个别比如safair浏览器有隐私模式，本地缓存是不起作用的，无法读取，所以要做一些额外的处理。</p>
+</blockquote>
+<p>主要的是两个sessionStorage和localStorage两套API来应用，它们是有区别的，前者只在浏览器运行时存在，也可以跨页面，前提是页面不能关闭。后者是永久存在的，如果用户不删除，那么它永远不会删除。它们的使用方式都是一样的，包括API。至于分配的空间，要看各浏览器的态度的，一般情况下是5MB，还有一点它是跟域走的。</p>
+<pre><code><span class="title">interface</span> Storage{
+    <span class="title">readonly</span> attribute unsigned long legth;
+    <span class="title">getter</span> DOMString key();
+    <span class="title">getter</span> any getItem();
+    <span class="title">setter</span> creator void setItem();
+    <span class="title">deleter</span> void removeItem();
+    <span class="title">viod</span> clear();
+}
+</code></pre><ul>
+<li>length 描述Storage对象中存储的key=value数量</li>
+<li>key 方法允许获取一个指定位置的键</li>
+<li>getItem方法根据指定的key返回一个value</li>
+<li>setItem方法将数据value存入指定的位置key</li>
+<li>removeItem根据指定的key来删除数据</li>
+<li>clear 删除全部的数据</li>
+</ul>
+<p>使用：</p>
+<pre><code><span class="transposed_variable">localStorage.</span>setItem(<span class="string">'name'</span>,<span class="string">'lcepy'</span>);
+<span class="transposed_variable">localStorage.</span>getItem(<span class="string">'name'</span>);
+<span class="transposed_variable">localStorage.</span>key(<span class="number">0</span>);
+<span class="transposed_variable">localStorage.</span><span class="built_in">length</span>;
+<span class="transposed_variable">localStorage.</span>removeItem(<span class="string">'name'</span>);
+<span class="transposed_variable">localStorage.</span><span class="keyword">clear</span>();
+</code></pre><p>另外API中还有一套事件用于本地存储发生改变时的通知</p>
+<pre><code><span class="built_in">window</span>.addEventLister(<span class="string">'storage'</span>,<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{},<span class="literal">true</span>);
+</code></pre><p>event对象中包含有</p>
+<ul>
+<li>key 存储了被更新或者删除的键</li>
+<li>oldValue 包含了更新之前的数据</li>
+<li>url Storage事件发生的源</li>
+<li>newValue 包含了更新之后的数据</li>
+<li>storageArea 包含一个引用，指向发生改变之前的localStorage或者sessionStorage</li>
+</ul>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-复习JavaScript八之操作XML" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/02/复习JavaScript八之操作XML/" class="article-date">
+  	<time datetime="2015-02-02T09:50:14.000Z" itemprop="datePublished">2月 2 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/02/复习JavaScript八之操作XML/">复习JavaScript八之操作XML</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在以前XML是存储和传输数据的事实标准（客户端没有出现JSON之前），那个时候浏览器还不支持解析XML，于是很多开发者需要自己写一个XML解析器。原理，就是把XML也转化成DOM文档，然后通过DOM API来获取。</p>
+<p>而现在，在客户端（浏览器）编程中几乎很少会使用到XML，数据的交换都应用在JSON上了，了解这个有一个好处，就是在做服务端编程，比如SAOP协议时就会用到，还有桌面的客户端，或者是移动客户端上，比如iOS，它把一些数据，比如NSArray写入到本地，实际上就是一个XML文本，当然在代码层面上，是看不出来有解析的，如果读取这个文件，是直接转成NSArray对象的。</p>
+<blockquote>
+<p>IE有它自己的实现对XML的支持，下面说的两个类型，在IE中都不支持</p>
+</blockquote>
+<p>将XML字符串序列化成DOM文档，主要是使用DOMparser类来实现，其他的用法跟获取DOM节点一样。</p>
+<pre><code><span class="keyword">var</span> parser = <span class="keyword">new</span> DOMparser();
+<span class="keyword">var</span> xmlDomObject = parser.parserFromString(<span class="string">'&lt;root&gt;&lt;child/&gt;&lt;/root&gt;'</span>,<span class="string">'text/xml'</span>);
+
+xmlDomObject.getElementsByTagName(<span class="string">'child'</span>);
+</code></pre><p>将DOM文档反序列化成XML字符串，主要是使用XMLSerializer类型，使用上述的xmlDomObject对象。</p>
+<pre><code><span class="built_in">var</span> serializer <span class="subst">=</span> <span class="literal">new</span> XMLSerializer();
+<span class="built_in">var</span> <span class="built_in">xml</span> <span class="subst">=</span> serializer<span class="built_in">.</span>serializeToString(xmlDomObject);
+</code></pre><p>如果XML解析有错误都会返回一个parsererror标签，获取的时候就可以判断是否有这个标签来决定解析是否有错误。</p>
+<p>据说DOM3版本的XML操作只有一个浏览器实现了，所以当资料了解就好。</p>
+<h3 id="IE版本">IE版本</h3>
+<blockquote>
+<p>IE版本的XML解析主要是使用它的ActiveXObject类型来实现</p>
+</blockquote>
+<p>在IE中想要解析XML就必须先创建一个空的DOM文档，然后通过这个文档来获取。</p>
+<pre><code>var xmldom = createDocument();
+xmldom.loadXML(<span class="comment">'<span class="xmlDocTag">&lt;root&gt;</span><span class="xmlDocTag">&lt;child/&gt;</span><span class="xmlDocTag">&lt;/root&gt;</span>');</span>
+
+xmldom.getElementsByTagName(<span class="comment">'child');</span>
+</code></pre><p>如果解析有错误，可以检查parseError对象。</p>
+<pre><code><span class="keyword">if</span>(xmldom.parseError !== <span class="number">0</span>){
+    //<span class="keyword">do</span> 
+}
+</code></pre><p>在IE中进行序列化非常的方便，因为它都内置在了DOM文档中，每一个DOM节点都有一个xml属性，它就保存着XML字符串。</p>
+<pre><code>xmldom<span class="built_in">.</span><span class="built_in">xml</span>
+</code></pre><p>最后IE还提供了一个可以加载远程XML文件的方法load，它就接收一个参数，远程XML的URL地址。当然，也可以使用async属性来设置同步还是异步，默认是异步（true）。</p>
+<pre><code><span class="keyword">var</span> xmldom = createDocument();
+xmldom.<span class="keyword">async</span> = <span class="keyword">false</span>;
+xmldom.load(<span class="string">'http://xxx.sss.xml'</span>);
+</code></pre><p>如果是异步还要监听一下onreadystatechange事件，判断readystate状态，这个跟Ajax的使用是一样的。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-UINavigationController的理解" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -391,341 +770,9 @@ doc.style.width = <span class="string">'100px'</span>;
 
 
   
-    <article id="post-复习JavaScript六之事件" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/27/复习JavaScript六之事件/" class="article-date">
-  	<time datetime="2015-01-27T10:08:04.000Z" itemprop="datePublished">1月 27 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/27/复习JavaScript六之事件/">复习JavaScript六之事件</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>IE浏览器的事件不是复习的重点</p>
-</blockquote>
-<p>事件是JavaScript与HTML进行交互的一个纽带，理解事件可以更好的处理Web应用程序，现在的浏览器中主要支持两种事件流：</p>
-<ul>
-<li>事件冒泡</li>
-<li>事件捕获</li>
-<li>DOM事件流</li>
-</ul>
-<p>事件冒泡则是指事件开始时由具体的元素接收，然后逐级向上传播。比如：</p>
-<pre><code><span class="tag">&lt;<span class="title">html</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">head</span>&gt;</span><span class="tag">&lt;/<span class="title">head</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">body</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">div</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">p</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
-</code></pre><p>给p标签监听一个事件，它的流向是p,div,body,html,document，其实细心看来这种流的走向会存在一个问题，给div也监听一个事件，当用户点击P的时候是会触发两次的，好在event对象中有可以阻止事件冒泡的方法。</p>
-<p>事件捕获则是指事件由最上级接收，逐级向下传播到具体的元素上，了解了冒泡之后这个就非常好理解了，正是一个相反的步骤。</p>
-<p>而DOM事件流又正好是冒泡与捕获的结合体，它分为三个阶段：事件捕获，目标事件，事件冒泡，如果在纸上画出来，它的走向就是一个圆形。</p>
-<blockquote>
-<p>对于事件处理程序，写在HTML标签中的，另外一种是直接写一个function的，比如doc.onclick = function(){}，一般来说这些浏览器支持，但是基本上不会使用了。因为前者是跟HTML耦合的，不利代码维护，而且虽然HTML加载了但是Js文件还未加载，用户点击后，是直接报错的。后者虽然也可以删除，比如doc.onclick = null，对于对代码有强迫症的同学，基本上不会使用到它。</p>
-</blockquote>
-<p>那么，我们该怎么给一个元素添加上事件处理程序呢？</p>
-<h3 id="DOM2级事件处理程序">DOM2级事件处理程序</h3>
-<ul>
-<li>addEventLister</li>
-<li>removeEventLister</li>
-</ul>
-<p>所有的DOM节点都具备这两个方法，它接收三个参数：</p>
-<ul>
-<li>要处理的事件名称，比如click（这里跟上述两个以及IE注册事件都不同，不需要on）</li>
-<li>需要事件进行处理的函数</li>
-<li>一个布尔值，表示（true，在捕获阶段调用事件处理函数）（false，在冒泡阶段调用事件处理函数）</li>
-</ul>
-<blockquote>
-<p>一般情况下第三个参数都填false</p>
-</blockquote>
-<p>IE浏览器对应的两个方法，attachEvent，detachEvent，它们只有冒泡，事件名要加上on。</p>
-<h3 id="事件对象">事件对象</h3>
-<p>在注册完事件处理程序后，事件的一个比较重要的对象必须要理解，<strong>event事件对象</strong>。</p>
-<p>一般来说，这个对象中包含着所有与当前元素所监听的事件有关的信息，比如元素监听的事件类型，元素本身等等。</p>
-<p><strong>比较重要的属性和方法（只读）</strong></p>
-<ul>
-<li>currentTarget 真正监听事件的那个元素</li>
-<li>target 事件的目标元素</li>
-<li>type 事件的类型</li>
-<li>perventDefault()  取消事件的默认行为</li>
-<li>stopPropagation()  取消事件的捕获或者冒泡</li>
-<li>bubbles 事件是否冒泡</li>
-<li>eventPhase 事件处理程序的三个阶段，1捕获2处于目标3冒泡</li>
-</ul>
-<p><strong>比较重要的属性和方法（读写）</strong></p>
-<ul>
-<li>clientX 鼠标在窗口中的水平位置</li>
-<li>clientY 鼠标在窗口中的垂直位置</li>
-</ul>
-<h3 id="事件类型">事件类型</h3>
-<blockquote>
-<p>PC端主要是针对鼠标，移动端则是触摸，手势相关的处理</p>
-</blockquote>
-<p>如果在PC端上发生一次click事件，实际上它是发生了三次事件，mousedown当鼠标按下的时候，mouseup当用户放开的时候，click两个加起来就发生了一次click事件。相对于移动，PC上的鼠标事件非常的丰富，例如mouseover当鼠标首次移入一个元素边界时触发，mouseout当鼠标移出元素时触发，这个移出，到子元素上也会触发这个事件，mousemove当鼠标在元素内移动时重复触发。</p>
-<p>总体来说对于文档加载，表单控件，窗口大小改变等事件，比如获取焦点，在失去或者获取焦点是值改变等移动上都是一样的，focus（获得焦点）blur（失去焦点）。</p>
-<p>在做一些视差滚动的效果时scroll事件是非常好用，移动上在css中提供了一个类似的属性。</p>
-<p>唯一的区别是移动端上没有键盘事件。</p>
-<h3 id="移动事件">移动事件</h3>
-<ul>
-<li>touchstart 当手指触摸到屏幕时触发</li>
-<li>touchmove 当手指在屏幕上连续滑动时触发</li>
-<li>touchend 当手指从屏幕上移开时触发</li>
-<li>touchcancel 当系统停止跟踪触摸时触发（这个事件没有确定的触发时间）</li>
-</ul>
-<p>它们都是冒泡的，也可以取消</p>
-<p><strong>三个跟踪触摸事件的属性</strong></p>
-<ul>
-<li>touches 当前跟踪触摸操作的touch数组，在touchend事件中为空</li>
-<li>targetTouchs 特定事件目标的touch数组</li>
-<li>ChangedTouches 上次触摸时发生了什么改变的touch数组</li>
-</ul>
-<p><strong>移动event事件对象</strong></p>
-<p>PC上存在的，在移动上也存在，描述上有差异，比如</p>
-<ul>
-<li>target 触摸的DOM节点目标</li>
-<li>pageX 触摸目标在页面中的X坐标</li>
-<li>pageY 触摸目标在页面中的Y坐标</li>
-</ul>
-<p><strong>一些手势</strong></p>
-<ul>
-<li>gesturestart 当一个手指按在屏幕上另外一个手指又触摸屏幕时触发</li>
-<li>gesturechange 依赖前者当其中的一个手指发生改变时触发</li>
-<li>gestureend 当任何一个手指离开时触发</li>
-</ul>
-<p><strong>移动手势干货三部曲</strong></p>
-<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/23/webkit-touch-event-1.html" target="_blank" rel="external">对于Touch的处理</a></p>
-<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-2.html" target="_blank" rel="external">处理简单手势</a></p>
-<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-3.html" target="_blank" rel="external">处理复杂手势</a></p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript五之面向对象的程序设计" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/26/复习JavaScript五之面向对象的程序设计/" class="article-date">
-  	<time datetime="2015-01-26T06:52:39.000Z" itemprop="datePublished">1月 26 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/26/复习JavaScript五之面向对象的程序设计/">复习JavaScript五之面向对象的程序设计</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>面向对象的语言有一个非常明显的标志：类，通过类来创建任意多个具有相同属性和方法的对象，可惜的是Js里没有这样的概念。</p>
-<p>但是Js有一个特性：一切皆是对象。</p>
-<p>聪明的开发者通过这些特性进行摸索，于是迂回发明了一些程序设计，以便更好的组织代码结构。</p>
-<h3 id="工厂模式">工厂模式</h3>
-<p>主要是用来解决有多个相同属性和方法的对象的问题，可以用函数来封装特定的接口来实现</p>
-<pre><code><span class="keyword">var</span> computer = <span class="function"><span class="keyword">function</span><span class="params">(name,version)</span></span>{
-    <span class="keyword">return</span> {
-        <span class="string">'name'</span>:name,
-        <span class="string">'version'</span>:version,
-        <span class="string">'showMessage'</span>:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-            alert(<span class="keyword">this</span>.name);
-        }
-    }
-}
-<span class="keyword">var</span> test = computer(<span class="string">'apple'</span>,<span class="string">'11.1'</span>);
-test.showMessage();
-</code></pre><h3 id="构造函数模式">构造函数模式</h3>
-<p>我们知道像原生的构造函数，比如Object，Array等，它们是在运行时自动出现在执行环境中的。因此，为了模仿它，这里也可以通过一个普通的函数，并且new出一个对象，这样就成为了自定义的构造函数，也可以为他们添加自定义的属性和方法。</p>
-<p>但是这样的构造函数有一个缺陷，就是每个方法都会在每个实例上创建一次，因为每次创建都需要分配内存空间，但是有时候这样的特性还是有用的，主要是要控制它们，在不使用的时候释放内存。</p>
-<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name,version)</span></span>{
-    <span class="keyword">this</span>.name = name;
-    <span class="keyword">this</span>.version = version;
-    <span class="keyword">this</span>.showMessage = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        alert(<span class="keyword">this</span>.name);
-    }
-}
-
-<span class="keyword">var</span> apple = <span class="keyword">new</span> Computer(<span class="string">'apple'</span>,<span class="number">2014</span>);
-<span class="keyword">var</span> dell = <span class="keyword">new</span> Computer(<span class="string">'dell'</span>,<span class="number">2010</span>);
-apple.showMessage();
-dell.showMessage();
-</code></pre><p>像apple，dell是通过Computer实例化出来的不同的对象，但是它们的constructor都是指向Computer的。这里也可以使用instanceof来对（对象）进行检测。</p>
-<p>在书写上构造函数跟其他函数是没有什么区别的，主要的区别还是在使用上，构造函数需要使用new操作符。</p>
-<p>其实这样的书写，已经跟类没有什么区别了，表面上来看，而构造函数我个人更倾向于一个类的某个静态方法。</p>
-<h3 id="原型模式">原型模式</h3>
-<p>说到原型模式就不得不提一提关于指针的问题，因为每一个函数都有一个prototype属性，而这个属性是一个指针，指向一个对象。</p>
-<p><strong>C语言描述指针，这个在iOS开发中非常重要</strong></p>
-<p>比如我先定义一个int类型的指针变量和一个普通的int类型数据，然后给指针变量赋值。</p>
-<pre><code><span class="keyword">int</span> *<span class="keyword">p</span>;
-<span class="keyword">int</span> <span class="keyword">pp</span> = <span class="number">123</span>;
-<span class="keyword">p</span> = &amp;<span class="keyword">pp</span>;
-*<span class="keyword">p</span> = <span class="number">999</span>;
-<span class="built_in">printf</span>(<span class="string">'%d'</span>,<span class="keyword">pp</span>);
-</code></pre><p>*是一个特殊符号用于标明它是一个指针变量。</p>
-<p>&amp;是地址符</p>
-<p>分析这个就要说到栈内存和堆内存了，比如*p在栈内存中分配了一个地址假设是ff22x0，它还没有空间。而pp存在一个地址ff23x0，并且分配了一个空间存储着123，这个地址是指向这个空间的。</p>
-<p>p = &amp;pp 这样的赋值操作，也就是把ff23x0取出来，并且给p分配一个空间把ff23x0存储进去，并且ff22x0指向这个空间。</p>
-<p>*p = 999 从这里就可以看出来p操作的是地址，而这个地址不就是ff23x0么，于是pp成了999。</p>
-<p>所谓的指针也就是存储着地址的变量。</p>
-<p>回到原型上，如果每一个函数中的 prototype属性都是一个指针，实际上它只是一个地址引用着一个空间，而这个空间正是我们写的xxx.prototype.xxx = function(){}这样的代码在运行时分配的空间。那么可见，使用原型的好处是空间只分配一次，大家都是共享的，因为它是指针。</p>
-<p>先看一个例子</p>
-<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
-    <span class="keyword">this</span>.name = name;
-}
-Computer.prototype.showMessage = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
-    alert(name);
-}
-
-<span class="keyword">var</span> apple = <span class="keyword">new</span> Computer(<span class="string">'apple'</span>);
-<span class="keyword">var</span> dell = <span class="keyword">new</span> Computer(<span class="string">'dell'</span>);
-Computer.prototype.isPrototypeOf(apple);
-</code></pre><p>在解释这个原型链之前，还要明白Js的一个特性，就是如果自身不存在，它会沿着原型往上查找。它的原理稍微有些绕，Computer自身的prototype是指向它自身的原型对象的，而每一个函数又有一个constructor指向它自身，prototype.constructor又指向它自身。于是Computer的两个实例apple，dell内部有一个<strong>proto</strong>属性是指向Computer.prototype的，最后的结果是它们可以使用showMessage方法。</p>
-<p>当然它们还有一个搜索原则，比如在调用showMessage的时候，引擎先问apple自身有showMessage吗？“没有”，继续搜索，apple的原型有吗，“有”，调用。所以从这里可以看出，this.showMessage是会覆盖prototype.showMessage的。</p>
-<p>另外还可以使用isPrototypeOf来检测一个对象是否在另一个对象的原型链上，上述的代码返回的是true。</p>
-<pre><code>apple.hasOwnProperty(<span class="string">'name'</span>)
-
-apple.hasOwnProperty(<span class="string">'showMessage'</span>)
-</code></pre><p>使用hasOwnProperty来检测到底是对象属性还是原型属性，使用this创建的属性是一个对象属性。<br>
-        
-          <p class="article-more-link">
-            <a href="/2015/01/26/复习JavaScript五之面向对象的程序设计/#more">more >></a>
-          </p>
-        
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript四之Object" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/25/复习JavaScript四之Object/" class="article-date">
-  	<time datetime="2015-01-25T13:42:07.000Z" itemprop="datePublished">1月 25 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/25/复习JavaScript四之Object/">复习JavaScript四之Object</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>JavaScript的所有对象都衍生于Object对象，所有对象都继承了Object.prototype上的方法和属性，虽然它们可能会被覆盖，熟悉它对于编程能起到很大的作用，也能比较深刻的了解JavaScript这门语言。</p>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" rel="external">可参考的资料-Object</a></p>
-<p>创建一个对象可以使用new，也可以使用快速创建的方式：</p>
-<pre><code><span class="keyword">var</span> _<span class="class"><span class="keyword">object</span> = </span>{};
-</code></pre><p>_object对象中就可以使用Object.prototype中所有的方法和属性，虽然看起来它是空的。说到这里在编程中常常有一个非常有用的需求，如何判断一个对象是空对象。</p>
-<p>这是zepto中的判断一个对象是否是空对象，常常使用：</p>
-<pre><code>$.isEmptyObject = <span class="function"><span class="keyword">function</span><span class="params">(obj)</span> </span>{
-    <span class="keyword">var</span> name
-    <span class="keyword">for</span> (name <span class="keyword">in</span> obj) <span class="keyword">return</span> <span class="literal">false</span>
-    <span class="keyword">return</span> <span class="literal">true</span>
-  }
-</code></pre><p>也顺便看了下jQuery原理是一模一样的：</p>
-<pre><code>isEmptyObject: <span class="function"><span class="keyword">function</span><span class="params">( obj )</span> </span>{
-    <span class="keyword">var</span> name;
-    <span class="keyword">for</span> ( name <span class="keyword">in</span> obj ) {
-        <span class="keyword">return</span> <span class="literal">false</span>;
-    }
-    <span class="keyword">return</span> <span class="literal">true</span>;
-}
-</code></pre><p>使用in操作符来实现，它不会遍历到父原型链。</p>
-<p>constructor返回一个指向创建了该对象的函数引用，这个东西主要是可以用来识别（类）到底是指向哪里的。</p>
-<p>defineProperty直接在一个对象上定义一个新属性，非常适合用于动态构建，传入三个参数［动态添加对象的目标对象，需要定义或被修改的属性名，需要定义的对象］，在第三个参数中可以有些属性来表示是否继承（<strong>proto</strong>），要不要定义get，set方法，enumerable是否可枚举。</p>
-<p>defineProperties跟上述defineProperty一样，但是它可以添加多个。</p>
-<p>getOwnPropertyNames返回一个由指定对象的所有属性组成的数组</p>
-<p>keys返回一个数组包括对象所有的属性（可枚举）</p>
-<blockquote>
-<p>keys是经常会用到的一个属性，它只能包可枚举的，如果想获取一个对象的所有属性包括不枚举的，那么使用getOwnPropertyNames。</p>
-</blockquote>
-<p>hasOwnProperty用于判断某个对象是否包含有自身的属性，这个方法常常用于检测对象中的属性是否存在，它只检测自身，对于继承过来的都是false，这一点是非常重要的理解。</p>
-<p>isPrototypeOf 用于检测一个对象是否在另一个对象的原型链上，比如有两个对象是互相交互的，常常会使用它来进行检测。</p>
-<p>propertyIsEnumerable这个方法也比较重要，返回一个布尔值，检测一个对象的自身属性是否可以枚举</p>
-<blockquote>
-<p>可枚举的理解，也就是对象的属性可枚举，它的属性值不可以修改，但是在Js中它有自己的定义，引擎内部看不见的该属性的[[Enumerable]]特性为true，那么就是可枚举的。基本上把一个普通对象可以看做是一个枚举类型，比如var color = {‘red’:1}，red是可以修改的，但是red是可枚举的，但是如果是继承过来的属性，propertyIsEnumerable是返回false的，它还有一个特点，就是自身。</p>
-</blockquote>
-<p>如果要定义不可枚举的属性，那就要使用defineProperty方法了，目前不能用对象直接量或者构造函数定义出来。</p>
-<pre><code><span class="keyword">var</span> obj = {name: <span class="string">'jack'</span>, age:<span class="number">23</span>}
-Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="keyword">value</span> : <span class="string">'123'</span>, enumerable : <span class="keyword">false</span> });
-</code></pre>
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/page/2/">&laquo; Prev</a><a class="page-number" href="/archives/">1</a><a class="page-number" href="/archives/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/archives/page/4/">4</a><a class="page-number" href="/archives/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/7/">7</a><a class="extend next" rel="next" href="/archives/page/4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/archives/page/2/">&laquo; Prev</a><a class="page-number" href="/archives/">1</a><a class="page-number" href="/archives/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/archives/page/4/">4</a><a class="page-number" href="/archives/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/8/">8</a><a class="extend next" rel="next" href="/archives/page/4/">Next &raquo;</a>
     </nav>
   
 
