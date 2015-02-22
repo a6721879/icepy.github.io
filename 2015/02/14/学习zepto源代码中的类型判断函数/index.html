@@ -3,23 +3,23 @@
 <head>
   <meta charset="utf-8">
   
-  <title>UIViewController的生命周期 | lcepy</title>
+  <title>学习zepto源代码中的类型判断函数 | lcepy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理。
-呈现视图的顺序
-它内部的顺序是这样的，先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或story">
+  <meta name="description" content="在平时的开发中对于类型的判断是使用的很多的东西，我们可能需要对数据的类型进行检查，以满足预期的结果，而zepto中也提供了一揽子的解决方案，用于类型的判断，函数，字符串，对象，数组等。
+$.each('Boolean Number String Function Array Date RegExp Object Error'.split(' '),    function(i, name) {
+c">
 <meta property="og:type" content="article">
-<meta property="og:title" content="UIViewController的生命周期">
-<meta property="og:url" content="http://lcepy.github.io/2015/02/16/UIViewController的生命周期/">
+<meta property="og:title" content="学习zepto源代码中的类型判断函数">
+<meta property="og:url" content="http://lcepy.github.io/2015/02/14/学习zepto源代码中的类型判断函数/">
 <meta property="og:site_name" content="lcepy">
-<meta property="og:description" content="关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理。
-呈现视图的顺序
-它内部的顺序是这样的，先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或story">
+<meta property="og:description" content="在平时的开发中对于类型的判断是使用的很多的东西，我们可能需要对数据的类型进行检查，以满足预期的结果，而zepto中也提供了一揽子的解决方案，用于类型的判断，函数，字符串，对象，数组等。
+$.each('Boolean Number String Function Array Date RegExp Object Error'.split(' '),    function(i, name) {
+c">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="UIViewController的生命周期">
-<meta name="twitter:description" content="关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理。
-呈现视图的顺序
-它内部的顺序是这样的，先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或story">
+<meta name="twitter:title" content="学习zepto源代码中的类型判断函数">
+<meta name="twitter:description" content="在平时的开发中对于类型的判断是使用的很多的东西，我们可能需要对数据的类型进行检查，以满足预期的结果，而zepto中也提供了一揽子的解决方案，用于类型的判断，函数，字符串，对象，数组等。
+$.each('Boolean Number String Function Array Date RegExp Object Error'.split(' '),    function(i, name) {
+c">
 
   
     <link rel="alternative" href="/atom.xml" title="lcepy" type="application/atom+xml">
@@ -172,15 +172,15 @@
 		</header>				
 	</div>
 </nav>
-      <article id="post-UIViewController的生命周期" class="article article-type-post" itemscope itemprop="blogPost">
+      <article id="post-学习zepto源代码中的类型判断函数" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/02/16/UIViewController的生命周期/" class="article-date">
-  	<time datetime="2015-02-16T13:54:06.000Z" itemprop="datePublished">2月 16 2015</time>
+      <a href="/2015/02/14/学习zepto源代码中的类型判断函数/" class="article-date">
+  	<time datetime="2015-02-14T14:55:51.000Z" itemprop="datePublished">2月 14 2015</time>
 </a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node-js/">node&js</a></li></ul>
 
     </div>
   
@@ -193,7 +193,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      UIViewController的生命周期
+      学习zepto源代码中的类型判断函数
     </h1>
   
 
@@ -201,23 +201,29 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理。</p>
-<p><strong>呈现视图的顺序</strong></p>
-<p>它内部的顺序是这样的，先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或storyborad，如果这个也没有则走loadView方法，loadView方法系统调用，也可以重载它。当我们重载它时，可以[super loadView] 父类帮助我们创建一个空的view，如果不调用父类，那么就要自己创建一个UIView，并且self.view = UIView。</p>
-<p>如果在调用loadView时不调用父类，也不创建，如果使用self.view的getter method并且view等于nil，会发生自我循环调用。一般情况下，不要在初始化时做view相当的动作。在viewDiload中调用一些网络访问的动作，可以在初始化方法中做一些关于模型数据的准备工作。</p>
-<p>如果覆盖了loadView，则必须创建UIViewController的view属性。如果没有覆盖该方法，UIViewController会默认调用initWithNibName方法来初始化并加载view。</p>
-<p><strong>生命周期</strong></p>
-<p>一般来说我们需要知道应用程序什么时候在屏幕上，什么时候从屏幕上消失，这个就是生命周期了。初始化的方法可以在viewDidLoad，这个方法在生命周期中只会调用一次，当然不要忘记了调用它的父类的viewDidLoad方法，[super viewDidLoad]。在调用这个方法时，实际上视图并没有在屏幕上确定下来，于是一般来说，如果视图的几何操作，不要放在这个方法中执行。</p>
-<p>viewWillAppear，这个方法会被多次调用，一般来说一次性的初始化不要放在这个方法中实现，但是如果是基于模型的动态初始化，可以放置在这个方法中实现。这个方法会在视图即将要在屏幕上呈现之前调用。</p>
-<p>当视图从屏幕上消失时，也会得到通知，viewWillDisappear方法。这个方法是在视图将要从屏幕消失之前调用。</p>
-<p>viewDidAppear视图已经呈现在屏幕上调用 viewDidDisappear视图已经从屏幕上消失调用。</p>
-<p>viewWillLayoutSubviews  viewDidLayoutSubviews 这两个方法可以在，比如从竖屏到横屏，系统会自动元素的位置，第一个方法是在移动之前调用，第二个方法是在移动完成之后调用，需要设置Autorotation属性。</p>
-<p>didReceiveMemoryWarning 当内存不足时，系统会调用这个方法，发送警告。 </p>
-<h2 id="顺序">顺序</h2>
-<p>viewDidLoad -&gt; viewWillAppear -&gt; viewDidAppear -&gt; viewWillDisappear -&gt; viewDidDisappear</p>
-<p>关于layout的顺序</p>
-<p>viewWillLayoutSubviews -&gt; viewDidLayoutSubviews</p>
-
+        <p>在平时的开发中对于类型的判断是使用的很多的东西，我们可能需要对数据的类型进行检查，以满足预期的结果，而zepto中也提供了一揽子的解决方案，用于类型的判断，函数，字符串，对象，数组等。</p>
+<pre><code>$.each(<span class="string">"Boolean Number String Function Array Date RegExp Object Error"</span>.split(<span class="string">" "</span>),    <span class="function"><span class="keyword">function</span><span class="params">(i, name)</span> </span>{
+class2type[ <span class="string">"[object "</span> + name + <span class="string">"]"</span> ] = name.toLowerCase()
+  })
+</code></pre><p>其实从这里就可以看的出来zepto使用的是什么方式来检索数据类型，借用的就是Object对象的toString方法把全类型字符串打印出来，然后再根据这些字符串来分别处理。在zepto的源代码中，它没有这么写，Object.prototype.toString.call(obj)，而是直接toString.call(obj)，这是因为这个toString是一个内置对象，作用域我想我们都明白，在客户端它是如何搜索的。</p>
+<p>在得到了全类型的字符串后，可以去class2type的map中取出值来进行比对，来返回正确的类型。</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">isObject</span><span class="params">(obj)</span>     </span>{ <span class="keyword">return</span> type(obj) == <span class="string">"object"</span> }
+<span class="function"><span class="keyword">function</span> <span class="title">isFunction</span><span class="params">(value)</span> </span>{ <span class="keyword">return</span> type(value) == <span class="string">"function"</span> }
+<span class="function"><span class="keyword">function</span> <span class="title">type</span><span class="params">(obj)</span> </span>{
+<span class="keyword">return</span> obj == <span class="literal">null</span> ? <span class="built_in">String</span>(obj) :
+  class2type[toString.call(obj)] || <span class="string">"object"</span>
+  }
+</code></pre><p>数组zepto使用的最新的API，Array提供的isArray方法。</p>
+<pre><code>isArray = <span class="built_in">Array</span>.isArray ||
+  <span class="function"><span class="keyword">function</span><span class="params">(object)</span></span>{ <span class="keyword">return</span> object <span class="keyword">instanceof</span> <span class="built_in">Array</span> }
+</code></pre><p>zepto还提供了检测document，window等。</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">isWindow</span><span class="params">(obj)</span>     </span>{ <span class="keyword">return</span> obj != <span class="literal">null</span> &amp;&amp; obj == obj.window }
+  <span class="function"><span class="keyword">function</span> <span class="title">isDocument</span><span class="params">(obj)</span>   </span>{ <span class="keyword">return</span> obj != <span class="literal">null</span> &amp;&amp; obj.nodeType == obj.DOCUMENT_NODE }
+  <span class="function"><span class="keyword">function</span> <span class="title">isPlainObject</span><span class="params">(obj)</span> </span>{
+ <span class="comment">//getPrototypeOf 返回一个对象的原型 ，这里是不是跟Object.prototype相等</span>
+ <span class="keyword">return</span> isObject(obj) &amp;&amp; !isWindow(obj) &amp;&amp; <span class="built_in">Object</span>.getPrototypeOf(obj) == <span class="built_in">Object</span>.prototype
+}
+</code></pre>
       
     </div>
   </div>
@@ -225,18 +231,18 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/02/16/学习zepto源代码中的map函数/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2015/02/15/学习zepto源代码中的初始化逻辑/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">&lt;</strong>
       <div class="article-nav-title">
         
-          学习zepto源代码中的map函数
+          学习zepto源代码中的初始化逻辑
         
       </div>
     </a>
   
   
-    <a href="/2015/02/15/学习zepto源代码中的初始化逻辑/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">学习zepto源代码中的初始化逻辑</div>
+    <a href="/2015/02/06/理解UITableView/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">理解UITableView</div>
       <strong class="article-nav-caption">&gt;</strong>
     </a>
   
@@ -265,7 +271,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="UIViewController的生命周期" data-title="UIViewController的生命周期" data-url="http://lcepy.github.io/2015/02/16/UIViewController的生命周期/"></div>
+	<div class="ds-thread" data-thread-key="学习zepto源代码中的类型判断函数" data-title="学习zepto源代码中的类型判断函数" data-url="http://lcepy.github.io/2015/02/14/学习zepto源代码中的类型判断函数/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

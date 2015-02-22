@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-02-17T09:52:41.861Z</updated>
+  <updated>2015-02-22T17:34:58.180Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -15,11 +15,11 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[每天zepto源代码学习片段四之each]]></title>
-    <link href="http://lcepy.github.io/2015/02/17/%E6%AF%8F%E5%A4%A9zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%89%87%E6%AE%B5%E5%9B%9B%E4%B9%8Beach/"/>
-    <id>http://lcepy.github.io/2015/02/17/每天zepto源代码学习片段四之each/</id>
+    <title><![CDATA[学习zepto源代码中的each函数]]></title>
+    <link href="http://lcepy.github.io/2015/02/17/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84each%E5%87%BD%E6%95%B0/"/>
+    <id>http://lcepy.github.io/2015/02/17/学习zepto源代码中的each函数/</id>
     <published>2015-02-17T09:41:49.000Z</published>
-    <updated>2015-02-17T09:51:49.000Z</updated>
+    <updated>2015-02-22T17:34:26.000Z</updated>
     <content type="html"><![CDATA[<p>each顾名思义是用来遍历的</p>
 <pre><code>$.each = <span class="function"><span class="keyword">function</span><span class="params">(elements, callback)</span></span>{
 <span class="keyword">var</span> i, key
@@ -46,11 +46,11 @@
   </entry>
   
   <entry>
-    <title><![CDATA[每天zepto源代码学习片段三之map]]></title>
-    <link href="http://lcepy.github.io/2015/02/16/%E6%AF%8F%E5%A4%A9zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%89%87%E6%AE%B5%E4%B8%89%E4%B9%8Bmap/"/>
-    <id>http://lcepy.github.io/2015/02/16/每天zepto源代码学习片段三之map/</id>
+    <title><![CDATA[学习zepto源代码中的map函数]]></title>
+    <link href="http://lcepy.github.io/2015/02/16/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84map%E5%87%BD%E6%95%B0/"/>
+    <id>http://lcepy.github.io/2015/02/16/学习zepto源代码中的map函数/</id>
     <published>2015-02-16T13:57:58.000Z</published>
-    <updated>2015-02-17T08:26:18.000Z</updated>
+    <updated>2015-02-22T17:34:36.000Z</updated>
     <content type="html"><![CDATA[<p>在学习map函数之前，先学习几个比较有用的方法，比如判断一个对象是否是空对象，给字符串两边去空白等。判断空对象，主要是利用了in语法，它可以遍历对象的属性，如果是空对象for循环会直接跳过。</p>
 <pre><code>$.isEmptyObject = <span class="function"><span class="keyword">function</span><span class="params">(obj)</span> </span>{
     <span class="keyword">var</span> name
@@ -123,11 +123,11 @@ var <span class="built_in">value</span>, values = [], i, key
   </entry>
   
   <entry>
-    <title><![CDATA[每天zepto源代码学习片段二之初始化]]></title>
-    <link href="http://lcepy.github.io/2015/02/15/%E6%AF%8F%E5%A4%A9zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%89%87%E6%AE%B5%E4%BA%8C%E4%B9%8B%E5%88%9D%E5%A7%8B%E5%8C%96/"/>
-    <id>http://lcepy.github.io/2015/02/15/每天zepto源代码学习片段二之初始化/</id>
+    <title><![CDATA[学习zepto源代码中的初始化逻辑]]></title>
+    <link href="http://lcepy.github.io/2015/02/15/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E9%80%BB%E8%BE%91/"/>
+    <id>http://lcepy.github.io/2015/02/15/学习zepto源代码中的初始化逻辑/</id>
     <published>2015-02-15T06:11:30.000Z</published>
-    <updated>2015-02-15T08:42:43.000Z</updated>
+    <updated>2015-02-22T17:33:59.000Z</updated>
     <content type="html"><![CDATA[<p>基本上是个人都知道在使用zepto时，是$符号来获取元素对象，如果是空会返回一个数组。从源代码上面来看，是这样的。</p>
 <pre><code>$ = <span class="function"><span class="keyword">function</span><span class="params">(selector, context)</span></span>{
     <span class="keyword">return</span> zepto.init(selector, context)
@@ -240,11 +240,11 @@ zepto.Z = <span class="function"><span class="keyword">function</span><span clas
   </entry>
   
   <entry>
-    <title><![CDATA[每天zepto源代码学习片段一之Js类型函数库]]></title>
-    <link href="http://lcepy.github.io/2015/02/14/%E6%AF%8F%E5%A4%A9zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%89%87%E6%AE%B5%E4%B8%80%E4%B9%8BJs%E7%B1%BB%E5%9E%8B%E5%87%BD%E6%95%B0%E5%BA%93/"/>
-    <id>http://lcepy.github.io/2015/02/14/每天zepto源代码学习片段一之Js类型函数库/</id>
+    <title><![CDATA[学习zepto源代码中的类型判断函数]]></title>
+    <link href="http://lcepy.github.io/2015/02/14/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%88%A4%E6%96%AD%E5%87%BD%E6%95%B0/"/>
+    <id>http://lcepy.github.io/2015/02/14/学习zepto源代码中的类型判断函数/</id>
     <published>2015-02-14T14:55:51.000Z</published>
-    <updated>2015-02-14T15:23:39.000Z</updated>
+    <updated>2015-02-22T17:34:13.000Z</updated>
     <content type="html"><![CDATA[<p>在平时的开发中对于类型的判断是使用的很多的东西，我们可能需要对数据的类型进行检查，以满足预期的结果，而zepto中也提供了一揽子的解决方案，用于类型的判断，函数，字符串，对象，数组等。</p>
 <pre><code>$.each(<span class="string">"Boolean Number String Function Array Date RegExp Object Error"</span>.split(<span class="string">" "</span>),    <span class="function"><span class="keyword">function</span><span class="params">(i, name)</span> </span>{
 class2type[ <span class="string">"[object "</span> + name + <span class="string">"]"</span> ] = name.toLowerCase()
