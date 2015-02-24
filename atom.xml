@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-02-23T09:22:56.968Z</updated>
+  <updated>2015-02-24T11:51:54.230Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://lcepy.github.io/2015/02/17/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84each%E5%87%BD%E6%95%B0/"/>
     <id>http://lcepy.github.io/2015/02/17/学习zepto源代码中的each函数/</id>
     <published>2015-02-17T09:41:49.000Z</published>
-    <updated>2015-02-22T17:34:26.000Z</updated>
+    <updated>2015-02-24T11:48:06.000Z</updated>
     <content type="html"><![CDATA[<p>each顾名思义是用来遍历的</p>
 <pre><code>$.each = <span class="function"><span class="keyword">function</span><span class="params">(elements, callback)</span></span>{
 <span class="keyword">var</span> i, key
@@ -41,7 +41,7 @@
 <pre><code>$.each = <span class="function"><span class="keyword">function</span><span class="params">(elements, callba]]>
     </summary>
     
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
@@ -50,7 +50,7 @@
     <link href="http://lcepy.github.io/2015/02/16/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84map%E5%87%BD%E6%95%B0/"/>
     <id>http://lcepy.github.io/2015/02/16/学习zepto源代码中的map函数/</id>
     <published>2015-02-16T13:57:58.000Z</published>
-    <updated>2015-02-22T17:34:36.000Z</updated>
+    <updated>2015-02-24T11:48:11.000Z</updated>
     <content type="html"><![CDATA[<p>在学习map函数之前，先学习几个比较有用的方法，比如判断一个对象是否是空对象，给字符串两边去空白等。判断空对象，主要是利用了in语法，它可以遍历对象的属性，如果是空对象for循环会直接跳过。</p>
 <pre><code>$.isEmptyObject = <span class="function"><span class="keyword">function</span><span class="params">(obj)</span> </span>{
     <span class="keyword">var</span> name
@@ -87,7 +87,7 @@ var <span class="built_in">value</span>, values = [], i, key
 <pre><code>$.isEmptyObject = <span cl]]>
     </summary>
     
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
@@ -127,7 +127,7 @@ var <span class="built_in">value</span>, values = [], i, key
     <link href="http://lcepy.github.io/2015/02/15/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E9%80%BB%E8%BE%91/"/>
     <id>http://lcepy.github.io/2015/02/15/学习zepto源代码中的初始化逻辑/</id>
     <published>2015-02-15T06:11:30.000Z</published>
-    <updated>2015-02-22T17:33:59.000Z</updated>
+    <updated>2015-02-24T11:47:54.000Z</updated>
     <content type="html"><![CDATA[<p>基本上是个人都知道在使用zepto时，是$符号来获取元素对象，如果是空会返回一个数组。从源代码上面来看，是这样的。</p>
 <pre><code>$ = <span class="function"><span class="keyword">function</span><span class="params">(selector, context)</span></span>{
     <span class="keyword">return</span> zepto.init(selector, context)
@@ -235,7 +235,7 @@ zepto.Z = <span class="function"><span class="keyword">function</span><span clas
 <pre><code>$ = <span class="function"><span class="keyword">function</span>]]>
     </summary>
     
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
@@ -244,7 +244,7 @@ zepto.Z = <span class="function"><span class="keyword">function</span><span clas
     <link href="http://lcepy.github.io/2015/02/14/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%88%A4%E6%96%AD%E5%87%BD%E6%95%B0/"/>
     <id>http://lcepy.github.io/2015/02/14/学习zepto源代码中的类型判断函数/</id>
     <published>2015-02-14T14:55:51.000Z</published>
-    <updated>2015-02-22T17:34:13.000Z</updated>
+    <updated>2015-02-24T11:47:59.000Z</updated>
     <content type="html"><![CDATA[<p>在平时的开发中对于类型的判断是使用的很多的东西，我们可能需要对数据的类型进行检查，以满足预期的结果，而zepto中也提供了一揽子的解决方案，用于类型的判断，函数，字符串，对象，数组等。</p>
 <pre><code>$.each(<span class="string">"Boolean Number String Function Array Date RegExp Object Error"</span>.split(<span class="string">" "</span>),    <span class="function"><span class="keyword">function</span><span class="params">(i, name)</span> </span>{
 class2type[ <span class="string">"[object "</span> + name + <span class="string">"]"</span> ] = name.toLowerCase()
@@ -273,7 +273,7 @@ class2type[ <span class="string">"[object "</span> + name + <span class="string"
 <pre><code>$.each(<span class="string">"]]>
     </summary>
     
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
@@ -349,7 +349,7 @@ class2type[ <span class="string">"[object "</span> + name + <span class="string"
     <link href="http://lcepy.github.io/2015/02/05/%E5%A4%8D%E4%B9%A0JavaScript%E5%8D%81%E4%BA%8C%E4%B9%8B%E7%90%86%E8%A7%A3%E4%BD%9C%E7%94%A8%E5%9F%9F/"/>
     <id>http://lcepy.github.io/2015/02/05/复习JavaScript十二之理解作用域/</id>
     <published>2015-02-05T10:17:09.000Z</published>
-    <updated>2015-02-05T13:19:53.000Z</updated>
+    <updated>2015-02-24T11:47:42.000Z</updated>
     <content type="html"><![CDATA[<p>理解作用域链是Js编程中一个必须要具备的，作用域决定了变量和函数有权力访问哪些数据。在Web浏览器中，全局执行环境是window对象，这也意味着所有的全局变量或者方法都是window对象的属性或方法。当个函数在被调用的时候都会创建自己的执行环境，而这个函数中所写的代码就开始进入这个函数的执行环境，于是由变量对象构建起了一个作用域链。</p>
 <pre><code><span class="keyword">var</span> wow = <span class="string">'魔兽世界'</span>;
 <span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
@@ -376,7 +376,7 @@ class2type[ <span class="string">"[object "</span> + name + <span class="string"
     <![CDATA[<p>理解作用域链是Js编程中一个必须要具备的，作用域决定了变量和函数有权力访问哪些数据。在Web浏览器中，全局执行环境是window对象，这也意味着所有的全局变量或者方法都是window对象的属性或方法。当个函数在被调用的时候都会创建自己的执行环境，而这个函数中所写的代码就开始]]>
     </summary>
     
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
@@ -561,7 +561,7 @@ NSString *str = [<span class="built_in">string</span> <span class="built_in">cop
     <link href="http://lcepy.github.io/2015/02/04/%E5%A4%8D%E4%B9%A0JavaScript%E5%8D%81%E4%B8%80%E4%B9%8B%E7%90%86%E8%A7%A3%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
     <id>http://lcepy.github.io/2015/02/04/复习JavaScript十一之理解内存管理/</id>
     <published>2015-02-04T10:53:09.000Z</published>
-    <updated>2015-02-04T15:00:09.000Z</updated>
+    <updated>2015-02-24T11:47:32.000Z</updated>
     <content type="html"><![CDATA[<p>一般来说内存管理主要有这么几种方式，引用计数和标记，而JavaScript采用的就是标记管理的方式。Js的内存管理是自动的，但是并不是说执行完后立马销毁，而是有时间周期性，相隔一段时间执行一下垃圾回收，把没有引用的内存全部销毁。</p>
 <p>OC中采用的是引用计数来手动管理内存，这样的方式比较好，可以让开发者自己来管理。当然也有不好的地方，如果遗忘了释放，很可能引起应用的崩溃。</p>
 <p>总体来看在IE中因为COM组件的原因，可能会发生循环引用的问题，这个问题在引用计数的内存管理都会遇见。所谓的循环引用是指在对象A中包含了一个指向B的指针，然后再对象B中包含一个指向A的指针，于是悲剧了。</p>
@@ -583,7 +583,7 @@ my = <span class="literal">null</span>;
 <p>OC中采用的是引用计数来手动管]]>
     </summary>
     
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
@@ -592,7 +592,7 @@ my = <span class="literal">null</span>;
     <link href="http://lcepy.github.io/2015/02/03/%E5%A4%8D%E4%B9%A0JavaScript%E5%8D%81%E4%B9%8B%E7%90%86%E8%A7%A3%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E9%97%AD%E5%8C%85/"/>
     <id>http://lcepy.github.io/2015/02/03/复习JavaScript十之理解引用类型和匿名函数闭包/</id>
     <published>2015-02-03T11:02:01.000Z</published>
-    <updated>2015-02-04T10:51:00.000Z</updated>
+    <updated>2015-02-24T11:47:37.000Z</updated>
     <content type="html"><![CDATA[<p>引用类型虽然看起来很类很相似，但是它们却是不同的概念，引用类型的值，也就是对象是引用类型的一个实例。在Js中引用类型主要有Object，Array，Date，正则，Function等。</p>
 <p>Object之前已经复习过了，Array是用的非常频繁的一个引用类型。</p>
 <p><strong>Array</strong></p>
@@ -744,7 +744,7 @@ g();
 <p>Object之前已经复习过了，Array是用的非常频繁的一个引用类型。</]]>
     </summary>
     
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
@@ -753,7 +753,7 @@ g();
     <link href="http://lcepy.github.io/2015/02/03/%E5%A4%8D%E4%B9%A0JavaScript%E4%B9%9D%E4%B9%8B%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%AD%98%E5%82%A8%E6%96%B9%E6%A1%88/"/>
     <id>http://lcepy.github.io/2015/02/03/复习JavaScript九之客户端存储方案/</id>
     <published>2015-02-03T09:43:48.000Z</published>
-    <updated>2015-02-03T11:00:43.000Z</updated>
+    <updated>2015-02-24T11:47:03.000Z</updated>
     <content type="html"><![CDATA[<p>随着Web应用越来越复杂，总是有很多需求需要在客户端存储一些特定的信息，用来描述访问者或者跟访问者相关的信息。于是，就有了这些客户端存储的方案，供开发者选择以及使用。</p>
 <h3 id="cookie">cookie</h3>
 <p>说起来cookie的出现是非常早的，用于在客户端存储会话信息，它要求服务器对任意的HTTP请求发送Set-Cookie HTTP头作为响应的一部分，例如：</p>
@@ -834,7 +834,7 @@ dataStore.getAttribute(<span class="string">'name'</span>);
 <p>说起来cookie的出现是非常早的，]]>
     </summary>
     
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
@@ -843,7 +843,7 @@ dataStore.getAttribute(<span class="string">'name'</span>);
     <link href="http://lcepy.github.io/2015/02/02/%E5%A4%8D%E4%B9%A0JavaScript%E5%85%AB%E4%B9%8B%E6%93%8D%E4%BD%9CXML/"/>
     <id>http://lcepy.github.io/2015/02/02/复习JavaScript八之操作XML/</id>
     <published>2015-02-02T09:50:14.000Z</published>
-    <updated>2015-02-02T10:53:39.000Z</updated>
+    <updated>2015-02-24T11:47:17.000Z</updated>
     <content type="html"><![CDATA[<p>在以前XML是存储和传输数据的事实标准（客户端没有出现JSON之前），那个时候浏览器还不支持解析XML，于是很多开发者需要自己写一个XML解析器。原理，就是把XML也转化成DOM文档，然后通过DOM API来获取。</p>
 <p>而现在，在客户端（浏览器）编程中几乎很少会使用到XML，数据的交换都应用在JSON上了，了解这个有一个好处，就是在做服务端编程，比如SAOP协议时就会用到，还有桌面的客户端，或者是移动客户端上，比如iOS，它把一些数据，比如NSArray写入到本地，实际上就是一个XML文本，当然在代码层面上，是看不出来有解析的，如果读取这个文件，是直接转成NSArray对象的。</p>
 <blockquote>
@@ -885,7 +885,7 @@ xmldom.load(<span class="string">'http://xxx.sss.xml'</span>);
 <p>而现在，在客户端（浏览器）编程中几乎很少会使]]>
     </summary>
     
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
@@ -961,7 +961,7 @@ self.window.<span class="variable">rootViewController =</span> navigation;
     <link href="http://lcepy.github.io/2015/01/28/%E5%A4%8D%E4%B9%A0JavaScript%E4%B8%83%E4%B9%8BDOM/"/>
     <id>http://lcepy.github.io/2015/01/28/复习JavaScript七之DOM/</id>
     <published>2015-01-28T11:51:01.000Z</published>
-    <updated>2015-02-01T11:53:05.000Z</updated>
+    <updated>2015-02-24T11:46:52.000Z</updated>
     <content type="html"><![CDATA[<p>DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。</p>
 <p><strong>理解层级结构与关系</strong></p>
 <p>在浏览器中比如HTML页面是由很多有层次结构的标签组成的，而为这些标签提供查询，添加，删除等等方法主要就是DOM在提供支持。</p>
@@ -1056,7 +1056,7 @@ doc.style.width = <span class="string">'100px'</span>;
 <p><strong>理解层级结构与关系</str]]>
     </summary>
     
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
@@ -1065,7 +1065,7 @@ doc.style.width = <span class="string">'100px'</span>;
     <link href="http://lcepy.github.io/2015/01/27/%E5%A4%8D%E4%B9%A0JavaScript%E5%85%AD%E4%B9%8B%E4%BA%8B%E4%BB%B6/"/>
     <id>http://lcepy.github.io/2015/01/27/复习JavaScript六之事件/</id>
     <published>2015-01-27T10:08:04.000Z</published>
-    <updated>2015-01-28T11:42:03.000Z</updated>
+    <updated>2015-02-24T11:47:27.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>IE浏览器的事件不是复习的重点</p>
 </blockquote>
@@ -1173,7 +1173,7 @@ doc.style.width = <span class="string">'100px'</span>;
 <li>事件冒泡</li>]]>
     </summary>
     
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
@@ -1182,7 +1182,7 @@ doc.style.width = <span class="string">'100px'</span>;
     <link href="http://lcepy.github.io/2015/01/26/%E5%A4%8D%E4%B9%A0JavaScript%E4%BA%94%E4%B9%8B%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
     <id>http://lcepy.github.io/2015/01/26/复习JavaScript五之面向对象的程序设计/</id>
     <published>2015-01-26T06:52:39.000Z</published>
-    <updated>2015-01-27T10:04:38.000Z</updated>
+    <updated>2015-02-24T11:47:12.000Z</updated>
     <content type="html"><![CDATA[<p>面向对象的语言有一个非常明显的标志：类，通过类来创建任意多个具有相同属性和方法的对象，可惜的是Js里没有这样的概念。</p>
 <p>但是Js有一个特性：一切皆是对象。</p>
 <p>聪明的开发者通过这些特性进行摸索，于是迂回发明了一些程序设计，以便更好的组织代码结构。</p>
@@ -1458,7 +1458,7 @@ apple.hasOwnProperty(<span class="string">'showMessage'</span>)
     
     </summary>
     
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
@@ -1467,7 +1467,7 @@ apple.hasOwnProperty(<span class="string">'showMessage'</span>)
     <link href="http://lcepy.github.io/2015/01/25/%E5%A4%8D%E4%B9%A0JavaScript%E5%9B%9B%E4%B9%8BObject/"/>
     <id>http://lcepy.github.io/2015/01/25/复习JavaScript四之Object/</id>
     <published>2015-01-25T13:42:07.000Z</published>
-    <updated>2015-01-26T06:27:02.000Z</updated>
+    <updated>2015-02-24T11:47:48.000Z</updated>
     <content type="html"><![CDATA[<p>JavaScript的所有对象都衍生于Object对象，所有对象都继承了Object.prototype上的方法和属性，虽然它们可能会被覆盖，熟悉它对于编程能起到很大的作用，也能比较深刻的了解JavaScript这门语言。</p>
 <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" rel="external">可参考的资料-Object</a></p>
 <p>创建一个对象可以使用new，也可以使用快速创建的方式：</p>
@@ -1511,7 +1511,7 @@ Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="keywo
 <p><a href="https://d]]>
     </summary>
     
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
@@ -1520,7 +1520,7 @@ Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="keywo
     <link href="http://lcepy.github.io/2015/01/24/%E5%A4%8D%E4%B9%A0JavaScript%E4%B8%89%E4%B9%8BBOM/"/>
     <id>http://lcepy.github.io/2015/01/24/复习JavaScript三之BOM/</id>
     <published>2015-01-24T14:14:04.000Z</published>
-    <updated>2015-01-25T09:48:38.000Z</updated>
+    <updated>2015-02-24T11:46:58.000Z</updated>
     <content type="html"><![CDATA[<p>BOM提供了很多对象，它的核心是window，表示它是浏览器的一个实例，在ECMAScript中又是Global对象。它提供了很多访问浏览器的功能，这些功能与网页无关，所以缺少事实标准的BOM既有意思又有些坑。复习它，主要是复习几个比较有用的对象，其他可以了解一二。</p>
 <h3 id="location">location</h3>
 <blockquote>
@@ -1600,7 +1600,7 @@ Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="keywo
     
     </summary>
     
-      <category term="node&amp;js" scheme="http://lcepy.github.io/tags/node-js/"/>
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
