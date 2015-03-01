@@ -108,7 +108,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 20.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 15.00px;">django</a><a href="/tags/iOS/" style="font-size: 17.50px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.50px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 15.00px;">生活</a><a href="/tags/经验之谈/" style="font-size: 12.50px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 20.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 15.00px;">django</a><a href="/tags/iOS/" style="font-size: 17.50px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.50px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 15.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.50px;">经验之谈</a>
 					</div>
 				</section>
 				
@@ -167,6 +167,87 @@
 	</div>
 </nav>
       
+  
+    <article id="post-iOS学习第一个月心得与总结" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/02/iOS学习第一个月心得与总结/" class="article-date">
+  	<time datetime="2015-01-02T15:45:14.000Z" itemprop="datePublished">1月 2 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/02/iOS学习第一个月心得与总结/">iOS学习第一个月心得与总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>从买来Mac之后，还是看的池建强老师的一篇文章《程序员如何选择技术方向》，就开始自发的学习iOS了，因为我也想做一个自己的应用，想学一门编译型的语言，说来也巧，买Mac电脑，还是看了池老师《Mac Talk人生元编程》才开始真正下定决心入手了一台。</p>
+<p>在开始学习iOS编程之前，我先重新去复习了一下C语言，这个是非常有必要的。虽然现在Swift已经出来了，但是Objective-C还是需要掌握的，而它又是C的超集，无可厚非，于是从头开始。</p>
+<p>C语言总结：</p>
+<ul>
+<li>学习它的基本类型，比如int float等</li>
+<li>学习数组，了解C语言数组是没有边界的，以及数组的指针是如何指向的</li>
+<li>学习C语言的函数，了解它的一些传参，返回值等等，C语言中的函数如果想改变参数的值，那么必须传入指针类型</li>
+<li>学习内存分配，以及如何分析问题</li>
+<li>学习指针*，地址符&amp;</li>
+<li>学习结构体，静态类型</li>
+<li>学习宏定义，文件包含，条件编译</li>
+<li>学习typedef</li>
+<li>学习指向一维，二维数组的指针，指针字符串，以及指向函数的指针与返回指针的函数</li>
+<li>枚举</li>
+<li>个别C语言函数库</li>
+</ul>
+<p>总体来说学习完C语言之后，再学习OC非常的轻松，很多东西都可以command + 鼠标左键 去h文件中自己看，苹果的方法长的跟句子一样，真的很难记住，所以必须要看头文件了。而且学习完C语言，对于内存的分配，更加的清楚了。</p>
+<p>Objective-C语言语法总结：</p>
+<ul>
+<li>学习OC后的结果第一条就是要学习如何看源代码</li>
+<li>@interface定义一个类，在h文件中，以及如何在m文件中实现这个类@implementation，它们都有@end来结尾</li>
+<li>了解OC是单继承，所以一个类只能继承一个父类，但可以有多个子类，OC中的继承是在头文件定义的类名后面:UIViewController 写上需要继承父类的类名</li>
+<li>OC里也有成员变量，可以用一个大括号括起来，它也有如@public @private等，如果没有显示的声明，那么默认都是@protected</li>
+<li>接着是学习如何定义方法，- + 以及self的作用，－表示实例方法，+表示静态方法，self表示当前谁用就指向谁</li>
+<li>学习如何传入参数-(int)number:(int)num; 第一个括号表示返回值，冒号也算方法名，后面跟着的括号，表示传入一个int类型的参数</li>
+<li>在成员变量中，可以显示的声明getter，setter方法，而在OC中这两种可以使用点语法来使用</li>
+<li>学习分类category，在xcode中创建的文件一般都是类＋分类名比如@interface Game:(Test)，通过它可以实现对类的扩展</li>
+<li>学习协议protocol，这玩意在做实际项目时会大量的运用到，它跟接口非常的类似，OC不强制要求实现全部的协议，使用的时候在类名后面加上尖括号<xxxdelegate>要求实现这个协议</xxxdelegate></li>
+<li>block语法，^{}，这玩意跟Js中的callback函数非常的类似，只是OC实现的语法会非常的奇怪int(^number)(int,int)第一个int表示返回值，中间括号表示block的名字，最后一个括号表示传入参数的类型，这玩意字符多的时候看起来会有些怪异和费解</li>
+<li>一些循环，for for in 或者block</li>
+<li>内存管理，OC是使用引用计数的方式来管理内存的，所以创建就必须对应有释放，现在因为已经有了ARC所以这部分代码可以不用写了，编译器会帮助我们自动补全。alloc retain copy ＋1 relese -1 0的时候系统释放，一般情况下，谁使用，谁释放的原则，比如我现在用alloc创建一个对象，那么我就需要在relese它，如果我把这个对象setter给另一个对象当属性，那么这个对象就要retain一次，在dealloc这个方法中对它relese，原则就是这样的，谁使用，谁释放。</li>
+<li>@property属性，OC提供了一个快速创建属性并默认实现getter setter方法的东西，主要是配合原子性，retain copy来使用，在开启ARC的环境下，可以用weak strong来使用，这个主要对应UI方面，一般情况下只是赋值用assign，NSString用copy，其他OC对象用retain</li>
+<li>学习copy语法，了解什么是浅拷贝，深拷贝</li>
+</ul>
+
+        
+          <p class="article-more-link">
+            <a href="/2015/01/02/iOS学习第一个月心得与总结/#more">more >></a>
+          </p>
+        
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
   
     <article id="post-使用cocoapods来管理第三方库" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -390,75 +471,6 @@ hexo <span class="keyword">server</span></span>
         
           <p class="article-more-link">
             <a href="/2014/11/14/关于django中CSRF开启的问题/#more">more >></a>
-          </p>
-        
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-django模型使用的一些心得" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/django模型使用的一些心得/" class="article-date">
-  	<time datetime="2014-11-14T12:30:31.000Z" itemprop="datePublished">11月 14 2014</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/">django</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/django模型使用的一些心得/">django模型使用的一些心得</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>近很一直在学习django，因为我需要使用它为自己的项目写一个前台页面和一个后台服务。它是一个关于咖啡的邮件订阅社区，既然有服务，自然需要数据库层的支持。这是一个很好的开始，学习django让我了解到python开发web应用真的非常快速，但是也有一个很明显的缺点。那就是国内，对django社区的支持度非常不好，这或许跟国内python的有关，不过也不要紧，学习就是这样，要啃难而上。</p>
-<p>说说在django中模型，对应的数据库层，也就是意味着django帮助我们完成了对数据库的访问，操作，通过它的模型类。</p>
-<blockquote>
-<p>django-admin.py startapp sendcloud</p>
-</blockquote>
-<p>通过上述的命令，我们可以完成一个app模块，这个模块中带有views.py models.py test.py，而models.py文件中，就是我们完成模型的一个最主要的文件。</p>
-<blockquote>
-<p>from django.db import models</p>
-</blockquote>
-<p>模型类，都需要继承自django.db.models类。通过它与manage.py来完成初始化等等动作。关于manage.py的命令，未来有时间，我会写写关于它的心得。</p>
-<pre><code><span class="class"><span class="keyword">class</span> <span class="title">WeeklySyncList</span><span class="params">(models.Model)</span>:</span>
-    <span class="comment">#do something</span>
-    <span class="keyword">pass</span>
-</code></pre><p>一个模型类对于数据库层中的一个表，在我们定义好模型类之后，可以在命令行中输入：</p>
-<blockquote>
-<p>python manage.py sqlall sendcloud</p>
-</blockquote>
-<p>来完成对创建语法的查看以及错误信息的查看，准确没有错误之后，可以输入：</p>
-<blockquote>
-<p>python manage.py syncdb</p>
-</blockquote>
-<p>来初始数据库，django会帮助我们完成数据库层面的操作。</p>
-
-        
-          <p class="article-more-link">
-            <a href="/2014/11/14/django模型使用的一些心得/#more">more >></a>
           </p>
         
       
