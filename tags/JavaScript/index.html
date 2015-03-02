@@ -168,6 +168,55 @@
 </nav>
       
   
+    <article id="post-学习zepto源代码中的read方法" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/02/学习zepto源代码中的read方法/" class="article-date">
+  	<time datetime="2015-03-02T03:31:58.000Z" itemprop="datePublished">3月 2 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/02/学习zepto源代码中的read方法/">学习zepto源代码中的read方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>read函数，是在开发中非常有用的函数，主要是用来当DOM文档准备好之后，再加载或直接某些Js片段。就是怕，某些情况下，比如Js片段已经写好了，这里面要获取某个DOM节点，实际上这里会是null，然后执行其他操作就抛错误了，因为在浏览器中，这个节点还不存在。</p>
+<pre><code><span class="comment">//读取readyState状态</span>
+  <span class="keyword">if</span> (readyRE.test(<span class="built_in">document</span>.readyState) &amp;&amp; <span class="built_in">document</span>.body) callback($)
+<span class="comment">//监听DOMContentLoaded事件</span>
+  <span class="keyword">else</span> <span class="built_in">document</span>.addEventListener(<span class="string">'DOMContentLoaded'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{ callback($) }, <span class="literal">false</span>)
+  <span class="keyword">return</span>  <span class="keyword">this</span>
+</code></pre><p>zepto因为是移动端的开发，所以它监听的是DOMContentLoaded事件，这个事件是一个原生方法，新版API中提供了这个，而对IE10兼容，则是判断document的readyState属性，保证它是complete|loaded|interactive，这也意味着已经准备好了，并且还要判断body是否存在，才执行callback函数。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-学习zepto源代码中的each函数" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -492,69 +541,6 @@ class2type[ <span class="string">"[object "</span> + name + <span class="string"
  <span class="keyword">return</span> isObject(obj) &amp;&amp; !isWindow(obj) &amp;&amp; <span class="built_in">Object</span>.getPrototypeOf(obj) == <span class="built_in">Object</span>.prototype
 }
 </code></pre>
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript十二之理解作用域" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/05/复习JavaScript十二之理解作用域/" class="article-date">
-  	<time datetime="2015-02-05T10:17:09.000Z" itemprop="datePublished">2月 5 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/05/复习JavaScript十二之理解作用域/">复习JavaScript十二之理解作用域</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>理解作用域链是Js编程中一个必须要具备的，作用域决定了变量和函数有权力访问哪些数据。在Web浏览器中，全局执行环境是window对象，这也意味着所有的全局变量或者方法都是window对象的属性或方法。当个函数在被调用的时候都会创建自己的执行环境，而这个函数中所写的代码就开始进入这个函数的执行环境，于是由变量对象构建起了一个作用域链。</p>
-<pre><code><span class="keyword">var</span> wow = <span class="string">'魔兽世界'</span>;
-<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> _wow = <span class="string">'123'</span>;
-}
-</code></pre><p>在这个例子中全局环境中包含了两个对象（全局环境的变量对象不算），window.wow和window.message，而这个message函数中又包含了两个对象，它自己的变量对象（其中定义了arguments对象）和全局环境的变量对象。当这个函数开始执行时，message自己的变量对象中定义了_wow，而它的全局环境的变量对象有wow，假设在message中alert一下wow，实际上是message中包含的全局环境的变量对象.wow，于是可以访问。</p>
-<pre><code><span class="keyword">var</span> wow = <span class="string">'123'</span>;
-<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> wow = <span class="string">'456'</span>;
-}
-</code></pre><p>如果执行message函数alert一下wow，它的作用域是这样开始搜索的，先搜索message自己的变量对象中是否存在wow，如果有就访问并且立马停止搜索，如果没有则继续往上访问它，有wow，则访问并且立马停止搜索，以此类推一直搜索到全局环境上的变量对象，如果这里都没，恭喜你，这里要抛错了。</p>
-<pre><code><span class="keyword">var</span> c = <span class="string">'123'</span>;
-<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> g = <span class="string">'123'</span>;
-    <span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        <span class="keyword">var</span> d = <span class="string">'123'</span>;
-    }
-}
-</code></pre><p>在这个例子中包含有三个执行环境，全局环境，message的环境，a的环境。从这里可以看出message自身包含两个对象，自己的变量对象和全局环境中的变量对象，而函数a则包含了三个，自身的变量对象，message的变量对象和全局变量对象。</p>
-<p>当开始执行这函数时，在函数a中可以访问到变量g，那是因为函数a包含了message的变量对象，于是在自身没有开始搜索上一级的变量对象时发现了，于是可以访问。那么访问c的原理也是如此，当自身和上一级的message的变量对象都没有，但是全局变量对象中存在，于是访问成功。</p>
-<p>了解这个作用域，对于Js编程是至关重要的，不然可能会出现，明明想要的预期结果是123，但是变成了456，为什么？那就是因为一级一级的搜索，可能会存在覆盖，或者搜索到别的地方就立即停止搜索了。</p>
-
       
     </div>
   </div>

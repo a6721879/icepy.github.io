@@ -168,6 +168,55 @@
 </nav>
       
   
+    <article id="post-学习zepto源代码中的read方法" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/02/学习zepto源代码中的read方法/" class="article-date">
+  	<time datetime="2015-03-02T03:31:58.000Z" itemprop="datePublished">3月 2 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/02/学习zepto源代码中的read方法/">学习zepto源代码中的read方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>read函数，是在开发中非常有用的函数，主要是用来当DOM文档准备好之后，再加载或直接某些Js片段。就是怕，某些情况下，比如Js片段已经写好了，这里面要获取某个DOM节点，实际上这里会是null，然后执行其他操作就抛错误了，因为在浏览器中，这个节点还不存在。</p>
+<pre><code><span class="comment">//读取readyState状态</span>
+  <span class="keyword">if</span> (readyRE.test(<span class="built_in">document</span>.readyState) &amp;&amp; <span class="built_in">document</span>.body) callback($)
+<span class="comment">//监听DOMContentLoaded事件</span>
+  <span class="keyword">else</span> <span class="built_in">document</span>.addEventListener(<span class="string">'DOMContentLoaded'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{ callback($) }, <span class="literal">false</span>)
+  <span class="keyword">return</span>  <span class="keyword">this</span>
+</code></pre><p>zepto因为是移动端的开发，所以它监听的是DOMContentLoaded事件，这个事件是一个原生方法，新版API中提供了这个，而对IE10兼容，则是判断document的readyState属性，保证它是complete|loaded|interactive，这也意味着已经准备好了，并且还要判断body是否存在，才执行callback函数。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-向文文的简历" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
