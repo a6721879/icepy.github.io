@@ -3,17 +3,41 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2015/3 | lcepy</title>
+  <title>向文文的简历 | lcepy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="lcepy">
-<meta property="og:url" content="http://lcepy.github.io/archives/2015/03/">
+  <meta name="description" content="个人信息：
+向文文 xiangwenwe@foxmail.com.com  (+86) 18574532867 
+技术博客 http://lcepy.github.io/
+Github https://github.com/lcepy
+Skill set：JavaScript NodeJs
+工作经验：
+上海携程旅行网   软件开发工程师
+任职时间：2014年2月12日-12月31日
+工作职责：负责">
+<meta property="og:type" content="article">
+<meta property="og:title" content="向文文的简历">
+<meta property="og:url" content="http://lcepy.github.io/2015/03/01/myresume/">
 <meta property="og:site_name" content="lcepy">
-<meta property="og:description">
+<meta property="og:description" content="个人信息：
+向文文 xiangwenwe@foxmail.com.com  (+86) 18574532867 
+技术博客 http://lcepy.github.io/
+Github https://github.com/lcepy
+Skill set：JavaScript NodeJs
+工作经验：
+上海携程旅行网   软件开发工程师
+任职时间：2014年2月12日-12月31日
+工作职责：负责">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="lcepy">
-<meta name="twitter:description">
+<meta name="twitter:title" content="向文文的简历">
+<meta name="twitter:description" content="个人信息：
+向文文 xiangwenwe@foxmail.com.com  (+86) 18574532867 
+技术博客 http://lcepy.github.io/
+Github https://github.com/lcepy
+Skill set：JavaScript NodeJs
+工作经验：
+上海携程旅行网   软件开发工程师
+任职时间：2014年2月12日-12月31日
+工作职责：负责">
 
   
     <link rel="alternative" href="/atom.xml" title="lcepy" type="application/atom+xml">
@@ -166,58 +190,7 @@
 		</header>				
 	</div>
 </nav>
-      
-  
-    <article id="post-学习zepto源代码中的read方法" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/02/学习zepto源代码中的read方法/" class="article-date">
-  	<time datetime="2015-03-02T03:31:58.000Z" itemprop="datePublished">3月 2 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/02/学习zepto源代码中的read方法/">学习zepto源代码中的read方法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>read函数，是在开发中非常有用的函数，主要是用来当DOM文档准备好之后，再加载或直接某些Js片段。就是怕，某些情况下，比如Js片段已经写好了，这里面要获取某个DOM节点，实际上这里会是null，然后执行其他操作就抛错误了，因为在浏览器中，这个节点还不存在。</p>
-<pre><code><span class="comment">//读取readyState状态</span>
-  <span class="keyword">if</span> (readyRE.test(<span class="built_in">document</span>.readyState) &amp;&amp; <span class="built_in">document</span>.body) callback($)
-<span class="comment">//监听DOMContentLoaded事件</span>
-  <span class="keyword">else</span> <span class="built_in">document</span>.addEventListener(<span class="string">'DOMContentLoaded'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{ callback($) }, <span class="literal">false</span>)
-  <span class="keyword">return</span>  <span class="keyword">this</span>
-</code></pre><p>zepto因为是移动端的开发，所以它监听的是DOMContentLoaded事件，这个事件是一个原生方法，新版API中提供了这个，而对IE10兼容，则是判断document的readyState属性，保证它是complete|loaded|interactive，这也意味着已经准备好了，并且还要判断body是否存在，才执行callback函数。</p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-myresume" class="article article-type-post" itemscope itemprop="blogPost">
+      <article id="post-myresume" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2015/03/01/myresume/" class="article-date">
@@ -237,8 +210,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/01/myresume/">向文文的简历</a>
+    <h1 class="article-title" itemprop="name">
+      向文文的简历
     </h1>
   
 
@@ -315,15 +288,68 @@
     </div>
   </div>
   
+    
+<nav id="article-nav">
+  
+    <a href="/2015/03/02/学习zepto源代码中的read方法/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">&lt;</strong>
+      <div class="article-nav-title">
+        
+          学习zepto源代码中的read方法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/02/17/学习zepto源代码中的each函数/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">学习zepto源代码中的each函数</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
 </article>
 
 
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
 
 
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="myresume" data-title="向文文的简历" data-url="http://lcepy.github.io/2015/03/01/myresume/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lcepy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
-  
-  
+
+
 
       <footer id="footer">
   <div class="outer">
