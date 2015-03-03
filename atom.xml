@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-03-02T07:28:08.461Z</updated>
+  <updated>2015-03-03T03:28:40.479Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -13,6 +13,56 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[有趣味的iOS动画实现]]></title>
+    <link href="http://lcepy.github.io/2015/03/03/%E6%9C%89%E8%B6%A3%E5%91%B3%E7%9A%84iOS%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/"/>
+    <id>http://lcepy.github.io/2015/03/03/有趣味的iOS动画实现/</id>
+    <published>2015-03-03T01:40:21.000Z</published>
+    <updated>2015-03-03T03:28:12.000Z</updated>
+    <content type="html"><![CDATA[<p>在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，设置apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。</p>
+<p>想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，也就是几个属性。</p>
+<pre><code>dropview.frame;
+dropview.<span class="keyword">center</span>;
+dropview.bounds;
+dropview.transform
+</code></pre><p>动画，是顾名思义的，在平面或者多维度的移动，frame中记录了当前视图相对于父视图左上角顶点的左边，而center则是中心原点，transform则代表了比如旋转等等矩阵的改变属性。</p>
+<p>最简单的动画，就是操作这些属性，改变其值，使用的是UIView的类方法，比如：</p>
+<pre><code>[UIView animateWithDuration:<span class="number">1.0</span> animations:^{
+
+} completion:^(BOOL finished) {
+
+}]
+</code></pre><p>其实我最近研究了一下UIDynamicAnimator，它提供了一个模拟真实物理世界的动画与交互系统，比如可以定义一些行为，重力行为，碰撞行为等等。</p>
+<pre><code>-(<span class="constant">UIDynamicAnimator</span> *)animator
+{
+    <span class="keyword">if</span> (!_animator) {
+        _animator = [[<span class="constant">UIDynamicAnimator</span> alloc] <span class="symbol">initWithReferenceView:</span><span class="keyword">self</span>.gameview];
+    }
+    <span class="keyword">return</span> _animator;
+}
+</code></pre><p>UIDynamicAnimator需要一个通用的视图，而动画则是在这个视图上发生，所以init的时候添加了一个通用视图上去。然后可以去实现其他的物理类，比如重力，把它add到UIDynamicAnimator中。</p>
+<pre><code>-(<span class="type">UIGravityBehavior</span> *)gravit
+{
+    <span class="keyword">if</span> (!_gravit) {
+        _gravit = [[<span class="type">UIGravityBehavior</span> alloc] <span class="keyword">init</span>];
+        _gravit.magnitude = <span class="number">0.9</span>;
+        [<span class="keyword">self</span>.animator addBehavior:_gravit];
+    }
+    <span class="keyword">return</span> _gravit;
+}
+</code></pre><p>最后一步是要把需要被实现物理动画的视图，添加到重力系统中去。</p>
+<pre><code><span class="title">[self.gravit addItem:dropview]</span><span class="comment">;</span>
+</code></pre><p>从技术实现的角度上来说，iOS平台实现这些动画，包括绘制，物理交互，都非常的简单，主要是要注意一些细节的处理，比如当前动画停止之后处理什么，在动画执行过程中，可能会出现一些情况，然后处理，或者是几个动画的连接延迟等等。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，设置apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。</p>
+<p>想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[学习zepto源代码中的read方法]]></title>
@@ -1560,59 +1610,6 @@ Computer.prototype.isPrototypeOf(apple);
 apple.hasOwnProperty(<span class="string">'showMessage'</span>)
 </code></pre><p>使用hasOwnProperty来检测到底是对象属性还是原型属性，使用this创建的属性是一个对象属性。<br>]]>
     
-    </summary>
-    
-      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[复习JavaScript四之Object]]></title>
-    <link href="http://lcepy.github.io/2015/01/25/%E5%A4%8D%E4%B9%A0JavaScript%E5%9B%9B%E4%B9%8BObject/"/>
-    <id>http://lcepy.github.io/2015/01/25/复习JavaScript四之Object/</id>
-    <published>2015-01-25T13:42:07.000Z</published>
-    <updated>2015-02-24T11:47:48.000Z</updated>
-    <content type="html"><![CDATA[<p>JavaScript的所有对象都衍生于Object对象，所有对象都继承了Object.prototype上的方法和属性，虽然它们可能会被覆盖，熟悉它对于编程能起到很大的作用，也能比较深刻的了解JavaScript这门语言。</p>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" rel="external">可参考的资料-Object</a></p>
-<p>创建一个对象可以使用new，也可以使用快速创建的方式：</p>
-<pre><code><span class="keyword">var</span> _<span class="class"><span class="keyword">object</span> = </span>{};
-</code></pre><p>_object对象中就可以使用Object.prototype中所有的方法和属性，虽然看起来它是空的。说到这里在编程中常常有一个非常有用的需求，如何判断一个对象是空对象。</p>
-<p>这是zepto中的判断一个对象是否是空对象，常常使用：</p>
-<pre><code>$.isEmptyObject = <span class="function"><span class="keyword">function</span><span class="params">(obj)</span> </span>{
-    <span class="keyword">var</span> name
-    <span class="keyword">for</span> (name <span class="keyword">in</span> obj) <span class="keyword">return</span> <span class="literal">false</span>
-    <span class="keyword">return</span> <span class="literal">true</span>
-  }
-</code></pre><p>也顺便看了下jQuery原理是一模一样的：</p>
-<pre><code>isEmptyObject: <span class="function"><span class="keyword">function</span><span class="params">( obj )</span> </span>{
-    <span class="keyword">var</span> name;
-    <span class="keyword">for</span> ( name <span class="keyword">in</span> obj ) {
-        <span class="keyword">return</span> <span class="literal">false</span>;
-    }
-    <span class="keyword">return</span> <span class="literal">true</span>;
-}
-</code></pre><p>使用in操作符来实现，它不会遍历到父原型链。</p>
-<p>constructor返回一个指向创建了该对象的函数引用，这个东西主要是可以用来识别（类）到底是指向哪里的。</p>
-<p>defineProperty直接在一个对象上定义一个新属性，非常适合用于动态构建，传入三个参数［动态添加对象的目标对象，需要定义或被修改的属性名，需要定义的对象］，在第三个参数中可以有些属性来表示是否继承（<strong>proto</strong>），要不要定义get，set方法，enumerable是否可枚举。</p>
-<p>defineProperties跟上述defineProperty一样，但是它可以添加多个。</p>
-<p>getOwnPropertyNames返回一个由指定对象的所有属性组成的数组</p>
-<p>keys返回一个数组包括对象所有的属性（可枚举）</p>
-<blockquote>
-<p>keys是经常会用到的一个属性，它只能包可枚举的，如果想获取一个对象的所有属性包括不枚举的，那么使用getOwnPropertyNames。</p>
-</blockquote>
-<p>hasOwnProperty用于判断某个对象是否包含有自身的属性，这个方法常常用于检测对象中的属性是否存在，它只检测自身，对于继承过来的都是false，这一点是非常重要的理解。</p>
-<p>isPrototypeOf 用于检测一个对象是否在另一个对象的原型链上，比如有两个对象是互相交互的，常常会使用它来进行检测。</p>
-<p>propertyIsEnumerable这个方法也比较重要，返回一个布尔值，检测一个对象的自身属性是否可以枚举</p>
-<blockquote>
-<p>可枚举的理解，也就是对象的属性可枚举，它的属性值不可以修改，但是在Js中它有自己的定义，引擎内部看不见的该属性的[[Enumerable]]特性为true，那么就是可枚举的。基本上把一个普通对象可以看做是一个枚举类型，比如var color = {‘red’:1}，red是可以修改的，但是red是可枚举的，但是如果是继承过来的属性，propertyIsEnumerable是返回false的，它还有一个特点，就是自身。</p>
-</blockquote>
-<p>如果要定义不可枚举的属性，那就要使用defineProperty方法了，目前不能用对象直接量或者构造函数定义出来。</p>
-<pre><code><span class="keyword">var</span> obj = {name: <span class="string">'jack'</span>, age:<span class="number">23</span>}
-Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="keyword">value</span> : <span class="string">'123'</span>, enumerable : <span class="keyword">false</span> });
-</code></pre>]]></content>
-    <summary type="html">
-    <![CDATA[<p>JavaScript的所有对象都衍生于Object对象，所有对象都继承了Object.prototype上的方法和属性，虽然它们可能会被覆盖，熟悉它对于编程能起到很大的作用，也能比较深刻的了解JavaScript这门语言。</p>
-<p><a href="https://d]]>
     </summary>
     
       <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>

@@ -3,23 +3,32 @@
 <head>
   <meta charset="utf-8">
   
-  <title>学习zepto源代码中的read方法 | lcepy</title>
+  <title>有趣味的iOS动画实现 | lcepy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="read函数，是在开发中非常有用的函数，主要是用来当DOM文档准备好之后，再加载或直接某些Js片段。就是怕，某些情况下，比如Js片段已经写好了，这里面要获取某个DOM节点，实际上这里会是null，然后执行其他操作就抛错误了，因为在浏览器中，这个节点还不存在。
-//读取readyState状态
-  if (readyRE.test(document.readyState) &amp;&amp; do">
+  <meta name="description" content="在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，设置apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。
+想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，也就是几个属性。
+dropview.frame;
+dropview.center;
+dropview.bounds;
+dropview.tr">
 <meta property="og:type" content="article">
-<meta property="og:title" content="学习zepto源代码中的read方法">
-<meta property="og:url" content="http://lcepy.github.io/2015/03/02/学习zepto源代码中的read方法/">
+<meta property="og:title" content="有趣味的iOS动画实现">
+<meta property="og:url" content="http://lcepy.github.io/2015/03/03/有趣味的iOS动画实现/">
 <meta property="og:site_name" content="lcepy">
-<meta property="og:description" content="read函数，是在开发中非常有用的函数，主要是用来当DOM文档准备好之后，再加载或直接某些Js片段。就是怕，某些情况下，比如Js片段已经写好了，这里面要获取某个DOM节点，实际上这里会是null，然后执行其他操作就抛错误了，因为在浏览器中，这个节点还不存在。
-//读取readyState状态
-  if (readyRE.test(document.readyState) &amp;&amp; do">
+<meta property="og:description" content="在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，设置apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。
+想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，也就是几个属性。
+dropview.frame;
+dropview.center;
+dropview.bounds;
+dropview.tr">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="学习zepto源代码中的read方法">
-<meta name="twitter:description" content="read函数，是在开发中非常有用的函数，主要是用来当DOM文档准备好之后，再加载或直接某些Js片段。就是怕，某些情况下，比如Js片段已经写好了，这里面要获取某个DOM节点，实际上这里会是null，然后执行其他操作就抛错误了，因为在浏览器中，这个节点还不存在。
-//读取readyState状态
-  if (readyRE.test(document.readyState) &amp;&amp; do">
+<meta name="twitter:title" content="有趣味的iOS动画实现">
+<meta name="twitter:description" content="在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，设置apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。
+想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，也就是几个属性。
+dropview.frame;
+dropview.center;
+dropview.bounds;
+dropview.tr">
 
   
     <link rel="alternative" href="/atom.xml" title="lcepy" type="application/atom+xml">
@@ -172,15 +181,15 @@
 		</header>				
 	</div>
 </nav>
-      <article id="post-学习zepto源代码中的read方法" class="article article-type-post" itemscope itemprop="blogPost">
+      <article id="post-有趣味的iOS动画实现" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/03/02/学习zepto源代码中的read方法/" class="article-date">
-  	<time datetime="2015-03-02T03:31:58.000Z" itemprop="datePublished">3月 2 2015</time>
+      <a href="/2015/03/03/有趣味的iOS动画实现/" class="article-date">
+  	<time datetime="2015-03-03T01:40:21.000Z" itemprop="datePublished">3月 3 2015</time>
 </a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
 
     </div>
   
@@ -193,7 +202,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      学习zepto源代码中的read方法
+      有趣味的iOS动画实现
     </h1>
   
 
@@ -201,13 +210,40 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>read函数，是在开发中非常有用的函数，主要是用来当DOM文档准备好之后，再加载或直接某些Js片段。就是怕，某些情况下，比如Js片段已经写好了，这里面要获取某个DOM节点，实际上这里会是null，然后执行其他操作就抛错误了，因为在浏览器中，这个节点还不存在。</p>
-<pre><code><span class="comment">//读取readyState状态</span>
-  <span class="keyword">if</span> (readyRE.test(<span class="built_in">document</span>.readyState) &amp;&amp; <span class="built_in">document</span>.body) callback($)
-<span class="comment">//监听DOMContentLoaded事件</span>
-  <span class="keyword">else</span> <span class="built_in">document</span>.addEventListener(<span class="string">'DOMContentLoaded'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{ callback($) }, <span class="literal">false</span>)
-  <span class="keyword">return</span>  <span class="keyword">this</span>
-</code></pre><p>zepto因为是移动端的开发，所以它监听的是DOMContentLoaded事件，这个事件是一个原生方法，新版API中提供了这个，而对IE10兼容，则是判断document的readyState属性，保证它是complete|loaded|interactive，这也意味着已经准备好了，并且还要判断body是否存在，才执行callback函数。</p>
+        <p>在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，设置apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。</p>
+<p>想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，也就是几个属性。</p>
+<pre><code>dropview.frame;
+dropview.<span class="keyword">center</span>;
+dropview.bounds;
+dropview.transform
+</code></pre><p>动画，是顾名思义的，在平面或者多维度的移动，frame中记录了当前视图相对于父视图左上角顶点的左边，而center则是中心原点，transform则代表了比如旋转等等矩阵的改变属性。</p>
+<p>最简单的动画，就是操作这些属性，改变其值，使用的是UIView的类方法，比如：</p>
+<pre><code>[UIView animateWithDuration:<span class="number">1.0</span> animations:^{
+
+} completion:^(BOOL finished) {
+
+}]
+</code></pre><p>其实我最近研究了一下UIDynamicAnimator，它提供了一个模拟真实物理世界的动画与交互系统，比如可以定义一些行为，重力行为，碰撞行为等等。</p>
+<pre><code>-(<span class="constant">UIDynamicAnimator</span> *)animator
+{
+    <span class="keyword">if</span> (!_animator) {
+        _animator = [[<span class="constant">UIDynamicAnimator</span> alloc] <span class="symbol">initWithReferenceView:</span><span class="keyword">self</span>.gameview];
+    }
+    <span class="keyword">return</span> _animator;
+}
+</code></pre><p>UIDynamicAnimator需要一个通用的视图，而动画则是在这个视图上发生，所以init的时候添加了一个通用视图上去。然后可以去实现其他的物理类，比如重力，把它add到UIDynamicAnimator中。</p>
+<pre><code>-(<span class="type">UIGravityBehavior</span> *)gravit
+{
+    <span class="keyword">if</span> (!_gravit) {
+        _gravit = [[<span class="type">UIGravityBehavior</span> alloc] <span class="keyword">init</span>];
+        _gravit.magnitude = <span class="number">0.9</span>;
+        [<span class="keyword">self</span>.animator addBehavior:_gravit];
+    }
+    <span class="keyword">return</span> _gravit;
+}
+</code></pre><p>最后一步是要把需要被实现物理动画的视图，添加到重力系统中去。</p>
+<pre><code><span class="title">[self.gravit addItem:dropview]</span><span class="comment">;</span>
+</code></pre><p>从技术实现的角度上来说，iOS平台实现这些动画，包括绘制，物理交互，都非常的简单，主要是要注意一些细节的处理，比如当前动画停止之后处理什么，在动画执行过程中，可能会出现一些情况，然后处理，或者是几个动画的连接延迟等等。</p>
 
       
     </div>
@@ -216,18 +252,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/03/03/有趣味的iOS动画实现/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">&lt;</strong>
-      <div class="article-nav-title">
-        
-          有趣味的iOS动画实现
-        
-      </div>
-    </a>
   
-  
-    <a href="/2015/03/01/myresume/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">向文文的简历</div>
+    <a href="/2015/03/02/学习zepto源代码中的read方法/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">学习zepto源代码中的read方法</div>
       <strong class="article-nav-caption">&gt;</strong>
     </a>
   
@@ -256,7 +283,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="学习zepto源代码中的read方法" data-title="学习zepto源代码中的read方法" data-url="http://lcepy.github.io/2015/03/02/学习zepto源代码中的read方法/"></div>
+	<div class="ds-thread" data-thread-key="有趣味的iOS动画实现" data-title="有趣味的iOS动画实现" data-url="http://lcepy.github.io/2015/03/03/有趣味的iOS动画实现/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

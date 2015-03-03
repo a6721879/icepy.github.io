@@ -168,6 +168,82 @@
 </nav>
       
   
+    <article id="post-有趣味的iOS动画实现" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/03/有趣味的iOS动画实现/" class="article-date">
+  	<time datetime="2015-03-03T01:40:21.000Z" itemprop="datePublished">3月 3 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/03/有趣味的iOS动画实现/">有趣味的iOS动画实现</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，设置apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。</p>
+<p>想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，也就是几个属性。</p>
+<pre><code>dropview.frame;
+dropview.<span class="keyword">center</span>;
+dropview.bounds;
+dropview.transform
+</code></pre><p>动画，是顾名思义的，在平面或者多维度的移动，frame中记录了当前视图相对于父视图左上角顶点的左边，而center则是中心原点，transform则代表了比如旋转等等矩阵的改变属性。</p>
+<p>最简单的动画，就是操作这些属性，改变其值，使用的是UIView的类方法，比如：</p>
+<pre><code>[UIView animateWithDuration:<span class="number">1.0</span> animations:^{
+
+} completion:^(BOOL finished) {
+
+}]
+</code></pre><p>其实我最近研究了一下UIDynamicAnimator，它提供了一个模拟真实物理世界的动画与交互系统，比如可以定义一些行为，重力行为，碰撞行为等等。</p>
+<pre><code>-(<span class="constant">UIDynamicAnimator</span> *)animator
+{
+    <span class="keyword">if</span> (!_animator) {
+        _animator = [[<span class="constant">UIDynamicAnimator</span> alloc] <span class="symbol">initWithReferenceView:</span><span class="keyword">self</span>.gameview];
+    }
+    <span class="keyword">return</span> _animator;
+}
+</code></pre><p>UIDynamicAnimator需要一个通用的视图，而动画则是在这个视图上发生，所以init的时候添加了一个通用视图上去。然后可以去实现其他的物理类，比如重力，把它add到UIDynamicAnimator中。</p>
+<pre><code>-(<span class="type">UIGravityBehavior</span> *)gravit
+{
+    <span class="keyword">if</span> (!_gravit) {
+        _gravit = [[<span class="type">UIGravityBehavior</span> alloc] <span class="keyword">init</span>];
+        _gravit.magnitude = <span class="number">0.9</span>;
+        [<span class="keyword">self</span>.animator addBehavior:_gravit];
+    }
+    <span class="keyword">return</span> _gravit;
+}
+</code></pre><p>最后一步是要把需要被实现物理动画的视图，添加到重力系统中去。</p>
+<pre><code><span class="title">[self.gravit addItem:dropview]</span><span class="comment">;</span>
+</code></pre><p>从技术实现的角度上来说，iOS平台实现这些动画，包括绘制，物理交互，都非常的简单，主要是要注意一些细节的处理，比如当前动画停止之后处理什么，在动画执行过程中，可能会出现一些情况，然后处理，或者是几个动画的连接延迟等等。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-学习zepto源代码中的read方法" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -439,64 +515,6 @@ var <span class="built_in">value</span>, values = [], i, key
     <span class="constant">return</span> flatten(values)
   }
 </code></pre><p>likeArray是判断了下length属性是不是number，如果是，遍历，然后装载到values数组中，如果是对象就用for in，最后的flatten是借用一下concat，copy一个副本出来返回。</p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-UIViewController的生命周期" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/16/UIViewController的生命周期/" class="article-date">
-  	<time datetime="2015-02-16T13:54:06.000Z" itemprop="datePublished">2月 16 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/16/UIViewController的生命周期/">UIViewController的生命周期</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理。</p>
-<p><strong>呈现视图的顺序</strong></p>
-<p>它内部的顺序是这样的，先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或storyborad，如果这个也没有则走loadView方法，loadView方法系统调用，也可以重载它。当我们重载它时，可以[super loadView] 父类帮助我们创建一个空的view，如果不调用父类，那么就要自己创建一个UIView，并且self.view = UIView。</p>
-<p>如果在调用loadView时不调用父类，也不创建，如果使用self.view的getter method并且view等于nil，会发生自我循环调用。一般情况下，不要在初始化时做view相当的动作。在viewDiload中调用一些网络访问的动作，可以在初始化方法中做一些关于模型数据的准备工作。</p>
-<p>如果覆盖了loadView，则必须创建UIViewController的view属性。如果没有覆盖该方法，UIViewController会默认调用initWithNibName方法来初始化并加载view。</p>
-<p><strong>生命周期</strong></p>
-<p>一般来说我们需要知道应用程序什么时候在屏幕上，什么时候从屏幕上消失，这个就是生命周期了。初始化的方法可以在viewDidLoad，这个方法在生命周期中只会调用一次，当然不要忘记了调用它的父类的viewDidLoad方法，[super viewDidLoad]。在调用这个方法时，实际上视图并没有在屏幕上确定下来，于是一般来说，如果视图的几何操作，不要放在这个方法中执行。</p>
-<p>viewWillAppear，这个方法会被多次调用，一般来说一次性的初始化不要放在这个方法中实现，但是如果是基于模型的动态初始化，可以放置在这个方法中实现。这个方法会在视图即将要在屏幕上呈现之前调用。</p>
-<p>当视图从屏幕上消失时，也会得到通知，viewWillDisappear方法。这个方法是在视图将要从屏幕消失之前调用。</p>
-<p>viewDidAppear视图已经呈现在屏幕上调用 viewDidDisappear视图已经从屏幕上消失调用。</p>
-<p>viewWillLayoutSubviews  viewDidLayoutSubviews 这两个方法可以在，比如从竖屏到横屏，系统会自动元素的位置，第一个方法是在移动之前调用，第二个方法是在移动完成之后调用，需要设置Autorotation属性。</p>
-<p>didReceiveMemoryWarning 当内存不足时，系统会调用这个方法，发送警告。 </p>
-<h2 id="顺序">顺序</h2>
-<p>viewDidLoad -&gt; viewWillAppear -&gt; viewDidAppear -&gt; viewWillDisappear -&gt; viewDidDisappear</p>
-<p>关于layout的顺序</p>
-<p>viewWillLayoutSubviews -&gt; viewDidLayoutSubviews</p>
 
       
     </div>

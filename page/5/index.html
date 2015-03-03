@@ -168,6 +168,85 @@
 </nav>
       
   
+    <article id="post-复习JavaScript四之Object" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/25/复习JavaScript四之Object/" class="article-date">
+  	<time datetime="2015-01-25T13:42:07.000Z" itemprop="datePublished">1月 25 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/25/复习JavaScript四之Object/">复习JavaScript四之Object</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>JavaScript的所有对象都衍生于Object对象，所有对象都继承了Object.prototype上的方法和属性，虽然它们可能会被覆盖，熟悉它对于编程能起到很大的作用，也能比较深刻的了解JavaScript这门语言。</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" rel="external">可参考的资料-Object</a></p>
+<p>创建一个对象可以使用new，也可以使用快速创建的方式：</p>
+<pre><code><span class="keyword">var</span> _<span class="class"><span class="keyword">object</span> = </span>{};
+</code></pre><p>_object对象中就可以使用Object.prototype中所有的方法和属性，虽然看起来它是空的。说到这里在编程中常常有一个非常有用的需求，如何判断一个对象是空对象。</p>
+<p>这是zepto中的判断一个对象是否是空对象，常常使用：</p>
+<pre><code>$.isEmptyObject = <span class="function"><span class="keyword">function</span><span class="params">(obj)</span> </span>{
+    <span class="keyword">var</span> name
+    <span class="keyword">for</span> (name <span class="keyword">in</span> obj) <span class="keyword">return</span> <span class="literal">false</span>
+    <span class="keyword">return</span> <span class="literal">true</span>
+  }
+</code></pre><p>也顺便看了下jQuery原理是一模一样的：</p>
+<pre><code>isEmptyObject: <span class="function"><span class="keyword">function</span><span class="params">( obj )</span> </span>{
+    <span class="keyword">var</span> name;
+    <span class="keyword">for</span> ( name <span class="keyword">in</span> obj ) {
+        <span class="keyword">return</span> <span class="literal">false</span>;
+    }
+    <span class="keyword">return</span> <span class="literal">true</span>;
+}
+</code></pre><p>使用in操作符来实现，它不会遍历到父原型链。</p>
+<p>constructor返回一个指向创建了该对象的函数引用，这个东西主要是可以用来识别（类）到底是指向哪里的。</p>
+<p>defineProperty直接在一个对象上定义一个新属性，非常适合用于动态构建，传入三个参数［动态添加对象的目标对象，需要定义或被修改的属性名，需要定义的对象］，在第三个参数中可以有些属性来表示是否继承（<strong>proto</strong>），要不要定义get，set方法，enumerable是否可枚举。</p>
+<p>defineProperties跟上述defineProperty一样，但是它可以添加多个。</p>
+<p>getOwnPropertyNames返回一个由指定对象的所有属性组成的数组</p>
+<p>keys返回一个数组包括对象所有的属性（可枚举）</p>
+<blockquote>
+<p>keys是经常会用到的一个属性，它只能包可枚举的，如果想获取一个对象的所有属性包括不枚举的，那么使用getOwnPropertyNames。</p>
+</blockquote>
+<p>hasOwnProperty用于判断某个对象是否包含有自身的属性，这个方法常常用于检测对象中的属性是否存在，它只检测自身，对于继承过来的都是false，这一点是非常重要的理解。</p>
+<p>isPrototypeOf 用于检测一个对象是否在另一个对象的原型链上，比如有两个对象是互相交互的，常常会使用它来进行检测。</p>
+<p>propertyIsEnumerable这个方法也比较重要，返回一个布尔值，检测一个对象的自身属性是否可以枚举</p>
+<blockquote>
+<p>可枚举的理解，也就是对象的属性可枚举，它的属性值不可以修改，但是在Js中它有自己的定义，引擎内部看不见的该属性的[[Enumerable]]特性为true，那么就是可枚举的。基本上把一个普通对象可以看做是一个枚举类型，比如var color = {‘red’:1}，red是可以修改的，但是red是可枚举的，但是如果是继承过来的属性，propertyIsEnumerable是返回false的，它还有一个特点，就是自身。</p>
+</blockquote>
+<p>如果要定义不可枚举的属性，那就要使用defineProperty方法了，目前不能用对象直接量或者构造函数定义出来。</p>
+<pre><code><span class="keyword">var</span> obj = {name: <span class="string">'jack'</span>, age:<span class="number">23</span>}
+Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="keyword">value</span> : <span class="string">'123'</span>, enumerable : <span class="keyword">false</span> });
+</code></pre>
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-复习JavaScript三之BOM" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -480,76 +559,6 @@ iframe.onload = <span class="function"><span class="keyword">function</span><spa
 <p>每一个请求和响应都会带有相应的HTTP头信息，其中对开发者是很有用的，而xhr对象提供了一个setRequestHeader方法来设置头信息，它必须在调用open方法之后并且在send方法之前。有设置，必须得有获取，xhr对象也提供了两个方法分别来获取，getResponseHeader传入一个头部字段名来获取，getAllResponseHeaders来获取全部的头信息。</p>
 <p>onreadystatechange事件，每次刷新状态时，系统都会重新调用此事件。</p>
 
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-移动H5-HybridApp开发思路的一些总结" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/" class="article-date">
-  	<time datetime="2015-01-10T07:04:24.000Z" itemprop="datePublished">1月 10 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/经验之谈/">经验之谈</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/">移动H5-HybridApp开发思路的一些总结</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>利用H5来开发移动app时，很大一部分的逻辑处理是在每一个视图的切换上，包括维护生命周期，释放内存，以及维护动画。我们在使用iOS时，基本上当前屏幕中内容显示的区域内就应该算是一个视图，当然H5版的app跟纯粹的iOS开发又有一些不同。</p>
-<ul>
-<li>H5版本的app是一个HTML页面，场景的切换基本上是切换内部的div容器，而当前浏览器内的框架则是它的window</li>
-<li>H5版本的app还需要监听hashchange或者history，来维护每一个视图控制器js文件的加载，执行</li>
-<li>每一个视图控制器需要维护它自身的生命周期，如创建，渲染视图，添加事件，销毁，以及离开当前视图时等一系列的生命周期</li>
-<li>一个视图控制器对应一个视图，一个模型，视图控制器来控制模型的请求，视图的渲染，模型与视图之间互相不干扰</li>
-<li>H5版本的app还需要维护一个NavigationController的头，用来控制内容区域内的视图控制器的转换以及它的动画</li>
-<li>应用兼容iOS，安卓，WP手持设备的dom兼容库（zepto），以及手势，触摸事件的兼容处理</li>
-<li>关于请求还需要维护本地存储与它之间的联系</li>
-<li>在Hybrid中，要构建起与原生框架的交互桥梁，比如phoneGap</li>
-<li>维护一个UI组件交互的库，比如一些常用的scoll，slider等</li>
-</ul>
-<p>从上述的一些总结中，可以看的出来要开发基于H5的移动端app，需要做的事情还是有很多的，浓缩的总结有三个方面：</p>
-<blockquote>
-<p>代码组织，MVC或者MVVM以及它们的生命周期与文件加载</p>
-<p>DOM 触摸 手势兼容处理</p>
-<p>与Native的交互</p>
-</blockquote>
-<p>在代码实现的思路上，这里都会使用一个栈来实现它。</p>
-<ul>
-<li>栈顶属于当前视图控制器</li>
-<li>基栈则是根视图控制器</li>
-</ul>
-
-        
-          <p class="article-more-link">
-            <a href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/#more">more >></a>
-          </p>
-        
       
     </div>
   </div>

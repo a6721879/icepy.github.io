@@ -168,6 +168,99 @@
 </nav>
       
   
+    <article id="post-UINavigationController的理解" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/01/UINavigationController的理解/" class="article-date">
+  	<time datetime="2015-02-01T11:23:41.000Z" itemprop="datePublished">2月 1 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/01/UINavigationController的理解/">UINavigationController的理解</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在做iOS开发的时候，<strong>UINavigationController</strong>可以说使用跟那个UITableView一样非常的常见。在学习这个之前，需要了解一下在iOS开发中的层级关系。</p>
+<p>我把它想象成一本书，虽然这么描述非常的不精准，但是却很像。每一个UIViewController就像书页，最外面的一个是封页，当然它就是我们的启动UI界面了，而目录就相当于是UINavigationController，通过它可以精准的翻到每一页。在iOS应用中，这样的层级关系就像书页一页。</p>
+<blockquote>
+<p>实际上这里可能描述的有些错误，但是我只能这么想象了，当我翻到某一页时，这一页（UIViewController）就是在顶端的，而其他页（UIViewController）是在下面的。当然，对于导航控制，它想要控制每一页（对于书来说是人在控制）就必需在每一个视图控制器的根部。</p>
+</blockquote>
+<p>UINavigationController是一个栈结构，所谓的栈结构也就是一个顺序（先进后出的顺序），因为当前的书页我们要看见，它永远都必须在第一的位置，我们才能看见，也就决定了它是我们人看完之后才能出去的顺序。</p>
+<p>如何创建一个UINavigationController？</p>
+<pre><code> ViewController *<span class="variable">view =</span> [[ViewController alloc] init];
+UINavigationController *<span class="variable">navigation =</span> [[UINavigationController alloc]
+initWithRootViewController:view];
+self.window.<span class="variable">rootViewController =</span> navigation;
+</code></pre><p>这里会要求加入一个根视图控制器，也就是初始化时我们看见的那一页。</p>
+<p>从官方的.h文件中可以看的出来用来进行导航的就四个方法，协议的不算。</p>
+<pre><code>- (<span class="keyword">void</span>)pushViewController:(<span class="built_in">UIViewController</span> *)viewController animated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Uses a horizontal slide transition. Has no effect if the view controller is already in the stack.</span>
+
+- (<span class="built_in">UIViewController</span> *)popViewControllerAnimated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Returns the popped controller.</span>
+- (<span class="built_in">NSArray</span> *)popToViewController:(<span class="built_in">UIViewController</span> *)viewController animated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Pops view controllers until the one specified is on top. Returns the popped controllers.</span>
+- (<span class="built_in">NSArray</span> *)popToRootViewControllerAnimated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Pops until there's only a single view controller left on the stack. Returns the popped controllers.</span>
+</code></pre><p>分别是添加到视图控制器入栈，移出最后一个视图控制器，移出到跟视图控制器上，移出到任意位置上的视图控制器。</p>
+<p>除了上述的方法外，还有几个属性需要掌握，在写到这个之前，还需要理解导航控制上的一些概念问题。对于管理多个内容视图的push和pop，导航控制器自身提供了视图切换的动画效果。一般来说一个app中的内容区域就相当于视图控制器，而这个框就是导航控制器，当然这个框又是在另一个框上的，比如window。假设一下，当我们切换了内容后，有些app是上部的一个工具条不会变中间的内容变，也有可能中间和上部都会变。从这里，其实可以看的出来，导航控制存在着这些toolBar，也控制着视图控制器，但是这些toolBar的真正控制权是在每一个视图控制器上的。</p>
+<p>总结起来</p>
+<blockquote>
+<p>一个navigationController对应一个navigationBar，一个navigationController包含多个UIViewController，每个UIViewController对应一个UINavigationItem，UINavigationItem控制着多个UIBarButtonItem，一个UINavigationController控制一个UIToolBar，UIToolBar中的UIBarButtonItem由当前视图控制器管理，而不是导航控制器来控制。需要注意的是，一个UINavigationItem不是由navigationbar或者是导航控制器来控制，而是由当前视图控制器来控制。</p>
+</blockquote>
+<p>对于生成一个系统自带的UIBarButtonItem，从代码上就可以看的出来它不是self.navigationController在控制，当然有系统的一般来说肯定有自定义的。</p>
+<pre><code><span class="built_in">UIBarButtonItem</span> *leftbutton = [[<span class="built_in">UIBarButtonItem</span> alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(leftEvent)];
+<span class="keyword">self</span><span class="variable">.navigationItem</span><span class="variable">.leftBarButtonItem</span> = leftbutton;
+
+<span class="built_in">UIButton</span> *button1 = [<span class="built_in">UIButton</span> buttonWithType:UIButtonTypeRoundedRect];
+[button1 setTitle:<span class="string">@"view"</span> forState:UIControlStateNormal];
+[button1 setTitleColor:[<span class="built_in">UIColor</span> blackColor] forState:UIControlStateNormal];
+[button1 setFrame:CGRectMake(<span class="number">0</span>, <span class="number">0</span>, <span class="number">40</span>, <span class="number">40</span>)];
+[button1 addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(customviews:) forControlEvents:UIControlEventTouchUpInside];
+<span class="built_in">UIBarButtonItem</span> *right = [[<span class="built_in">UIBarButtonItem</span> alloc] initWithCustomView:button1];
+
+<span class="keyword">self</span><span class="variable">.navigationItem</span><span class="variable">.rightBarButtonItem</span> = right;
+</code></pre><p>自定义一个button放到navigationItem的右边的bar中</p>
+<pre><code><span class="built_in">UIButton</span> *button = [<span class="built_in">UIButton</span> buttonWithType:UIButtonTypeRoundedRect];
+[button setTitle:<span class="string">@"Push"</span> forState:UIControlStateNormal];
+[button setTitleColor:[<span class="built_in">UIColor</span> blackColor] forState:UIControlStateNormal];
+[button setFrame:CGRectMake(<span class="number">90</span>, <span class="number">100</span>, <span class="number">140</span>, <span class="number">40</span>)];
+[button addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(pushview:) forControlEvents:UIControlEventTouchUpInside];
+[<span class="keyword">self</span><span class="variable">.view</span> addSubview:button];
+
+-(<span class="keyword">void</span>)pushview:(<span class="built_in">UIButton</span> *)sender
+{
+    SecondViewController *secoundVC = [[SecondViewController alloc] init];
+    [<span class="keyword">self</span><span class="variable">.navigationController</span> pushViewController:secoundVC animated:<span class="literal">YES</span>];
+}
+</code></pre><p>然后创建一个按钮，导航到第二个视图控制器上。</p>
+<p><a href="https://github.com/lcepy/geekObjective-C/tree/master/NavigationControllerDemo" target="_blank" rel="external">源代码查看</a></p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-iOS学习第一个月心得与总结" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
