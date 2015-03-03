@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-03-03T03:28:40.479Z</updated>
+  <updated>2015-03-03T12:08:57.943Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -92,9 +92,9 @@ dropview.transform
     <link href="http://lcepy.github.io/2015/03/01/myresume/"/>
     <id>http://lcepy.github.io/2015/03/01/myresume/</id>
     <published>2015-03-01T15:35:20.000Z</published>
-    <updated>2015-03-01T15:56:43.000Z</updated>
+    <updated>2015-03-03T12:08:36.000Z</updated>
     <content type="html"><![CDATA[<h2 id="个人信息：">个人信息：</h2>
-<p>向文文 xiangwenwe@foxmail.com.com  (+86) 18574532867 </p>
+<p>向文文 xiangwenwe@foxmail.com  (+86) 18574532867 </p>
 <p>技术博客 <a href="http://lcepy.github.io/" target="_blank" rel="external">http://lcepy.github.io/</a></p>
 <p>Github <a href="https://github.com/lcepy" target="_blank" rel="external">https://github.com/lcepy</a></p>
 <p>Skill set：JavaScript NodeJs</p>
@@ -160,8 +160,8 @@ dropview.transform
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="个人信息：">个人信息：</h2>
-<p>向文文 xiangwenwe@foxmail.com.com  (+86) 18574532867 </p>
-<p>技术博客 <a href="http://lcepy.github.io/" target="_blank]]>
+<p>向文文 xiangwenwe@foxmail.com  (+86) 18574532867 </p>
+<p>技术博客 <a href="http://lcepy.github.io/" target="_blank" re]]>
     </summary>
     
       <category term="简历" scheme="http://lcepy.github.io/tags/%E7%AE%80%E5%8E%86/"/>
