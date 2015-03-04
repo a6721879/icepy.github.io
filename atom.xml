@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-03-03T12:08:57.943Z</updated>
+  <updated>2015-03-04T12:46:26.130Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -19,8 +19,8 @@
     <link href="http://lcepy.github.io/2015/03/03/%E6%9C%89%E8%B6%A3%E5%91%B3%E7%9A%84iOS%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/"/>
     <id>http://lcepy.github.io/2015/03/03/有趣味的iOS动画实现/</id>
     <published>2015-03-03T01:40:21.000Z</published>
-    <updated>2015-03-03T03:28:12.000Z</updated>
-    <content type="html"><![CDATA[<p>在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，设置apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。</p>
+    <updated>2015-03-04T12:37:16.000Z</updated>
+    <content type="html"><![CDATA[<p>在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，甚至apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。</p>
 <p>想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，也就是几个属性。</p>
 <pre><code>dropview.frame;
 dropview.<span class="keyword">center</span>;
@@ -56,7 +56,7 @@ dropview.transform
 </code></pre><p>从技术实现的角度上来说，iOS平台实现这些动画，包括绘制，物理交互，都非常的简单，主要是要注意一些细节的处理，比如当前动画停止之后处理什么，在动画执行过程中，可能会出现一些情况，然后处理，或者是几个动画的连接延迟等等。</p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p>在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，设置apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。</p>
+    <![CDATA[<p>在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，甚至apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。</p>
 <p>想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，]]>
     </summary>
     
@@ -746,8 +746,8 @@ my = <span class="literal">null</span>;
     <link href="http://lcepy.github.io/2015/02/03/%E5%A4%8D%E4%B9%A0JavaScript%E5%8D%81%E4%B9%8B%E7%90%86%E8%A7%A3%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E9%97%AD%E5%8C%85/"/>
     <id>http://lcepy.github.io/2015/02/03/复习JavaScript十之理解引用类型和匿名函数闭包/</id>
     <published>2015-02-03T11:02:01.000Z</published>
-    <updated>2015-02-24T11:47:37.000Z</updated>
-    <content type="html"><![CDATA[<p>引用类型虽然看起来很类很相似，但是它们却是不同的概念，引用类型的值，也就是对象是引用类型的一个实例。在Js中引用类型主要有Object，Array，Date，正则，Function等。</p>
+    <updated>2015-03-04T12:45:41.000Z</updated>
+    <content type="html"><![CDATA[<p>引用类型虽然看起来和类很相似，但是它们却是不同的概念，引用类型的值，也就是对象是引用类型的一个实例。在Js中引用类型主要有Object，Array，Date，正则，Function等。</p>
 <p>Object之前已经复习过了，Array是用的非常频繁的一个引用类型。</p>
 <p><strong>Array</strong></p>
 <p>在Js中数组可以存储任意的数据，而且它的大小是可以动态调整的类似于OC中的NSMutableArray。创建数组可以使用构造函数的方式也可以使用字面量的形式，另外可以使用concat从一个数组中复制一个副本出来。数组本身提供了很多方法让开发者使用来操作数组。</p>
@@ -894,7 +894,7 @@ g();
 <p>那么用完之后只能设置为null来解除引用，等着自动销毁把内存回收。</p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p>引用类型虽然看起来很类很相似，但是它们却是不同的概念，引用类型的值，也就是对象是引用类型的一个实例。在Js中引用类型主要有Object，Array，Date，正则，Function等。</p>
+    <![CDATA[<p>引用类型虽然看起来和类很相似，但是它们却是不同的概念，引用类型的值，也就是对象是引用类型的一个实例。在Js中引用类型主要有Object，Array，Date，正则，Function等。</p>
 <p>Object之前已经复习过了，Array是用的非常频繁的一个引用类型。</]]>
     </summary>
     
