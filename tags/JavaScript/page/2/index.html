@@ -168,6 +168,70 @@
 </nav>
       
   
+    <article id="post-学习zepto源代码中的类型判断函数" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/14/学习zepto源代码中的类型判断函数/" class="article-date">
+  	<time datetime="2015-02-14T14:55:51.000Z" itemprop="datePublished">2月 14 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/14/学习zepto源代码中的类型判断函数/">学习zepto源代码中的类型判断函数</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在平时的开发中对于类型的判断是使用的很多的东西，我们可能需要对数据的类型进行检查，以满足预期的结果，而zepto中也提供了一揽子的解决方案，用于类型的判断，函数，字符串，对象，数组等。</p>
+<pre><code>$.each(<span class="string">"Boolean Number String Function Array Date RegExp Object Error"</span>.split(<span class="string">" "</span>),    <span class="function"><span class="keyword">function</span><span class="params">(i, name)</span> </span>{
+class2type[ <span class="string">"[object "</span> + name + <span class="string">"]"</span> ] = name.toLowerCase()
+  })
+</code></pre><p>其实从这里就可以看的出来zepto使用的是什么方式来检索数据类型，借用的就是Object对象的toString方法把全类型字符串打印出来，然后再根据这些字符串来分别处理。在zepto的源代码中，它没有这么写，Object.prototype.toString.call(obj)，而是直接toString.call(obj)，这是因为这个toString是一个内置对象，作用域我想我们都明白，在客户端它是如何搜索的。</p>
+<p>在得到了全类型的字符串后，可以去class2type的map中取出值来进行比对，来返回正确的类型。</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">isObject</span><span class="params">(obj)</span>     </span>{ <span class="keyword">return</span> type(obj) == <span class="string">"object"</span> }
+<span class="function"><span class="keyword">function</span> <span class="title">isFunction</span><span class="params">(value)</span> </span>{ <span class="keyword">return</span> type(value) == <span class="string">"function"</span> }
+<span class="function"><span class="keyword">function</span> <span class="title">type</span><span class="params">(obj)</span> </span>{
+<span class="keyword">return</span> obj == <span class="literal">null</span> ? <span class="built_in">String</span>(obj) :
+  class2type[toString.call(obj)] || <span class="string">"object"</span>
+  }
+</code></pre><p>数组zepto使用的最新的API，Array提供的isArray方法。</p>
+<pre><code>isArray = <span class="built_in">Array</span>.isArray ||
+  <span class="function"><span class="keyword">function</span><span class="params">(object)</span></span>{ <span class="keyword">return</span> object <span class="keyword">instanceof</span> <span class="built_in">Array</span> }
+</code></pre><p>zepto还提供了检测document，window等。</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">isWindow</span><span class="params">(obj)</span>     </span>{ <span class="keyword">return</span> obj != <span class="literal">null</span> &amp;&amp; obj == obj.window }
+  <span class="function"><span class="keyword">function</span> <span class="title">isDocument</span><span class="params">(obj)</span>   </span>{ <span class="keyword">return</span> obj != <span class="literal">null</span> &amp;&amp; obj.nodeType == obj.DOCUMENT_NODE }
+  <span class="function"><span class="keyword">function</span> <span class="title">isPlainObject</span><span class="params">(obj)</span> </span>{
+ <span class="comment">//getPrototypeOf 返回一个对象的原型 ，这里是不是跟Object.prototype相等</span>
+ <span class="keyword">return</span> isObject(obj) &amp;&amp; !isWindow(obj) &amp;&amp; <span class="built_in">Object</span>.getPrototypeOf(obj) == <span class="built_in">Object</span>.prototype
+}
+</code></pre>
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-复习JavaScript十二之理解作用域" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -577,83 +641,6 @@ dataStore.getAttribute(<span class="string">'name'</span>);
 <li>newValue 包含了更新之后的数据</li>
 <li>storageArea 包含一个引用，指向发生改变之前的localStorage或者sessionStorage</li>
 </ul>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript八之操作XML" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/02/复习JavaScript八之操作XML/" class="article-date">
-  	<time datetime="2015-02-02T09:50:14.000Z" itemprop="datePublished">2月 2 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/02/复习JavaScript八之操作XML/">复习JavaScript八之操作XML</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在以前XML是存储和传输数据的事实标准（客户端没有出现JSON之前），那个时候浏览器还不支持解析XML，于是很多开发者需要自己写一个XML解析器。原理，就是把XML也转化成DOM文档，然后通过DOM API来获取。</p>
-<p>而现在，在客户端（浏览器）编程中几乎很少会使用到XML，数据的交换都应用在JSON上了，了解这个有一个好处，就是在做服务端编程，比如SAOP协议时就会用到，还有桌面的客户端，或者是移动客户端上，比如iOS，它把一些数据，比如NSArray写入到本地，实际上就是一个XML文本，当然在代码层面上，是看不出来有解析的，如果读取这个文件，是直接转成NSArray对象的。</p>
-<blockquote>
-<p>IE有它自己的实现对XML的支持，下面说的两个类型，在IE中都不支持</p>
-</blockquote>
-<p>将XML字符串序列化成DOM文档，主要是使用DOMparser类来实现，其他的用法跟获取DOM节点一样。</p>
-<pre><code><span class="keyword">var</span> parser = <span class="keyword">new</span> DOMparser();
-<span class="keyword">var</span> xmlDomObject = parser.parserFromString(<span class="string">'&lt;root&gt;&lt;child/&gt;&lt;/root&gt;'</span>,<span class="string">'text/xml'</span>);
-
-xmlDomObject.getElementsByTagName(<span class="string">'child'</span>);
-</code></pre><p>将DOM文档反序列化成XML字符串，主要是使用XMLSerializer类型，使用上述的xmlDomObject对象。</p>
-<pre><code><span class="built_in">var</span> serializer <span class="subst">=</span> <span class="literal">new</span> XMLSerializer();
-<span class="built_in">var</span> <span class="built_in">xml</span> <span class="subst">=</span> serializer<span class="built_in">.</span>serializeToString(xmlDomObject);
-</code></pre><p>如果XML解析有错误都会返回一个parsererror标签，获取的时候就可以判断是否有这个标签来决定解析是否有错误。</p>
-<p>据说DOM3版本的XML操作只有一个浏览器实现了，所以当资料了解就好。</p>
-<h3 id="IE版本">IE版本</h3>
-<blockquote>
-<p>IE版本的XML解析主要是使用它的ActiveXObject类型来实现</p>
-</blockquote>
-<p>在IE中想要解析XML就必须先创建一个空的DOM文档，然后通过这个文档来获取。</p>
-<pre><code>var xmldom = createDocument();
-xmldom.loadXML(<span class="comment">'<span class="xmlDocTag">&lt;root&gt;</span><span class="xmlDocTag">&lt;child/&gt;</span><span class="xmlDocTag">&lt;/root&gt;</span>');</span>
-
-xmldom.getElementsByTagName(<span class="comment">'child');</span>
-</code></pre><p>如果解析有错误，可以检查parseError对象。</p>
-<pre><code><span class="keyword">if</span>(xmldom.parseError !== <span class="number">0</span>){
-    //<span class="keyword">do</span> 
-}
-</code></pre><p>在IE中进行序列化非常的方便，因为它都内置在了DOM文档中，每一个DOM节点都有一个xml属性，它就保存着XML字符串。</p>
-<pre><code>xmldom<span class="built_in">.</span><span class="built_in">xml</span>
-</code></pre><p>最后IE还提供了一个可以加载远程XML文件的方法load，它就接收一个参数，远程XML的URL地址。当然，也可以使用async属性来设置同步还是异步，默认是异步（true）。</p>
-<pre><code><span class="keyword">var</span> xmldom = createDocument();
-xmldom.<span class="keyword">async</span> = <span class="keyword">false</span>;
-xmldom.load(<span class="string">'http://xxx.sss.xml'</span>);
-</code></pre><p>如果是异步还要监听一下onreadystatechange事件，判断readystate状态，这个跟Ajax的使用是一样的。</p>
 
       
     </div>
