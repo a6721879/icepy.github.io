@@ -168,6 +168,63 @@
 </nav>
       
   
+    <article id="post-学习zepto源代码中的each函数" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/17/学习zepto源代码中的each函数/" class="article-date">
+  	<time datetime="2015-02-17T09:41:49.000Z" itemprop="datePublished">2月 17 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/17/学习zepto源代码中的each函数/">学习zepto源代码中的each函数</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>each顾名思义是用来遍历的</p>
+<pre><code>$.each = <span class="function"><span class="keyword">function</span><span class="params">(elements, callback)</span></span>{
+<span class="keyword">var</span> i, key
+<span class="keyword">if</span> (likeArray(elements)) {
+  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; elements.length; i++)
+    <span class="comment">//函数的默认返回值是undefined ，那么什么情况下会成 false  ?</span>
+    <span class="keyword">if</span> (<span class="keyword">callback</span>.call(elements[i], i, elements[i]) === <span class="literal">false</span>) <span class="keyword">return</span> elements
+} <span class="keyword">else</span> {
+  <span class="keyword">for</span> (key <span class="keyword">in</span> elements)
+    <span class="keyword">if</span> (<span class="keyword">callback</span>.call(elements[key], key, elements[key]) === <span class="literal">false</span>) <span class="keyword">return</span> elements
+}
+
+<span class="keyword">return</span> elements
+  } 
+</code></pre><p>唯一有个问题，看看有其他朋友知晓不，什么情况下callback.call会等于false？按道理来说，如果检查typeof callback === ‘function’，这样的情况，我认为可以理解。毕竟函数的默认返回值就是undefined，但是它也不是“强类型”相等的，所以我不明白它的意义何在？</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-学习zepto源代码中的map函数" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -493,99 +550,6 @@ class2type[ <span class="string">"[object "</span> + name + <span class="string"
  <span class="keyword">return</span> isObject(obj) &amp;&amp; !isWindow(obj) &amp;&amp; <span class="built_in">Object</span>.getPrototypeOf(obj) == <span class="built_in">Object</span>.prototype
 }
 </code></pre>
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-理解UITableView" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/06/理解UITableView/" class="article-date">
-  	<time datetime="2015-02-06T13:06:07.000Z" itemprop="datePublished">2月 6 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/06/理解UITableView/">理解UITableView</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>UITableView是在iOS开发中使用非常频繁的一个控件，比如QQ的消息人列表，淘宝的商品，微信等等都会使用到它，对于它的理解有一个前提，那就是要理解iOS MVC的设计思路。</p>
-<p>创建一个UITableView可以使用代码的方式，也可以使用xib或者storyboard。</p>
-<pre><code><span class="built_in">UITableView</span> *tableView = [[<span class="built_in">UITableView</span> alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
-</code></pre><p>在MVC的设计思想中控制器控制着要从模型中拿数据，然后把数据装载给视图。在UITableView中模型主要是实现在UITableViewDataSource数据源中，也就是UITableView有几行，分组么，然后每一行装载什么？数据源的目的就是想问开发者这些问题。</p>
-<pre><code><span class="pp">-<span class="params">(<span class="variable">NSInteger</span>)</span>numberOfSectionsInTableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView
-{
-
-}</span>
-</code></pre><p>这个方法如果存在有分组，系统就会询问，有几个分组？如果不是分组的，可以不实现这个方法，系统默认是1。</p>
-<p>有了分组之后，然后系统会询问会有几行？</p>
-<pre><code><span class="pp">-<span class="params">(<span class="variable">NSInteger</span>)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView numberOfRowsInSection:<span class="params">(<span class="variable">NSInteger</span>)</span>section
-{
-
-}</span>
-</code></pre><p>section跟分组有关</p>
-<p>最后系统询问，每一行实现什么？</p>
-<pre><code><span class="pp">-<span class="params">(<span class="variable">UITableViewCell</span> *)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView cellForRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
-{
-
-}</span>
-</code></pre><p>这个方法的实现可以说是核心的核心，在UITableView中每一行是要求实现一个cell，可以想象每一个cell相当于就是一个容器，这个容器里面装载着很多其他UI对象，当然cell也可以自定义。</p>
-<p>考虑到性能，其实每一个cell可以从缓存中读取</p>
-<pre><code><span class="built_in">UITableViewCell</span> *cell = [tableView dequeueReusableCellWithIdentifier:<span class="string">@"cell"</span>];
-<span class="keyword">if</span> (!cell) {
-    cell = [[<span class="built_in">UITableViewCell</span> alloc] initWithStyle:UITableViewStylePlain reuseIdentifier:<span class="string">@"cell"</span>];
-}
-
-<span class="comment">//do</span>
-</code></pre><p>indexPath是一个类，看看头文件就可以明白，它这个里面装载着row，section等，这些数值非常有意义，在从模型里获取数据的时候。数据源还有一些其他的方法可以实现，比如编辑模式，这个东西一般用于删除每一条消息，从右向左滑动的时候。</p>
-<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView commitEditingStyle:<span class="params">(<span class="variable">UITableViewCellEditingStyle</span>)</span>editingStyle forRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
-{
-
-}</span>
-</code></pre><p>排序</p>
-<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView moveRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>sourceIndexPath toIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>destinationIndexPath
-{
-
-}</span>
-</code></pre><p>有了数据源，当然也会存在一些代理，这些代理就是一些动作，比如实现了某些代理方法之后，系统会询问，你点了？一个手指按下不动了？等等，然后再doing什么，就是写在这些代理的方法中，主要是实现UITableViewDelegate。</p>
-<p>常用的比如按下的时候，放开的时候：</p>
-<p>点击了每一行时做的动作</p>
-<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView didSelectRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
-{
-
-}</span>
-</code></pre><p>放开每一行时做的动作</p>
-<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView didDeselectRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
-{
-
-}</span>
-</code></pre><p>协议中有很多在某些情况下会非常有用，细节就要慢慢在学习中积累了。</p>
-
       
     </div>
   </div>

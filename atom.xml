@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-03-05T03:27:46.035Z</updated>
+  <updated>2015-03-06T06:57:35.315Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -13,6 +13,53 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[JavaScript解析URL字符串]]></title>
+    <link href="http://lcepy.github.io/2015/03/06/JavaScript%E8%A7%A3%E6%9E%90URL%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
+    <id>http://lcepy.github.io/2015/03/06/JavaScript解析URL字符串/</id>
+    <published>2015-03-06T06:38:32.000Z</published>
+    <updated>2015-03-06T06:56:33.000Z</updated>
+    <content type="html"><![CDATA[<p>说到解析URL思路应该有多种多样的，比如一点一点的分解，先indexOf(‘?’)判断是否有参数，完了之后split(‘?’)一下，后面的参数继续split(‘&amp;’)成一个数组然后循环再split(‘=’)组装成一个一个key和vaule的键值对对象。前面那一部分也可以继续分解，把端口，协议，路径等等分解出来。或者用正则表达式，一个一个的分解。除了上述的思路，其实还有一个更简单的办法，利用a标签。</p>
+<pre><code><span class="keyword">var</span> parseURL = function(url){
+    <span class="keyword">var</span> temp =  document.createElement('a');
+    temp.href = url;
+    <span class="keyword">var</span> <span class="literal">result</span> = {
+        <span class="string">"port"</span>:temp.port,
+        <span class="string">"protocol"</span>:temp.protocol.replace(':',''),
+        <span class="string">"hash"</span>:temp.hash.replace('<span class="comment">#',''),</span>
+        <span class="string">"host"</span>:temp.host,
+        <span class="string">"href"</span>:temp.href,
+        <span class="string">"hostname"</span>:temp.hostname,
+        <span class="string">"pathname"</span>:temp.pathname,
+        <span class="string">"search"</span>:temp.search,
+        <span class="string">"query"</span>:{}
+    }
+    <span class="keyword">var</span> seg = <span class="literal">result</span>.search.replace(/^\?/,'').split('&amp;'),
+        leng = seg.length,
+        i = <span class="number">0</span>,
+        target;
+    <span class="keyword">for</span>(;i&lt;leng;i++){
+        <span class="keyword">if</span>(!seg[i])<span class="keyword">continue</span>;
+        target = seg[i].split('=');
+        <span class="literal">result</span>.query[target[<span class="number">0</span>]] = target[<span class="number">1</span>];
+    }
+    temp = null;
+    <span class="keyword">return</span> <span class="literal">result</span>;
+}
+<span class="keyword">var</span> url = 'https://github.com:<span class="number">8989</span>?key=value&amp;hub=<span class="number">123</span>ASFDGGR<span class="comment">#github';</span>
+parseURL(url);
+</code></pre><p>最后使用完了，把对象的引用设置为null，等待内存回收。</p>
+<p>说到URL就不得不提一下编码和解码的函数，Js里提供了三组，其中最常用的一组是encodeURIComponent和decodeURIComponent。</p>
+<p>通过对三个函数的分析，我们可以知道：escape()除了 ASCII 字母、数字和特定的符号外，对传进来的字符串全部进行转义编码，因此如果想对URL编码，最好不要使用此方法。而encodeURI() 用于编码整个URI,因为URI中的合法字符都不会被编码转换。encodeURIComponent方法在编码单个URIComponent（指请求参数）应当是最常用的，它可以讲参数中的中文、特殊字符进行转义，而不会影响整个URL。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>说到解析URL思路应该有多种多样的，比如一点一点的分解，先indexOf(‘?’)判断是否有参数，完了之后split(‘?’)一下，后面的参数继续split(‘&amp;’)成一个数组然后循环再split(‘=’)组装成一个一个key和vaule的键值对对象。前面那一部分也]]>
+    </summary>
+    
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[JavaScript中的深拷贝与浅拷贝]]></title>
@@ -1285,123 +1332,6 @@ doc.style.width = <span class="string">'100px'</span>;
     <summary type="html">
     <![CDATA[<p>DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。</p>
 <p><strong>理解层级结构与关系</str]]>
-    </summary>
-    
-      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[复习JavaScript六之事件]]></title>
-    <link href="http://lcepy.github.io/2015/01/27/%E5%A4%8D%E4%B9%A0JavaScript%E5%85%AD%E4%B9%8B%E4%BA%8B%E4%BB%B6/"/>
-    <id>http://lcepy.github.io/2015/01/27/复习JavaScript六之事件/</id>
-    <published>2015-01-27T10:08:04.000Z</published>
-    <updated>2015-02-24T11:47:27.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p>IE浏览器的事件不是复习的重点</p>
-</blockquote>
-<p>事件是JavaScript与HTML进行交互的一个纽带，理解事件可以更好的处理Web应用程序，现在的浏览器中主要支持两种事件流：</p>
-<ul>
-<li>事件冒泡</li>
-<li>事件捕获</li>
-<li>DOM事件流</li>
-</ul>
-<p>事件冒泡则是指事件开始时由具体的元素接收，然后逐级向上传播。比如：</p>
-<pre><code><span class="tag">&lt;<span class="title">html</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">head</span>&gt;</span><span class="tag">&lt;/<span class="title">head</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">body</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">div</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">p</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
-</code></pre><p>给p标签监听一个事件，它的流向是p,div,body,html,document，其实细心看来这种流的走向会存在一个问题，给div也监听一个事件，当用户点击P的时候是会触发两次的，好在event对象中有可以阻止事件冒泡的方法。</p>
-<p>事件捕获则是指事件由最上级接收，逐级向下传播到具体的元素上，了解了冒泡之后这个就非常好理解了，正是一个相反的步骤。</p>
-<p>而DOM事件流又正好是冒泡与捕获的结合体，它分为三个阶段：事件捕获，目标事件，事件冒泡，如果在纸上画出来，它的走向就是一个圆形。</p>
-<blockquote>
-<p>对于事件处理程序，写在HTML标签中的，另外一种是直接写一个function的，比如doc.onclick = function(){}，一般来说这些浏览器支持，但是基本上不会使用了。因为前者是跟HTML耦合的，不利代码维护，而且虽然HTML加载了但是Js文件还未加载，用户点击后，是直接报错的。后者虽然也可以删除，比如doc.onclick = null，对于对代码有强迫症的同学，基本上不会使用到它。</p>
-</blockquote>
-<p>那么，我们该怎么给一个元素添加上事件处理程序呢？</p>
-<h3 id="DOM2级事件处理程序">DOM2级事件处理程序</h3>
-<ul>
-<li>addEventLister</li>
-<li>removeEventLister</li>
-</ul>
-<p>所有的DOM节点都具备这两个方法，它接收三个参数：</p>
-<ul>
-<li>要处理的事件名称，比如click（这里跟上述两个以及IE注册事件都不同，不需要on）</li>
-<li>需要事件进行处理的函数</li>
-<li>一个布尔值，表示（true，在捕获阶段调用事件处理函数）（false，在冒泡阶段调用事件处理函数）</li>
-</ul>
-<blockquote>
-<p>一般情况下第三个参数都填false</p>
-</blockquote>
-<p>IE浏览器对应的两个方法，attachEvent，detachEvent，它们只有冒泡，事件名要加上on。</p>
-<h3 id="事件对象">事件对象</h3>
-<p>在注册完事件处理程序后，事件的一个比较重要的对象必须要理解，<strong>event事件对象</strong>。</p>
-<p>一般来说，这个对象中包含着所有与当前元素所监听的事件有关的信息，比如元素监听的事件类型，元素本身等等。</p>
-<p><strong>比较重要的属性和方法（只读）</strong></p>
-<ul>
-<li>currentTarget 真正监听事件的那个元素</li>
-<li>target 事件的目标元素</li>
-<li>type 事件的类型</li>
-<li>perventDefault()  取消事件的默认行为</li>
-<li>stopPropagation()  取消事件的捕获或者冒泡</li>
-<li>bubbles 事件是否冒泡</li>
-<li>eventPhase 事件处理程序的三个阶段，1捕获2处于目标3冒泡</li>
-</ul>
-<p><strong>比较重要的属性和方法（读写）</strong></p>
-<ul>
-<li>clientX 鼠标在窗口中的水平位置</li>
-<li>clientY 鼠标在窗口中的垂直位置</li>
-</ul>
-<h3 id="事件类型">事件类型</h3>
-<blockquote>
-<p>PC端主要是针对鼠标，移动端则是触摸，手势相关的处理</p>
-</blockquote>
-<p>如果在PC端上发生一次click事件，实际上它是发生了三次事件，mousedown当鼠标按下的时候，mouseup当用户放开的时候，click两个加起来就发生了一次click事件。相对于移动，PC上的鼠标事件非常的丰富，例如mouseover当鼠标首次移入一个元素边界时触发，mouseout当鼠标移出元素时触发，这个移出，到子元素上也会触发这个事件，mousemove当鼠标在元素内移动时重复触发。</p>
-<p>总体来说对于文档加载，表单控件，窗口大小改变等事件，比如获取焦点，在失去或者获取焦点是值改变等移动上都是一样的，focus（获得焦点）blur（失去焦点）。</p>
-<p>在做一些视差滚动的效果时scroll事件是非常好用，移动上在css中提供了一个类似的属性。</p>
-<p>唯一的区别是移动端上没有键盘事件。</p>
-<h3 id="移动事件">移动事件</h3>
-<ul>
-<li>touchstart 当手指触摸到屏幕时触发</li>
-<li>touchmove 当手指在屏幕上连续滑动时触发</li>
-<li>touchend 当手指从屏幕上移开时触发</li>
-<li>touchcancel 当系统停止跟踪触摸时触发（这个事件没有确定的触发时间）</li>
-</ul>
-<p>它们都是冒泡的，也可以取消</p>
-<p><strong>三个跟踪触摸事件的属性</strong></p>
-<ul>
-<li>touches 当前跟踪触摸操作的touch数组，在touchend事件中为空</li>
-<li>targetTouchs 特定事件目标的touch数组</li>
-<li>ChangedTouches 上次触摸时发生了什么改变的touch数组</li>
-</ul>
-<p><strong>移动event事件对象</strong></p>
-<p>PC上存在的，在移动上也存在，描述上有差异，比如</p>
-<ul>
-<li>target 触摸的DOM节点目标</li>
-<li>pageX 触摸目标在页面中的X坐标</li>
-<li>pageY 触摸目标在页面中的Y坐标</li>
-</ul>
-<p><strong>一些手势</strong></p>
-<ul>
-<li>gesturestart 当一个手指按在屏幕上另外一个手指又触摸屏幕时触发</li>
-<li>gesturechange 依赖前者当其中的一个手指发生改变时触发</li>
-<li>gestureend 当任何一个手指离开时触发</li>
-</ul>
-<p><strong>移动手势干货三部曲</strong></p>
-<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/23/webkit-touch-event-1.html" target="_blank" rel="external">对于Touch的处理</a></p>
-<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-2.html" target="_blank" rel="external">处理简单手势</a></p>
-<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-3.html" target="_blank" rel="external">处理复杂手势</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p>IE浏览器的事件不是复习的重点</p>
-</blockquote>
-<p>事件是JavaScript与HTML进行交互的一个纽带，理解事件可以更好的处理Web应用程序，现在的浏览器中主要支持两种事件流：</p>
-<ul>
-<li>事件冒泡</li>]]>
     </summary>
     
       <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
