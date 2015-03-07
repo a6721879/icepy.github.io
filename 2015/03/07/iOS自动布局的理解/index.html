@@ -3,17 +3,26 @@
 <head>
   <meta charset="utf-8">
   
-  <title>JavaScript解析URL字符串 | lcepy</title>
+  <title>iOS自动布局的理解 | lcepy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="说到解析URL思路应该有多种多样的，比如一点一点的分解，先indexOf(‘?’)判断是否有参数，完了之后split(‘?’)一下，后面的参数继续split(‘&amp;’)成一个数组然后循环再split(‘=’)组装成一个一个key和vaule的键值对对象。前面那一部分也可以继续分解，把端口，协议，路径等等分解出来。或者用正则表达式，一个一个的分解。除了上述的思路，其实还有一个更简单的办法，利用">
+  <meta name="description" content="一般情况下iOS的自动布局可以在Xcode中利用图形化的工具来操作完成，当然也可以使用代码的方式来完成，这些工作主要是对视图定义一些规则和约束，在容器变化的时候，视图可以遵守这些约束。
+实现约束的三种方式：
+
+比如拖动一个Label在storyboard中，会出现蓝色的辅助线，放定好位置时，在下方的小按钮中点击Reset to Suggested Constraints，系统会帮助我们选择最佳的自">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JavaScript解析URL字符串">
-<meta property="og:url" content="http://lcepy.github.io/2015/03/06/JavaScript解析URL字符串/">
+<meta property="og:title" content="iOS自动布局的理解">
+<meta property="og:url" content="http://lcepy.github.io/2015/03/07/iOS自动布局的理解/">
 <meta property="og:site_name" content="lcepy">
-<meta property="og:description" content="说到解析URL思路应该有多种多样的，比如一点一点的分解，先indexOf(‘?’)判断是否有参数，完了之后split(‘?’)一下，后面的参数继续split(‘&amp;’)成一个数组然后循环再split(‘=’)组装成一个一个key和vaule的键值对对象。前面那一部分也可以继续分解，把端口，协议，路径等等分解出来。或者用正则表达式，一个一个的分解。除了上述的思路，其实还有一个更简单的办法，利用">
+<meta property="og:description" content="一般情况下iOS的自动布局可以在Xcode中利用图形化的工具来操作完成，当然也可以使用代码的方式来完成，这些工作主要是对视图定义一些规则和约束，在容器变化的时候，视图可以遵守这些约束。
+实现约束的三种方式：
+
+比如拖动一个Label在storyboard中，会出现蓝色的辅助线，放定好位置时，在下方的小按钮中点击Reset to Suggested Constraints，系统会帮助我们选择最佳的自">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JavaScript解析URL字符串">
-<meta name="twitter:description" content="说到解析URL思路应该有多种多样的，比如一点一点的分解，先indexOf(‘?’)判断是否有参数，完了之后split(‘?’)一下，后面的参数继续split(‘&amp;’)成一个数组然后循环再split(‘=’)组装成一个一个key和vaule的键值对对象。前面那一部分也可以继续分解，把端口，协议，路径等等分解出来。或者用正则表达式，一个一个的分解。除了上述的思路，其实还有一个更简单的办法，利用">
+<meta name="twitter:title" content="iOS自动布局的理解">
+<meta name="twitter:description" content="一般情况下iOS的自动布局可以在Xcode中利用图形化的工具来操作完成，当然也可以使用代码的方式来完成，这些工作主要是对视图定义一些规则和约束，在容器变化的时候，视图可以遵守这些约束。
+实现约束的三种方式：
+
+比如拖动一个Label在storyboard中，会出现蓝色的辅助线，放定好位置时，在下方的小按钮中点击Reset to Suggested Constraints，系统会帮助我们选择最佳的自">
 
   
     <link rel="alternative" href="/atom.xml" title="lcepy" type="application/atom+xml">
@@ -166,15 +175,15 @@
 		</header>				
 	</div>
 </nav>
-      <article id="post-JavaScript解析URL字符串" class="article article-type-post" itemscope itemprop="blogPost">
+      <article id="post-iOS自动布局的理解" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/03/06/JavaScript解析URL字符串/" class="article-date">
-  	<time datetime="2015-03-06T06:38:32.000Z" itemprop="datePublished">3月 6 2015</time>
+      <a href="/2015/03/07/iOS自动布局的理解/" class="article-date">
+  	<time datetime="2015-03-07T03:47:44.000Z" itemprop="datePublished">3月 7 2015</time>
 </a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
 
     </div>
   
@@ -187,7 +196,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      JavaScript解析URL字符串
+      iOS自动布局的理解
     </h1>
   
 
@@ -195,38 +204,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>说到解析URL思路应该有多种多样的，比如一点一点的分解，先indexOf(‘?’)判断是否有参数，完了之后split(‘?’)一下，后面的参数继续split(‘&amp;’)成一个数组然后循环再split(‘=’)组装成一个一个key和vaule的键值对对象。前面那一部分也可以继续分解，把端口，协议，路径等等分解出来。或者用正则表达式，一个一个的分解。除了上述的思路，其实还有一个更简单的办法，利用a标签。</p>
-<pre><code><span class="keyword">var</span> parseURL = function(url){
-    <span class="keyword">var</span> temp =  document.createElement('a');
-    temp.href = url;
-    <span class="keyword">var</span> <span class="literal">result</span> = {
-        <span class="string">"port"</span>:temp.port,
-        <span class="string">"protocol"</span>:temp.protocol.replace(':',''),
-        <span class="string">"hash"</span>:temp.hash.replace('<span class="comment">#',''),</span>
-        <span class="string">"host"</span>:temp.host,
-        <span class="string">"href"</span>:temp.href,
-        <span class="string">"hostname"</span>:temp.hostname,
-        <span class="string">"pathname"</span>:temp.pathname,
-        <span class="string">"search"</span>:temp.search,
-        <span class="string">"query"</span>:{}
-    }
-    <span class="keyword">var</span> seg = <span class="literal">result</span>.search.replace(/^\?/,'').split('&amp;'),
-        leng = seg.length,
-        i = <span class="number">0</span>,
-        target;
-    <span class="keyword">for</span>(;i&lt;leng;i++){
-        <span class="keyword">if</span>(!seg[i])<span class="keyword">continue</span>;
-        target = seg[i].split('=');
-        <span class="literal">result</span>.query[target[<span class="number">0</span>]] = target[<span class="number">1</span>];
-    }
-    temp = null;
-    <span class="keyword">return</span> <span class="literal">result</span>;
-}
-<span class="keyword">var</span> url = 'https://github.com:<span class="number">8989</span>?key=value&amp;hub=<span class="number">123</span>ASFDGGR<span class="comment">#github';</span>
-parseURL(url);
-</code></pre><p>最后使用完了，把对象的引用设置为null，等待内存回收。</p>
-<p>说到URL就不得不提一下编码和解码的函数，Js里提供了三组，其中最常用的一组是encodeURIComponent和decodeURIComponent。</p>
-<p>通过对三个函数的分析，我们可以知道：escape()除了 ASCII 字母、数字和特定的符号外，对传进来的字符串全部进行转义编码，因此如果想对URL编码，最好不要使用此方法。而encodeURI() 用于编码整个URI,因为URI中的合法字符都不会被编码转换。encodeURIComponent方法在编码单个URIComponent（指请求参数）应当是最常用的，它可以讲参数中的中文、特殊字符进行转义，而不会影响整个URL。</p>
+        <p>一般情况下iOS的自动布局可以在Xcode中利用图形化的工具来操作完成，当然也可以使用代码的方式来完成，这些工作主要是对视图定义一些规则和约束，在容器变化的时候，视图可以遵守这些约束。</p>
+<p>实现约束的三种方式：</p>
+<ul>
+<li>比如拖动一个Label在storyboard中，会出现蓝色的辅助线，放定好位置时，在下方的小按钮中点击Reset to Suggested Constraints，系统会帮助我们选择最佳的自动布局方式</li>
+<li>拖动一个Label到storyboard中，依然是点击下方小按钮，有add，手动添加。</li>
+<li>拖动一个Label到storyboard中按住control键，拖动到想放的位置上，这里有一个前提，是有一个参照视图，放开的时候会弹出一个小框来让你选择约束</li>
+</ul>
+<p>比如要查看效果，可以右边的属性栏中选择Orientation中的Landscape，就变成了横屏。如果想删除约束，可以在左侧的文档大纲中进行删除，假设一个视图没有约束，也可以在文档大纲中来add约束。</p>
+<p>如果想要查看一个约束，可以在Show the size inspector中查看constraints。</p>
 
       
     </div>
@@ -235,18 +221,18 @@ parseURL(url);
     
 <nav id="article-nav">
   
-    <a href="/2015/03/07/iOS自动布局的理解/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2015/03/07/iOS多线程GCD的使用/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">&lt;</strong>
       <div class="article-nav-title">
         
-          iOS自动布局的理解
+          iOS多线程GCD的使用
         
       </div>
     </a>
   
   
-    <a href="/2015/03/04/JavaScript中的深拷贝与浅拷贝/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">JavaScript中的深拷贝与浅拷贝</div>
+    <a href="/2015/03/06/JavaScript解析URL字符串/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JavaScript解析URL字符串</div>
       <strong class="article-nav-caption">&gt;</strong>
     </a>
   
@@ -275,7 +261,7 @@ parseURL(url);
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="JavaScript解析URL字符串" data-title="JavaScript解析URL字符串" data-url="http://lcepy.github.io/2015/03/06/JavaScript解析URL字符串/"></div>
+	<div class="ds-thread" data-thread-key="iOS自动布局的理解" data-title="iOS自动布局的理解" data-url="http://lcepy.github.io/2015/03/07/iOS自动布局的理解/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

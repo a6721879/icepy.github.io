@@ -168,6 +168,133 @@
 </nav>
       
   
+    <article id="post-iOS多线程GCD的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/07/iOS多线程GCD的使用/" class="article-date">
+  	<time datetime="2015-03-07T09:07:36.000Z" itemprop="datePublished">3月 7 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/07/iOS多线程GCD的使用/">iOS多线程GCD的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在做iOS开发的时候线程的使用场景还是蛮多的，比如网络请求，比如大的数据处理等等。因为iOS只有一个主线程，而且这个主线程是让UIKit来使用的，如果我们不想让UI界面因为某些操作，那么就必须把一些需要时间等待的操作，分配给其他的线程去处理，并且保证主线程不让UIKit之外的程序来使用。</p>
+<p>在UIKit中某些对象是可以在其他线程中正常工作的，但是UIKit的大部分是只能在主线程中正常工作的，明白这一点非常的重要。</p>
+<p>iOS中实现多任务编程，主要使用三种方式，1、NSThread 2、NSOperation 3、GCD；个人感觉GCD比较好使用，它主要是与block来配合使用的。比如在网络活动时，我想在<a href="http://wow.163.com" target="_blank" rel="external">http://wow.163.com</a>下载一张图片显示在UIImageView，但是下载的过程，如果不使用其他线程来下载图片数据，UI界面会有卡顿的感觉，所以这里就会使用多线程来处理了。</p>
+<p>GCD主要可以使用的函数有几个：</p>
+<ul>
+<li>dispatch_queue_create(“name”,NULL) </li>
+<li>dispatch_async(dispatch_queue_t queue,^{})</li>
+<li>dispatch_get_main_queue</li>
+<li>dispatch_sync</li>
+<li>dispatch_get_global_queue</li>
+</ul>
+<p>dispatch_get_main_queue顾名思义，运行在主线程的Main queue，可以通过dispatch_get_main_queue获取。</p>
+<p>dispatch_async用于异步操作</p>
+<p>dispatch_sync用于同步操作</p>
+<p>dispatch_queue_create一般用来创建串行queue，而且只可能创建一个线程，顺序执行</p>
+<p>dispatch_get_global_queue 添加到主queue的可能会并行执行，也就意味着创建了多个线程</p>
+<p>回到例子上来说，如果我有两个界面，从其中一个界面点击一个按钮到另外一个界面中显示一张图片，而这个图片需要在网络上下载。如果这里不利于多线程，在视觉上得到的反馈，就有可能在第一个界面中卡顿了，因为网络下载把主线程阻塞了。</p>
+<p>例子：</p>
+<pre><code>    <span class="comment">//创建一个请求</span>
+    <span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:<span class="keyword">self</span><span class="variable">.imageURL</span>];
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
+    NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request completionHandler:^(<span class="built_in">NSURL</span> *location, NSURLResponse *response, <span class="built_in">NSError</span> *error) {
+        <span class="keyword">if</span> (!error) {
+            <span class="keyword">if</span> ([request<span class="variable">.URL</span> isEqual:<span class="keyword">self</span><span class="variable">.imageURL</span>]) {
+                <span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageWithData:[NSData dataWithContentsOfURL:location]];
+                <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^{
+                    <span class="keyword">self</span><span class="variable">.image</span> = image;
+                });
+            }
+        }
+    }];
+    [task resume];    
+</code></pre><p>在这个例子中主要是利用了NSURLSession临时会话，NSURLSessionDownloadTask任务，NSURLSessionConfiguration配置与dispatch_async相结合的方式来处理的多线程。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-iOS自动布局的理解" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/07/iOS自动布局的理解/" class="article-date">
+  	<time datetime="2015-03-07T03:47:44.000Z" itemprop="datePublished">3月 7 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/07/iOS自动布局的理解/">iOS自动布局的理解</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一般情况下iOS的自动布局可以在Xcode中利用图形化的工具来操作完成，当然也可以使用代码的方式来完成，这些工作主要是对视图定义一些规则和约束，在容器变化的时候，视图可以遵守这些约束。</p>
+<p>实现约束的三种方式：</p>
+<ul>
+<li>比如拖动一个Label在storyboard中，会出现蓝色的辅助线，放定好位置时，在下方的小按钮中点击Reset to Suggested Constraints，系统会帮助我们选择最佳的自动布局方式</li>
+<li>拖动一个Label到storyboard中，依然是点击下方小按钮，有add，手动添加。</li>
+<li>拖动一个Label到storyboard中按住control键，拖动到想放的位置上，这里有一个前提，是有一个参照视图，放开的时候会弹出一个小框来让你选择约束</li>
+</ul>
+<p>比如要查看效果，可以右边的属性栏中选择Orientation中的Landscape，就变成了横屏。如果想删除约束，可以在左侧的文档大纲中进行删除，假设一个视图没有约束，也可以在文档大纲中来add约束。</p>
+<p>如果想要查看一个约束，可以在Show the size inspector中查看constraints。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-JavaScript解析URL字符串" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -407,161 +534,6 @@ dropview.transform
 </code></pre><p>最后一步是要把需要被实现物理动画的视图，添加到重力系统中去。</p>
 <pre><code><span class="title">[self.gravit addItem:dropview]</span><span class="comment">;</span>
 </code></pre><p>从技术实现的角度上来说，iOS平台实现这些动画，包括绘制，物理交互，都非常的简单，主要是要注意一些细节的处理，比如当前动画停止之后处理什么，在动画执行过程中，可能会出现一些情况，然后处理，或者是几个动画的连接延迟等等。</p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-学习zepto源代码中的read方法" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/02/学习zepto源代码中的read方法/" class="article-date">
-  	<time datetime="2015-03-02T03:31:58.000Z" itemprop="datePublished">3月 2 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/02/学习zepto源代码中的read方法/">学习zepto源代码中的read方法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>read函数，是在开发中非常有用的函数，主要是用来当DOM文档准备好之后，再加载或直接某些Js片段。就是怕，某些情况下，比如Js片段已经写好了，这里面要获取某个DOM节点，实际上这里会是null，然后执行其他操作就抛错误了，因为在浏览器中，这个节点还不存在。</p>
-<pre><code><span class="comment">//读取readyState状态</span>
-  <span class="keyword">if</span> (readyRE.test(<span class="built_in">document</span>.readyState) &amp;&amp; <span class="built_in">document</span>.body) callback($)
-<span class="comment">//监听DOMContentLoaded事件</span>
-  <span class="keyword">else</span> <span class="built_in">document</span>.addEventListener(<span class="string">'DOMContentLoaded'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{ callback($) }, <span class="literal">false</span>)
-  <span class="keyword">return</span>  <span class="keyword">this</span>
-</code></pre><p>zepto因为是移动端的开发，所以它监听的是DOMContentLoaded事件，这个事件是一个原生方法，新版API中提供了这个，而对IE10兼容，则是判断document的readyState属性，保证它是complete|loaded|interactive，这也意味着已经准备好了，并且还要判断body是否存在，才执行callback函数。</p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-myresume" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/01/myresume/" class="article-date">
-  	<time datetime="2015-03-01T15:35:20.000Z" itemprop="datePublished">3月 1 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/简历/">简历</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/01/myresume/">向文文的简历</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="个人信息：">个人信息：</h2>
-<p>向文文 xiangwenwe@foxmail.com  (+86) 18574532867 </p>
-<p>技术博客 <a href="http://lcepy.github.io/" target="_blank" rel="external">http://lcepy.github.io/</a></p>
-<p>Github <a href="https://github.com/lcepy" target="_blank" rel="external">https://github.com/lcepy</a></p>
-<p>Skill set：JavaScript NodeJs</p>
-<h2 id="工作经验：">工作经验：</h2>
-<p><em>上海携程旅行网   软件开发工程师</em></p>
-<p>任职时间：2014年2月12日-12月31日</p>
-<p>工作职责：负责H5，Hybrid App的开发工作</p>
-<p>App下载，可以在各大app市场下载，apple需要在appstore中下载</p>
-<p>项目网站：<a href="http://m.ctrip.com/webapp/cruise/index.html#index" target="_blank" rel="external">http://m.ctrip.com/webapp/cruise/index.html#index</a></p>
-<p><em>远光软件股份有限公司    SMB软件部任职开发工程师</em></p>
-<p>任职时间：2012年5月-2013年8月</p>
-<p>工作职责：在部门中所担负的角色，主要在基于web的企业级应用开发与平台框架，并培训部门内部开发人员的前端开发技术，并提供解决方案供部门领导参考。</p>
-<p>公司网站：<a href="http://www.ygsoft.com/Home/" target="_blank" rel="external">http://www.ygsoft.com/Home/</a></p>
-<p><em>湖南华声在线有限公司    UI组任职前端工程师</em></p>
-<p>任职时间：2011年8月-2012年4月</p>
-<p>工作职责：负责教育产品，社交空间的前端开发，培训组内的前端技术，并提供教育系列产品的前端解决方案，并负责一定的服务端开发工作，主要是基于php技术。</p>
-<p>公司网站：<a href="http://www.voc.com.cn/" target="_blank" rel="external">http://www.voc.com.cn/</a> </p>
-<h2 id="详细的项目经验：">详细的项目经验：</h2>
-<p><a href="http://lcepy.github.io/2014/11/14/%E6%88%91%E7%9A%84%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/" target="_blank" rel="external">我的项目经历-详细版</a></p>
-<h2 id="项目经验：(提供最近一年内的项目)">项目经验：(提供最近一年内的项目)</h2>
-<p><strong>2014年11月20日到2014年12月31日 CRUISE H5 Hybrid 6.1（邮轮）</strong></p>
-<pre><code>主要负责详情页板块的改造，新增我的收藏，用户浏览历史，降价提醒功能
-</code></pre><p><strong>2014年10月15日到2014年11月18日 CRUISE H5 Hybrid 6.0（邮轮）</strong></p>
-<pre><code>主要邮轮产品详情页，邮轮岸上游详情页，修复H5跳Hybrid，增加在搜索页定位图标，增加常见问题页FAQ。
-迁移首页，列表，搜索页三个页面到新版2.1框架，支持首页，列表页的SEO
-</code></pre><p><strong>2014年9月15日到2014年10月9日 CRUISE H5 Hybrid 5.10（邮轮）</strong></p>
-<pre><code>主要负责把搜索与筛选的业务逻辑全部修改为联调机制，并且在搜索中，增加途径国家，增加多级的搜索。
-列表页需要支持<span class="built_in">URL</span>参数并且支持SEO，修改首页的地理位置定位与默认参数的逻辑，制作一个新的营销<span class="constant">CR</span>页面。
-</code></pre><p><em>让用户从之前的单个搜索，筛选，变更为在同一个view中进行搜索与筛选，不切换view在体检上就不会感觉到很麻烦。</em></p>
-<p><strong>2014年8月9日到9月11日 CRUISE H5 Hybrid 5.9（邮轮）</strong></p>
-<pre><code>主要负责重构邮轮首页，列表页，搜索页以及筛选的业务逻辑，中间修改了广告营销，预定咨询页，修复5.8bug以及新增需求。
-</code></pre><p><em>帮助同事进行源代码重构，分享一些过往的开发经验。</em></p>
-<p><strong>2014年7月7日到2014年8月5日 CRUISE H5 Hybrid 5.8（邮轮）</strong></p>
-<pre><code>主要是新接手同事的列表，搜索排序，筛选排序，新做了订单意向单，邮轮详情页中的行程介绍，岸上游详情介绍，修复5.7bug以及新增需求。
-</code></pre><p><strong>2014年5月21日到2014年6月27日 CRUISE H5 Hybrid 5.7（邮轮）</strong></p>
-<pre><code>主要是负责邮轮的整个订单部分，分为订单第一步，选择班期。
-订单第二步，选择房型。
-订单第三步，填写常用联系人，并核算消费明细等。
-配套的有，常用旅客的选择，编辑，新增。
-另外两项功能性选择，为保险多选选择，岸上游单选选择，并且提交支付。
-</code></pre><p><em>中间的逻辑（不复述了）解决了携程邮轮在无线端下订单从无到有的开始。</em></p>
-<p><strong>2014年4月25日到2014年5月19日 CRUISE H5 Hybrid 5.6（邮轮）编写了两个工具</strong></p>
-<pre><code>主要是负责了第一版邮轮的订单意向单，预定须知，签证签出。
-在当时的开发环境下为其他开发人员编写了两个工具，一个工具是HTTP代理服务器用来模拟数据（nodejs）这个已经提交在个人github中，项目名为<span class="built_in">glob</span>-proxy。
-另外一个是给组长编写的excels导入工具（<span class="keyword">python</span>）
-</code></pre><p><em>解决了当时开发团队在开发方式上的困难，因为前后不同步的原因，需要经常在模型层中修改请求地址，或是在本地自己模拟假数据。这个工具的出现，则统一由代理服务器去切换请求地址或者在本地生成mock数据。另外一项任务，是帮助当时的开发经理从项目日志中，导出excels表。</em></p>
-<p><strong>2014年3月10日到4月11日 门票 H5 Hybrid 5.5</strong></p>
-<pre><code>当时主要是负责了门票详情页，预定须知，点评，地图交互，景点介绍。
-</code></pre><p><strong>2014年2月12日到3月3日  机票 H5 Hybrid 5.5  编写了一个工具</strong></p>
-<pre><code>当时在机票主要是负责从用户订取机票的时间与航空公司的上下班时间中分析出一个合理的时间区间数组来。
-打包工具主要是根据SOAP协议来调取webapp包地址，多线程下载完成之后重新打包。现工具已经在提交在个人github上，项目名为downloadZIP
-</code></pre><p><em>关于时间区间的分析，根据航空公司上下班时间与用户自己期望的时间分析出一个合理的时间数组，让用户可以清晰的了解到取票的时间范围。</em></p>
-<h2 id="自我评价：">自我评价：</h2>
-<pre><code>在软件工程，前端领域已经工作近四年之久，对于编程的思考，解决问题的思路都已形成了自己比较独特的思维。
-语言只是解决问题的一个工具，最关键的还是在于人，如何去规划问题，思考问题，并解决问题。
-我比较擅长JavaScript，近几年比较流行的Nodejs，HTML5 API CSS3也有一些自己总结的经验。
-三年多的工作经验集中在客户端技术，包括SPA MVC客户端，Hybrid app客户端，移动浏览器H5应用，有过一年左右的<span class="keyword">python</span>网络编程。
-对请求，一些服务端，客户端框架，比如zepto underscore  django，应用在客户端 服务端上的MVC开发模式，HTML5 API都非常的了解和掌握。
-平时，也掌握了基本的nodejs，主要是使用express来写博客等学习，如果需要，我相信自己能在很短的时间内掌握它。
-额外的掌握了iOS开发，对基础的<span class="keyword">c</span>，Objective-C，xcode工具等都比较熟练的掌握了，
-</code></pre><p>教育背景：</p>
-<p>中南林业科技大学    大专</p>
 
       
     </div>

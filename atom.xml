@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-03-06T09:03:29.161Z</updated>
+  <updated>2015-03-07T09:38:04.190Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -13,6 +13,82 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[iOS多线程GCD的使用]]></title>
+    <link href="http://lcepy.github.io/2015/03/07/iOS%E5%A4%9A%E7%BA%BF%E7%A8%8BGCD%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
+    <id>http://lcepy.github.io/2015/03/07/iOS多线程GCD的使用/</id>
+    <published>2015-03-07T09:07:36.000Z</published>
+    <updated>2015-03-07T09:37:02.000Z</updated>
+    <content type="html"><![CDATA[<p>在做iOS开发的时候线程的使用场景还是蛮多的，比如网络请求，比如大的数据处理等等。因为iOS只有一个主线程，而且这个主线程是让UIKit来使用的，如果我们不想让UI界面因为某些操作，那么就必须把一些需要时间等待的操作，分配给其他的线程去处理，并且保证主线程不让UIKit之外的程序来使用。</p>
+<p>在UIKit中某些对象是可以在其他线程中正常工作的，但是UIKit的大部分是只能在主线程中正常工作的，明白这一点非常的重要。</p>
+<p>iOS中实现多任务编程，主要使用三种方式，1、NSThread 2、NSOperation 3、GCD；个人感觉GCD比较好使用，它主要是与block来配合使用的。比如在网络活动时，我想在<a href="http://wow.163.com" target="_blank" rel="external">http://wow.163.com</a>下载一张图片显示在UIImageView，但是下载的过程，如果不使用其他线程来下载图片数据，UI界面会有卡顿的感觉，所以这里就会使用多线程来处理了。</p>
+<p>GCD主要可以使用的函数有几个：</p>
+<ul>
+<li>dispatch_queue_create(“name”,NULL) </li>
+<li>dispatch_async(dispatch_queue_t queue,^{})</li>
+<li>dispatch_get_main_queue</li>
+<li>dispatch_sync</li>
+<li>dispatch_get_global_queue</li>
+</ul>
+<p>dispatch_get_main_queue顾名思义，运行在主线程的Main queue，可以通过dispatch_get_main_queue获取。</p>
+<p>dispatch_async用于异步操作</p>
+<p>dispatch_sync用于同步操作</p>
+<p>dispatch_queue_create一般用来创建串行queue，而且只可能创建一个线程，顺序执行</p>
+<p>dispatch_get_global_queue 添加到主queue的可能会并行执行，也就意味着创建了多个线程</p>
+<p>回到例子上来说，如果我有两个界面，从其中一个界面点击一个按钮到另外一个界面中显示一张图片，而这个图片需要在网络上下载。如果这里不利于多线程，在视觉上得到的反馈，就有可能在第一个界面中卡顿了，因为网络下载把主线程阻塞了。</p>
+<p>例子：</p>
+<pre><code>    <span class="comment">//创建一个请求</span>
+    <span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:<span class="keyword">self</span><span class="variable">.imageURL</span>];
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
+    NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request completionHandler:^(<span class="built_in">NSURL</span> *location, NSURLResponse *response, <span class="built_in">NSError</span> *error) {
+        <span class="keyword">if</span> (!error) {
+            <span class="keyword">if</span> ([request<span class="variable">.URL</span> isEqual:<span class="keyword">self</span><span class="variable">.imageURL</span>]) {
+                <span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageWithData:[NSData dataWithContentsOfURL:location]];
+                <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^{
+                    <span class="keyword">self</span><span class="variable">.image</span> = image;
+                });
+            }
+        }
+    }];
+    [task resume];    
+</code></pre><p>在这个例子中主要是利用了NSURLSession临时会话，NSURLSessionDownloadTask任务，NSURLSessionConfiguration配置与dispatch_async相结合的方式来处理的多线程。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>在做iOS开发的时候线程的使用场景还是蛮多的，比如网络请求，比如大的数据处理等等。因为iOS只有一个主线程，而且这个主线程是让UIKit来使用的，如果我们不想让UI界面因为某些操作，那么就必须把一些需要时间等待的操作，分配给其他的线程去处理，并且保证主线程不让UIKit之外]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[iOS自动布局的理解]]></title>
+    <link href="http://lcepy.github.io/2015/03/07/iOS%E8%87%AA%E5%8A%A8%E5%B8%83%E5%B1%80%E7%9A%84%E7%90%86%E8%A7%A3/"/>
+    <id>http://lcepy.github.io/2015/03/07/iOS自动布局的理解/</id>
+    <published>2015-03-07T03:47:44.000Z</published>
+    <updated>2015-03-07T05:24:16.000Z</updated>
+    <content type="html"><![CDATA[<p>一般情况下iOS的自动布局可以在Xcode中利用图形化的工具来操作完成，当然也可以使用代码的方式来完成，这些工作主要是对视图定义一些规则和约束，在容器变化的时候，视图可以遵守这些约束。</p>
+<p>实现约束的三种方式：</p>
+<ul>
+<li>比如拖动一个Label在storyboard中，会出现蓝色的辅助线，放定好位置时，在下方的小按钮中点击Reset to Suggested Constraints，系统会帮助我们选择最佳的自动布局方式</li>
+<li>拖动一个Label到storyboard中，依然是点击下方小按钮，有add，手动添加。</li>
+<li>拖动一个Label到storyboard中按住control键，拖动到想放的位置上，这里有一个前提，是有一个参照视图，放开的时候会弹出一个小框来让你选择约束</li>
+</ul>
+<p>比如要查看效果，可以右边的属性栏中选择Orientation中的Landscape，就变成了横屏。如果想删除约束，可以在左侧的文档大纲中进行删除，假设一个视图没有约束，也可以在文档大纲中来add约束。</p>
+<p>如果想要查看一个约束，可以在Show the size inspector中查看constraints。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>一般情况下iOS的自动布局可以在Xcode中利用图形化的工具来操作完成，当然也可以使用代码的方式来完成，这些工作主要是对视图定义一些规则和约束，在容器变化的时候，视图可以遵守这些约束。</p>
+<p>实现约束的三种方式：</p>
+<ul>
+<li>比如拖动一个Label在s]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[JavaScript解析URL字符串]]></title>
@@ -1161,177 +1237,6 @@ xmldom.load(<span class="string">'http://xxx.sss.xml'</span>);
     <summary type="html">
     <![CDATA[<p>在以前XML是存储和传输数据的事实标准（客户端没有出现JSON之前），那个时候浏览器还不支持解析XML，于是很多开发者需要自己写一个XML解析器。原理，就是把XML也转化成DOM文档，然后通过DOM API来获取。</p>
 <p>而现在，在客户端（浏览器）编程中几乎很少会使]]>
-    </summary>
-    
-      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[UINavigationController的理解]]></title>
-    <link href="http://lcepy.github.io/2015/02/01/UINavigationController%E7%9A%84%E7%90%86%E8%A7%A3/"/>
-    <id>http://lcepy.github.io/2015/02/01/UINavigationController的理解/</id>
-    <published>2015-02-01T11:23:41.000Z</published>
-    <updated>2015-02-06T10:42:45.000Z</updated>
-    <content type="html"><![CDATA[<p>在做iOS开发的时候，<strong>UINavigationController</strong>可以说使用跟那个UITableView一样非常的常见。在学习这个之前，需要了解一下在iOS开发中的层级关系。</p>
-<p>我把它想象成一本书，虽然这么描述非常的不精准，但是却很像。每一个UIViewController就像书页，最外面的一个是封页，当然它就是我们的启动UI界面了，而目录就相当于是UINavigationController，通过它可以精准的翻到每一页。在iOS应用中，这样的层级关系就像书页一页。</p>
-<blockquote>
-<p>实际上这里可能描述的有些错误，但是我只能这么想象了，当我翻到某一页时，这一页（UIViewController）就是在顶端的，而其他页（UIViewController）是在下面的。当然，对于导航控制，它想要控制每一页（对于书来说是人在控制）就必需在每一个视图控制器的根部。</p>
-</blockquote>
-<p>UINavigationController是一个栈结构，所谓的栈结构也就是一个顺序（先进后出的顺序），因为当前的书页我们要看见，它永远都必须在第一的位置，我们才能看见，也就决定了它是我们人看完之后才能出去的顺序。</p>
-<p>如何创建一个UINavigationController？</p>
-<pre><code> ViewController *<span class="variable">view =</span> [[ViewController alloc] init];
-UINavigationController *<span class="variable">navigation =</span> [[UINavigationController alloc]
-initWithRootViewController:view];
-self.window.<span class="variable">rootViewController =</span> navigation;
-</code></pre><p>这里会要求加入一个根视图控制器，也就是初始化时我们看见的那一页。</p>
-<p>从官方的.h文件中可以看的出来用来进行导航的就四个方法，协议的不算。</p>
-<pre><code>- (<span class="keyword">void</span>)pushViewController:(<span class="built_in">UIViewController</span> *)viewController animated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Uses a horizontal slide transition. Has no effect if the view controller is already in the stack.</span>
-
-- (<span class="built_in">UIViewController</span> *)popViewControllerAnimated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Returns the popped controller.</span>
-- (<span class="built_in">NSArray</span> *)popToViewController:(<span class="built_in">UIViewController</span> *)viewController animated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Pops view controllers until the one specified is on top. Returns the popped controllers.</span>
-- (<span class="built_in">NSArray</span> *)popToRootViewControllerAnimated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Pops until there's only a single view controller left on the stack. Returns the popped controllers.</span>
-</code></pre><p>分别是添加到视图控制器入栈，移出最后一个视图控制器，移出到跟视图控制器上，移出到任意位置上的视图控制器。</p>
-<p>除了上述的方法外，还有几个属性需要掌握，在写到这个之前，还需要理解导航控制上的一些概念问题。对于管理多个内容视图的push和pop，导航控制器自身提供了视图切换的动画效果。一般来说一个app中的内容区域就相当于视图控制器，而这个框就是导航控制器，当然这个框又是在另一个框上的，比如window。假设一下，当我们切换了内容后，有些app是上部的一个工具条不会变中间的内容变，也有可能中间和上部都会变。从这里，其实可以看的出来，导航控制存在着这些toolBar，也控制着视图控制器，但是这些toolBar的真正控制权是在每一个视图控制器上的。</p>
-<p>总结起来</p>
-<blockquote>
-<p>一个navigationController对应一个navigationBar，一个navigationController包含多个UIViewController，每个UIViewController对应一个UINavigationItem，UINavigationItem控制着多个UIBarButtonItem，一个UINavigationController控制一个UIToolBar，UIToolBar中的UIBarButtonItem由当前视图控制器管理，而不是导航控制器来控制。需要注意的是，一个UINavigationItem不是由navigationbar或者是导航控制器来控制，而是由当前视图控制器来控制。</p>
-</blockquote>
-<p>对于生成一个系统自带的UIBarButtonItem，从代码上就可以看的出来它不是self.navigationController在控制，当然有系统的一般来说肯定有自定义的。</p>
-<pre><code><span class="built_in">UIBarButtonItem</span> *leftbutton = [[<span class="built_in">UIBarButtonItem</span> alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(leftEvent)];
-<span class="keyword">self</span><span class="variable">.navigationItem</span><span class="variable">.leftBarButtonItem</span> = leftbutton;
-
-<span class="built_in">UIButton</span> *button1 = [<span class="built_in">UIButton</span> buttonWithType:UIButtonTypeRoundedRect];
-[button1 setTitle:<span class="string">@"view"</span> forState:UIControlStateNormal];
-[button1 setTitleColor:[<span class="built_in">UIColor</span> blackColor] forState:UIControlStateNormal];
-[button1 setFrame:CGRectMake(<span class="number">0</span>, <span class="number">0</span>, <span class="number">40</span>, <span class="number">40</span>)];
-[button1 addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(customviews:) forControlEvents:UIControlEventTouchUpInside];
-<span class="built_in">UIBarButtonItem</span> *right = [[<span class="built_in">UIBarButtonItem</span> alloc] initWithCustomView:button1];
-
-<span class="keyword">self</span><span class="variable">.navigationItem</span><span class="variable">.rightBarButtonItem</span> = right;
-</code></pre><p>自定义一个button放到navigationItem的右边的bar中</p>
-<pre><code><span class="built_in">UIButton</span> *button = [<span class="built_in">UIButton</span> buttonWithType:UIButtonTypeRoundedRect];
-[button setTitle:<span class="string">@"Push"</span> forState:UIControlStateNormal];
-[button setTitleColor:[<span class="built_in">UIColor</span> blackColor] forState:UIControlStateNormal];
-[button setFrame:CGRectMake(<span class="number">90</span>, <span class="number">100</span>, <span class="number">140</span>, <span class="number">40</span>)];
-[button addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(pushview:) forControlEvents:UIControlEventTouchUpInside];
-[<span class="keyword">self</span><span class="variable">.view</span> addSubview:button];
-
--(<span class="keyword">void</span>)pushview:(<span class="built_in">UIButton</span> *)sender
-{
-    SecondViewController *secoundVC = [[SecondViewController alloc] init];
-    [<span class="keyword">self</span><span class="variable">.navigationController</span> pushViewController:secoundVC animated:<span class="literal">YES</span>];
-}
-</code></pre><p>然后创建一个按钮，导航到第二个视图控制器上。</p>
-<p><a href="https://github.com/lcepy/geekObjective-C/tree/master/NavigationControllerDemo" target="_blank" rel="external">源代码查看</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>在做iOS开发的时候，<strong>UINavigationController</strong>可以说使用跟那个UITableView一样非常的常见。在学习这个之前，需要了解一下在iOS开发中的层级关系。</p>
-<p>我把它想象成一本书，虽然这么描述非常的不精准，但是]]>
-    </summary>
-    
-      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[复习JavaScript七之DOM]]></title>
-    <link href="http://lcepy.github.io/2015/01/28/%E5%A4%8D%E4%B9%A0JavaScript%E4%B8%83%E4%B9%8BDOM/"/>
-    <id>http://lcepy.github.io/2015/01/28/复习JavaScript七之DOM/</id>
-    <published>2015-01-28T11:51:01.000Z</published>
-    <updated>2015-02-24T11:46:52.000Z</updated>
-    <content type="html"><![CDATA[<p>DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。</p>
-<p><strong>理解层级结构与关系</strong></p>
-<p>在浏览器中比如HTML页面是由很多有层次结构的标签组成的，而为这些标签提供查询，添加，删除等等方法主要就是DOM在提供支持。</p>
-<p>（页面又称为文档）文档中所有的节点之间都存在这样或那样的关系，比如下面一个经典的HTML：</p>
-<pre><code><span class="tag">&lt;<span class="title">html</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">head</span>&gt;</span><span class="tag">&lt;/<span class="title">head</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">body</span>&gt;</span><span class="tag">&lt;/<span class="title">body</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
-</code></pre><p>一个标签又可以称为一个元素，head和body那就是兄弟关系，它们都来自一个父系html，又可以说html的子元素是head和body，可能这样描述还不太明显，这样就用原生Js操作DOM来的方式来看看层级结构。</p>
-<pre><code><span class="keyword">var</span> html = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'html'</span>)[<span class="number">0</span>];
-</code></pre><p>先通过getElementsByTagName获取html根元素的节点，每一个元素都有一个childNodes集合和一个parentNode分别代表子节点集合和父节点，<strong>如果不存在，则都是null，如果是集合不存在，则是一个[]</strong>。</p>
-<blockquote>
-<p>html的childNodes //[head,body] html的parentNode // document</p>
-</blockquote>
-<p>每一个元素也都有一个firstChild和lastChild来分别代表第一个子元素和最后一个子元素</p>
-<p>每一个元素也都有一个nextSibling和previousSibling分别代表前面一个元素和后面一个元素，以当前自己为参照物。</p>
-<p>从这样可以看出来，它就像族谱一样对元素的关系进行了定义，通过理解这些层级关系，利用DOM提供的API可以很顺利的进行操作。</p>
-<h3 id="操作DOM">操作DOM</h3>
-<p><strong>常见的获取方式</strong></p>
-<ul>
-<li>document.getElementById （通过ID来获取到节点）</li>
-<li>document.getElementsByTagName （通过节点标签来获取）</li>
-<li>document.querySelector  </li>
-<li>document.querySelectorAll</li>
-</ul>
-<p>后面两个属于HTML5提供的新API，在移动端会用的比较多，前者是获取单个，后者获取集合。</p>
-<p><strong>常见添加，删除</strong></p>
-<ul>
-<li>appendChild</li>
-<li>insterBefore</li>
-<li>replaceChild</li>
-<li>removeChild</li>
-</ul>
-<p>appendChild主要是向childNodes集合的末尾添加一条元素，insterBefore可以用来插入特定位置，两个参数，要插入的节点和作为参照的节点，更新成功后插入的节点会在参照节点之前，也就是参照节点的previousSibling。replaceChild和insterBefore有些类似，两个参数，要插入的节点和参照节点，更新成功后，要插入的节点会替换参照节点，removeChild就比较好理解了，删除一个节点，这四个方法都有返回值。</p>
-<p><strong>常见元素属性</strong></p>
-<p>一般来说，如果var doc = document.getElementById(‘doc’);doc.id = ‘xx’;这样的方式也是可以更新或者获取到元素的属性的，不过不推荐这么使用，要获取元素的属性，DOM API也提供了三个方法来使用。</p>
-<ul>
-<li>getAttribute</li>
-<li>setAttribute</li>
-<li>removeAttribute</li>
-</ul>
-<p>getAttribute可以获取元素的属性，setAttribute可以对元素的属性进行设置，如果属性名不存在，则创建该属性。removeAttribute则是完全删除此属性。</p>
-<p>还有一个属性attributes，主要是获取元素属性集合，这个不是很常用，主要是在遍历元素属性时会使用到，它是一个集合。</p>
-<p><strong>常见创建元素或文本</strong></p>
-<p>一般情况下创建元素都会使用字符串的形式，innerHTML进去。不过，某些情况下，会用到createElement来创建一个元素，如果用到它，那么创建的文本也必须使用createTextNode了。</p>
-<p>对于文本节点，注释节点等开发真的很少用，可以当一个子类大概了解即可。</p>
-<blockquote>
-<p>关于模式的讨论，主要可以用document.compatMode来判断，如果是CSS1Compat就是标准模式，移动端不会出现这样的情况，IE上可能有别的模式，模式主要是影响到CSS布局上，Js影响非常少。</p>
-<p>在移动端上滚动是一个比较要处理的问题，一般来说会使用scrollIntoView，scrollIntoViewIfNeeded，scrollByLines，scrollByPages，这四个方法safari chrome都有实现，意味着在iOS和安卓平台都是良好的。</p>
-</blockquote>
-<ul>
-<li>scrollByPages 将元素的内容滚动到指定的页面高度，具体的高度是由元素的高度来决定的。</li>
-<li>scrollByLines 将元素的内容滚动到知道的行数高度，参数可正可负。</li>
-<li>scrollIntoViewIfNeeded，当元素在视窗（viewport）不可见，会滚动容器元素或者浏览器窗口让其可见。如果是可见的，这个方法不起任何作用。如果参数为true，可能是垂直居中的可见。</li>
-<li>scrollIntoView 滚动容器元素或者浏览器窗口，让元素可见。</li>
-</ul>
-<p><strong>一些小技巧</strong></p>
-<p>每一个元素都存在一个contains方法，用来检测传入的节点是不是当前节点的子节点，火狐对于的方法名叫compareDocumentPosition。</p>
-<p>如果要获取一个文本节点可以使用innerText（纯文本）来获取字符串，如果要获取所有的包括标签的字符串可以使用innerHTML。它们还有一种outer系列对应的方法，主要的区别是前者（outerText）会替换节点，后者(outerHTML)会修改调用它的元素，一般基本没人使用。它们可以获取，也可以通过赋值来设置新的节点。</p>
-<h3 id="DOM2和DOM3">DOM2和DOM3</h3>
-<p>对于这两级在DOM中基本上IE没啥支持，或者说支持的非常少，像style对象，CSS的一些对象外。</p>
-<p>这里最大的变化是增加了对XML命名空间的支持，元素样式的访问，节点的遍历以及range。当然目前来看，节点的遍历，range，XML命名空间在开发中使用的非常少，可以当资料来阅读，了解有这么回事，用到的时候再查询。而元素样式的访问，这个在开发中普遍使用的较多，因为在没法使用css3动画的浏览器中，可以通过改变样式来到达动画的目的。</p>
-<pre><code><span class="keyword">var</span> doc = <span class="built_in">document</span>.getElementById(<span class="string">'doc'</span>);
-doc.style.width = <span class="string">'100px'</span>;
-</code></pre><p>对于iframe的访问这里增加了一个contentDocument对象来进行引用，还有节点的比较，isSameNode和isEqualNode，这两个的区别在于，前者是否引用的同一个节点对象，后者是指两个节点是否是相同的类型。不过，它们使用的也不多，了解就好。</p>
-<p><strong>元素的大小</strong></p>
-<p>这个部分需要理解，因为关乎到元素在浏览器上的位置显示，跟动画有关系，四个属性。</p>
-<ul>
-<li>offsetWidth 元素在水平方向占用的空间大小</li>
-<li>offsetHeight 元素在垂直方向占用的空间大小</li>
-<li>offsetLeft 元素的左外边框到内边框的距离</li>
-<li>offsetTop 元素的上外边框到内边框的距离</li>
-</ul>
-<p><strong>滚动大小</strong></p>
-<p>这个在视察滚动或者处理滚动条的时候用的上，也是四个属性</p>
-<ul>
-<li>scrollHeight 在没有滚动的情况下，元素的总高度</li>
-<li>scrollWidth 在没有滚动的情况下，元素的总宽度</li>
-<li>scrollLeft 被隐藏在内容区域左侧的像素度</li>
-<li>scrollTop 被隐藏在内容区域上侧的像素度</li>
-</ul>
-<blockquote>
-<p>下面这些IE全部不支持，range支持一种叫做文本范围的东西</p>
-</blockquote>
-<p><strong>元素遍历</strong></p>
-<p>关于遍历其实有两个方法可用createNodeIterator和createTreeWalker，不过这些在开发中几乎不会使用到，谁没事去遍历节点完呢。</p>
-<p><strong>关于range</strong></p>
-<p>这个也是非常少会使用到，除非是做那种编辑器应用或者在线编辑器等等，不过使用它可以更精准的控制的DOM，主要是使用createRange方法。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。</p>
-<p><strong>理解层级结构与关系</str]]>
     </summary>
     
       <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
