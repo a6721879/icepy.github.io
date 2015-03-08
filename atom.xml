@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-03-07T11:28:33.369Z</updated>
+  <updated>2015-03-08T04:44:13.094Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://lcepy.github.io/2015/03/07/iOS%E5%A4%9A%E7%BA%BF%E7%A8%8BGCD%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
     <id>http://lcepy.github.io/2015/03/07/iOS多线程GCD的使用/</id>
     <published>2015-03-07T09:07:36.000Z</published>
-    <updated>2015-03-07T11:28:18.000Z</updated>
+    <updated>2015-03-08T04:43:57.000Z</updated>
     <content type="html"><![CDATA[<p>在做iOS开发的时候线程的使用场景还是蛮多的，比如网络请求，比如大的数据处理等等。因为iOS只有一个主线程，而且这个主线程是让UIKit来使用的，如果我们不想让UI界面因为某些操作而出现卡顿，那么就必须把一些需要时间等待的操作，分配给其他的线程去处理，并且保证主线程不让UIKit之外的程序来使用。</p>
 <p>在UIKit中某些对象是可以在其他线程中正常工作的，比如UIImage，UIColor等。但是UIKit的大部分只能在主线程中正常工作的，明白这一点非常的重要。</p>
 <p>iOS中实现多任务编程，主要使用三种方式，1、NSThread 2、NSOperation 3、GCD；个人感觉GCD比较好使用，它主要是与block来配合使用的。比如在网络活动时，我想在<a href="http://wow.163.com" target="_blank" rel="external">http://wow.163.com</a>下载一张图片显示在UIImageView，但是下载的过程，如果不使用其他线程来下载图片数据，UI界面就会出现卡顿的感觉，用户体验非常不好。</p>
@@ -36,7 +36,7 @@
 <p>dispatch_sync用于同步操作</p>
 <p>dispatch_queue_create一般用来创建串行queue，而且只可能创建一个线程，顺序执行</p>
 <p>dispatch_get_global_queue 添加到主queue的可能会并行执行，也就意味着创建了多个线程</p>
-<p>回到例子上来说，如果我有两个界面，从其中一个界面点击一个按钮到另外一个界面中显示一张图片，而这个图片需要在网络上下载。如果这里不利于多线程，在视觉上得到的反馈，就有可能在第一个界面中卡顿了，因为网络下载把主线程阻塞了。</p>
+<p>回到例子上来说，如果我有两个界面，从其中一个界面点击一个按钮到另外一个界面中显示一张图片，而这个图片需要在网络上下载。如果这里不使用多线程，在视觉上得到的反馈，就有可能在第一个界面中出现卡顿，因为网络下载把主线程阻塞了。</p>
 <p>例子：</p>
 <pre><code>    <span class="comment">//创建一个请求</span>
     <span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:<span class="keyword">self</span><span class="variable">.imageURL</span>];

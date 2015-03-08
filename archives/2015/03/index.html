@@ -213,7 +213,7 @@
 <p>dispatch_sync用于同步操作</p>
 <p>dispatch_queue_create一般用来创建串行queue，而且只可能创建一个线程，顺序执行</p>
 <p>dispatch_get_global_queue 添加到主queue的可能会并行执行，也就意味着创建了多个线程</p>
-<p>回到例子上来说，如果我有两个界面，从其中一个界面点击一个按钮到另外一个界面中显示一张图片，而这个图片需要在网络上下载。如果这里不利于多线程，在视觉上得到的反馈，就有可能在第一个界面中卡顿了，因为网络下载把主线程阻塞了。</p>
+<p>回到例子上来说，如果我有两个界面，从其中一个界面点击一个按钮到另外一个界面中显示一张图片，而这个图片需要在网络上下载。如果这里不使用多线程，在视觉上得到的反馈，就有可能在第一个界面中出现卡顿，因为网络下载把主线程阻塞了。</p>
 <p>例子：</p>
 <pre><code>    <span class="comment">//创建一个请求</span>
     <span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:<span class="keyword">self</span><span class="variable">.imageURL</span>];
