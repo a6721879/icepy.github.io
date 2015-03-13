@@ -108,7 +108,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 20.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 15.00px;">django</a><a href="/tags/iOS/" style="font-size: 17.50px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.50px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 15.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.50px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 20.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 18.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
 					</div>
 				</section>
 				
@@ -167,6 +167,83 @@
 	</div>
 </nav>
       
+  
+    <article id="post-复习JavaScript八之操作XML" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/02/复习JavaScript八之操作XML/" class="article-date">
+  	<time datetime="2015-02-02T09:50:14.000Z" itemprop="datePublished">2月 2 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/02/复习JavaScript八之操作XML/">复习JavaScript八之操作XML</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在以前XML是存储和传输数据的事实标准（客户端没有出现JSON之前），那个时候浏览器还不支持解析XML，于是很多开发者需要自己写一个XML解析器。原理，就是把XML也转化成DOM文档，然后通过DOM API来获取。</p>
+<p>而现在，在客户端（浏览器）编程中几乎很少会使用到XML，数据的交换都应用在JSON上了，了解这个有一个好处，就是在做服务端编程，比如SAOP协议时就会用到，还有桌面的客户端，或者是移动客户端上，比如iOS，它把一些数据，比如NSArray写入到本地，实际上就是一个XML文本，当然在代码层面上，是看不出来有解析的，如果读取这个文件，是直接转成NSArray对象的。</p>
+<blockquote>
+<p>IE有它自己的实现对XML的支持，下面说的两个类型，在IE中都不支持</p>
+</blockquote>
+<p>将XML字符串序列化成DOM文档，主要是使用DOMparser类来实现，其他的用法跟获取DOM节点一样。</p>
+<pre><code><span class="keyword">var</span> parser = <span class="keyword">new</span> DOMparser();
+<span class="keyword">var</span> xmlDomObject = parser.parserFromString(<span class="string">'&lt;root&gt;&lt;child/&gt;&lt;/root&gt;'</span>,<span class="string">'text/xml'</span>);
+
+xmlDomObject.getElementsByTagName(<span class="string">'child'</span>);
+</code></pre><p>将DOM文档反序列化成XML字符串，主要是使用XMLSerializer类型，使用上述的xmlDomObject对象。</p>
+<pre><code><span class="built_in">var</span> serializer <span class="subst">=</span> <span class="literal">new</span> XMLSerializer();
+<span class="built_in">var</span> <span class="built_in">xml</span> <span class="subst">=</span> serializer<span class="built_in">.</span>serializeToString(xmlDomObject);
+</code></pre><p>如果XML解析有错误都会返回一个parsererror标签，获取的时候就可以判断是否有这个标签来决定解析是否有错误。</p>
+<p>据说DOM3版本的XML操作只有一个浏览器实现了，所以当资料了解就好。</p>
+<h3 id="IE版本">IE版本</h3>
+<blockquote>
+<p>IE版本的XML解析主要是使用它的ActiveXObject类型来实现</p>
+</blockquote>
+<p>在IE中想要解析XML就必须先创建一个空的DOM文档，然后通过这个文档来获取。</p>
+<pre><code>var xmldom = createDocument();
+xmldom.loadXML(<span class="comment">'<span class="xmlDocTag">&lt;root&gt;</span><span class="xmlDocTag">&lt;child/&gt;</span><span class="xmlDocTag">&lt;/root&gt;</span>');</span>
+
+xmldom.getElementsByTagName(<span class="comment">'child');</span>
+</code></pre><p>如果解析有错误，可以检查parseError对象。</p>
+<pre><code><span class="keyword">if</span>(xmldom.parseError !== <span class="number">0</span>){
+    //<span class="keyword">do</span> 
+}
+</code></pre><p>在IE中进行序列化非常的方便，因为它都内置在了DOM文档中，每一个DOM节点都有一个xml属性，它就保存着XML字符串。</p>
+<pre><code>xmldom<span class="built_in">.</span><span class="built_in">xml</span>
+</code></pre><p>最后IE还提供了一个可以加载远程XML文件的方法load，它就接收一个参数，远程XML的URL地址。当然，也可以使用async属性来设置同步还是异步，默认是异步（true）。</p>
+<pre><code><span class="keyword">var</span> xmldom = createDocument();
+xmldom.<span class="keyword">async</span> = <span class="keyword">false</span>;
+xmldom.load(<span class="string">'http://xxx.sss.xml'</span>);
+</code></pre><p>如果是异步还要监听一下onreadystatechange事件，判断readystate状态，这个跟Ajax的使用是一样的。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
   
     <article id="post-UINavigationController的理解" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -632,85 +709,6 @@ apple.hasOwnProperty(<span class="string">'showMessage'</span>)
             <a href="/2015/01/26/复习JavaScript五之面向对象的程序设计/#more">more >></a>
           </p>
         
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript四之Object" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/25/复习JavaScript四之Object/" class="article-date">
-  	<time datetime="2015-01-25T13:42:07.000Z" itemprop="datePublished">1月 25 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/25/复习JavaScript四之Object/">复习JavaScript四之Object</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>JavaScript的所有对象都衍生于Object对象，所有对象都继承了Object.prototype上的方法和属性，虽然它们可能会被覆盖，熟悉它对于编程能起到很大的作用，也能比较深刻的了解JavaScript这门语言。</p>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" rel="external">可参考的资料-Object</a></p>
-<p>创建一个对象可以使用new，也可以使用快速创建的方式：</p>
-<pre><code><span class="keyword">var</span> _<span class="class"><span class="keyword">object</span> = </span>{};
-</code></pre><p>_object对象中就可以使用Object.prototype中所有的方法和属性，虽然看起来它是空的。说到这里在编程中常常有一个非常有用的需求，如何判断一个对象是空对象。</p>
-<p>这是zepto中的判断一个对象是否是空对象，常常使用：</p>
-<pre><code>$.isEmptyObject = <span class="function"><span class="keyword">function</span><span class="params">(obj)</span> </span>{
-    <span class="keyword">var</span> name
-    <span class="keyword">for</span> (name <span class="keyword">in</span> obj) <span class="keyword">return</span> <span class="literal">false</span>
-    <span class="keyword">return</span> <span class="literal">true</span>
-  }
-</code></pre><p>也顺便看了下jQuery原理是一模一样的：</p>
-<pre><code>isEmptyObject: <span class="function"><span class="keyword">function</span><span class="params">( obj )</span> </span>{
-    <span class="keyword">var</span> name;
-    <span class="keyword">for</span> ( name <span class="keyword">in</span> obj ) {
-        <span class="keyword">return</span> <span class="literal">false</span>;
-    }
-    <span class="keyword">return</span> <span class="literal">true</span>;
-}
-</code></pre><p>使用in操作符来实现，它不会遍历到父原型链。</p>
-<p>constructor返回一个指向创建了该对象的函数引用，这个东西主要是可以用来识别（类）到底是指向哪里的。</p>
-<p>defineProperty直接在一个对象上定义一个新属性，非常适合用于动态构建，传入三个参数［动态添加对象的目标对象，需要定义或被修改的属性名，需要定义的对象］，在第三个参数中可以有些属性来表示是否继承（<strong>proto</strong>），要不要定义get，set方法，enumerable是否可枚举。</p>
-<p>defineProperties跟上述defineProperty一样，但是它可以添加多个。</p>
-<p>getOwnPropertyNames返回一个由指定对象的所有属性组成的数组</p>
-<p>keys返回一个数组包括对象所有的属性（可枚举）</p>
-<blockquote>
-<p>keys是经常会用到的一个属性，它只能包可枚举的，如果想获取一个对象的所有属性包括不枚举的，那么使用getOwnPropertyNames。</p>
-</blockquote>
-<p>hasOwnProperty用于判断某个对象是否包含有自身的属性，这个方法常常用于检测对象中的属性是否存在，它只检测自身，对于继承过来的都是false，这一点是非常重要的理解。</p>
-<p>isPrototypeOf 用于检测一个对象是否在另一个对象的原型链上，比如有两个对象是互相交互的，常常会使用它来进行检测。</p>
-<p>propertyIsEnumerable这个方法也比较重要，返回一个布尔值，检测一个对象的自身属性是否可以枚举</p>
-<blockquote>
-<p>可枚举的理解，也就是对象的属性可枚举，它的属性值不可以修改，但是在Js中它有自己的定义，引擎内部看不见的该属性的[[Enumerable]]特性为true，那么就是可枚举的。基本上把一个普通对象可以看做是一个枚举类型，比如var color = {‘red’:1}，red是可以修改的，但是red是可枚举的，但是如果是继承过来的属性，propertyIsEnumerable是返回false的，它还有一个特点，就是自身。</p>
-</blockquote>
-<p>如果要定义不可枚举的属性，那就要使用defineProperty方法了，目前不能用对象直接量或者构造函数定义出来。</p>
-<pre><code><span class="keyword">var</span> obj = {name: <span class="string">'jack'</span>, age:<span class="number">23</span>}
-Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="keyword">value</span> : <span class="string">'123'</span>, enumerable : <span class="keyword">false</span> });
-</code></pre>
       
     </div>
   </div>
