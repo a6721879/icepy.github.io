@@ -168,6 +168,121 @@
 </nav>
       
   
+    <article id="post-复习JavaScript九之客户端存储方案" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/03/复习JavaScript九之客户端存储方案/" class="article-date">
+  	<time datetime="2015-02-03T09:43:48.000Z" itemprop="datePublished">2月 3 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/03/复习JavaScript九之客户端存储方案/">复习JavaScript九之客户端存储方案</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>随着Web应用越来越复杂，总是有很多需求需要在客户端存储一些特定的信息，用来描述访问者或者跟访问者相关的信息。于是，就有了这些客户端存储的方案，供开发者选择以及使用。</p>
+<h3 id="cookie">cookie</h3>
+<p>说起来cookie的出现是非常早的，用于在客户端存储会话信息，它要求服务器对任意的HTTP请求发送Set-Cookie HTTP头作为响应的一部分，例如：</p>
+<pre><code><span class="status">HTTP/1.1 <span class="number">200</span> OK</span>
+<span class="attribute">Content-Type</span>: <span class="string">text/html</span>
+<span class="attribute">Set-Cookie</span>: <span class="string">name=value</span>
+</code></pre><p>cookie虽然好用，但是它在客户端上有很多限制，而去获取也不是很容易。最重要的是关于请求的性能，cookie是对任意HTTP设置，所以也会发送给服务器，这些额外信息有时候不是必需的。</p>
+<ul>
+<li>cookie是跟特定的域有关系的，也就意味着存储在cookie中的信息只能让特定的域来访问</li>
+<li>cookie的条数是有限制的，大体上来说各浏览器不会超过50个，除了safair chrome</li>
+<li>cookie在客户端只有一个方法可以用document.cookie</li>
+<li>cookie的大小在客户端上也有限制，大体不会超过1MB</li>
+<li>如果在客户端设置了cookie，是没法删除的，只能在同一个cookie上设置name=空字符串或者设置失效时间</li>
+<li>如果设置了secure，cookie只能在SSL链接才能传输</li>
+</ul>
+<p>cookie在浏览器上的保存是由几个方面组成的，理解这个对于使用Js操作cookie是一个必备条件，它由名称也就是每一项的key，每一项的值value，域名的限制，路径对于哪一个页面起作用，时间，以及安全标识secure。</p>
+<p>在客户端主要是使用document.cookie来进行操作，获取和设置都是这一个。而去获取是一个全的字符串，还需要进一步的处理才能得到值。如果是设置，也是需要设置一个全的字符串。对于这个，最好都要encodeURIComponent一下，获取的时候decodeURIComponent一下。</p>
+<pre><code><span class="keyword">var</span> setCookie = <span class="function"><span class="keyword">function</span><span class="params">(name,value,expires,path,domain,secure)</span></span>{
+    <span class="keyword">var</span> cookieText = <span class="built_in">encodeURIComponent</span>(name)+<span class="string">'='</span>+<span class="built_in">encodeURIComponent</span>(value);
+
+    <span class="comment">//各项的拼接</span>
+    <span class="built_in">document</span>.cookie = cookieText;
+}
+</code></pre><p>聪明的开发者为了绕开浏览器上对于条数的限制，研究出了一个方式，把真实的值设置在子cookie上。</p>
+<pre><code><span class="variable">name=</span><span class="variable">name=</span>value
+</code></pre><h3 id="IE上的客户端存储userData">IE上的客户端存储userData</h3>
+<p>在IE中引入了一个userData的方案来存储客户端数据，允许每个文档最多128KB，每个域1MB的数据量。想使用它首选在那个元素上应用一个css。</p>
+<pre><code>&lt;<span class="keyword">div</span> style=<span class="string">"behavior:url(#default#userData)"</span>&gt;&lt;/<span class="keyword">div</span>&gt;
+</code></pre><p>使用的时候跟设置dom属性一样，唯一有一个不同的地方是最后要调用save方法，告诉它存储在哪个数据仓库上。</p>
+<pre><code><span class="keyword">var</span> dataStore = <span class="built_in">document</span>.getElementById(<span class="string">'dataStore'</span>);
+dataStore.setAttribute(<span class="string">'name'</span>,<span class="string">'lcepy'</span>);
+dataStore.save(<span class="string">'MyNameInfo'</span>);
+</code></pre><p>获取</p>
+<pre><code>dataStore.<span class="built_in">load</span>(<span class="string">'MyNameInfo'</span>);
+dataStore.getAttribute(<span class="string">'name'</span>);
+</code></pre><h3 id="HTML5的客户端存储方案">HTML5的客户端存储方案</h3>
+<blockquote>
+<p>支持度以及使用比较广泛的是Web Storage API，当然客户端还有本地数据IndexDB等等，这些也是可以存储客户端数据，但是它们支持的很少。在做移动端开发时，localStorage的使用是非常频繁的，还要注意一点是个别比如safair浏览器有隐私模式，本地缓存是不起作用的，无法读取，所以要做一些额外的处理。</p>
+</blockquote>
+<p>主要的是两个sessionStorage和localStorage两套API来应用，它们是有区别的，前者只在浏览器运行时存在，也可以跨页面，前提是页面不能关闭。后者是永久存在的，如果用户不删除，那么它永远不会删除。它们的使用方式都是一样的，包括API。至于分配的空间，要看各浏览器的态度的，一般情况下是5MB，还有一点它是跟域走的。</p>
+<pre><code><span class="title">interface</span> Storage{
+    <span class="title">readonly</span> attribute unsigned long legth;
+    <span class="title">getter</span> DOMString key();
+    <span class="title">getter</span> any getItem();
+    <span class="title">setter</span> creator void setItem();
+    <span class="title">deleter</span> void removeItem();
+    <span class="title">viod</span> clear();
+}
+</code></pre><ul>
+<li>length 描述Storage对象中存储的key=value数量</li>
+<li>key 方法允许获取一个指定位置的键</li>
+<li>getItem方法根据指定的key返回一个value</li>
+<li>setItem方法将数据value存入指定的位置key</li>
+<li>removeItem根据指定的key来删除数据</li>
+<li>clear 删除全部的数据</li>
+</ul>
+<p>使用：</p>
+<pre><code><span class="transposed_variable">localStorage.</span>setItem(<span class="string">'name'</span>,<span class="string">'lcepy'</span>);
+<span class="transposed_variable">localStorage.</span>getItem(<span class="string">'name'</span>);
+<span class="transposed_variable">localStorage.</span>key(<span class="number">0</span>);
+<span class="transposed_variable">localStorage.</span><span class="built_in">length</span>;
+<span class="transposed_variable">localStorage.</span>removeItem(<span class="string">'name'</span>);
+<span class="transposed_variable">localStorage.</span><span class="keyword">clear</span>();
+</code></pre><p>另外API中还有一套事件用于本地存储发生改变时的通知</p>
+<pre><code><span class="built_in">window</span>.addEventLister(<span class="string">'storage'</span>,<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{},<span class="literal">true</span>);
+</code></pre><p>event对象中包含有</p>
+<ul>
+<li>key 存储了被更新或者删除的键</li>
+<li>oldValue 包含了更新之前的数据</li>
+<li>url Storage事件发生的源</li>
+<li>newValue 包含了更新之后的数据</li>
+<li>storageArea 包含一个引用，指向发生改变之前的localStorage或者sessionStorage</li>
+</ul>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-复习JavaScript八之操作XML" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -607,123 +722,9 @@ doc.style.width = <span class="string">'100px'</span>;
 
 
   
-    <article id="post-复习JavaScript五之面向对象的程序设计" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/26/复习JavaScript五之面向对象的程序设计/" class="article-date">
-  	<time datetime="2015-01-26T06:52:39.000Z" itemprop="datePublished">1月 26 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/26/复习JavaScript五之面向对象的程序设计/">复习JavaScript五之面向对象的程序设计</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>面向对象的语言有一个非常明显的标志：类，通过类来创建任意多个具有相同属性和方法的对象，可惜的是Js里没有这样的概念。</p>
-<p>但是Js有一个特性：一切皆是对象。</p>
-<p>聪明的开发者通过这些特性进行摸索，于是迂回发明了一些程序设计，以便更好的组织代码结构。</p>
-<h3 id="工厂模式">工厂模式</h3>
-<p>主要是用来解决有多个相同属性和方法的对象的问题，可以用函数来封装特定的接口来实现</p>
-<pre><code><span class="keyword">var</span> computer = <span class="function"><span class="keyword">function</span><span class="params">(name,version)</span></span>{
-    <span class="keyword">return</span> {
-        <span class="string">'name'</span>:name,
-        <span class="string">'version'</span>:version,
-        <span class="string">'showMessage'</span>:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-            alert(<span class="keyword">this</span>.name);
-        }
-    }
-}
-<span class="keyword">var</span> test = computer(<span class="string">'apple'</span>,<span class="string">'11.1'</span>);
-test.showMessage();
-</code></pre><h3 id="构造函数模式">构造函数模式</h3>
-<p>我们知道像原生的构造函数，比如Object，Array等，它们是在运行时自动出现在执行环境中的。因此，为了模仿它，这里也可以通过一个普通的函数，并且new出一个对象，这样就成为了自定义的构造函数，也可以为他们添加自定义的属性和方法。</p>
-<p>但是这样的构造函数有一个缺陷，就是每个方法都会在每个实例上创建一次，因为每次创建都需要分配内存空间，但是有时候这样的特性还是有用的，主要是要控制它们，在不使用的时候释放内存。</p>
-<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name,version)</span></span>{
-    <span class="keyword">this</span>.name = name;
-    <span class="keyword">this</span>.version = version;
-    <span class="keyword">this</span>.showMessage = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        alert(<span class="keyword">this</span>.name);
-    }
-}
-
-<span class="keyword">var</span> apple = <span class="keyword">new</span> Computer(<span class="string">'apple'</span>,<span class="number">2014</span>);
-<span class="keyword">var</span> dell = <span class="keyword">new</span> Computer(<span class="string">'dell'</span>,<span class="number">2010</span>);
-apple.showMessage();
-dell.showMessage();
-</code></pre><p>像apple，dell是通过Computer实例化出来的不同的对象，但是它们的constructor都是指向Computer的。这里也可以使用instanceof来对（对象）进行检测。</p>
-<p>在书写上构造函数跟其他函数是没有什么区别的，主要的区别还是在使用上，构造函数需要使用new操作符。</p>
-<p>其实这样的书写，已经跟类没有什么区别了，表面上来看，而构造函数我个人更倾向于一个类的某个静态方法。</p>
-<h3 id="原型模式">原型模式</h3>
-<p>说到原型模式就不得不提一提关于指针的问题，因为每一个函数都有一个prototype属性，而这个属性是一个指针，指向一个对象。</p>
-<p><strong>C语言描述指针，这个在iOS开发中非常重要</strong></p>
-<p>比如我先定义一个int类型的指针变量和一个普通的int类型数据，然后给指针变量赋值。</p>
-<pre><code><span class="keyword">int</span> *<span class="keyword">p</span>;
-<span class="keyword">int</span> <span class="keyword">pp</span> = <span class="number">123</span>;
-<span class="keyword">p</span> = &amp;<span class="keyword">pp</span>;
-*<span class="keyword">p</span> = <span class="number">999</span>;
-<span class="built_in">printf</span>(<span class="string">'%d'</span>,<span class="keyword">pp</span>);
-</code></pre><p>*是一个特殊符号用于标明它是一个指针变量。</p>
-<p>&amp;是地址符</p>
-<p>分析这个就要说到栈内存和堆内存了，比如*p在栈内存中分配了一个地址假设是ff22x0，它还没有空间。而pp存在一个地址ff23x0，并且分配了一个空间存储着123，这个地址是指向这个空间的。</p>
-<p>p = &amp;pp 这样的赋值操作，也就是把ff23x0取出来，并且给p分配一个空间把ff23x0存储进去，并且ff22x0指向这个空间。</p>
-<p>*p = 999 从这里就可以看出来p操作的是地址，而这个地址不就是ff23x0么，于是pp成了999。</p>
-<p>所谓的指针也就是存储着地址的变量。</p>
-<p>回到原型上，如果每一个函数中的 prototype属性都是一个指针，实际上它只是一个地址引用着一个空间，而这个空间正是我们写的xxx.prototype.xxx = function(){}这样的代码在运行时分配的空间。那么可见，使用原型的好处是空间只分配一次，大家都是共享的，因为它是指针。</p>
-<p>先看一个例子</p>
-<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
-    <span class="keyword">this</span>.name = name;
-}
-Computer.prototype.showMessage = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
-    alert(name);
-}
-
-<span class="keyword">var</span> apple = <span class="keyword">new</span> Computer(<span class="string">'apple'</span>);
-<span class="keyword">var</span> dell = <span class="keyword">new</span> Computer(<span class="string">'dell'</span>);
-Computer.prototype.isPrototypeOf(apple);
-</code></pre><p>在解释这个原型链之前，还要明白Js的一个特性，就是如果自身不存在，它会沿着原型往上查找。它的原理稍微有些绕，Computer自身的prototype是指向它自身的原型对象的，而每一个函数又有一个constructor指向它自身，prototype.constructor又指向它自身。于是Computer的两个实例apple，dell内部有一个<strong>proto</strong>属性是指向Computer.prototype的，最后的结果是它们可以使用showMessage方法。</p>
-<p>当然它们还有一个搜索原则，比如在调用showMessage的时候，引擎先问apple自身有showMessage吗？“没有”，继续搜索，apple的原型有吗，“有”，调用。所以从这里可以看出，this.showMessage是会覆盖prototype.showMessage的。</p>
-<p>另外还可以使用isPrototypeOf来检测一个对象是否在另一个对象的原型链上，上述的代码返回的是true。</p>
-<pre><code>apple.hasOwnProperty(<span class="string">'name'</span>)
-
-apple.hasOwnProperty(<span class="string">'showMessage'</span>)
-</code></pre><p>使用hasOwnProperty来检测到底是对象属性还是原型属性，使用this创建的属性是一个对象属性。<br>
-        
-          <p class="article-more-link">
-            <a href="/2015/01/26/复习JavaScript五之面向对象的程序设计/#more">more >></a>
-          </p>
-        
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
     </nav>
   
 

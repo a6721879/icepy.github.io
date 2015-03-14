@@ -168,6 +168,78 @@
 </nav>
       
   
+    <article id="post-学习zepto源代码中的map函数" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/16/学习zepto源代码中的map函数/" class="article-date">
+  	<time datetime="2015-02-16T13:57:58.000Z" itemprop="datePublished">2月 16 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/16/学习zepto源代码中的map函数/">学习zepto源代码中的map函数</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在学习map函数之前，先学习几个比较有用的方法，比如判断一个对象是否是空对象，给字符串两边去空白等。判断空对象，主要是利用了in语法，它可以遍历对象的属性，如果是空对象for循环会直接跳过。</p>
+<pre><code>$.isEmptyObject = <span class="function"><span class="keyword">function</span><span class="params">(obj)</span> </span>{
+    <span class="keyword">var</span> name
+    <span class="keyword">for</span> (name <span class="keyword">in</span> obj) <span class="keyword">return</span> <span class="literal">false</span>
+    <span class="keyword">return</span> <span class="literal">true</span>
+  }
+</code></pre><p>判断一个元素是否在数组中，借用了在最上面申明的一个空数组的indexOf。</p>
+<pre><code>$.inArray = <span class="function"><span class="keyword">function</span><span class="params">(elem, array, i)</span></span>{
+    <span class="keyword">return</span> emptyArray.indexOf.call(array, elem, i)
+  }
+</code></pre><p>给字符串左右两边去空白，这个是借用了String包装对象的trim方法。</p>
+<pre><code>$.trim = <span class="function"><span class="keyword">function</span><span class="params">(str)</span> </span>{
+    <span class="keyword">return</span> str == <span class="literal">null</span> ? <span class="string">""</span> : <span class="built_in">String</span>.prototype.trim.call(str)
+  }
+</code></pre><p>map函数是一个很有意思很有用的函数，它可以帮助开发者进行映射到每一个元素上，新版的数组也提供了map方法，考虑到某些浏览器没有实现这个，所以zepto帮助我们实现了它。</p>
+<pre><code>$.map = <span class="function"><span class="keyword">function</span>(<span class="title">elements</span>, <span class="title">callback</span>){</span>
+var <span class="built_in">value</span>, values = [], i, key
+<span class="keyword">if</span> (likeArray(elements))
+  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; elements.<span class="built_in">length</span>; i++) {
+    <span class="built_in">value</span> = callback(elements[i], i)
+    <span class="keyword">if</span> (<span class="built_in">value</span> != <span class="constant">null</span>) values.push(<span class="built_in">value</span>)
+  }
+<span class="keyword">else</span>
+      <span class="keyword">for</span> (key <span class="operator">in</span> elements) {
+        <span class="built_in">value</span> = callback(elements[key], key)
+        <span class="keyword">if</span> (<span class="built_in">value</span> != <span class="constant">null</span>) values.push(<span class="built_in">value</span>)
+      }
+    <span class="constant">return</span> flatten(values)
+  }
+</code></pre><p>likeArray是判断了下length属性是不是number，如果是，遍历，然后装载到values数组中，如果是对象就用for in，最后的flatten是借用一下concat，copy一个副本出来返回。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-UIViewController的生命周期" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -513,69 +585,6 @@ class2type[ <span class="string">"[object "</span> + name + <span class="string"
 
 }</span>
 </code></pre><p>协议中有很多在某些情况下会非常有用，细节就要慢慢在学习中积累了。</p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript十二之理解作用域" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/05/复习JavaScript十二之理解作用域/" class="article-date">
-  	<time datetime="2015-02-05T10:17:09.000Z" itemprop="datePublished">2月 5 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/05/复习JavaScript十二之理解作用域/">复习JavaScript十二之理解作用域</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>理解作用域链是Js编程中一个必须要具备的，作用域决定了变量和函数有权力访问哪些数据。在Web浏览器中，全局执行环境是window对象，这也意味着所有的全局变量或者方法都是window对象的属性或方法。当个函数在被调用的时候都会创建自己的执行环境，而这个函数中所写的代码就开始进入这个函数的执行环境，于是由变量对象构建起了一个作用域链。</p>
-<pre><code><span class="keyword">var</span> wow = <span class="string">'魔兽世界'</span>;
-<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> _wow = <span class="string">'123'</span>;
-}
-</code></pre><p>在这个例子中全局环境中包含了两个对象（全局环境的变量对象不算），window.wow和window.message，而这个message函数中又包含了两个对象，它自己的变量对象（其中定义了arguments对象）和全局环境的变量对象。当这个函数开始执行时，message自己的变量对象中定义了_wow，而它的全局环境的变量对象有wow，假设在message中alert一下wow，实际上是message中包含的全局环境的变量对象.wow，于是可以访问。</p>
-<pre><code><span class="keyword">var</span> wow = <span class="string">'123'</span>;
-<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> wow = <span class="string">'456'</span>;
-}
-</code></pre><p>如果执行message函数alert一下wow，它的作用域是这样开始搜索的，先搜索message自己的变量对象中是否存在wow，如果有就访问并且立马停止搜索，如果没有则继续往上访问它，有wow，则访问并且立马停止搜索，以此类推一直搜索到全局环境上的变量对象，如果这里都没，恭喜你，这里要抛错了。</p>
-<pre><code><span class="keyword">var</span> c = <span class="string">'123'</span>;
-<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> g = <span class="string">'123'</span>;
-    <span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        <span class="keyword">var</span> d = <span class="string">'123'</span>;
-    }
-}
-</code></pre><p>在这个例子中包含有三个执行环境，全局环境，message的环境，a的环境。从这里可以看出message自身包含两个对象，自己的变量对象和全局环境中的变量对象，而函数a则包含了三个，自身的变量对象，message的变量对象和全局变量对象。</p>
-<p>当开始执行这函数时，在函数a中可以访问到变量g，那是因为函数a包含了message的变量对象，于是在自身没有开始搜索上一级的变量对象时发现了，于是可以访问。那么访问c的原理也是如此，当自身和上一级的message的变量对象都没有，但是全局变量对象中存在，于是访问成功。</p>
-<p>了解这个作用域，对于Js编程是至关重要的，不然可能会出现，明明想要的预期结果是123，但是变成了456，为什么？那就是因为一级一级的搜索，可能会存在覆盖，或者搜索到别的地方就立即停止搜索了。</p>
 
       
     </div>
