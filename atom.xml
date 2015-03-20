@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title><![CDATA[lcepy]]></title>
+  <title><![CDATA[icepy]]></title>
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
-  <link href="http://lcepy.github.io/"/>
-  <updated>2015-03-20T11:46:56.080Z</updated>
-  <id>http://lcepy.github.io/</id>
+  <link href="http://icepy.github.io/"/>
+  <updated>2015-03-20T18:36:22.602Z</updated>
+  <id>http://icepy.github.io/</id>
   
   <author>
-    <name><![CDATA[lcepy]]></name>
+    <name><![CDATA[icepy]]></name>
     
   </author>
   
@@ -16,8 +16,8 @@
   
   <entry>
     <title><![CDATA[陀螺]]></title>
-    <link href="http://lcepy.github.io/2015/03/19/%E9%99%80%E8%9E%BA/"/>
-    <id>http://lcepy.github.io/2015/03/19/陀螺/</id>
+    <link href="http://icepy.github.io/2015/03/19/%E9%99%80%E8%9E%BA/"/>
+    <id>http://icepy.github.io/2015/03/19/陀螺/</id>
     <published>2015-03-19T08:25:26.000Z</published>
     <updated>2015-03-19T08:49:45.000Z</updated>
     <content type="html"><![CDATA[<p>最近在生活中遇到了很多的挫折，一个无所事事的状态，其实非常的糟糕，为什么这么说，那是因为人一旦无所谓，就会无所畏惧，就会混乱，这是一个非常糟糕的事情。也许一直以来，都非常的顺利，改变自己。这样的改变，并不成功。没有经历这些挫折，怎么能说是成功呢？</p>
@@ -32,16 +32,16 @@
 <p>我发现自己最]]>
     </summary>
     
-      <category term="生活" scheme="http://lcepy.github.io/tags/%E7%94%9F%E6%B4%BB/"/>
+      <category term="生活" scheme="http://icepy.github.io/tags/%E7%94%9F%E6%B4%BB/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[Native与H5交互的原理]]></title>
-    <link href="http://lcepy.github.io/2015/03/14/Native%E4%B8%8EH5%E4%BA%A4%E4%BA%92%E7%9A%84%E5%8E%9F%E7%90%86/"/>
-    <id>http://lcepy.github.io/2015/03/14/Native与H5交互的原理/</id>
+    <link href="http://icepy.github.io/2015/03/14/Native%E4%B8%8EH5%E4%BA%A4%E4%BA%92%E7%9A%84%E5%8E%9F%E7%90%86/"/>
+    <id>http://icepy.github.io/2015/03/14/Native与H5交互的原理/</id>
     <published>2015-03-14T04:14:50.000Z</published>
-    <updated>2015-03-14T06:18:49.000Z</updated>
+    <updated>2015-03-20T12:05:46.000Z</updated>
     <content type="html"><![CDATA[<p>在做混合应用时，H5与Native通信的重要性，我想每一个H5开发者都非常的清楚。通过它，我们可以很好的借用Native API的优势来实现自己想做的事情，业界有一个非常成熟的框架让大家选择，它就是PhoneGap。混合开发，并不是意味着什么App都可以做，它也有局限性。在写交互原理之前，我想先写写自己的体会。</p>
 <ul>
 <li>混合开发使用的语言是JavaScript由于系统分配的资源始终有限，在UIWebView这个容器中运行，效率跟原生的差距是非常明显的</li>
@@ -89,14 +89,14 @@ requ.bind(<span class="string">'click'</span>,<span class="function"><span class
     <![CDATA[<p>在做混合应用时，H5与Native通信的重要性，我想每一个H5开发者都非常的清楚。通过它，我们可以很好的借用Native API的优势来实现自己想做的事情，业界有一个非常成熟的框架让大家选择，它就是PhoneGap。混合开发，并不是意味着什么App都可以做，它也有局限性。在]]>
     </summary>
     
-      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+      <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[2015年面试之囧途]]></title>
-    <link href="http://lcepy.github.io/2015/03/13/2015%E5%B9%B4%E9%9D%A2%E8%AF%95%E4%B9%8B%E5%9B%A7%E9%80%94/"/>
-    <id>http://lcepy.github.io/2015/03/13/2015年面试之囧途/</id>
+    <link href="http://icepy.github.io/2015/03/13/2015%E5%B9%B4%E9%9D%A2%E8%AF%95%E4%B9%8B%E5%9B%A7%E9%80%94/"/>
+    <id>http://icepy.github.io/2015/03/13/2015年面试之囧途/</id>
     <published>2015-03-13T11:07:52.000Z</published>
     <updated>2015-03-14T05:52:45.000Z</updated>
     <content type="html"><![CDATA[<p>至去年从携程离职之后，就开启了一次新的面试囧途，面试这东西，主要可以了解自己所处的水平，写写它是想告诉自己一些事情，有事情，人应该要了解和想清楚自己到底需要什么，到底适合什么样的工作，而不是为了生活，为了好的公司，为了高的薪水去妥协，在与兴趣之间平衡的坍塌，会造成很严重的后果，诱惑，是每一个人都会遇到的，如何面对这些诱惑，而明确自己所想，才是最重要的。</p>
@@ -128,14 +128,14 @@ requ.bind(<span class="string">'click'</span>,<span class="function"><span class
     <![CDATA[<p>至去年从携程离职之后，就开启了一次新的面试囧途，面试这东西，主要可以了解自己所处的水平，写写它是想告诉自己一些事情，有事情，人应该要了解和想清楚自己到底需要什么，到底适合什么样的工作，而不是为了生活，为了好的公司，为了高的薪水去妥协，在与兴趣之间平衡的坍塌，会造成很严重的后]]>
     </summary>
     
-      <category term="生活" scheme="http://lcepy.github.io/tags/%E7%94%9F%E6%B4%BB/"/>
+      <category term="生活" scheme="http://icepy.github.io/tags/%E7%94%9F%E6%B4%BB/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[iOS多线程GCD的使用]]></title>
-    <link href="http://lcepy.github.io/2015/03/07/iOS%E5%A4%9A%E7%BA%BF%E7%A8%8BGCD%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
-    <id>http://lcepy.github.io/2015/03/07/iOS多线程GCD的使用/</id>
+    <link href="http://icepy.github.io/2015/03/07/iOS%E5%A4%9A%E7%BA%BF%E7%A8%8BGCD%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
+    <id>http://icepy.github.io/2015/03/07/iOS多线程GCD的使用/</id>
     <published>2015-03-07T09:07:36.000Z</published>
     <updated>2015-03-08T04:43:57.000Z</updated>
     <content type="html"><![CDATA[<p>在做iOS开发的时候线程的使用场景还是蛮多的，比如网络请求，比如大的数据处理等等。因为iOS只有一个主线程，而且这个主线程是让UIKit来使用的，如果我们不想让UI界面因为某些操作而出现卡顿，那么就必须把一些需要时间等待的操作，分配给其他的线程去处理，并且保证主线程不让UIKit之外的程序来使用。</p>
@@ -177,16 +177,16 @@ requ.bind(<span class="string">'click'</span>,<span class="function"><span class
     <![CDATA[<p>在做iOS开发的时候线程的使用场景还是蛮多的，比如网络请求，比如大的数据处理等等。因为iOS只有一个主线程，而且这个主线程是让UIKit来使用的，如果我们不想让UI界面因为某些操作而出现卡顿，那么就必须把一些需要时间等待的操作，分配给其他的线程去处理，并且保证主线程不让UI]]>
     </summary>
     
-      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+      <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[iOS自动布局的理解]]></title>
-    <link href="http://lcepy.github.io/2015/03/07/iOS%E8%87%AA%E5%8A%A8%E5%B8%83%E5%B1%80%E7%9A%84%E7%90%86%E8%A7%A3/"/>
-    <id>http://lcepy.github.io/2015/03/07/iOS自动布局的理解/</id>
+    <link href="http://icepy.github.io/2015/03/07/iOS%E8%87%AA%E5%8A%A8%E5%B8%83%E5%B1%80%E7%9A%84%E7%90%86%E8%A7%A3/"/>
+    <id>http://icepy.github.io/2015/03/07/iOS自动布局的理解/</id>
     <published>2015-03-07T03:47:44.000Z</published>
-    <updated>2015-03-07T05:24:16.000Z</updated>
+    <updated>2015-03-20T11:55:23.000Z</updated>
     <content type="html"><![CDATA[<p>一般情况下iOS的自动布局可以在Xcode中利用图形化的工具来操作完成，当然也可以使用代码的方式来完成，这些工作主要是对视图定义一些规则和约束，在容器变化的时候，视图可以遵守这些约束。</p>
 <p>实现约束的三种方式：</p>
 <ul>
@@ -204,14 +204,14 @@ requ.bind(<span class="string">'click'</span>,<span class="function"><span class
 <li>比如拖动一个Label在s]]>
     </summary>
     
-      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+      <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[JavaScript解析URL字符串]]></title>
-    <link href="http://lcepy.github.io/2015/03/06/JavaScript%E8%A7%A3%E6%9E%90URL%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
-    <id>http://lcepy.github.io/2015/03/06/JavaScript解析URL字符串/</id>
+    <link href="http://icepy.github.io/2015/03/06/JavaScript%E8%A7%A3%E6%9E%90URL%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
+    <id>http://icepy.github.io/2015/03/06/JavaScript解析URL字符串/</id>
     <published>2015-03-06T06:38:32.000Z</published>
     <updated>2015-03-06T06:56:33.000Z</updated>
     <content type="html"><![CDATA[<p>说到解析URL思路应该有多种多样的，比如一点一点的分解，先indexOf(‘?’)判断是否有参数，完了之后split(‘?’)一下，后面的参数继续split(‘&amp;’)成一个数组然后循环再split(‘=’)组装成一个一个key和vaule的键值对对象。前面那一部分也可以继续分解，把端口，协议，路径等等分解出来。或者用正则表达式，一个一个的分解。除了上述的思路，其实还有一个更简单的办法，利用a标签。</p>
@@ -251,14 +251,14 @@ parseURL(url);
     <![CDATA[<p>说到解析URL思路应该有多种多样的，比如一点一点的分解，先indexOf(‘?’)判断是否有参数，完了之后split(‘?’)一下，后面的参数继续split(‘&amp;’)成一个数组然后循环再split(‘=’)组装成一个一个key和vaule的键值对对象。前面那一部分也]]>
     </summary>
     
-      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
+      <category term="JavaScript" scheme="http://icepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[JavaScript中的深拷贝与浅拷贝]]></title>
-    <link href="http://lcepy.github.io/2015/03/04/JavaScript%E4%B8%AD%E7%9A%84%E6%B7%B1%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B5%85%E6%8B%B7%E8%B4%9D/"/>
-    <id>http://lcepy.github.io/2015/03/04/JavaScript中的深拷贝与浅拷贝/</id>
+    <link href="http://icepy.github.io/2015/03/04/JavaScript%E4%B8%AD%E7%9A%84%E6%B7%B1%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B5%85%E6%8B%B7%E8%B4%9D/"/>
+    <id>http://icepy.github.io/2015/03/04/JavaScript中的深拷贝与浅拷贝/</id>
     <published>2015-03-04T12:56:49.000Z</published>
     <updated>2015-03-05T03:27:31.000Z</updated>
     <content type="html"><![CDATA[<p>关于拷贝的问题，主要分为深拷贝和浅拷贝，但是如果从空间分配上来说JavaScript的拷贝不应该算是深拷贝，比如：</p>
@@ -328,14 +328,14 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
 <span class="keyword">f]]>
     </summary>
     
-      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
+      <category term="JavaScript" scheme="http://icepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[有趣味的iOS动画实现]]></title>
-    <link href="http://lcepy.github.io/2015/03/03/%E6%9C%89%E8%B6%A3%E5%91%B3%E7%9A%84iOS%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/"/>
-    <id>http://lcepy.github.io/2015/03/03/有趣味的iOS动画实现/</id>
+    <link href="http://icepy.github.io/2015/03/03/%E6%9C%89%E8%B6%A3%E5%91%B3%E7%9A%84iOS%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/"/>
+    <id>http://icepy.github.io/2015/03/03/有趣味的iOS动画实现/</id>
     <published>2015-03-03T01:40:21.000Z</published>
     <updated>2015-03-04T12:37:16.000Z</updated>
     <content type="html"><![CDATA[<p>在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，甚至apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。</p>
@@ -378,14 +378,14 @@ dropview.transform
 <p>想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，]]>
     </summary>
     
-      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+      <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[学习zepto源代码中的read方法]]></title>
-    <link href="http://lcepy.github.io/2015/03/02/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84read%E6%96%B9%E6%B3%95/"/>
-    <id>http://lcepy.github.io/2015/03/02/学习zepto源代码中的read方法/</id>
+    <link href="http://icepy.github.io/2015/03/02/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84read%E6%96%B9%E6%B3%95/"/>
+    <id>http://icepy.github.io/2015/03/02/学习zepto源代码中的read方法/</id>
     <published>2015-03-02T03:31:58.000Z</published>
     <updated>2015-03-02T03:44:23.000Z</updated>
     <content type="html"><![CDATA[<p>read函数，是在开发中非常有用的函数，主要是用来当DOM文档准备好之后，再加载或直接某些Js片段。就是怕，某些情况下，比如Js片段已经写好了，这里面要获取某个DOM节点，实际上这里会是null，然后执行其他操作就抛错误了，因为在浏览器中，这个节点还不存在。</p>
@@ -401,19 +401,19 @@ dropview.transform
 <pr]]>
     </summary>
     
-      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
+      <category term="JavaScript" scheme="http://icepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[向文文的简历]]></title>
-    <link href="http://lcepy.github.io/2015/03/01/myresume/"/>
-    <id>http://lcepy.github.io/2015/03/01/myresume/</id>
+    <link href="http://icepy.github.io/2015/03/01/myresume/"/>
+    <id>http://icepy.github.io/2015/03/01/myresume/</id>
     <published>2015-03-01T15:35:20.000Z</published>
-    <updated>2015-03-18T06:40:38.000Z</updated>
+    <updated>2015-03-20T12:06:13.000Z</updated>
     <content type="html"><![CDATA[<h2 id="个人信息：">个人信息：</h2>
 <p>向文文 xiangwenwe@foxmail.com / (+86) 18574532867 </p>
-<p>技术博客 <a href="http://lcepy.github.io/" target="_blank" rel="external">http://lcepy.github.io/</a></p>
+<p>技术博客 <a href="http://icepy.github.io/" target="_blank" rel="external">http://icepy.github.io/</a></p>
 <p>Github <a href="https://github.com/lcepy" target="_blank" rel="external">https://github.com/lcepy</a></p>
 <p>中南林业科技大学/大专</p>
 <p>Skill set：JavaScript NodeJs iOS Python</p>
@@ -459,7 +459,7 @@ dropview.transform
 <p>打包工具主要是根据SOAP协议来调取webapp包地址，多线程下载完成之后重新打包。现工具已经在提交在个人github上，项目名为downloadZIP</p>
 <p><em>关于时间区间的分析，根据航空公司上下班时间与用户自己期望的时间分析出一个合理的时间数组，让用户可以清晰的了解到取票的时间范围。</em></p>
 <h2 id="经历表述：">经历表述：</h2>
-<p><a href="http://lcepy.github.io/2014/11/14/%E6%88%91%E7%9A%84%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/" target="_blank" rel="external">我的项目经历-详细版</a></p>
+<p><a href="http://icepy.github.io/2014/11/14/%E6%88%91%E7%9A%84%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/" target="_blank" rel="external">我的项目经历-详细版</a></p>
 <p>在软件工程，前端领域已经工作近四年之久，对于编程的思考，解决问题的思路都已形成了自己比较独特的思维，语言只是解决问题的一个工具，最关键的还是在于人，如何去规划问题，思考问题，并解决问题。</p>
 <p>我比较擅长JavaScript，近几年比较流行的Nodejs，HTML5 API CSS3也有一些自己总结的经验.三年多的工作经验集中在客户端技术，包括SPA MVC客户端，Hybrid app客户端，移动浏览器H5应用，有过一年左右的python网络编程，对请求，一些服务端，客户端框架，比如zepto underscore  django，应用在客户端，服务端上的MVC开发模式，HTML5 API都非常的了解和掌握。</p>
 <p>平时，也掌握了基本的nodejs，主要是使用express来写博客等学习，如果需要，我相信自己能在很短的时间内掌握它。</p>
@@ -470,17 +470,17 @@ dropview.transform
     <summary type="html">
     <![CDATA[<h2 id="个人信息：">个人信息：</h2>
 <p>向文文 xiangwenwe@foxmail.com / (+86) 18574532867 </p>
-<p>技术博客 <a href="http://lcepy.github.io/" target="_blank" r]]>
+<p>技术博客 <a href="http://icepy.github.io/" target="_blank" r]]>
     </summary>
     
-      <category term="简历" scheme="http://lcepy.github.io/tags/%E7%AE%80%E5%8E%86/"/>
+      <category term="简历" scheme="http://icepy.github.io/tags/%E7%AE%80%E5%8E%86/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[学习zepto源代码中的each函数]]></title>
-    <link href="http://lcepy.github.io/2015/02/17/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84each%E5%87%BD%E6%95%B0/"/>
-    <id>http://lcepy.github.io/2015/02/17/学习zepto源代码中的each函数/</id>
+    <link href="http://icepy.github.io/2015/02/17/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84each%E5%87%BD%E6%95%B0/"/>
+    <id>http://icepy.github.io/2015/02/17/学习zepto源代码中的each函数/</id>
     <published>2015-02-17T09:41:49.000Z</published>
     <updated>2015-02-24T11:48:06.000Z</updated>
     <content type="html"><![CDATA[<p>each顾名思义是用来遍历的</p>
@@ -504,14 +504,14 @@ dropview.transform
 <pre><code>$.each = <span class="function"><span class="keyword">function</span><span class="params">(elements, callba]]>
     </summary>
     
-      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
+      <category term="JavaScript" scheme="http://icepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[学习zepto源代码中的map函数]]></title>
-    <link href="http://lcepy.github.io/2015/02/16/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84map%E5%87%BD%E6%95%B0/"/>
-    <id>http://lcepy.github.io/2015/02/16/学习zepto源代码中的map函数/</id>
+    <link href="http://icepy.github.io/2015/02/16/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84map%E5%87%BD%E6%95%B0/"/>
+    <id>http://icepy.github.io/2015/02/16/学习zepto源代码中的map函数/</id>
     <published>2015-02-16T13:57:58.000Z</published>
     <updated>2015-02-24T11:48:11.000Z</updated>
     <content type="html"><![CDATA[<p>在学习map函数之前，先学习几个比较有用的方法，比如判断一个对象是否是空对象，给字符串两边去空白等。判断空对象，主要是利用了in语法，它可以遍历对象的属性，如果是空对象for循环会直接跳过。</p>
@@ -550,16 +550,16 @@ var <span class="built_in">value</span>, values = [], i, key
 <pre><code>$.isEmptyObject = <span cl]]>
     </summary>
     
-      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
+      <category term="JavaScript" scheme="http://icepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[UIViewController的生命周期]]></title>
-    <link href="http://lcepy.github.io/2015/02/16/UIViewController%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/"/>
-    <id>http://lcepy.github.io/2015/02/16/UIViewController的生命周期/</id>
+    <link href="http://icepy.github.io/2015/02/16/UIViewController%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/"/>
+    <id>http://icepy.github.io/2015/02/16/UIViewController的生命周期/</id>
     <published>2015-02-16T13:54:06.000Z</published>
-    <updated>2015-02-17T09:09:13.000Z</updated>
+    <updated>2015-03-20T11:55:51.000Z</updated>
     <content type="html"><![CDATA[<p>关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理。</p>
 <p><strong>呈现视图的顺序</strong></p>
 <p>它内部的顺序是这样的，先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或storyborad，如果这个也没有则走loadView方法，loadView方法系统调用，也可以重载它。当我们重载它时，可以[super loadView] 父类帮助我们创建一个空的view，如果不调用父类，那么就要自己创建一个UIView，并且self.view = UIView。</p>
@@ -581,14 +581,14 @@ var <span class="built_in">value</span>, values = [], i, key
     <![CDATA[<p>关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理]]>
     </summary>
     
-      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+      <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[学习zepto源代码中的初始化逻辑]]></title>
-    <link href="http://lcepy.github.io/2015/02/15/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E9%80%BB%E8%BE%91/"/>
-    <id>http://lcepy.github.io/2015/02/15/学习zepto源代码中的初始化逻辑/</id>
+    <link href="http://icepy.github.io/2015/02/15/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E9%80%BB%E8%BE%91/"/>
+    <id>http://icepy.github.io/2015/02/15/学习zepto源代码中的初始化逻辑/</id>
     <published>2015-02-15T06:11:30.000Z</published>
     <updated>2015-02-24T11:47:54.000Z</updated>
     <content type="html"><![CDATA[<p>基本上是个人都知道在使用zepto时，是$符号来获取元素对象，如果是空会返回一个数组。从源代码上面来看，是这样的。</p>
@@ -698,14 +698,14 @@ zepto.Z = <span class="function"><span class="keyword">function</span><span clas
 <pre><code>$ = <span class="function"><span class="keyword">function</span>]]>
     </summary>
     
-      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
+      <category term="JavaScript" scheme="http://icepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[学习zepto源代码中的类型判断函数]]></title>
-    <link href="http://lcepy.github.io/2015/02/14/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%88%A4%E6%96%AD%E5%87%BD%E6%95%B0/"/>
-    <id>http://lcepy.github.io/2015/02/14/学习zepto源代码中的类型判断函数/</id>
+    <link href="http://icepy.github.io/2015/02/14/%E5%AD%A6%E4%B9%A0zepto%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%88%A4%E6%96%AD%E5%87%BD%E6%95%B0/"/>
+    <id>http://icepy.github.io/2015/02/14/学习zepto源代码中的类型判断函数/</id>
     <published>2015-02-14T14:55:51.000Z</published>
     <updated>2015-02-24T11:47:59.000Z</updated>
     <content type="html"><![CDATA[<p>在平时的开发中对于类型的判断是使用的很多的东西，我们可能需要对数据的类型进行检查，以满足预期的结果，而zepto中也提供了一揽子的解决方案，用于类型的判断，函数，字符串，对象，数组等。</p>
@@ -736,14 +736,14 @@ class2type[ <span class="string">"[object "</span> + name + <span class="string"
 <pre><code>$.each(<span class="string">"]]>
     </summary>
     
-      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
+      <category term="JavaScript" scheme="http://icepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[理解UITableView]]></title>
-    <link href="http://lcepy.github.io/2015/02/06/%E7%90%86%E8%A7%A3UITableView/"/>
-    <id>http://lcepy.github.io/2015/02/06/理解UITableView/</id>
+    <link href="http://icepy.github.io/2015/02/06/%E7%90%86%E8%A7%A3UITableView/"/>
+    <id>http://icepy.github.io/2015/02/06/理解UITableView/</id>
     <published>2015-02-06T13:06:07.000Z</published>
     <updated>2015-02-08T11:27:19.000Z</updated>
     <content type="html"><![CDATA[<p>UITableView是在iOS开发中使用非常频繁的一个控件，比如QQ的消息人列表，淘宝的商品，微信等等都会使用到它，对于它的理解有一个前提，那就是要理解iOS MVC的设计思路。</p>
@@ -803,14 +803,14 @@ class2type[ <span class="string">"[object "</span> + name + <span class="string"
 <p>创建一个UITableView可以使用代码的方式，也可以使用xib或者stor]]>
     </summary>
     
-      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+      <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[复习JavaScript十二之理解作用域]]></title>
-    <link href="http://lcepy.github.io/2015/02/05/%E5%A4%8D%E4%B9%A0JavaScript%E5%8D%81%E4%BA%8C%E4%B9%8B%E7%90%86%E8%A7%A3%E4%BD%9C%E7%94%A8%E5%9F%9F/"/>
-    <id>http://lcepy.github.io/2015/02/05/复习JavaScript十二之理解作用域/</id>
+    <link href="http://icepy.github.io/2015/02/05/%E5%A4%8D%E4%B9%A0JavaScript%E5%8D%81%E4%BA%8C%E4%B9%8B%E7%90%86%E8%A7%A3%E4%BD%9C%E7%94%A8%E5%9F%9F/"/>
+    <id>http://icepy.github.io/2015/02/05/复习JavaScript十二之理解作用域/</id>
     <published>2015-02-05T10:17:09.000Z</published>
     <updated>2015-02-24T11:47:42.000Z</updated>
     <content type="html"><![CDATA[<p>理解作用域链是Js编程中一个必须要具备的，作用域决定了变量和函数有权力访问哪些数据。在Web浏览器中，全局执行环境是window对象，这也意味着所有的全局变量或者方法都是window对象的属性或方法。当个函数在被调用的时候都会创建自己的执行环境，而这个函数中所写的代码就开始进入这个函数的执行环境，于是由变量对象构建起了一个作用域链。</p>
@@ -839,16 +839,16 @@ class2type[ <span class="string">"[object "</span> + name + <span class="string"
     <![CDATA[<p>理解作用域链是Js编程中一个必须要具备的，作用域决定了变量和函数有权力访问哪些数据。在Web浏览器中，全局执行环境是window对象，这也意味着所有的全局变量或者方法都是window对象的属性或方法。当个函数在被调用的时候都会创建自己的执行环境，而这个函数中所写的代码就开始]]>
     </summary>
     
-      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
+      <category term="JavaScript" scheme="http://icepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[iOS的copy语法]]></title>
-    <link href="http://lcepy.github.io/2015/02/05/iOS%E7%9A%84copy%E8%AF%AD%E6%B3%95/"/>
-    <id>http://lcepy.github.io/2015/02/05/iOS的copy语法/</id>
+    <link href="http://icepy.github.io/2015/02/05/iOS%E7%9A%84copy%E8%AF%AD%E6%B3%95/"/>
+    <id>http://icepy.github.io/2015/02/05/iOS的copy语法/</id>
     <published>2015-02-05T10:01:43.000Z</published>
-    <updated>2015-02-06T12:50:11.000Z</updated>
+    <updated>2015-03-20T11:55:35.000Z</updated>
     <content type="html"><![CDATA[<p>这是一个关于深拷贝和浅拷贝的问题，OC设计这个语法的目的就是创建一个副本，修改副本的时候不会改变原来的对象。</p>
 <blockquote>
 <p>对于这两个问题可以这么理解，浅拷贝也就是把指针赋值，大家用的都是地址。而深拷贝，则是创建了一个新的空间，虽然内容可能是一样的，但是大家使用的空间，地址都是不同的。</p>
@@ -894,14 +894,14 @@ NSString *str = [<span class="built_in">string</span> <span class="built_in">cop
 <p>对于这两个问题可以这么理解，浅拷贝也就是把指针赋值，大家用的都是地址。而深拷贝，则是创建了一个新的空间，虽然内容可能是一样的]]>
     </summary>
     
-      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+      <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[iOS的内存管理]]></title>
-    <link href="http://lcepy.github.io/2015/02/04/iOS%E7%9A%84%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
-    <id>http://lcepy.github.io/2015/02/04/iOS的内存管理/</id>
+    <link href="http://icepy.github.io/2015/02/04/iOS%E7%9A%84%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
+    <id>http://icepy.github.io/2015/02/04/iOS的内存管理/</id>
     <published>2015-02-04T15:00:33.000Z</published>
     <updated>2015-02-06T11:56:21.000Z</updated>
     <content type="html"><![CDATA[<p>在iOS开发中使用的是引用计数的方式来管理内存，也就是跟踪记录每个值被引用的次数。当声明一个变量来接收一个指针对象，引用次数就＋1，如果指针对象被添加到数组，字典，或者被其他指针对象所使用又＋1.如果使用完毕之后对它进行－1，一直到0，系统会立马释放这段内存。</p>
@@ -1015,14 +1015,14 @@ NSString *str = [<span class="built_in">string</span> <span class="built_in">cop
 <b]]>
     </summary>
     
-      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+      <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[复习JavaScript十一之理解内存管理]]></title>
-    <link href="http://lcepy.github.io/2015/02/04/%E5%A4%8D%E4%B9%A0JavaScript%E5%8D%81%E4%B8%80%E4%B9%8B%E7%90%86%E8%A7%A3%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
-    <id>http://lcepy.github.io/2015/02/04/复习JavaScript十一之理解内存管理/</id>
+    <link href="http://icepy.github.io/2015/02/04/%E5%A4%8D%E4%B9%A0JavaScript%E5%8D%81%E4%B8%80%E4%B9%8B%E7%90%86%E8%A7%A3%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
+    <id>http://icepy.github.io/2015/02/04/复习JavaScript十一之理解内存管理/</id>
     <published>2015-02-04T10:53:09.000Z</published>
     <updated>2015-02-24T11:47:32.000Z</updated>
     <content type="html"><![CDATA[<p>一般来说内存管理主要有这么几种方式，引用计数和标记，而JavaScript采用的就是标记管理的方式。Js的内存管理是自动的，但是并不是说执行完后立马销毁，而是有时间周期性，相隔一段时间执行一下垃圾回收，把没有引用的内存全部销毁。</p>
@@ -1046,7 +1046,7 @@ my = <span class="literal">null</span>;
 <p>OC中采用的是引用计数来手动管]]>
     </summary>
     
-      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
+      <category term="JavaScript" scheme="http://icepy.github.io/tags/JavaScript/"/>
     
   </entry>
   
