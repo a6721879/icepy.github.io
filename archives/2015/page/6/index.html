@@ -168,6 +168,78 @@
 </nav>
       
   
+    <article id="post-复习JavaScript三之BOM" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/24/复习JavaScript三之BOM/" class="article-date">
+  	<time datetime="2015-01-24T14:14:04.000Z" itemprop="datePublished">1月 24 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/24/复习JavaScript三之BOM/">复习JavaScript三之BOM</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>BOM提供了很多对象，它的核心是window，表示它是浏览器的一个实例，在ECMAScript中又是Global对象。它提供了很多访问浏览器的功能，这些功能与网页无关，所以缺少事实标准的BOM既有意思又有些坑。复习它，主要是复习几个比较有用的对象，其他可以了解一二。</p>
+<h3 id="location">location</h3>
+<blockquote>
+<p>算起来它是我用的最多的一个对象</p>
+</blockquote>
+<p>它提供了当前窗口加载的页面有关的信息，也对URL进行了片段分解，既是window的属性，也是document的属性。</p>
+<ul>
+<li>hash 返回URL的散列（#号后面跟着的零个或多个值）</li>
+<li>host 返回服务器名称和端口号</li>
+<li>hostname 返回不带端口号的服务器名称</li>
+<li>href 返回当前加载页面的完整URL</li>
+<li>pathname 返回URL中的目录或文件名</li>
+<li>port 返回URL中指定的端口号</li>
+<li>protocol 返回页面使用的协议</li>
+<li>search 返回URL中的查询字符串，它以问好（?）开头</li>
+</ul>
+<p>上述的属性基本上都可以直接使用，search除外，它返回的是一个完整的查询字符串，没有办法访问其中的每个查询字符串参数，还需要额外的进行处理。</p>
+<p>一般来说根据它的特点，?开头&amp;拼接，key=value的形式来展现，最好是key和value都要decodeURIComponent一下。</p>
+<p>在location中除了上述的属性外，还有一些比较有用的方法和技巧，主要是用来控制页面跳转的问题。</p>
+<ul>
+<li>assign方法接收一个参数，表示立即打开一个新的页面并在历史纪录中生成一条记录，它的效果等同于window.location.href = ‘’或者location.href = ‘’</li>
+<li>修改location对象的属性比如href，hash，search等也可以来改变URL</li>
+<li>replace方法接收一个参数，既跳转到新的URL上，并且不会在历史纪录中增加一条新的纪录</li>
+<li>reload表示重新加载当前页面</li>
+</ul>
+
+        
+          <p class="article-more-link">
+            <a href="/2015/01/24/复习JavaScript三之BOM/#more">more >></a>
+          </p>
+        
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-如果宅-纪念" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -478,67 +550,6 @@ iframe.onload = <span class="function"><span class="keyword">function</span><spa
             <a href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/#more">more >></a>
           </p>
         
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-this与prototype的区别" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/05/this与prototype的区别/" class="article-date">
-  	<time datetime="2015-01-05T11:15:53.000Z" itemprop="datePublished">1月 5 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/05/this与prototype的区别/">this与prototype的区别</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>this可以访问私有成员（用var声明的变量）私有方法（直接function或者内部），prototype无法访问</li>
-<li>Js首先查找自身的静态属性，方法，再查找上下文中可以访问的属性或方法，最后才查找prototype，谁先谁优先</li>
-<li>prototype比this要节约分配的空间，因为prototype有一个指向父类的指向，而this，每次实例化时都要分配存储空间</li>
-</ul>
-<pre><code>    <span class="keyword">var</span> Copy = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        <span class="keyword">var</span> d = <span class="string">"123"</span>;
-        <span class="keyword">this</span>._log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-            <span class="built_in">console</span>.log(d);
-        }
-        <span class="keyword">this</span>.log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-            <span class="built_in">console</span>.log(<span class="string">'yes'</span>);
-        }
-    }
-    Copy.prototype.log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        <span class="built_in">console</span>.log(<span class="string">'no'</span>);
-    }
-    <span class="keyword">var</span> c = <span class="keyword">new</span> Copy();
-    c.log();
-</code></pre>
       
     </div>
   </div>

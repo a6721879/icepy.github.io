@@ -168,6 +168,94 @@
 </nav>
       
   
+    <article id="post-纪录开发第一个iOS客户端遇见的坑" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/28/纪录开发第一个iOS客户端遇见的坑/" class="article-date">
+  	<time datetime="2015-03-28T06:51:34.000Z" itemprop="datePublished">3月 28 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/28/纪录开发第一个iOS客户端遇见的坑/">纪录开发第一个iOS客户端遇见的坑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>来到新公司做的第一个产品就是iOS客户端，我负责的是基于LeanCloud SDK开发的售后服务IM系统，也就是一个聊天的模块。第一次比较纯粹的在工作中，写Objective-c，遇到了一些坑，解决之后才发现原来是这么回事，而且还复习了它的基础语法知识。</p>
+<p><strong>block的问题</strong></p>
+<p>引用资料：</p>
+<ul>
+<li><a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/" target="_blank" rel="external">谈Objective-C Block的实现</a></li>
+<li><a href="http://www.cnbluebox.com/?p=255" target="_blank" rel="external">Block防止循环引用</a></li>
+</ul>
+<p>本来我想使用Block来解决通信的问题，后来我发现语法以及对Block的理解有些忘记了。基础不扎实，带来了严重的后果。Block使用^来声明，用;来结束一个完整的Block，缺一不可。</p>
+<pre><code><span class="keyword">void</span> (^ blockde)(<span class="built_in">NSString</span> *,<span class="built_in">NSString</span> *) = ^(<span class="built_in">NSString</span> *test1,<span class="built_in">NSString</span> *test2){
+    <span class="built_in">NSString</span> *log = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@,%@"</span>,test1,test2];
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,log);
+};
+</code></pre><p>Block的语法有些难度，特别是灵活运用的时候，但是记住一点，先声明返回值，然后两个括号用来描述这个Block的签名，以及参数类型，如果是OC对象，需要写上指针符号。如果没有签名，可以什么也不写。<strong>有一个情况例外，利用typedef定义的block必须写上签名</strong></p>
+<p>我想在动态方法中提供一个Block来处理一些事情，定义它有两种写法。</p>
+<p>第一种写法是利用typedef定义一个别名，描述还是第一项声明返回值参数，第二项别名签名，第三项传入的参数类型。</p>
+<pre><code><span class="keyword">typedef</span> <span class="built_in">NSString</span> *(^handlerBlock)(<span class="built_in">NSDictionary</span> * dic,<span class="built_in">NSArray</span> * arr);
+
+-(<span class="keyword">void</span>)sendMessageText:(handlerBlock)block
+{
+    block();
+}
+</code></pre><p>第二种写法是直接写在动态方法中，方法的参数形式一般都是()名字，所以block的声明就要写在一个圆括号中，这种写法可以省略block的签名。</p>
+<pre><code><span class="pp">-<span class="params">(void)</span>setSource:<span class="params">(<span class="variable">NSString</span> *)</span> source andBlock:<span class="params">(<span class="function_name">void</span>(^)(<span class="variable">NSString</span> *treme)</span>) block
+{
+    block<span class="params">()</span>;
+}</span>
+</code></pre><p>因为公司的项目都是ARC的，所以copy就省略了，其他方面主要是需要避免循环引用的问题，比如使用__weak关键字给self对象。</p>
+<p><strong>导入第三方库的问题</strong></p>
+<p>这个IM模块是基于第三方SDK实现的，所以需要导入第三方库，在这里也踩了下坑。LeanCloud依赖了其他五个框架，需要手动的添加到Link Binary With Libraries中，必须得承认学艺不精的后果是这个编译的错，琢磨了很久，而且还需要把openssl的include的路径添加到Head中。</p>
+<p>关于Xcode的使用，一定要把cocoaChina的那个Xcode系列阅读完。</p>
+<p><strong>开发者证书的问题</strong></p>
+<p>根据以往的经验想真机调试，那就必须的添加开发者证书，于是按照老旧的流程，去<a href="https://developer.apple.com/account/ios/certificate/certificateList.action" target="_blank" rel="external">https://developer.apple.com/account/ios/certificate/certificateList.action</a> 下载证书，然后添加设备UID，接着添加Profile一路Next。</p>
+<p>现在这些步骤真的不需要了，在Xcode中登录自己的Apple ID，然后在项目的Team选项中选择正确的签名，Xcode自动下载，自动匹配设备UID，一切自动化，当然首先要把设备连接好。</p>
+<p>它不是坑，而是因为自己不知道，在安装证书时发现了现在有这么方便的流程。    </p>
+<p><strong>访问相册或者摄像头返回给web端</strong>    </p>
+<p>引用资料：</p>
+<ul>
+<li><a href="http://blog.devtang.com/blog/2012/02/22/use-gcd/" target="_blank" rel="external">GCD</a></li>
+<li><a href="http://nshipster.cn/nsfilemanager/" target="_blank" rel="external">NSFileManager</a></li>
+</ul>
+<p>在拿到图片image对象后，怎么处理，是一个非常头疼的问题。LeanCloud的AVIMImageMessage类需要的是一个filePath而不是UIImage或者NSData对象，iOS应用是没有权限访问应用沙盒之外的东西的。首先想到的解决办法是把这个UIImage写入到应用内的Documents目录下的Photos目录，然后把这个地址发送给AVIMImageMessage对象。考虑到文件IO操作，还会对应用界面卡顿，所以把这个任务委托给了GCD去调度。</p>
+<p>在使用dispatch_async之前，还需要处理一个问题，那就是UI展示的问题。大坑在这里，我们的UI是web的。所以对于图片，调用UIImageJPEGRepresentation去压缩体积，然后再转成base64，把这个base64发送给客户端。</p>
+<p>为什么说这里是坑呢？因为它是一个IM系统，操作会非常的频繁，最关键的是展示是在web中，它的交互流程很坑。</p>
+<p><strong>使用ionic添加插件时的巨坑</strong></p>
+<p>在升级了ionic为1.3.18之后，它的plugin编译时需要手动添加，据说这个版本他们去掉了自动添加的模块，于是写在配置文件中的插件，需要在platform add ios后，再ionic plugin add im手动添加到编译环境中，每一个都需要重复上述的动作，最后ionic build ios。</p>
+<p>希望下一个版本，ionic能把这个补上吧。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-Native与H5交互的原理" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -442,64 +530,6 @@ dropview.transform
 </code></pre><p>最后一步是要把需要被实现物理动画的视图，添加到重力系统中去。</p>
 <pre><code><span class="title">[self.gravit addItem:dropview]</span><span class="comment">;</span>
 </code></pre><p>从技术实现的角度上来说，iOS平台实现这些动画，包括绘制，物理交互，都非常的简单，主要是要注意一些细节的处理，比如当前动画停止之后处理什么，在动画执行过程中，可能会出现一些情况，然后处理，或者是几个动画的连接延迟等等。</p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-UIViewController的生命周期" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/16/UIViewController的生命周期/" class="article-date">
-  	<time datetime="2015-02-16T13:54:06.000Z" itemprop="datePublished">2月 16 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/16/UIViewController的生命周期/">UIViewController的生命周期</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理。</p>
-<p><strong>呈现视图的顺序</strong></p>
-<p>它内部的顺序是这样的，先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或storyborad，如果这个也没有则走loadView方法，loadView方法系统调用，也可以重载它。当我们重载它时，可以[super loadView] 父类帮助我们创建一个空的view，如果不调用父类，那么就要自己创建一个UIView，并且self.view = UIView。</p>
-<p>如果在调用loadView时不调用父类，也不创建，如果使用self.view的getter method并且view等于nil，会发生自我循环调用。一般情况下，不要在初始化时做view相当的动作。在viewDiload中调用一些网络访问的动作，可以在初始化方法中做一些关于模型数据的准备工作。</p>
-<p>如果覆盖了loadView，则必须创建UIViewController的view属性。如果没有覆盖该方法，UIViewController会默认调用initWithNibName方法来初始化并加载view。</p>
-<p><strong>生命周期</strong></p>
-<p>一般来说我们需要知道应用程序什么时候在屏幕上，什么时候从屏幕上消失，这个就是生命周期了。初始化的方法可以在viewDidLoad，这个方法在生命周期中只会调用一次，当然不要忘记了调用它的父类的viewDidLoad方法，[super viewDidLoad]。在调用这个方法时，实际上视图并没有在屏幕上确定下来，于是一般来说，如果视图的几何操作，不要放在这个方法中执行。</p>
-<p>viewWillAppear，这个方法会被多次调用，一般来说一次性的初始化不要放在这个方法中实现，但是如果是基于模型的动态初始化，可以放置在这个方法中实现。这个方法会在视图即将要在屏幕上呈现之前调用。</p>
-<p>当视图从屏幕上消失时，也会得到通知，viewWillDisappear方法。这个方法是在视图将要从屏幕消失之前调用。</p>
-<p>viewDidAppear视图已经呈现在屏幕上调用 viewDidDisappear视图已经从屏幕上消失调用。</p>
-<p>viewWillLayoutSubviews  viewDidLayoutSubviews 这两个方法可以在，比如从竖屏到横屏，系统会自动元素的位置，第一个方法是在移动之前调用，第二个方法是在移动完成之后调用，需要设置Autorotation属性。</p>
-<p>didReceiveMemoryWarning 当内存不足时，系统会调用这个方法，发送警告。 </p>
-<h2 id="顺序">顺序</h2>
-<p>viewDidLoad -&gt; viewWillAppear -&gt; viewDidAppear -&gt; viewWillDisappear -&gt; viewDidDisappear</p>
-<p>关于layout的顺序</p>
-<p>viewWillLayoutSubviews -&gt; viewDidLayoutSubviews</p>
 
       
     </div>
