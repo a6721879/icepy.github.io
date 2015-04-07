@@ -235,15 +235,59 @@
 <p>引用资料：</p>
 <ul>
 <li><a href="http://blog.devtang.com/blog/2012/02/22/use-gcd/" target="_blank" rel="external">GCD</a></li>
-<li><a href="http://nshipster.cn/nsfilemanager/" target="_blank" rel="external">NSFileManager</a></li>
 </ul>
 <p>在拿到图片image对象后，怎么处理，是一个非常头疼的问题。LeanCloud的AVIMImageMessage类需要的是一个filePath而不是UIImage或者NSData对象，iOS应用是没有权限访问应用沙盒之外的东西的。首先想到的解决办法是把这个UIImage写入到应用内的Documents目录下的Photos目录，然后把这个地址发送给AVIMImageMessage对象。考虑到文件IO操作，还会对应用界面卡顿，所以把这个任务委托给了GCD去调度。</p>
 <p>在使用dispatch_async之前，还需要处理一个问题，那就是UI展示的问题。大坑在这里，我们的UI是web的。所以对于图片，调用UIImageJPEGRepresentation去压缩体积，然后再转成base64，把这个base64发送给客户端。</p>
 <p>为什么说这里是坑呢？因为它是一个IM系统，操作会非常的频繁，最关键的是展示是在web中，它的交互流程很坑。</p>
+<p><strong>文件处理</strong></p>
+<ul>
+<li><a href="http://nshipster.cn/nsfilemanager/" target="_blank" rel="external">NSFileManager</a></li>
+</ul>
+<p>针对每一个用户都应该在应用沙盒内有它对应的一个缓存文件，它必须写入在Documents目录下，当人在获取之前，可以先判断一下，文件是否存在。</p>
 <p><strong>使用ionic添加插件时的巨坑</strong></p>
 <p>在升级了ionic为1.3.18之后，它的plugin编译时需要手动添加，据说这个版本他们去掉了自动添加的模块，于是写在配置文件中的插件，需要在platform add ios后，再ionic plugin add im手动添加到编译环境中，每一个都需要重复上述的动作，最后ionic build ios。</p>
 <p>希望下一个版本，ionic能把这个补上吧。</p>
+<p><strong>debug模式|重构IM|Date处理</strong></p>
+<p>debug workflow 如果选择了汇编debug，进入的是直接查看内存地址的debug模式，这种模式某些情况下有用。本来使用web来写IM我们发现它的性能实在是不能忍受，于是用OC把它重构了。</p>
+<p>使用NSDate来处理时间的时候，还需要NSDateFormatter来格式化，而且拿到的毫秒还需要除以1000，因为OC只处理秒单位。</p>
+<p><strong>代码布局聊天界面的cell</strong></p>
+<p>利用CGFloat mainScreenWidth = [UIScreen mainScreen].bounds.size.width来获取屏幕的宽度，然后计算自定义的cell，统计出来一个高度，在-(CGFloat)tableView:(UITableView <em>)tableView heightForRowAtIndexPath:(NSIndexPath </em>)indexPath 返回给TableView。</p>
+<pre><code>-(<span class="built_in">CGFloat</span>)tableView:(<span class="built_in">UITableView</span> *)tableView heightForRowAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath
+{
+    MissIMFrame *missIMFrame = [<span class="keyword">self</span><span class="variable">.modelManager</span><span class="variable">.dataSource</span> objectAtIndex:indexPath<span class="variable">.row</span>];
+    <span class="keyword">return</span> missIMFrame<span class="variable">.cellHeight</span>;
+}
+</code></pre><p><strong>解析历史纪录</strong></p>
+<p>第三方的leanCloud拉取的历史纪录全部是字符串，还要进一步的处理，转成JSON，这个地方主要是使用了NSJSONSerialization来处理，判断解析的错误，如果错误了，说明它是一个真正的文本，如果是正确的，那么说明它是一个可以转化为字典的字符串，然后再进一步处理。</p>
+<p><strong>滚动上拉加载历史纪录</strong></p>
+<p>实现scrollView的三个协议</p>
+<pre><code>-(<span class="keyword">void</span>)scrollViewWillBeginDragging:(<span class="built_in">UIScrollView</span> *)scrollView
+{
+    <span class="comment">//手指触摸屏幕，准备滚动的那一刻</span>
+    <span class="built_in">NSLog</span>(<span class="string">@"手指滑动开始－－－－－的那一瞬间"</span>);
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,NSStringFromCGPoint(scrollView<span class="variable">.contentOffset</span>));
+}
 
+-(<span class="keyword">void</span>)scrollViewWillEndDragging:(<span class="built_in">UIScrollView</span> *)scrollView withVelocity:(<span class="built_in">CGPoint</span>)velocity targetContentOffset:(<span class="keyword">inout</span> <span class="built_in">CGPoint</span> *)targetContentOffset
+{
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,NSStringFromCGPoint(scrollView<span class="variable">.contentOffset</span>));
+}
+
+-(<span class="keyword">void</span>)scrollViewDidEndDragging:(<span class="built_in">UIScrollView</span> *)scrollView willDecelerate:(<span class="built_in">BOOL</span>)decelerate
+{
+    <span class="comment">//手指离开屏幕，放下的那一刻</span>
+    <span class="built_in">NSLog</span>(<span class="string">@"刷动到顶部，放下的时候"</span>);
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,NSStringFromCGPoint(scrollView<span class="variable">.contentOffset</span>));
+    <span class="keyword">if</span> (scrollView<span class="variable">.contentOffset</span><span class="variable">.y</span> &lt; <span class="number">0</span> &amp;&amp; <span class="keyword">self</span><span class="variable">.historyTimeId</span> &gt; <span class="number">0</span>) {
+        <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.isScroll</span>) {
+            <span class="keyword">self</span><span class="variable">.application</span><span class="variable">.networkActivityIndicatorVisible</span> = <span class="literal">YES</span>;
+            [<span class="keyword">self</span><span class="variable">.mainUI</span><span class="variable">.MissIMActivity</span> startAnimating];
+            <span class="keyword">self</span><span class="variable">.isScroll</span> = <span class="literal">NO</span>;
+            [<span class="keyword">self</span> fetchHistoryMessage:<span class="keyword">self</span><span class="variable">.conversationId</span> timeId:<span class="keyword">self</span><span class="variable">.historyTimeId</span>];
+        }
+    }
+}
+</code></pre>
       
     </div>
   </div>

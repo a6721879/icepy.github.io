@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://icepy.github.io/"/>
-  <updated>2015-03-28T15:39:09.732Z</updated>
+  <updated>2015-04-07T05:12:34.084Z</updated>
   <id>http://icepy.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://icepy.github.io/2015/03/28/%E7%BA%AA%E5%BD%95%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAiOS%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%81%87%E8%A7%81%E7%9A%84%E5%9D%91/"/>
     <id>http://icepy.github.io/2015/03/28/纪录开发第一个iOS客户端遇见的坑/</id>
     <published>2015-03-28T06:51:34.000Z</published>
-    <updated>2015-03-28T15:11:38.000Z</updated>
+    <updated>2015-04-07T05:10:01.000Z</updated>
     <content type="html"><![CDATA[<p>来到新公司做的第一个产品就是iOS客户端，我负责的是基于LeanCloud SDK开发的售后服务IM系统，也就是一个聊天的模块。第一次比较纯粹的在工作中，写Objective-c，遇到了一些坑，解决之后才发现原来是这么回事，而且还复习了它的基础语法知识。</p>
 <p><strong>block的问题</strong></p>
 <p>引用资料：</p>
@@ -58,15 +58,59 @@
 <p>引用资料：</p>
 <ul>
 <li><a href="http://blog.devtang.com/blog/2012/02/22/use-gcd/" target="_blank" rel="external">GCD</a></li>
-<li><a href="http://nshipster.cn/nsfilemanager/" target="_blank" rel="external">NSFileManager</a></li>
 </ul>
 <p>在拿到图片image对象后，怎么处理，是一个非常头疼的问题。LeanCloud的AVIMImageMessage类需要的是一个filePath而不是UIImage或者NSData对象，iOS应用是没有权限访问应用沙盒之外的东西的。首先想到的解决办法是把这个UIImage写入到应用内的Documents目录下的Photos目录，然后把这个地址发送给AVIMImageMessage对象。考虑到文件IO操作，还会对应用界面卡顿，所以把这个任务委托给了GCD去调度。</p>
 <p>在使用dispatch_async之前，还需要处理一个问题，那就是UI展示的问题。大坑在这里，我们的UI是web的。所以对于图片，调用UIImageJPEGRepresentation去压缩体积，然后再转成base64，把这个base64发送给客户端。</p>
 <p>为什么说这里是坑呢？因为它是一个IM系统，操作会非常的频繁，最关键的是展示是在web中，它的交互流程很坑。</p>
+<p><strong>文件处理</strong></p>
+<ul>
+<li><a href="http://nshipster.cn/nsfilemanager/" target="_blank" rel="external">NSFileManager</a></li>
+</ul>
+<p>针对每一个用户都应该在应用沙盒内有它对应的一个缓存文件，它必须写入在Documents目录下，当人在获取之前，可以先判断一下，文件是否存在。</p>
 <p><strong>使用ionic添加插件时的巨坑</strong></p>
 <p>在升级了ionic为1.3.18之后，它的plugin编译时需要手动添加，据说这个版本他们去掉了自动添加的模块，于是写在配置文件中的插件，需要在platform add ios后，再ionic plugin add im手动添加到编译环境中，每一个都需要重复上述的动作，最后ionic build ios。</p>
 <p>希望下一个版本，ionic能把这个补上吧。</p>
-]]></content>
+<p><strong>debug模式|重构IM|Date处理</strong></p>
+<p>debug workflow 如果选择了汇编debug，进入的是直接查看内存地址的debug模式，这种模式某些情况下有用。本来使用web来写IM我们发现它的性能实在是不能忍受，于是用OC把它重构了。</p>
+<p>使用NSDate来处理时间的时候，还需要NSDateFormatter来格式化，而且拿到的毫秒还需要除以1000，因为OC只处理秒单位。</p>
+<p><strong>代码布局聊天界面的cell</strong></p>
+<p>利用CGFloat mainScreenWidth = [UIScreen mainScreen].bounds.size.width来获取屏幕的宽度，然后计算自定义的cell，统计出来一个高度，在-(CGFloat)tableView:(UITableView <em>)tableView heightForRowAtIndexPath:(NSIndexPath </em>)indexPath 返回给TableView。</p>
+<pre><code>-(<span class="built_in">CGFloat</span>)tableView:(<span class="built_in">UITableView</span> *)tableView heightForRowAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath
+{
+    MissIMFrame *missIMFrame = [<span class="keyword">self</span><span class="variable">.modelManager</span><span class="variable">.dataSource</span> objectAtIndex:indexPath<span class="variable">.row</span>];
+    <span class="keyword">return</span> missIMFrame<span class="variable">.cellHeight</span>;
+}
+</code></pre><p><strong>解析历史纪录</strong></p>
+<p>第三方的leanCloud拉取的历史纪录全部是字符串，还要进一步的处理，转成JSON，这个地方主要是使用了NSJSONSerialization来处理，判断解析的错误，如果错误了，说明它是一个真正的文本，如果是正确的，那么说明它是一个可以转化为字典的字符串，然后再进一步处理。</p>
+<p><strong>滚动上拉加载历史纪录</strong></p>
+<p>实现scrollView的三个协议</p>
+<pre><code>-(<span class="keyword">void</span>)scrollViewWillBeginDragging:(<span class="built_in">UIScrollView</span> *)scrollView
+{
+    <span class="comment">//手指触摸屏幕，准备滚动的那一刻</span>
+    <span class="built_in">NSLog</span>(<span class="string">@"手指滑动开始－－－－－的那一瞬间"</span>);
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,NSStringFromCGPoint(scrollView<span class="variable">.contentOffset</span>));
+}
+
+-(<span class="keyword">void</span>)scrollViewWillEndDragging:(<span class="built_in">UIScrollView</span> *)scrollView withVelocity:(<span class="built_in">CGPoint</span>)velocity targetContentOffset:(<span class="keyword">inout</span> <span class="built_in">CGPoint</span> *)targetContentOffset
+{
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,NSStringFromCGPoint(scrollView<span class="variable">.contentOffset</span>));
+}
+
+-(<span class="keyword">void</span>)scrollViewDidEndDragging:(<span class="built_in">UIScrollView</span> *)scrollView willDecelerate:(<span class="built_in">BOOL</span>)decelerate
+{
+    <span class="comment">//手指离开屏幕，放下的那一刻</span>
+    <span class="built_in">NSLog</span>(<span class="string">@"刷动到顶部，放下的时候"</span>);
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,NSStringFromCGPoint(scrollView<span class="variable">.contentOffset</span>));
+    <span class="keyword">if</span> (scrollView<span class="variable">.contentOffset</span><span class="variable">.y</span> &lt; <span class="number">0</span> &amp;&amp; <span class="keyword">self</span><span class="variable">.historyTimeId</span> &gt; <span class="number">0</span>) {
+        <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.isScroll</span>) {
+            <span class="keyword">self</span><span class="variable">.application</span><span class="variable">.networkActivityIndicatorVisible</span> = <span class="literal">YES</span>;
+            [<span class="keyword">self</span><span class="variable">.mainUI</span><span class="variable">.MissIMActivity</span> startAnimating];
+            <span class="keyword">self</span><span class="variable">.isScroll</span> = <span class="literal">NO</span>;
+            [<span class="keyword">self</span> fetchHistoryMessage:<span class="keyword">self</span><span class="variable">.conversationId</span> timeId:<span class="keyword">self</span><span class="variable">.historyTimeId</span>];
+        }
+    }
+}
+</code></pre>]]></content>
     <summary type="html">
     <![CDATA[<p>来到新公司做的第一个产品就是iOS客户端，我负责的是基于LeanCloud SDK开发的售后服务IM系统，也就是一个聊天的模块。第一次比较纯粹的在工作中，写Objective-c，遇到了一些坑，解决之后才发现原来是这么回事，而且还复习了它的基础语法知识。</p>
 <p><s]]>
@@ -450,13 +494,13 @@ dropview.transform
     <link href="http://icepy.github.io/2015/03/01/myresume/"/>
     <id>http://icepy.github.io/2015/03/01/myresume/</id>
     <published>2015-03-01T15:35:20.000Z</published>
-    <updated>2015-03-23T07:17:39.000Z</updated>
+    <updated>2015-03-28T15:54:49.000Z</updated>
     <content type="html"><![CDATA[<h2 id="个人信息：">个人信息：</h2>
-<p>向文文 xiangwenwe@foxmail.com / (+86) 18574532867 </p>
+<p>向文文 xiangwenwe@foxmail.com / (+86) 18574532867 / </p>
 <p>技术博客 <a href="http://lcepy.github.io/" target="_blank" rel="external">http://lcepy.github.io/</a></p>
 <p>Github <a href="https://github.com/lcepy" target="_blank" rel="external">https://github.com/lcepy</a></p>
 <p>中南林业科技大学/大专</p>
-<p>Skill set：JavaScript NodeJs iOS Python</p>
+<p>Skill set：JavaScript NodeJs iOS Python </p>
 <h2 id="工作经验：">工作经验：</h2>
 <p><em>上海携程旅行网   软件开发工程师</em></p>
 <p>任职时间：2014年2月12日-12月31日</p>
@@ -509,8 +553,8 @@ dropview.transform
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="个人信息：">个人信息：</h2>
-<p>向文文 xiangwenwe@foxmail.com / (+86) 18574532867 </p>
-<p>技术博客 <a href="http://lcepy.github.io/" target="_blank" r]]>
+<p>向文文 xiangwenwe@foxmail.com / (+86) 18574532867 / </p>
+<p>技术博客 <a href="http://lcepy.github.io/" target="_blank"]]>
     </summary>
     
       <category term="简历" scheme="http://icepy.github.io/tags/%E7%AE%80%E5%8E%86/"/>
