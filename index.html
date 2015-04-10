@@ -287,7 +287,11 @@
         }
     }
 }
-</code></pre>
+</code></pre><p><strong>UIApplication</strong></p>
+<p>在info.plist文件中设置Application dose not run is background 设置为YES，就可以在应用退出的时候进行存盘了</p>
+<p><strong>Category添加自定义属性</strong></p>
+<p>分类只能在运行时，利用它的机制，动态的添加属性，使用@dynamic关键字，和两个函数objc_setAssociatedObject，objc_getAssociatedObject。</p>
+
       
     </div>
   </div>

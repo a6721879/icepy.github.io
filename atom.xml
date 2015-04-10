@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://icepy.github.io/"/>
-  <updated>2015-04-07T05:12:34.084Z</updated>
+  <updated>2015-04-10T07:01:47.336Z</updated>
   <id>http://icepy.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://icepy.github.io/2015/03/28/%E7%BA%AA%E5%BD%95%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAiOS%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%81%87%E8%A7%81%E7%9A%84%E5%9D%91/"/>
     <id>http://icepy.github.io/2015/03/28/纪录开发第一个iOS客户端遇见的坑/</id>
     <published>2015-03-28T06:51:34.000Z</published>
-    <updated>2015-04-07T05:10:01.000Z</updated>
+    <updated>2015-04-10T07:01:36.000Z</updated>
     <content type="html"><![CDATA[<p>来到新公司做的第一个产品就是iOS客户端，我负责的是基于LeanCloud SDK开发的售后服务IM系统，也就是一个聊天的模块。第一次比较纯粹的在工作中，写Objective-c，遇到了一些坑，解决之后才发现原来是这么回事，而且还复习了它的基础语法知识。</p>
 <p><strong>block的问题</strong></p>
 <p>引用资料：</p>
@@ -110,7 +110,11 @@
         }
     }
 }
-</code></pre>]]></content>
+</code></pre><p><strong>UIApplication</strong></p>
+<p>在info.plist文件中设置Application dose not run is background 设置为YES，就可以在应用退出的时候进行存盘了</p>
+<p><strong>Category添加自定义属性</strong></p>
+<p>分类只能在运行时，利用它的机制，动态的添加属性，使用@dynamic关键字，和两个函数objc_setAssociatedObject，objc_getAssociatedObject。</p>
+]]></content>
     <summary type="html">
     <![CDATA[<p>来到新公司做的第一个产品就是iOS客户端，我负责的是基于LeanCloud SDK开发的售后服务IM系统，也就是一个聊天的模块。第一次比较纯粹的在工作中，写Objective-c，遇到了一些坑，解决之后才发现原来是这么回事，而且还复习了它的基础语法知识。</p>
 <p><s]]>
