@@ -168,6 +168,77 @@
 </nav>
       
   
+    <article id="post-NSURLProtocol" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/04/13/NSURLProtocol/" class="article-date">
+  	<time datetime="2015-04-13T03:38:06.000Z" itemprop="datePublished">4月 13 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/13/NSURLProtocol/">NSURLProtocol</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>阅读资料：</p>
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtocol_Class/index.html" target="_blank" rel="external">Apple Foundation NSURLProtocol</a></li>
+<li><a href="http://nshipster.cn/nsurlprotocol/" target="_blank" rel="external">http://nshipster.cn/nsurlprotocol/</a></li>
+</ul>
+<p>正如NSHipster在上篇文章所写的一样，iOS离不开网络，那么这就需要网络编程。cocoa提供了一系列的API来操作网络，比如NSURL，NSURLRequest，NSURLSession等等，以及处理网络的GCD，NSOperation多任务处理。</p>
+<p>那么NSURLProtocol，它有什么用呢？官方给它的解释是，可以重新定义已经加载的URL的行为或者定义一个新的URL。换句话来说，就是这个类可以监管应用的网络活动，只要是通过URL来进行的。</p>
+<p>NSURLProtocol是一个抽象类，也就是说它需要一个子类继承它才可以正常工作，关于怎么使用可以阅读NSHipster的文章，把子类注册到NSURLProtocol中。</p>
+<pre><code>+ (<span class="keyword">void</span>)consolelog:(<span class="built_in">UITextView</span> *)debugText
+{
+    debug = debugText;
+    [NSURLProtocol registerClass:<span class="keyword">self</span>];
+}
+</code></pre><h3 id="案例需求，监管应用的URL加载系统，并且支持web_client_console_log">案例需求，监管应用的URL加载系统，并且支持web client console log</h3>
+<p>案例可以在Github中查看<a href="https://github.com/lcepy/MFLog" target="_blank" rel="external">MFLog</a></p>
+<pre><code>+ (BOOL)registerClass:(<span class="class"><span class="keyword">Class</span>)<span class="title">protocolClass</span></span>
+</code></pre><p>把子类注册到NSURLProtocol中</p>
+<pre><code>+ (<span class="keyword">void</span>)unregisterClass:(<span class="keyword">Class</span>)protocolClass
+</code></pre><p>把子类从NSURLProtocol中移除</p>
+<p>NSURLProtocol提供了一系列的方法来操作一个URL Data，先看其一，一个静态方法。</p>
+<pre><code>+ (<span class="built_in">BOOL</span>)canInitWithRequest:(<span class="built_in">NSURLRequest</span> *)request
+</code></pre><p>canInitWithRequest <strong>注意，这些是覆盖父类NSURLProtocol的静态方法</strong>是系统询问，是否处理该请求URL，如果返回NO，不处理。如果返回YES，子类进一步控制。</p>
+<pre><code><span class="bullet">+ </span>(NSURLRequest <span class="emphasis">*)canonicalRequestForRequest:(NSURLRequest *</span>)request
+</code></pre><p>返回请求的原始request</p>
+<pre><code><span class="pp">- <span class="params">(void)</span>startLoading</span>
+</code></pre><p>加载此次请求，可以通过self.request获取当前URL的request对象</p>
+<pre><code><span class="pp">- <span class="params">(void)</span>stopLoading</span>
+</code></pre><p>此次请求完成时，可以在这个方法中处理</p>
+<p>每一个NSURLProtocol都有一个client属性，这个属性是NSURLProtocolClient。另外，还可以实现NSConnectionDataDelegate协议，把NSURLProtocol与NSURLConnection链接起来，这样就可以在statLoading调用之后，系统将回调NSConnectionDataDelegate中定义的各种方法，这个在自定义时非常有用。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-纪录开发第一个iOS客户端遇见的坑" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -490,82 +561,6 @@ requ.bind(<span class="string">'click'</span>,<span class="function"><span class
 <li>没有选择好正确的公司</li>
 </ul>
 <p>以后我该怎么办？经历了这些之后，我才明白了一个道理，在做一项决定的时候，一定要考虑清楚了自己是否合适，这是不是我想要的。挫折，每个人都要面对，唯一不同的是，我如何从挫折中吸取教训，总结教训，未来能正确的行在路上。</p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-iOS多线程GCD的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/07/iOS多线程GCD的使用/" class="article-date">
-  	<time datetime="2015-03-07T09:07:36.000Z" itemprop="datePublished">3月 7 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/07/iOS多线程GCD的使用/">iOS多线程GCD的使用</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在做iOS开发的时候线程的使用场景还是蛮多的，比如网络请求，比如大的数据处理等等。因为iOS只有一个主线程，而且这个主线程是让UIKit来使用的，如果我们不想让UI界面因为某些操作而出现卡顿，那么就必须把一些需要时间等待的操作，分配给其他的线程去处理，并且保证主线程不让UIKit之外的程序来使用。</p>
-<p>在UIKit中某些对象是可以在其他线程中正常工作的，比如UIImage，UIColor等。但是UIKit的大部分只能在主线程中正常工作的，明白这一点非常的重要。</p>
-<p>iOS中实现多任务编程，主要使用三种方式，1、NSThread 2、NSOperation 3、GCD；个人感觉GCD比较好使用，它主要是与block来配合使用的。比如在网络活动时，我想在<a href="http://wow.163.com" target="_blank" rel="external">http://wow.163.com</a>下载一张图片显示在UIImageView，但是下载的过程，如果不使用其他线程来下载图片数据，UI界面就会出现卡顿的感觉，用户体验非常不好。</p>
-<p>GCD主要可以使用的函数有几个：</p>
-<ul>
-<li>dispatch_queue_create(“name”,NULL) </li>
-<li>dispatch_async(dispatch_queue_t queue,^{})</li>
-<li>dispatch_get_main_queue</li>
-<li>dispatch_sync</li>
-<li>dispatch_get_global_queue</li>
-</ul>
-<p>dispatch_get_main_queue顾名思义，运行在主线程的Main queue，可以通过dispatch_get_main_queue获取。</p>
-<p>dispatch_async用于异步操作</p>
-<p>dispatch_sync用于同步操作</p>
-<p>dispatch_queue_create一般用来创建串行queue，而且只可能创建一个线程，顺序执行</p>
-<p>dispatch_get_global_queue 添加到主queue的可能会并行执行，也就意味着创建了多个线程</p>
-<p>回到例子上来说，如果我有两个界面，从其中一个界面点击一个按钮到另外一个界面中显示一张图片，而这个图片需要在网络上下载。如果这里不使用多线程，在视觉上得到的反馈，就有可能在第一个界面中出现卡顿，因为网络下载把主线程阻塞了。</p>
-<p>例子：</p>
-<pre><code>    <span class="comment">//创建一个请求</span>
-    <span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:<span class="keyword">self</span><span class="variable">.imageURL</span>];
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
-    NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request completionHandler:^(<span class="built_in">NSURL</span> *location, NSURLResponse *response, <span class="built_in">NSError</span> *error) {
-        <span class="keyword">if</span> (!error) {
-            <span class="keyword">if</span> ([request<span class="variable">.URL</span> isEqual:<span class="keyword">self</span><span class="variable">.imageURL</span>]) {
-                <span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageWithData:[NSData dataWithContentsOfURL:location]];
-                <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^{
-                    <span class="keyword">self</span><span class="variable">.image</span> = image;
-                });
-            }
-        }
-    }];
-    [task resume];    
-</code></pre><p>在这个例子中主要是利用了NSURLSession临时会话，NSURLSessionDownloadTask任务，NSURLSessionConfiguration配置与dispatch_async相结合的方式来处理的多线程。</p>
 
       
     </div>

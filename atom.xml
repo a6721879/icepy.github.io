@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://icepy.github.io/"/>
-  <updated>2015-04-10T07:01:47.336Z</updated>
+  <updated>2015-04-13T04:36:05.315Z</updated>
   <id>http://icepy.github.io/</id>
   
   <author>
@@ -13,6 +13,52 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[NSURLProtocol]]></title>
+    <link href="http://icepy.github.io/2015/04/13/NSURLProtocol/"/>
+    <id>http://icepy.github.io/2015/04/13/NSURLProtocol/</id>
+    <published>2015-04-13T03:38:06.000Z</published>
+    <updated>2015-04-13T04:35:48.000Z</updated>
+    <content type="html"><![CDATA[<p>阅读资料：</p>
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtocol_Class/index.html" target="_blank" rel="external">Apple Foundation NSURLProtocol</a></li>
+<li><a href="http://nshipster.cn/nsurlprotocol/" target="_blank" rel="external">http://nshipster.cn/nsurlprotocol/</a></li>
+</ul>
+<p>正如NSHipster在上篇文章所写的一样，iOS离不开网络，那么这就需要网络编程。cocoa提供了一系列的API来操作网络，比如NSURL，NSURLRequest，NSURLSession等等，以及处理网络的GCD，NSOperation多任务处理。</p>
+<p>那么NSURLProtocol，它有什么用呢？官方给它的解释是，可以重新定义已经加载的URL的行为或者定义一个新的URL。换句话来说，就是这个类可以监管应用的网络活动，只要是通过URL来进行的。</p>
+<p>NSURLProtocol是一个抽象类，也就是说它需要一个子类继承它才可以正常工作，关于怎么使用可以阅读NSHipster的文章，把子类注册到NSURLProtocol中。</p>
+<pre><code>+ (<span class="keyword">void</span>)consolelog:(<span class="built_in">UITextView</span> *)debugText
+{
+    debug = debugText;
+    [NSURLProtocol registerClass:<span class="keyword">self</span>];
+}
+</code></pre><h3 id="案例需求，监管应用的URL加载系统，并且支持web_client_console_log">案例需求，监管应用的URL加载系统，并且支持web client console log</h3>
+<p>案例可以在Github中查看<a href="https://github.com/lcepy/MFLog" target="_blank" rel="external">MFLog</a></p>
+<pre><code>+ (BOOL)registerClass:(<span class="class"><span class="keyword">Class</span>)<span class="title">protocolClass</span></span>
+</code></pre><p>把子类注册到NSURLProtocol中</p>
+<pre><code>+ (<span class="keyword">void</span>)unregisterClass:(<span class="keyword">Class</span>)protocolClass
+</code></pre><p>把子类从NSURLProtocol中移除</p>
+<p>NSURLProtocol提供了一系列的方法来操作一个URL Data，先看其一，一个静态方法。</p>
+<pre><code>+ (<span class="built_in">BOOL</span>)canInitWithRequest:(<span class="built_in">NSURLRequest</span> *)request
+</code></pre><p>canInitWithRequest <strong>注意，这些是覆盖父类NSURLProtocol的静态方法</strong>是系统询问，是否处理该请求URL，如果返回NO，不处理。如果返回YES，子类进一步控制。</p>
+<pre><code><span class="bullet">+ </span>(NSURLRequest <span class="emphasis">*)canonicalRequestForRequest:(NSURLRequest *</span>)request
+</code></pre><p>返回请求的原始request</p>
+<pre><code><span class="pp">- <span class="params">(void)</span>startLoading</span>
+</code></pre><p>加载此次请求，可以通过self.request获取当前URL的request对象</p>
+<pre><code><span class="pp">- <span class="params">(void)</span>stopLoading</span>
+</code></pre><p>此次请求完成时，可以在这个方法中处理</p>
+<p>每一个NSURLProtocol都有一个client属性，这个属性是NSURLProtocolClient。另外，还可以实现NSConnectionDataDelegate协议，把NSURLProtocol与NSURLConnection链接起来，这样就可以在statLoading调用之后，系统将回调NSConnectionDataDelegate中定义的各种方法，这个在自定义时非常有用。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>阅读资料：</p>
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtocol_Class/]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[纪录开发第一个iOS客户端遇见的坑]]></title>
@@ -1342,57 +1388,6 @@ dataStore.getAttribute(<span class="string">'name'</span>);
     <![CDATA[<p>随着Web应用越来越复杂，总是有很多需求需要在客户端存储一些特定的信息，用来描述访问者或者跟访问者相关的信息。于是，就有了这些客户端存储的方案，供开发者选择以及使用。</p>
 <h3 id="cookie">cookie</h3>
 <p>说起来cookie的出现是非常早的，]]>
-    </summary>
-    
-      <category term="JavaScript" scheme="http://icepy.github.io/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[复习JavaScript八之操作XML]]></title>
-    <link href="http://icepy.github.io/2015/02/02/%E5%A4%8D%E4%B9%A0JavaScript%E5%85%AB%E4%B9%8B%E6%93%8D%E4%BD%9CXML/"/>
-    <id>http://icepy.github.io/2015/02/02/复习JavaScript八之操作XML/</id>
-    <published>2015-02-02T09:50:14.000Z</published>
-    <updated>2015-02-24T11:47:17.000Z</updated>
-    <content type="html"><![CDATA[<p>在以前XML是存储和传输数据的事实标准（客户端没有出现JSON之前），那个时候浏览器还不支持解析XML，于是很多开发者需要自己写一个XML解析器。原理，就是把XML也转化成DOM文档，然后通过DOM API来获取。</p>
-<p>而现在，在客户端（浏览器）编程中几乎很少会使用到XML，数据的交换都应用在JSON上了，了解这个有一个好处，就是在做服务端编程，比如SAOP协议时就会用到，还有桌面的客户端，或者是移动客户端上，比如iOS，它把一些数据，比如NSArray写入到本地，实际上就是一个XML文本，当然在代码层面上，是看不出来有解析的，如果读取这个文件，是直接转成NSArray对象的。</p>
-<blockquote>
-<p>IE有它自己的实现对XML的支持，下面说的两个类型，在IE中都不支持</p>
-</blockquote>
-<p>将XML字符串序列化成DOM文档，主要是使用DOMparser类来实现，其他的用法跟获取DOM节点一样。</p>
-<pre><code><span class="keyword">var</span> parser = <span class="keyword">new</span> DOMparser();
-<span class="keyword">var</span> xmlDomObject = parser.parserFromString(<span class="string">'&lt;root&gt;&lt;child/&gt;&lt;/root&gt;'</span>,<span class="string">'text/xml'</span>);
-
-xmlDomObject.getElementsByTagName(<span class="string">'child'</span>);
-</code></pre><p>将DOM文档反序列化成XML字符串，主要是使用XMLSerializer类型，使用上述的xmlDomObject对象。</p>
-<pre><code><span class="built_in">var</span> serializer <span class="subst">=</span> <span class="literal">new</span> XMLSerializer();
-<span class="built_in">var</span> <span class="built_in">xml</span> <span class="subst">=</span> serializer<span class="built_in">.</span>serializeToString(xmlDomObject);
-</code></pre><p>如果XML解析有错误都会返回一个parsererror标签，获取的时候就可以判断是否有这个标签来决定解析是否有错误。</p>
-<p>据说DOM3版本的XML操作只有一个浏览器实现了，所以当资料了解就好。</p>
-<h3 id="IE版本">IE版本</h3>
-<blockquote>
-<p>IE版本的XML解析主要是使用它的ActiveXObject类型来实现</p>
-</blockquote>
-<p>在IE中想要解析XML就必须先创建一个空的DOM文档，然后通过这个文档来获取。</p>
-<pre><code>var xmldom = createDocument();
-xmldom.loadXML(<span class="comment">'<span class="xmlDocTag">&lt;root&gt;</span><span class="xmlDocTag">&lt;child/&gt;</span><span class="xmlDocTag">&lt;/root&gt;</span>');</span>
-
-xmldom.getElementsByTagName(<span class="comment">'child');</span>
-</code></pre><p>如果解析有错误，可以检查parseError对象。</p>
-<pre><code><span class="keyword">if</span>(xmldom.parseError !== <span class="number">0</span>){
-    //<span class="keyword">do</span> 
-}
-</code></pre><p>在IE中进行序列化非常的方便，因为它都内置在了DOM文档中，每一个DOM节点都有一个xml属性，它就保存着XML字符串。</p>
-<pre><code>xmldom<span class="built_in">.</span><span class="built_in">xml</span>
-</code></pre><p>最后IE还提供了一个可以加载远程XML文件的方法load，它就接收一个参数，远程XML的URL地址。当然，也可以使用async属性来设置同步还是异步，默认是异步（true）。</p>
-<pre><code><span class="keyword">var</span> xmldom = createDocument();
-xmldom.<span class="keyword">async</span> = <span class="keyword">false</span>;
-xmldom.load(<span class="string">'http://xxx.sss.xml'</span>);
-</code></pre><p>如果是异步还要监听一下onreadystatechange事件，判断readystate状态，这个跟Ajax的使用是一样的。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>在以前XML是存储和传输数据的事实标准（客户端没有出现JSON之前），那个时候浏览器还不支持解析XML，于是很多开发者需要自己写一个XML解析器。原理，就是把XML也转化成DOM文档，然后通过DOM API来获取。</p>
-<p>而现在，在客户端（浏览器）编程中几乎很少会使]]>
     </summary>
     
       <category term="JavaScript" scheme="http://icepy.github.io/tags/JavaScript/"/>
