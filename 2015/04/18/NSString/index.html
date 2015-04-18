@@ -3,17 +3,29 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2015/4 | icepy</title>
+  <title>NSString | icepy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="icepy">
-<meta property="og:url" content="http://icepy.github.io/archives/2015/04/">
+  <meta name="description" content="NSString是我学习的第一个类，它是iOS中专门处理字符串的一个类，包括有从文件读取，从网络读取，标准C的转换，格式化，大小写转换，查询，写入文件等，当然它也有一个对应的Mutable。
+优化指南：尽早开启ARC，以下都是ARC版
+要使用NSString有三种方式，第一种语法糖方式，第二种alloc方式，第三种使用类方法方式。
+NSString *str = @'';
+NSString *st">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NSString">
+<meta property="og:url" content="http://icepy.github.io/2015/04/18/NSString/">
 <meta property="og:site_name" content="icepy">
-<meta property="og:description">
+<meta property="og:description" content="NSString是我学习的第一个类，它是iOS中专门处理字符串的一个类，包括有从文件读取，从网络读取，标准C的转换，格式化，大小写转换，查询，写入文件等，当然它也有一个对应的Mutable。
+优化指南：尽早开启ARC，以下都是ARC版
+要使用NSString有三种方式，第一种语法糖方式，第二种alloc方式，第三种使用类方法方式。
+NSString *str = @'';
+NSString *st">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="icepy">
-<meta name="twitter:description">
+<meta name="twitter:title" content="NSString">
+<meta name="twitter:description" content="NSString是我学习的第一个类，它是iOS中专门处理字符串的一个类，包括有从文件读取，从网络读取，标准C的转换，格式化，大小写转换，查询，写入文件等，当然它也有一个对应的Mutable。
+优化指南：尽早开启ARC，以下都是ARC版
+要使用NSString有三种方式，第一种语法糖方式，第二种alloc方式，第三种使用类方法方式。
+NSString *str = @'';
+NSString *st">
 
   
     <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
@@ -166,9 +178,7 @@
 		</header>				
 	</div>
 </nav>
-      
-  
-    <article id="post-NSString" class="article article-type-post" itemscope itemprop="blogPost">
+      <article id="post-NSString" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2015/04/18/NSString/" class="article-date">
@@ -188,8 +198,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/04/18/NSString/">NSString</a>
+    <h1 class="article-title" itemprop="name">
+      NSString
     </h1>
   
 
@@ -285,86 +295,59 @@ NSLog(@<span class="string">"%@"</span>,str1);
     </div>
   </div>
   
-</article>
-
-
-
-
-
-
-  
-    <article id="post-NSURLProtocol" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/04/13/NSURLProtocol/" class="article-date">
-  	<time datetime="2015-04-13T03:38:06.000Z" itemprop="datePublished">4月 13 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
     
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/04/13/NSURLProtocol/">NSURLProtocol</a>
-    </h1>
   
+    <a href="/2015/04/13/NSURLProtocol/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">NSURLProtocol</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>阅读资料：</p>
-<ul>
-<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtocol_Class/index.html" target="_blank" rel="external">Apple Foundation NSURLProtocol</a></li>
-<li><a href="http://nshipster.cn/nsurlprotocol/" target="_blank" rel="external">http://nshipster.cn/nsurlprotocol/</a></li>
-</ul>
-<p>正如NSHipster在上篇文章所写的一样，iOS离不开网络，那么这就需要网络编程。cocoa提供了一系列的API来操作网络，比如NSURL，NSURLRequest，NSURLSession等等，以及处理网络的GCD，NSOperation多任务处理。</p>
-<p>那么NSURLProtocol，它有什么用呢？官方给它的解释是，可以重新定义已经加载的URL的行为或者定义一个新的URL。换句话来说，就是这个类可以监管应用的网络活动，只要是通过URL来进行的。</p>
-<p>NSURLProtocol是一个抽象类，也就是说它需要一个子类继承它才可以正常工作，关于怎么使用可以阅读NSHipster的文章，把子类注册到NSURLProtocol中。</p>
-<pre><code>+ (<span class="keyword">void</span>)consolelog:(<span class="built_in">UITextView</span> *)debugText
-{
-    debug = debugText;
-    [NSURLProtocol registerClass:<span class="keyword">self</span>];
-}
-</code></pre><h3 id="案例需求，监管应用的URL加载系统，并且支持web_client_console_log">案例需求，监管应用的URL加载系统，并且支持web client console log</h3>
-<p>案例可以在Github中查看<a href="https://github.com/lcepy/MFLog" target="_blank" rel="external">MFLog</a></p>
-<pre><code>+ (BOOL)registerClass:(<span class="class"><span class="keyword">Class</span>)<span class="title">protocolClass</span></span>
-</code></pre><p>把子类注册到NSURLProtocol中</p>
-<pre><code>+ (<span class="keyword">void</span>)unregisterClass:(<span class="keyword">Class</span>)protocolClass
-</code></pre><p>把子类从NSURLProtocol中移除</p>
-<p>NSURLProtocol提供了一系列的方法来操作一个URL Data，先看其一，一个静态方法。</p>
-<pre><code>+ (<span class="built_in">BOOL</span>)canInitWithRequest:(<span class="built_in">NSURLRequest</span> *)request
-</code></pre><p>canInitWithRequest <strong>注意，这些是覆盖父类NSURLProtocol的静态方法</strong>是系统询问，是否处理该请求URL，如果返回NO，不处理。如果返回YES，子类进一步控制。</p>
-<pre><code><span class="bullet">+ </span>(NSURLRequest <span class="emphasis">*)canonicalRequestForRequest:(NSURLRequest *</span>)request
-</code></pre><p>返回请求的原始request</p>
-<pre><code><span class="pp">- <span class="params">(void)</span>startLoading</span>
-</code></pre><p>加载此次请求，可以通过self.request获取当前URL的request对象</p>
-<pre><code><span class="pp">- <span class="params">(void)</span>stopLoading</span>
-</code></pre><p>此次请求完成时，可以在这个方法中处理</p>
-<p>每一个NSURLProtocol都有一个client属性，这个属性是NSURLProtocolClient。另外，还可以实现NSConnectionDataDelegate协议，把NSURLProtocol与NSURLConnection链接起来，这样就可以在statLoading调用之后，系统将回调NSConnectionDataDelegate中定义的各种方法，这个在自定义时非常有用。</p>
-
-      
-    </div>
-  </div>
   
 </article>
 
 
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
 
 
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="NSString" data-title="NSString" data-url="http://icepy.github.io/2015/04/18/NSString/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lcepy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
-  
-  
+
+
 
       <footer id="footer">
   <div class="outer">

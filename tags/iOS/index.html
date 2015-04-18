@@ -168,6 +168,131 @@
 </nav>
       
   
+    <article id="post-NSString" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/04/18/NSString/" class="article-date">
+  	<time datetime="2015-04-18T15:05:37.000Z" itemprop="datePublished">4月 18 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/18/NSString/">NSString</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>NSString是我学习的第一个类，它是iOS中专门处理字符串的一个类，包括有从文件读取，从网络读取，标准C的转换，格式化，大小写转换，查询，写入文件等，当然它也有一个对应的Mutable。</p>
+<p><strong>优化指南：尽早开启ARC，以下都是ARC版</strong></p>
+<p>要使用NSString有三种方式，第一种语法糖方式，第二种alloc方式，第三种使用类方法方式。</p>
+<pre><code><span class="built_in">NSString</span> *str = <span class="string">@""</span>;
+<span class="built_in">NSString</span> *str1 = [[<span class="built_in">NSString</span> alloc] initWithFormat:<span class="string">@"%@"</span>,<span class="string">@"hello"</span>];
+<span class="built_in">NSString</span> *str2 = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@"</span>,<span class="string">@"hello"</span>];
+</code></pre><p>开发中用语法糖或者类方法的方式比较多</p>
+<h3 id="NSString常用">NSString常用</h3>
+<p>查询前缀，后缀</p>
+<pre><code><span class="constant">NSString *str</span> = @<span class="string">"http://lcepy.github.io"</span>;
+<span class="constant">BOOL isF</span> = [str hasPrefix:@<span class="string">"http"</span>];
+<span class="constant">BOOL isL</span> = [str hasSuffix:@<span class="string">"io"</span>];
+</code></pre><p>创建格式化字符串</p>
+<pre><code><span class="built_in">NSString</span> *formatter = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"http://%@"</span>,<span class="string">@"lcepy.github.io"</span>];
+<span class="built_in">NSString</span> *formatter1 = [[<span class="built_in">NSString</span> alloc] initWithFormat:<span class="string">@"http://%@"</span>,<span class="string">@"lcepy.github.io"</span>];
+</code></pre><p>从网络读取以及响应，当然很少有人会这么干PS :会block主线程</p>
+<pre><code><span class="built_in">NSURL</span> *urlS = [<span class="built_in">NSURL</span> URLWithString:<span class="string">@"http://lcepy.github.io"</span>];
+<span class="built_in">NSString</span> *urlStr = [<span class="built_in">NSString</span> stringWithContentsOfURL:urlS encoding:NSUTF8StringEncoding error:<span class="literal">nil</span>];
+<span class="built_in">NSString</span> *urlStr1 = [[<span class="built_in">NSString</span> alloc] initWithContentsOfURL:urlS encoding:NSUTF8StringEncoding error:<span class="literal">nil</span>];
+[urlStr writeToURL:urlS atomically:<span class="literal">YES</span> encoding:NSUTF8StringEncoding error:<span class="literal">nil</span>];
+</code></pre><p>从本地文件中读取以及写入</p>
+<pre><code><span class="built_in">NSString</span> *path = [[<span class="built_in">NSBundle</span> mainBundle] pathForResource:<span class="string">@"lcepy"</span> ofType:<span class="string">@"html"</span>];
+<span class="built_in">NSString</span> *fileStr = [<span class="built_in">NSString</span> stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:<span class="literal">nil</span>];
+<span class="built_in">NSString</span> *fileStr1 = [[<span class="built_in">NSString</span> alloc] initWithContentsOfFile:path encoding:NSUTF8StringEncoding error:<span class="literal">nil</span>];
+[fileStr writeToFile:str atomically:<span class="literal">YES</span> encoding:NSUTF8StringEncoding error:<span class="literal">nil</span>];
+</code></pre><p>字符串的比较，因为OC是C语言的超集，所以字符串有两种比较方式，指针一样，还有指针一样内容一样的比较，而==一般都不建议使用，它比较的是引用，NSString有它的比较方法。</p>
+<pre><code>isEqualToString
+
+<span class="type">NSString</span> *astring01 = @<span class="string">"This is a String!"</span>;
+<span class="type">NSString</span> *astring02 = @<span class="string">"This is a String!"</span>;
+<span class="type">BOOL</span> <span class="literal">result</span> = [astring01 compare:astring02] == <span class="type">NSOrderedSame</span>;    //<span class="type">NSOrderedSame</span>判断两者内容是否相同
+<span class="type">NSLog</span>(@<span class="string">"result:%d"</span>,<span class="literal">result</span>);
+<span class="type">BOOL</span> result1 = [astring01 compare:astring02] == <span class="type">NSOrderedAscending</span>;    //<span class="type">NSOrderedAscending</span>判断两对象值的大小(按字母顺序进行比较，astring02大于astring01为真)
+<span class="type">NSLog</span>(@<span class="string">"result:%d"</span>,result1);
+<span class="type">BOOL</span> result2 = [astring01 compare:astring02] == <span class="type">NSOrderedDescending</span>;    //<span class="type">NSOrderedDescending</span>判断两对象值的大小(按字母顺序进行比较，astring02小于astring01为真)
+<span class="type">NSLog</span>(@<span class="string">"result:%d"</span>,result2);
+</code></pre><p>大小写以及首字母大写</p>
+<pre><code><span class="built_in">NSString</span> *io = <span class="string">@"hello"</span>;
+<span class="built_in">NSString</span> *IO = <span class="string">@"HELLO"</span>;
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,[io uppercaseString]);
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,[IO lowercaseString]);
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,[io capitalizedString]);
+</code></pre><p>查询截取PS—&gt;<strong>我觉得NSString使用最频繁的一处，查询截取是在开发中无法避免的事项，它非常有用</strong>其实，在使用查询这一系列的方式时，它和NSRange有紧密相连的关系。NSRange是一个结构体，用来描述起始位置，以及计数。</p>
+<pre><code><span class="built_in">NSString</span> *str = <span class="string">@"http://lcepy.github.io"</span>;
+<span class="built_in">NSRange</span> httpRange =  [str rangeOfString:<span class="string">@"http"</span>]; <span class="comment">//返回一个range结构体</span>
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,NSStringFromRange(httpRange));
+
+
+<span class="built_in">NSRange</span> ioRange = [str rangeOfString:<span class="string">@"io"</span>];
+<span class="built_in">NSString</span> *subs = [str substringWithRange:NSMakeRange(ioRange<span class="variable">.location</span>, ioRange<span class="variable">.length</span>-<span class="number">1</span>)]; <span class="comment">//从指定位置开始截取字符串</span>
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,subs);
+
+<span class="comment">//从字符串开头一直截取到指定位置</span>
+<span class="built_in">NSString</span> *indexStr = [str substringToIndex:<span class="number">4</span>];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,indexStr);
+
+<span class="comment">//从指定位置开始截取到最后的字符串（包括）</span>
+<span class="built_in">NSString</span> *lastStr = [str substringFromIndex:<span class="number">4</span>];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,lastStr);
+</code></pre><p>扩展路径以及获取扩展文件名</p>
+<pre><code><span class="built_in">NSString</span> *doc = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, <span class="literal">YES</span>)[<span class="number">0</span>];
+<span class="built_in">NSString</span> *filePath = [doc stringByAppendingPathComponent:<span class="string">@"PhotoCache"</span>];
+<span class="built_in">NSString</span> *file = <span class="string">@"~/lcepy.io"</span>;
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,[file pathExtension]);
+</code></pre><h3 id="NSMutableString常用">NSMutableString常用</h3>
+<p>注意PS—&gt;<strong>NSString可以使用的方法，Mutable版全部具备，Mutable版的方法，NSString不一定有</strong></p>
+<p>在字符串最后插入或者格式化插入字符串</p>
+<pre><code>NSMutableString *str1 = [NSMutableString stringWithStrin<span class="variable">g:</span>@<span class="string">"http://lcepy.github.io"</span>];
+[str1 appendStrin<span class="variable">g:</span>@<span class="string">"#login"</span>];
+[str1 appendForma<span class="variable">t:</span>@<span class="string">"%@"</span>,@<span class="string">"#login"</span>];
+NSLog(@<span class="string">"%@"</span>,str1);
+</code></pre><p>在指定的位置插入字符串</p>
+<pre><code><span class="attr_selector">[str1 insertString:@"?id=fjdkfjkgfgi384jkg" atIndex:str1.length]</span>;
+<span class="function">NSLog</span>(<span class="at_rule">@<span class="string">"%@"</span>,str1);</span>
+</code></pre><p>在指定的范围内替换</p>
+<pre><code><span class="built_in">NSRange</span> login = [str1 rangeOfString:<span class="string">@"#login"</span>];
+[str1 replaceCharactersInRange:login withString:<span class="string">@"#logou"</span>];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,str1);
+</code></pre><p>延伸阅读：</p>
+<ul>
+<li><a href="http://blog.devtang.com/blog/2012/02/14/nsstring-java-like-wrapper/" target="_blank" rel="external">给NSString添加java风格：（感觉有点意思）</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSString_Class/index.html" target="_blank" rel="external">NSString</a></li>
+</ul>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-NSURLProtocol" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -522,57 +647,6 @@ requ.bind(<span class="string">'click'</span>,<span class="function"><span class
     }];
     [task resume];    
 </code></pre><p>在这个例子中主要是利用了NSURLSession临时会话，NSURLSessionDownloadTask任务，NSURLSessionConfiguration配置与dispatch_async相结合的方式来处理的多线程。</p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-iOS自动布局的理解" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/07/iOS自动布局的理解/" class="article-date">
-  	<time datetime="2015-03-07T03:47:44.000Z" itemprop="datePublished">3月 7 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/07/iOS自动布局的理解/">iOS自动布局的理解</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一般情况下iOS的自动布局可以在Xcode中利用图形化的工具来操作完成，当然也可以使用代码的方式来完成，这些工作主要是对视图定义一些规则和约束，在容器变化的时候，视图可以遵守这些约束。</p>
-<p>实现约束的三种方式：</p>
-<ul>
-<li>比如拖动一个Label在storyboard中，会出现蓝色的辅助线，放定好位置时，在下方的小按钮中点击Reset to Suggested Constraints，系统会帮助我们选择最佳的自动布局方式</li>
-<li>拖动一个Label到storyboard中，依然是点击下方小按钮，有add，手动添加。</li>
-<li>拖动一个Label到storyboard中按住control键，拖动到想放的位置上，这里有一个前提，是有一个参照视图，放开的时候会弹出一个小框来让你选择约束</li>
-</ul>
-<p>比如要查看效果，可以右边的属性栏中选择Orientation中的Landscape，就变成了横屏。如果想删除约束，可以在左侧的文档大纲中进行删除，假设一个视图没有约束，也可以在文档大纲中来add约束。</p>
-<p>如果想要查看一个约束，可以在Show the size inspector中查看constraints。</p>
 
       
     </div>
