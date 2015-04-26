@@ -168,6 +168,97 @@
 </nav>
       
   
+    <article id="post-iOS的网络编程NSURL" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/04/22/iOS的网络编程NSURL/" class="article-date">
+  	<time datetime="2015-04-22T04:37:14.000Z" itemprop="datePublished">4月 22 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/22/iOS的网络编程NSURL/">iOS的网络编程NSURL</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>如果只是说iOS中的URL系统，它的东西还不算比较多。但是，如果想用好它，可能还需要具备一些其他方面的知识，特别是多任务编程，比如GCD，NSOperation，NSOperationQueue，NSURLSession等等，而且苹果公司在后期还推了一个叫NSURLComponents的东西，这也是需要去学习的。</p>
+<p>一个简单的URL是这样发送出去的：</p>
+<pre><code><span class="built_in">NSString</span> *path = <span class="string">@"http://lcepy.github.io"</span>;
+<span class="built_in">NSURL</span> *url = [<span class="built_in">NSURL</span> URLWithString:path];
+<span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:url];
+NSURLResponse *response = <span class="literal">nil</span>;
+<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
+[<span class="built_in">NSURLConnection</span> sendSynchronousRequest:request returningResponse:&amp;response error:&amp;error];
+</code></pre><p>基本上如果要构造一个request需要先构造一个NSURL对象，然后通过NSURLConnection发送出去。NSURLRequest是一个不可变的对象，默认发送的是GET的请求，如果想要发送POST请求，可以用它可变的NSMutableURLRequest来支持POST请求，包括超时时间等等。</p>
+<p>关于NSURLConnection有三种方式可以发送请求，前面同步版本我们已经看过了，下面是异步和使用协议的方式：</p>
+<pre><code>[NSURLConnection sendAsynchronousRequest:request queue:nil completionHandler:^(NSURLResponse <span class="keyword">*</span>response, NSData <span class="keyword">*</span>data, NSError <span class="keyword">*</span>connectionError) {
+
+}];
+</code></pre><p>协议：</p>
+<pre><code><span class="comment">//实现NSURLConnectionDataDelegate协议</span>
+
+<span class="built_in">NSURLConnection</span> *connection = [<span class="built_in">NSURLConnection</span> connectionWithRequest:request delegate:<span class="keyword">self</span>];
+[connection start];
+
+<span class="comment">//常用的需要实现下面四种方法</span>
+
+-(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didFailWithError:(<span class="built_in">NSError</span> *)error
+{
+    <span class="comment">//请求超时，错误的时候</span>
+}
+
+-(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveResponse:(NSURLResponse *)response
+{
+    <span class="comment">//服务器第一次响应一个response的时候</span>
+}
+
+-(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveData:(NSData *)data
+{
+    <span class="comment">//传输数据</span>
+}
+
+-(<span class="keyword">void</span>)connectionDidFinishLoading:(<span class="built_in">NSURLConnection</span> *)connection
+{
+    <span class="comment">//完成的时候</span>
+}
+</code></pre><p>对于某些任务，比如下载图片，文件等等大数据的时候，可以使用一个临时会话来启动一个请求，也就是构造一个NSURLSession。</p>
+<pre><code>NSURLSessionConfiguration <span class="keyword">*</span>configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+NSURLSession <span class="keyword">*</span>session = [NSURLSession sessionWithConfiguration:configuration];
+NSURLSessionDataTask <span class="keyword">*</span>task = [session dataTaskWithRequest:request completionHandler:^(NSData <span class="keyword">*</span>data, NSURLResponse <span class="keyword">*</span>response, NSError <span class="keyword">*</span>error) {
+
+    //请求的结果
+}];
+[task resume];
+</code></pre><p>临时会话的好处是每一个都不是在主线程执行，写的代码量比较少，适合简单的任务。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-NSString" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">

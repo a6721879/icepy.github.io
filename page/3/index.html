@@ -168,6 +168,108 @@
 </nav>
       
   
+    <article id="post-JavaScript中的深拷贝与浅拷贝" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/04/JavaScript中的深拷贝与浅拷贝/" class="article-date">
+  	<time datetime="2015-03-04T12:56:49.000Z" itemprop="datePublished">3月 4 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/04/JavaScript中的深拷贝与浅拷贝/">JavaScript中的深拷贝与浅拷贝</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>关于拷贝的问题，主要分为深拷贝和浅拷贝，但是如果从空间分配上来说JavaScript的拷贝不应该算是深拷贝，比如：</p>
+<pre><code><span class="keyword">var</span> d = {};
+<span class="keyword">for</span>(k <span class="keyword">in</span> a){
+    d[k] = a[k];
+}
+<span class="keyword">return</span> d;
+</code></pre><p>今天突然想到了这么一个问题，在C语言中，所谓的拷贝，就是分两种情况，一种是把指针地址拷贝给另外一个变量，虽然也开辟的了一个内存空间，在栈上也存在着一个地址，我对这个变量进行修改，同一个指针是会改变其值的，这种拷贝叫浅拷贝。另外一种情况，直接开辟一个新空间，把需要复制的值都复制在这个新的空间中，这种拷贝叫中深拷贝。</p>
+<p>如果看到上述的一段Js代码，很多人说它是浅拷贝，假设传入一个a对象，拷贝完成之后返回一个d，当我修改返回对象的值时并不能同时修改a对象，于是，在这里我有一个很大的疑问，在Js中到底什么是浅拷贝，什么是深拷贝的问题？</p>
+<p>这一点上感觉Js真的很奇葩，如果在开发iOS中，不可变对象copy一下，依然是不可变，所以是浅拷贝，拷贝了指针变量中存储的地址值。如果是可变对象copy一下，到不可变，空间变化了，包括不可变mutableCopy到不可变，空间依然变化了，所以是深拷贝。但是JavaScript中对于这一点要考虑一种情况，值类型，和引用类型，这个基础知识，我相信大家都非常清楚。数字，字符串等都是值类型，object，array等都是引用类型。</p>
+<pre><code><span class="keyword">var</span> a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];
+<span class="keyword">var</span> b = a;
+
+b.push(<span class="number">4</span>);
+<span class="built_in">console</span>.log(a); <span class="comment">//[1,2,3,4]</span>
+
+<span class="keyword">var</span> numb = <span class="number">123</span>;
+<span class="keyword">var</span> _numb = numb;
+_numb = <span class="number">567</span>;
+
+<span class="built_in">console</span>.log(numb); <span class="comment">//123</span>
+</code></pre><p>从这个例子中可以看的出来，它们使用的都是＝符号，而数组a发生了变化，numb数字却没有发生变化。那么从这里，可以有一个总结，所谓了深拷贝，浅拷贝的问题，应该针对的是有多个嵌套发生的情况。不然假设是这样的情况，还能叫浅拷贝么？</p>
+<pre><code><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> = </span>{<span class="string">"de"</span>:<span class="number">123</span>};
+<span class="keyword">var</span> o = copy(<span class="keyword">object</span>);
+
+o.de = <span class="number">456</span>;
+
+console.log(<span class="keyword">object</span>) <span class="comment">//{"de":123}</span>
+</code></pre><p>明显对象o中的de属性修改并没有影响到原始对象，一个对象中的属性是一个字符串，如果从内存空间的角度上来说，这里明显是开辟了新的空间，还能说是浅拷贝么？那么针对另外一种情况。</p>
+<pre><code><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> = </span>{
+    <span class="string">"de"</span>:{
+        <span class="string">"d"</span>:<span class="number">123</span>
+    }
+}
+
+<span class="keyword">var</span> o = deepCopy(<span class="keyword">object</span>);
+o.de.d = <span class="string">"asd"</span>;
+</code></pre><p>如果一个对象中的第一层属性，不是值类型，只单层循环，这样来看的话确实是一个浅拷贝，因为在Js中引用类型用＝赋值，实际上是引用，这样说的通。所以，深拷贝，还需要做一些处理，把object，array等引用类型识别出来，深层递归到最后一层，一个一个的拷贝。</p>
+<pre><code><span class="keyword">var</span> deepCopy = <span class="function"><span class="keyword">function</span><span class="params">(o)</span></span>{
+    <span class="keyword">var</span> target = {};
+    <span class="keyword">if</span>(<span class="keyword">typeof</span> o !== <span class="string">'object'</span> &amp;&amp; !<span class="built_in">Array</span>.isArray(o)){
+        <span class="keyword">return</span> o;
+    }
+    <span class="keyword">for</span>(<span class="keyword">var</span> k <span class="keyword">in</span> o){
+        target[k] = deepCopy(o[k]);
+    }
+    <span class="keyword">return</span> target;
+}
+</code></pre><p>思路是如此，这个例子只考虑了两种情况，对象和数组，为了验证这样的思路，最后的结果与预期是一样的。</p>
+<pre><code><span class="keyword">var</span> _copy = {
+    <span class="string">'object'</span>:{
+        <span class="string">'name'</span>:<span class="string">'wen'</span>
+    },
+    <span class="string">'array'</span>:[<span class="number">1</span>,<span class="number">2</span>]
+
+}
+<span class="keyword">var</span> h = deepCopy(_copy);
+h.object.name = <span class="string">'lcepy'</span>;
+h.array[<span class="number">1</span>] = <span class="number">8</span>;
+<span class="built_in">console</span>.log(h);
+<span class="built_in">console</span>.log(_copy);
+</code></pre>
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-有趣味的iOS动画实现" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -616,102 +718,9 @@ var <span class="built_in">value</span>, values = [], i, key
 
 
   
-    <article id="post-理解UITableView" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/06/理解UITableView/" class="article-date">
-  	<time datetime="2015-02-06T13:06:07.000Z" itemprop="datePublished">2月 6 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/06/理解UITableView/">理解UITableView</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>UITableView是在iOS开发中使用非常频繁的一个控件，比如QQ的消息人列表，淘宝的商品，微信等等都会使用到它，对于它的理解有一个前提，那就是要理解iOS MVC的设计思路。</p>
-<p>创建一个UITableView可以使用代码的方式，也可以使用xib或者storyboard。</p>
-<pre><code><span class="built_in">UITableView</span> *tableView = [[<span class="built_in">UITableView</span> alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
-</code></pre><p>在MVC的设计思想中控制器控制着要从模型中拿数据，然后把数据装载给视图。在UITableView中模型主要是实现在UITableViewDataSource数据源中，也就是UITableView有几行，分组么，然后每一行装载什么？数据源的目的就是想问开发者这些问题。</p>
-<pre><code><span class="pp">-<span class="params">(<span class="variable">NSInteger</span>)</span>numberOfSectionsInTableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView
-{
-
-}</span>
-</code></pre><p>这个方法如果存在有分组，系统就会询问，有几个分组？如果不是分组的，可以不实现这个方法，系统默认是1。</p>
-<p>有了分组之后，然后系统会询问会有几行？</p>
-<pre><code><span class="pp">-<span class="params">(<span class="variable">NSInteger</span>)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView numberOfRowsInSection:<span class="params">(<span class="variable">NSInteger</span>)</span>section
-{
-
-}</span>
-</code></pre><p>section跟分组有关</p>
-<p>最后系统询问，每一行实现什么？</p>
-<pre><code><span class="pp">-<span class="params">(<span class="variable">UITableViewCell</span> *)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView cellForRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
-{
-
-}</span>
-</code></pre><p>这个方法的实现可以说是核心的核心，在UITableView中每一行是要求实现一个cell，可以想象每一个cell相当于就是一个容器，这个容器里面装载着很多其他UI对象，当然cell也可以自定义。</p>
-<p>考虑到性能，其实每一个cell可以从缓存中读取</p>
-<pre><code><span class="built_in">UITableViewCell</span> *cell = [tableView dequeueReusableCellWithIdentifier:<span class="string">@"cell"</span>];
-<span class="keyword">if</span> (!cell) {
-    cell = [[<span class="built_in">UITableViewCell</span> alloc] initWithStyle:UITableViewStylePlain reuseIdentifier:<span class="string">@"cell"</span>];
-}
-
-<span class="comment">//do</span>
-</code></pre><p>indexPath是一个类，看看头文件就可以明白，它这个里面装载着row，section等，这些数值非常有意义，在从模型里获取数据的时候。数据源还有一些其他的方法可以实现，比如编辑模式，这个东西一般用于删除每一条消息，从右向左滑动的时候。</p>
-<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView commitEditingStyle:<span class="params">(<span class="variable">UITableViewCellEditingStyle</span>)</span>editingStyle forRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
-{
-
-}</span>
-</code></pre><p>排序</p>
-<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView moveRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>sourceIndexPath toIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>destinationIndexPath
-{
-
-}</span>
-</code></pre><p>有了数据源，当然也会存在一些代理，这些代理就是一些动作，比如实现了某些代理方法之后，系统会询问，你点了？一个手指按下不动了？等等，然后再doing什么，就是写在这些代理的方法中，主要是实现UITableViewDelegate。</p>
-<p>常用的比如按下的时候，放开的时候：</p>
-<p>点击了每一行时做的动作</p>
-<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView didSelectRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
-{
-
-}</span>
-</code></pre><p>放开每一行时做的动作</p>
-<pre><code><span class="pp">-<span class="params">(void)</span>tableView:<span class="params">(<span class="variable">UITableView</span> *)</span>tableView didDeselectRowAtIndexPath:<span class="params">(<span class="variable">NSIndexPath</span> *)</span>indexPath
-{
-
-}</span>
-</code></pre><p>协议中有很多在某些情况下会非常有用，细节就要慢慢在学习中积累了。</p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
     </nav>
   
 

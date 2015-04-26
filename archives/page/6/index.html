@@ -168,6 +168,145 @@
 </nav>
       
   
+    <article id="post-复习JavaScript六之事件" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/27/复习JavaScript六之事件/" class="article-date">
+  	<time datetime="2015-01-27T10:08:04.000Z" itemprop="datePublished">1月 27 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/27/复习JavaScript六之事件/">复习JavaScript六之事件</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>IE浏览器的事件不是复习的重点</p>
+</blockquote>
+<p>事件是JavaScript与HTML进行交互的一个纽带，理解事件可以更好的处理Web应用程序，现在的浏览器中主要支持两种事件流：</p>
+<ul>
+<li>事件冒泡</li>
+<li>事件捕获</li>
+<li>DOM事件流</li>
+</ul>
+<p>事件冒泡则是指事件开始时由具体的元素接收，然后逐级向上传播。比如：</p>
+<pre><code><span class="tag">&lt;<span class="title">html</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">head</span>&gt;</span><span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">body</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">p</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</code></pre><p>给p标签监听一个事件，它的流向是p,div,body,html,document，其实细心看来这种流的走向会存在一个问题，给div也监听一个事件，当用户点击P的时候是会触发两次的，好在event对象中有可以阻止事件冒泡的方法。</p>
+<p>事件捕获则是指事件由最上级接收，逐级向下传播到具体的元素上，了解了冒泡之后这个就非常好理解了，正是一个相反的步骤。</p>
+<p>而DOM事件流又正好是冒泡与捕获的结合体，它分为三个阶段：事件捕获，目标事件，事件冒泡，如果在纸上画出来，它的走向就是一个圆形。</p>
+<blockquote>
+<p>对于事件处理程序，写在HTML标签中的，另外一种是直接写一个function的，比如doc.onclick = function(){}，一般来说这些浏览器支持，但是基本上不会使用了。因为前者是跟HTML耦合的，不利代码维护，而且虽然HTML加载了但是Js文件还未加载，用户点击后，是直接报错的。后者虽然也可以删除，比如doc.onclick = null，对于对代码有强迫症的同学，基本上不会使用到它。</p>
+</blockquote>
+<p>那么，我们该怎么给一个元素添加上事件处理程序呢？</p>
+<h3 id="DOM2级事件处理程序">DOM2级事件处理程序</h3>
+<ul>
+<li>addEventLister</li>
+<li>removeEventLister</li>
+</ul>
+<p>所有的DOM节点都具备这两个方法，它接收三个参数：</p>
+<ul>
+<li>要处理的事件名称，比如click（这里跟上述两个以及IE注册事件都不同，不需要on）</li>
+<li>需要事件进行处理的函数</li>
+<li>一个布尔值，表示（true，在捕获阶段调用事件处理函数）（false，在冒泡阶段调用事件处理函数）</li>
+</ul>
+<blockquote>
+<p>一般情况下第三个参数都填false</p>
+</blockquote>
+<p>IE浏览器对应的两个方法，attachEvent，detachEvent，它们只有冒泡，事件名要加上on。</p>
+<h3 id="事件对象">事件对象</h3>
+<p>在注册完事件处理程序后，事件的一个比较重要的对象必须要理解，<strong>event事件对象</strong>。</p>
+<p>一般来说，这个对象中包含着所有与当前元素所监听的事件有关的信息，比如元素监听的事件类型，元素本身等等。</p>
+<p><strong>比较重要的属性和方法（只读）</strong></p>
+<ul>
+<li>currentTarget 真正监听事件的那个元素</li>
+<li>target 事件的目标元素</li>
+<li>type 事件的类型</li>
+<li>perventDefault()  取消事件的默认行为</li>
+<li>stopPropagation()  取消事件的捕获或者冒泡</li>
+<li>bubbles 事件是否冒泡</li>
+<li>eventPhase 事件处理程序的三个阶段，1捕获2处于目标3冒泡</li>
+</ul>
+<p><strong>比较重要的属性和方法（读写）</strong></p>
+<ul>
+<li>clientX 鼠标在窗口中的水平位置</li>
+<li>clientY 鼠标在窗口中的垂直位置</li>
+</ul>
+<h3 id="事件类型">事件类型</h3>
+<blockquote>
+<p>PC端主要是针对鼠标，移动端则是触摸，手势相关的处理</p>
+</blockquote>
+<p>如果在PC端上发生一次click事件，实际上它是发生了三次事件，mousedown当鼠标按下的时候，mouseup当用户放开的时候，click两个加起来就发生了一次click事件。相对于移动，PC上的鼠标事件非常的丰富，例如mouseover当鼠标首次移入一个元素边界时触发，mouseout当鼠标移出元素时触发，这个移出，到子元素上也会触发这个事件，mousemove当鼠标在元素内移动时重复触发。</p>
+<p>总体来说对于文档加载，表单控件，窗口大小改变等事件，比如获取焦点，在失去或者获取焦点是值改变等移动上都是一样的，focus（获得焦点）blur（失去焦点）。</p>
+<p>在做一些视差滚动的效果时scroll事件是非常好用，移动上在css中提供了一个类似的属性。</p>
+<p>唯一的区别是移动端上没有键盘事件。</p>
+<h3 id="移动事件">移动事件</h3>
+<ul>
+<li>touchstart 当手指触摸到屏幕时触发</li>
+<li>touchmove 当手指在屏幕上连续滑动时触发</li>
+<li>touchend 当手指从屏幕上移开时触发</li>
+<li>touchcancel 当系统停止跟踪触摸时触发（这个事件没有确定的触发时间）</li>
+</ul>
+<p>它们都是冒泡的，也可以取消</p>
+<p><strong>三个跟踪触摸事件的属性</strong></p>
+<ul>
+<li>touches 当前跟踪触摸操作的touch数组，在touchend事件中为空</li>
+<li>targetTouchs 特定事件目标的touch数组</li>
+<li>ChangedTouches 上次触摸时发生了什么改变的touch数组</li>
+</ul>
+<p><strong>移动event事件对象</strong></p>
+<p>PC上存在的，在移动上也存在，描述上有差异，比如</p>
+<ul>
+<li>target 触摸的DOM节点目标</li>
+<li>pageX 触摸目标在页面中的X坐标</li>
+<li>pageY 触摸目标在页面中的Y坐标</li>
+</ul>
+<p><strong>一些手势</strong></p>
+<ul>
+<li>gesturestart 当一个手指按在屏幕上另外一个手指又触摸屏幕时触发</li>
+<li>gesturechange 依赖前者当其中的一个手指发生改变时触发</li>
+<li>gestureend 当任何一个手指离开时触发</li>
+</ul>
+<p><strong>移动手势干货三部曲</strong></p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/23/webkit-touch-event-1.html" target="_blank" rel="external">对于Touch的处理</a></p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-2.html" target="_blank" rel="external">处理简单手势</a></p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-3.html" target="_blank" rel="external">处理复杂手势</a></p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-复习JavaScript五之面向对象的程序设计" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -485,131 +624,9 @@ Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="keywo
 
 
   
-    <article id="post-复习JavaScript二之跨域" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/23/复习JavaScript二之跨域/" class="article-date">
-  	<time datetime="2015-01-23T14:17:20.000Z" itemprop="datePublished">1月 23 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/23/复习JavaScript二之跨域/">复习JavaScript二之跨域</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>客户端Js出于安全的考虑，不允许跨域调用其他页面的对象，正是因为这样才给Ajax带来了很多不方便的地方。跨域最简单的理解就是因为Js同源策略的存在，比如a.com域名下的Js不能访问b.com下的Js对象。</p>
-<ul>
-<li>协议端口没法跨，客户端</li>
-<li>在跨域上，域仅仅是通过首部来识别，window.location.protocol +window.location.host</li>
-</ul>
-<h3 id="利用document-domain和iframe来设置">利用document.domain和iframe来设置</h3>
-<p>对于主域相同而子域名不同的情况，可以通过document.domain来处理，比如www.163.com/index.html和wow.163.com/wower.html，在这两个文件中分别加入document.domain = “163.com”，然后在index.html页面中创建一个iframe引入wower.html，获取iframe的contentDocument，这样这两个js就可以交互了。</p>
-<p>index.html</p>
-<pre><code><span class="built_in">document</span>.domain = <span class="string">'163.com'</span>;
-<span class="keyword">var</span> iframe = <span class="built_in">document</span>.createElement(<span class="string">'iframe'</span>);
-iframe.src = <span class="string">'http://wow.163.com/wower.html'</span>;
-iframe.style.display = <span class="string">'none'</span>; 
-<span class="built_in">document</span>.body.appendChild(iframe);
-iframe.onload = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> doc = iframe.contentDocument || iframe.contentWindow.document;
-    <span class="comment">//现在可以通过doc来操作wower.html中的js对象了</span>
-}
-</code></pre><p>wower.html</p>
-<pre><code><span class="built_in">document</span>.domain = <span class="string">'163.com'</span>;
-</code></pre><p>使用这样的方式来实现的跨域是有限制的</p>
-<ul>
-<li>主域名必须是同一个</li>
-<li>安全性引发的问题，比如第一个页面出现了安全问题，在后面的页面也会出现</li>
-<li>iframe引用过多的话，每一个iframe都必须设置document.domain，比较琐碎</li>
-</ul>
-<blockquote>
-<p>偶尔可以使用一下</p>
-</blockquote>
-<h3 id="利用window-name">利用window.name</h3>
-<p>稍微有些绕，但是数据量比较大，也比较安全</p>
-<ul>
-<li>wow.163.com/app.html 应用所在的页面</li>
-<li>wow.163.com/empty.html 中间代理页面，搞个空的即可，但是必须在主域名下</li>
-<li>www.qq.com/data.html 需要交互的数据页面</li>
-</ul>
-<p>在data.html页面中</p>
-<pre><code><span class="attribute">window.name </span>=<span class="string"> 123;</span>
-</code></pre><p>app.html页面中创建一个隐藏的iframe，它的scr指向data.html，在onload事件中，把当前iframe的contentWindow.loaction修改成empty.html，当再次onload时就可以通过contentWindow.name来获取到123了。</p>
-<blockquote>
-<p>偶尔使用</p>
-</blockquote>
-<h3 id="利用iframe和location-hash">利用iframe和location.hash</h3>
-<p>利用这种方式，说实话（不建议），比较绕，而且数据量小，直接暴露在URL上。它的原理主要是这样的，假设wow.163.com/index.html页面，wow.163.com/empty.html（空的，什么内容都没有），需要交换数据的页面在www.qq.com/a.html上。</p>
-<p>在wow.163.com/index.html#（＃号就是我们要传递的数据），创建一个隐藏的iframe，hash值可以当参数传递给www.qq.com/a.html#()，在www.qq.com/a.html中可以获取到hash值，根据它进行处理，然后在www.qq.com/a.html页面中创建一个隐藏iframe，把处理的结果当hash值进行传递，给wow.163.com/empty.html#()这样，在同一个域名下，wow.163.com/empty.html中的js可以通过parent.parent.location.hash = self.location.hash来改变hash值，这样就达到了跨域的目的。</p>
-<blockquote>
-<p>不建议使用，坑爹的思路</p>
-</blockquote>
-<h3 id="JSONP">JSONP</h3>
-<p>这种方式是目前开发时最常用的一种方式，利用动态创建script标签来实现跨域的目的，虽然浏览器有显示Js对象的访问，但是它没有限制Js文件的加载，任何域名下的Js文件都可以加载。</p>
-<p>对客户端而言，文件的加载其实就是发送一次GET请求，在服务端实现时，也就是处理这次的GET请求，并且响应，参数可以通过?来带走，俗称一波流。</p>
-<p>在客户端上对于script文件加载是否已经完毕的判断，IE是判断script标签的readystatechange属性，而其他浏览器是onload事件。</p>
-<blockquote>
-<p>突然感觉做移动端不考虑IE的兼容，果然是杠杠的，建议使用</p>
-</blockquote>
-<h3 id="HTML5_postMessage">HTML5 postMessage</h3>
-<p>主要是利用window.postMessage来发送消息，监听window.message来获取消息，判断origin可以判断消息来源，data获取消息内容，soucre来引用发送方的window对象引用。</p>
-<p>www.b.com/b.html发送消息给www.a.com/a.html</p>
-<pre><code><span class="built_in">window</span>.postMessage(<span class="string">'hello'</span>,<span class="string">'www.a.com/a.html'</span>)
-</code></pre><p>www.a.com/a.html获取消息</p>
-<pre><code><span class="built_in">window</span>.addEventLister(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span><span class="params">(event)</span></span>{
-    <span class="keyword">if</span>(event.origin === <span class="string">'http://b.com'</span>){
-        <span class="comment">//处理</span>
-    }
-})
-</code></pre><p>iframe的发送方式</p>
-<pre><code>contentWindow.postMessage(<span class="string">'data'</span>,<span class="string">'b.com'</span>)
-</code></pre><blockquote>
-<p>话不多说，移动端这种跨域方式也很常用（建议推荐使用）</p>
-</blockquote>
-<h3 id="HTML5_跨域头_XMLHttpRequest2">HTML5 跨域头 XMLHttpRequest2</h3>
-<p>如果是自己产品，又是做移动端可以使用，比上述任何方式都要方便，需要服务端支持响应时也要设置跨域头。</p>
-<p>如果服务器响应此头，浏览器会检查此头，它的值表示请求内容所允许的域名，也就是如果是*号，表示所有域都可以访问，如果这里是a.com，表示除了同源外，只允许来自a.com域的访问。</p>
-<pre><code>Access-<span class="keyword">Control</span>-Allow-Origin：＊
-</code></pre><p>如果需要读取cookie则需要设置它</p>
-<pre><code>Access-Control-Allow-Credentials:<span class="literal">true</span>
-</code></pre><p>设置允许跨域的请求类型</p>
-<pre><code>Access-Control-Allow-Method<span class="variable">s:POST</span>
-</code></pre><blockquote>
-<p>兼容性问题，某些版本的浏览器需要在open之后，设置xhr.withCredentials ＝ true;话不多说，建议推荐使用</p>
-</blockquote>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/page/5/">&laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/4/">4</a><a class="page-number" href="/archives/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/archives/page/7/">7</a><a class="page-number" href="/archives/page/8/">8</a><a class="page-number" href="/archives/page/9/">9</a><a class="extend next" rel="next" href="/archives/page/7/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/archives/page/5/">&laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/4/">4</a><a class="page-number" href="/archives/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/archives/page/7/">7</a><a class="page-number" href="/archives/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/10/">10</a><a class="extend next" rel="next" href="/archives/page/7/">Next &raquo;</a>
     </nav>
   
 

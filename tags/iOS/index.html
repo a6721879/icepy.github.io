@@ -168,6 +168,97 @@
 </nav>
       
   
+    <article id="post-iOS的网络编程NSURL" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/04/22/iOS的网络编程NSURL/" class="article-date">
+  	<time datetime="2015-04-22T04:37:14.000Z" itemprop="datePublished">4月 22 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/22/iOS的网络编程NSURL/">iOS的网络编程NSURL</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>如果只是说iOS中的URL系统，它的东西还不算比较多。但是，如果想用好它，可能还需要具备一些其他方面的知识，特别是多任务编程，比如GCD，NSOperation，NSOperationQueue，NSURLSession等等，而且苹果公司在后期还推了一个叫NSURLComponents的东西，这也是需要去学习的。</p>
+<p>一个简单的URL是这样发送出去的：</p>
+<pre><code><span class="built_in">NSString</span> *path = <span class="string">@"http://lcepy.github.io"</span>;
+<span class="built_in">NSURL</span> *url = [<span class="built_in">NSURL</span> URLWithString:path];
+<span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:url];
+NSURLResponse *response = <span class="literal">nil</span>;
+<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
+[<span class="built_in">NSURLConnection</span> sendSynchronousRequest:request returningResponse:&amp;response error:&amp;error];
+</code></pre><p>基本上如果要构造一个request需要先构造一个NSURL对象，然后通过NSURLConnection发送出去。NSURLRequest是一个不可变的对象，默认发送的是GET的请求，如果想要发送POST请求，可以用它可变的NSMutableURLRequest来支持POST请求，包括超时时间等等。</p>
+<p>关于NSURLConnection有三种方式可以发送请求，前面同步版本我们已经看过了，下面是异步和使用协议的方式：</p>
+<pre><code>[NSURLConnection sendAsynchronousRequest:request queue:nil completionHandler:^(NSURLResponse <span class="keyword">*</span>response, NSData <span class="keyword">*</span>data, NSError <span class="keyword">*</span>connectionError) {
+
+}];
+</code></pre><p>协议：</p>
+<pre><code><span class="comment">//实现NSURLConnectionDataDelegate协议</span>
+
+<span class="built_in">NSURLConnection</span> *connection = [<span class="built_in">NSURLConnection</span> connectionWithRequest:request delegate:<span class="keyword">self</span>];
+[connection start];
+
+<span class="comment">//常用的需要实现下面四种方法</span>
+
+-(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didFailWithError:(<span class="built_in">NSError</span> *)error
+{
+    <span class="comment">//请求超时，错误的时候</span>
+}
+
+-(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveResponse:(NSURLResponse *)response
+{
+    <span class="comment">//服务器第一次响应一个response的时候</span>
+}
+
+-(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveData:(NSData *)data
+{
+    <span class="comment">//传输数据</span>
+}
+
+-(<span class="keyword">void</span>)connectionDidFinishLoading:(<span class="built_in">NSURLConnection</span> *)connection
+{
+    <span class="comment">//完成的时候</span>
+}
+</code></pre><p>对于某些任务，比如下载图片，文件等等大数据的时候，可以使用一个临时会话来启动一个请求，也就是构造一个NSURLSession。</p>
+<pre><code>NSURLSessionConfiguration <span class="keyword">*</span>configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+NSURLSession <span class="keyword">*</span>session = [NSURLSession sessionWithConfiguration:configuration];
+NSURLSessionDataTask <span class="keyword">*</span>task = [session dataTaskWithRequest:request completionHandler:^(NSData <span class="keyword">*</span>data, NSURLResponse <span class="keyword">*</span>response, NSError <span class="keyword">*</span>error) {
+
+    //请求的结果
+}];
+[task resume];
+</code></pre><p>临时会话的好处是每一个都不是在主线程执行，写的代码量比较少，适合简单的任务。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-NSString" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -571,82 +662,6 @@ requ.bind(<span class="string">'click'</span>,<span class="function"><span class
 });
 </code></pre><p>发送这个request让Native进行拦截，协议名可以随便取，当然这个名字要取的有意义。</p>
 <p><a href="https://github.com/lcepy/geekObjective-C/tree/master/WebViewNativeToJavaScript" target="_blank" rel="external">例子查看</a></p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-iOS多线程GCD的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/07/iOS多线程GCD的使用/" class="article-date">
-  	<time datetime="2015-03-07T09:07:36.000Z" itemprop="datePublished">3月 7 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/07/iOS多线程GCD的使用/">iOS多线程GCD的使用</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在做iOS开发的时候线程的使用场景还是蛮多的，比如网络请求，比如大的数据处理等等。因为iOS只有一个主线程，而且这个主线程是让UIKit来使用的，如果我们不想让UI界面因为某些操作而出现卡顿，那么就必须把一些需要时间等待的操作，分配给其他的线程去处理，并且保证主线程不让UIKit之外的程序来使用。</p>
-<p>在UIKit中某些对象是可以在其他线程中正常工作的，比如UIImage，UIColor等。但是UIKit的大部分只能在主线程中正常工作的，明白这一点非常的重要。</p>
-<p>iOS中实现多任务编程，主要使用三种方式，1、NSThread 2、NSOperation 3、GCD；个人感觉GCD比较好使用，它主要是与block来配合使用的。比如在网络活动时，我想在<a href="http://wow.163.com" target="_blank" rel="external">http://wow.163.com</a>下载一张图片显示在UIImageView，但是下载的过程，如果不使用其他线程来下载图片数据，UI界面就会出现卡顿的感觉，用户体验非常不好。</p>
-<p>GCD主要可以使用的函数有几个：</p>
-<ul>
-<li>dispatch_queue_create(“name”,NULL) </li>
-<li>dispatch_async(dispatch_queue_t queue,^{})</li>
-<li>dispatch_get_main_queue</li>
-<li>dispatch_sync</li>
-<li>dispatch_get_global_queue</li>
-</ul>
-<p>dispatch_get_main_queue顾名思义，运行在主线程的Main queue，可以通过dispatch_get_main_queue获取。</p>
-<p>dispatch_async用于异步操作</p>
-<p>dispatch_sync用于同步操作</p>
-<p>dispatch_queue_create一般用来创建串行queue，而且只可能创建一个线程，顺序执行</p>
-<p>dispatch_get_global_queue 添加到主queue的可能会并行执行，也就意味着创建了多个线程</p>
-<p>回到例子上来说，如果我有两个界面，从其中一个界面点击一个按钮到另外一个界面中显示一张图片，而这个图片需要在网络上下载。如果这里不使用多线程，在视觉上得到的反馈，就有可能在第一个界面中出现卡顿，因为网络下载把主线程阻塞了。</p>
-<p>例子：</p>
-<pre><code>    <span class="comment">//创建一个请求</span>
-    <span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:<span class="keyword">self</span><span class="variable">.imageURL</span>];
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
-    NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request completionHandler:^(<span class="built_in">NSURL</span> *location, NSURLResponse *response, <span class="built_in">NSError</span> *error) {
-        <span class="keyword">if</span> (!error) {
-            <span class="keyword">if</span> ([request<span class="variable">.URL</span> isEqual:<span class="keyword">self</span><span class="variable">.imageURL</span>]) {
-                <span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageWithData:[NSData dataWithContentsOfURL:location]];
-                <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^{
-                    <span class="keyword">self</span><span class="variable">.image</span> = image;
-                });
-            }
-        }
-    }];
-    [task resume];    
-</code></pre><p>在这个例子中主要是利用了NSURLSession临时会话，NSURLSessionDownloadTask任务，NSURLSessionConfiguration配置与dispatch_async相结合的方式来处理的多线程。</p>
 
       
     </div>

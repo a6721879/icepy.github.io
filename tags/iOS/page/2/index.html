@@ -168,6 +168,82 @@
 </nav>
       
   
+    <article id="post-iOS多线程GCD的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/07/iOS多线程GCD的使用/" class="article-date">
+  	<time datetime="2015-03-07T09:07:36.000Z" itemprop="datePublished">3月 7 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/07/iOS多线程GCD的使用/">iOS多线程GCD的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在做iOS开发的时候线程的使用场景还是蛮多的，比如网络请求，比如大的数据处理等等。因为iOS只有一个主线程，而且这个主线程是让UIKit来使用的，如果我们不想让UI界面因为某些操作而出现卡顿，那么就必须把一些需要时间等待的操作，分配给其他的线程去处理，并且保证主线程不让UIKit之外的程序来使用。</p>
+<p>在UIKit中某些对象是可以在其他线程中正常工作的，比如UIImage，UIColor等。但是UIKit的大部分只能在主线程中正常工作的，明白这一点非常的重要。</p>
+<p>iOS中实现多任务编程，主要使用三种方式，1、NSThread 2、NSOperation 3、GCD；个人感觉GCD比较好使用，它主要是与block来配合使用的。比如在网络活动时，我想在<a href="http://wow.163.com" target="_blank" rel="external">http://wow.163.com</a>下载一张图片显示在UIImageView，但是下载的过程，如果不使用其他线程来下载图片数据，UI界面就会出现卡顿的感觉，用户体验非常不好。</p>
+<p>GCD主要可以使用的函数有几个：</p>
+<ul>
+<li>dispatch_queue_create(“name”,NULL) </li>
+<li>dispatch_async(dispatch_queue_t queue,^{})</li>
+<li>dispatch_get_main_queue</li>
+<li>dispatch_sync</li>
+<li>dispatch_get_global_queue</li>
+</ul>
+<p>dispatch_get_main_queue顾名思义，运行在主线程的Main queue，可以通过dispatch_get_main_queue获取。</p>
+<p>dispatch_async用于异步操作</p>
+<p>dispatch_sync用于同步操作</p>
+<p>dispatch_queue_create一般用来创建串行queue，而且只可能创建一个线程，顺序执行</p>
+<p>dispatch_get_global_queue 添加到主queue的可能会并行执行，也就意味着创建了多个线程</p>
+<p>回到例子上来说，如果我有两个界面，从其中一个界面点击一个按钮到另外一个界面中显示一张图片，而这个图片需要在网络上下载。如果这里不使用多线程，在视觉上得到的反馈，就有可能在第一个界面中出现卡顿，因为网络下载把主线程阻塞了。</p>
+<p>例子：</p>
+<pre><code>    <span class="comment">//创建一个请求</span>
+    <span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:<span class="keyword">self</span><span class="variable">.imageURL</span>];
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
+    NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request completionHandler:^(<span class="built_in">NSURL</span> *location, NSURLResponse *response, <span class="built_in">NSError</span> *error) {
+        <span class="keyword">if</span> (!error) {
+            <span class="keyword">if</span> ([request<span class="variable">.URL</span> isEqual:<span class="keyword">self</span><span class="variable">.imageURL</span>]) {
+                <span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageWithData:[NSData dataWithContentsOfURL:location]];
+                <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^{
+                    <span class="keyword">self</span><span class="variable">.image</span> = image;
+                });
+            }
+        }
+    }];
+    [task resume];    
+</code></pre><p>在这个例子中主要是利用了NSURLSession临时会话，NSURLSessionDownloadTask任务，NSURLSessionConfiguration配置与dispatch_async相结合的方式来处理的多线程。</p>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-iOS自动布局的理解" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -433,86 +509,6 @@ dropview.transform
 
 }</span>
 </code></pre><p>协议中有很多在某些情况下会非常有用，细节就要慢慢在学习中积累了。</p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-iOS的copy语法" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/05/iOS的copy语法/" class="article-date">
-  	<time datetime="2015-02-05T10:01:43.000Z" itemprop="datePublished">2月 5 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/05/iOS的copy语法/">iOS的copy语法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这是一个关于深拷贝和浅拷贝的问题，OC设计这个语法的目的就是创建一个副本，修改副本的时候不会改变原来的对象。</p>
-<blockquote>
-<p>对于这两个问题可以这么理解，浅拷贝也就是把指针赋值，大家用的都是地址。而深拷贝，则是创建了一个新的空间，虽然内容可能是一样的，但是大家使用的空间，地址都是不同的。</p>
-</blockquote>
-<p>在OC中可以使用copy或者mutableCopy语法来实现深拷贝和浅拷贝，要求实现NSCopying或者NSMutableCopying协议。</p>
-<p>copy和mutableCopy是有区别的，区别在于NSString和NSMutableString的区别，如果使用NSString调用copy创建出来的新对象那就是NSString，如果是使用NSString的mutableCopy创建出来的新对象那就是NSMutableString。前者是不可变的，后者是可变的，它的空间不是固定的。</p>
-<pre><code>NSString *<span class="typename">string</span> = [[NSString alloc] initWithFormat:@<span class="string">"123"</span>,<span class="number">10</span>];
-
-NSMutableString *str = [<span class="typename">string</span> mutableCopy];
-
-[<span class="typename">string</span> <span class="keyword">release</span>];
-[str <span class="keyword">release</span>];
-</code></pre><p>遵守上面所说的创建一个副本，修改副本的时候不会改变原来的对象，其实这里可以看内存地址就可以看出来，它们是不同的。</p>
-<pre><code><span class="attr_selector">[str appendString:@"123"]</span>;
-
-<span class="function">NSlog</span>(<span class="at_rule">@<span class="string">"%@"</span>,string);</span>
-<span class="function">NSlog</span>(<span class="at_rule">@<span class="string">"%@"</span>,str);</span>
-</code></pre><p>从打印的结果可以很明显的看的出来，从内存的角度上来看，因为是新对象，所以它的引用计数是加1的，所以copy或者mutableCopy都需要release。</p>
-<p>如果使用copy语法，因为有一个机制不可变的元素，所以OC就直接把原来的对象返回，并且引用计数加1，于是这就是浅拷贝了，而mutableCopy就是深拷贝了。</p>
-<p>如果在OC中反过来又是什么样的情况呢？比如使用NSMutableString调用它的copy方法，会产生什么样的情况呢？</p>
-<pre><code>NSMutableString *<span class="built_in">string</span> = [[NSMutableString alloc]stringWithForma<span class="variable">t:</span>@<span class="string">"123"</span>,<span class="number">10</span>];
-NSString *str = [<span class="built_in">string</span> <span class="built_in">copy</span>];
-</code></pre><p>如果从可变成不可变使用的copy却是一个深拷贝，产生一个新的对象，它的引用计数为1。如果可变的使用mutableCopy产生一个对象，它也是深拷贝，产生一个新对象，引用计数为1，所以都需要release。</p>
-<blockquote>
-<p>总结一下，只有一种情况是浅拷贝，不可变对象调用它的copy方法为浅拷贝，再原对象上计数加1.而其他的不管是调用copy还是mutableCopy都是深拷贝，产生一个新的对象，计数为1。</p>
-</blockquote>
-<h3 id="如何自定义的类提供copy或者mutableCopy">如何自定义的类提供copy或者mutableCopy</h3>
-<p>如果要自己实现自定义对象的copy或者mutableCopy语法，首先要实现NSCopying或者NSMutableCopying协议，它们的原理都是一样的，按NSCopying来讲解一个例子。</p>
-<pre><code>-(<span class="property">id</span>)copyWithZone:(NSZone *)zone
-{
-    Pser *<span class="keyword">copy</span> = [[[self <span class="type">class</span>] allocWithZone:zone] init];
-    <span class="keyword">copy</span>.<span class="property">name</span> = _name;
-<span class="command">    return</span> <span class="keyword">copy</span>;
-}
-</code></pre><p>主要是实现copyWithZone方法，系统会为copy分配一个空间，以存储创建出来的副本。它不要求在copyWithZone内部进行内存管理，因为外部还需要使用。一般来说，使用copy还需要注意一些问题，也就是父子的问题。假设父类有实现copyWithZone方法，一般来说在子类中需要覆盖一下，然后调用它的父类的copyWithZone。而且在需要使用self class来实例对象，谁使用self就是谁，这样才能说子类调用之后，接收的还是子类，而不是父类。</p>
-<pre><code> <span class="title">[super copyWithZone:zone]</span><span class="comment">;</span>
-</code></pre><p>然后再进一步的操作。</p>
-<p>NSMutableCopying的操作步骤是一模一样的，注意的问题也是如同。</p>
 
       
     </div>
