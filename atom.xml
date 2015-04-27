@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://icepy.github.io/"/>
-  <updated>2015-04-26T14:46:57.985Z</updated>
+  <updated>2015-04-27T03:58:10.224Z</updated>
   <id>http://icepy.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://icepy.github.io/2015/04/22/iOS%E7%9A%84%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8BNSURL/"/>
     <id>http://icepy.github.io/2015/04/22/iOS的网络编程NSURL/</id>
     <published>2015-04-22T04:37:14.000Z</published>
-    <updated>2015-04-26T14:46:17.000Z</updated>
+    <updated>2015-04-27T03:57:53.000Z</updated>
     <content type="html"><![CDATA[<p>如果只是说iOS中的URL系统，它的东西还不算比较多。但是，如果想用好它，可能还需要具备一些其他方面的知识，特别是多任务编程，比如GCD，NSOperation，NSOperationQueue，NSURLSession等等，而且苹果公司在后期还推了一个叫NSURLComponents的东西，这也是需要去学习的。</p>
 <p>一个简单的URL是这样发送出去的：</p>
 <pre><code><span class="built_in">NSString</span> *path = <span class="string">@"http://lcepy.github.io"</span>;
@@ -69,6 +69,17 @@ NSURLSessionDataTask <span class="keyword">*</span>task = [session dataTaskWithR
 }];
 [task resume];
 </code></pre><p>临时会话的好处是每一个都不是在主线程执行，写的代码量比较少，适合简单的任务。</p>
+<p><strong>参考资料</strong></p>
+<ul>
+<li><a href="http://nshipster.cn/nsurl/" target="_blank" rel="external">NSURL/NSURLComponents</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSURLRequest_Class/" target="_blank" rel="external">NSURLRequest</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSURL_Class/index.html" target="_blank" rel="external">NSURL</a></li>
+<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/Cocoa/Reference/Foundation/Classes/NSURLConnection_Class/index.html" target="_blank" rel="external">NSURLConnection</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/" target="_blank" rel="external">NSURLSession</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSURLResponse_Class/index.html" target="_blank" rel="external">NSURLResponse</a></li>
+<li><a href="http://objccn.io/issue-5-4/" target="_blank" rel="external">从 NSURLConnection 到 NSURLSession</a></li>
+<li><a href="http://ubluesky.com/archives/55" target="_blank" rel="external">NSURL详解</a></li>
+</ul>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>如果只是说iOS中的URL系统，它的东西还不算比较多。但是，如果想用好它，可能还需要具备一些其他方面的知识，特别是多任务编程，比如GCD，NSOperation，NSOperationQueue，NSURLSession等等，而且苹果公司在后期还推了一个叫NSURLComp]]>
