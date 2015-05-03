@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://icepy.github.io/"/>
-  <updated>2015-04-27T03:58:10.224Z</updated>
+  <updated>2015-05-03T07:38:05.254Z</updated>
   <id>http://icepy.github.io/</id>
   
   <author>
@@ -13,6 +13,75 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[好用的WebKit.framework]]></title>
+    <link href="http://icepy.github.io/2015/05/01/%E5%A5%BD%E7%94%A8%E7%9A%84WebKit-framework/"/>
+    <id>http://icepy.github.io/2015/05/01/好用的WebKit-framework/</id>
+    <published>2015-05-01T06:25:36.000Z</published>
+    <updated>2015-05-03T07:37:26.000Z</updated>
+    <content type="html"><![CDATA[<p>WebKit是iOS8推出的一个用于替代UIWebView的框架，解决了很多UIWebView的问题，比如释放内存，各种稀奇古怪的bug，而且还内置了手势的处理，一句话：好用。</p>
+<p>注意：<strong>2015年4月更新的苹果审核文档中明确标识，必须要用WebKit替换UIWebView，不然审核拒绝。</strong></p>
+<p>在使用WebKit框架的过程中，自己也遇到了一些问题，有些解决了，有些还未解决。</p>
+<ul>
+<li>WebKit目前还未能在storyboard中直接使用，需要用代码的方式创建，手动添加约束</li>
+<li>对于某些页面如果设置了overflow-x，这可能引起scrollView的contentSize的变化，进一步影响WKWebView的内置手势，swipe返回失效</li>
+<li>目前还未找到怎么处理NSURLCache的问题，也就是页面的缓存机制，看样子好像要自己实现</li>
+</ul>
+<p>如何创建一个WKWebView？首先要在link中引入WebKit.framework，然后使用代码的方式：</p>
+<pre><code>-(<span class="constant">WKWebView</span> *)<span class="constant">WKWebPageView</span>
+{
+    <span class="keyword">if</span> (!_WKWebPageView) {
+        _WKWebPageView = [[<span class="constant">WKWebView</span> alloc] <span class="symbol">initWithFrame:</span><span class="keyword">self</span>.view.bounds];
+        _WKWebPageView.navigationDelegate = <span class="keyword">self</span>;
+    }
+    <span class="keyword">return</span> _WKWebPageView;
+}
+</code></pre><p>WKWebView主要需要实现两个协议WKNavigationDelegate和WKUIDelegate，前一个用于一个页面的加载状态，包括第一次响应成功，加载中，加载完成，加载错误等，后面一个我个人感觉有点意思，主要用于改变UI界面，比如客户端JavaScript使用了一个alert，这个协议可以捕获到，然后使用原生的控件来替代。</p>
+<p>WebKit框架还提供了一个任务配置类WKWebViewConfiguration，跟NSURLSessionConfiguration的使用方式类似,可以重新初始化WKWebView的一些配置。</p>
+<p>WKNavigationDelegate协议，我主要使用了三个来处理我的应用，加载中，加载完成，加载错误的处理：</p>
+<pre><code><span class="pp">-<span class="params">(void)</span>webView:<span class="params">(<span class="variable">WKWebView</span> *)</span>webView didStartProvisionalNavigation:<span class="params">(<span class="variable">WKNavigation</span> *)</span>navigation
+{
+
+}
+
+-<span class="params">(void)</span>webView:<span class="params">(<span class="variable">WKWebView</span> *)</span>webView didFinishNavigation:<span class="params">(<span class="variable">WKNavigation</span> *)</span>navigation
+{
+
+}
+
+-<span class="params">(void)</span>webView:<span class="params">(<span class="variable">WKWebView</span> *)</span>webView didFailProvisionalNavigation:<span class="params">(<span class="variable">WKNavigation</span> *)</span>navigation withError:<span class="params">(<span class="variable">NSError</span> *)</span>error
+{
+
+}</span>
+</code></pre><p>另外一些属性我用KVO来监听：</p>
+<pre><code>[<span class="keyword">self</span>.<span class="constant">WKWebPageView</span> <span class="symbol">addObserver:</span><span class="keyword">self</span> <span class="symbol">forKeyPath:</span>@<span class="string">"estimatedProgress"</span> <span class="symbol">options:</span><span class="constant">NSKeyValueObservingOptionNew</span> <span class="symbol">context:</span><span class="keyword">nil</span>];
+[<span class="keyword">self</span>.<span class="constant">WKWebPageView</span> <span class="symbol">addObserver:</span><span class="keyword">self</span> <span class="symbol">forKeyPath:</span>@<span class="string">"title"</span> <span class="symbol">options:</span><span class="constant">NSKeyValueObservingOptionNew</span> <span class="symbol">context:</span><span class="keyword">nil</span>];
+[<span class="keyword">self</span>.<span class="constant">WKWebPageView</span> <span class="symbol">addObserver:</span><span class="keyword">self</span> <span class="symbol">forKeyPath:</span>@<span class="string">"URL"</span> <span class="symbol">options:</span><span class="constant">NSKeyValueObservingOptionNew</span> <span class="symbol">context:</span><span class="keyword">nil</span>];
+[<span class="keyword">self</span>.<span class="constant">WKWebPageView</span> <span class="symbol">addObserver:</span><span class="keyword">self</span> <span class="symbol">forKeyPath:</span>@<span class="string">"canGoBack"</span> <span class="symbol">options:</span><span class="constant">NSKeyValueObservingOptionNew</span> <span class="symbol">context:</span><span class="keyword">nil</span>];
+</code></pre><p>它们分别是，页面的加载进度，页面的标题，页面的URL，页面是否回退过</p>
+<p>WKWebView默认是没有开启内置手势的，可以通过allowsBackForwardNavigationGestures来设置</p>
+<p>与JavaScript的交互，我目前主要使用[self.WKWebPageView evaluateJavaScript:&lt;#(NSString <em>)#&gt; completionHandler:&lt;#^(id, NSError </em>)completionHandler#&gt;]来动态改变页面加载完成之后的css样式，还有WKUserScript <em>script = [[WKUserScript alloc] initWithSource:&lt;#(NSString </em>)#&gt; injectionTime:&lt;#(WKUserScriptInjectionTime)#&gt; forMainFrameOnly:&lt;#(BOOL)#&gt;]来创建脚本，它可以明确指定加载前后注入的方式。</p>
+<p><strong>注明：上述的两种创建脚本的方式都是单方向的</strong></p>
+<p>如果我们想互相调用，那么就要实现WKScriptMessageHandler协议了，具体的使用方式可以参考下面给出的的参考资料。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="http://nshipster.cn/wkwebkit/" target="_blank" rel="external">WKWebView-NSHipster</a></li>
+<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/WebKit/Reference/WKScriptMessageHandler_Ref/index.html" target="_blank" rel="external">WKScriptMessageHandler</a></li>
+<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/WebKit/Reference/WKWebView_Ref/index.html" target="_blank" rel="external">WKWebView</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKWebViewConfiguration_Ref/index.html" target="_blank" rel="external">WKWebViewConfiguration</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKUIDelegate_Ref/index.html" target="_blank" rel="external">WKUIDelegate</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKNavigationDelegate_Ref/index.html" target="_blank" rel="external">WKNavigationDelegate</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>WebKit是iOS8推出的一个用于替代UIWebView的框架，解决了很多UIWebView的问题，比如释放内存，各种稀奇古怪的bug，而且还内置了手势的处理，一句话：好用。</p>
+<p>注意：<strong>2015年4月更新的苹果审核文档中明确标识，必须要用WebK]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[iOS的网络编程NSURL]]></title>
@@ -1283,37 +1352,6 @@ NSString *str = [<span class="built_in">string</span> <span class="built_in">cop
     </summary>
     
       <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[复习JavaScript十一之理解内存管理]]></title>
-    <link href="http://icepy.github.io/2015/02/04/%E5%A4%8D%E4%B9%A0JavaScript%E5%8D%81%E4%B8%80%E4%B9%8B%E7%90%86%E8%A7%A3%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
-    <id>http://icepy.github.io/2015/02/04/复习JavaScript十一之理解内存管理/</id>
-    <published>2015-02-04T10:53:09.000Z</published>
-    <updated>2015-02-24T11:47:32.000Z</updated>
-    <content type="html"><![CDATA[<p>一般来说内存管理主要有这么几种方式，引用计数和标记，而JavaScript采用的就是标记管理的方式。Js的内存管理是自动的，但是并不是说执行完后立马销毁，而是有时间周期性，相隔一段时间执行一下垃圾回收，把没有引用的内存全部销毁。</p>
-<p>OC中采用的是引用计数来手动管理内存，这样的方式比较好，可以让开发者自己来管理。当然也有不好的地方，如果遗忘了释放，很可能引起应用的崩溃。</p>
-<p>总体来看在IE中因为COM组件的原因，可能会发生循环引用的问题，这个问题在引用计数的内存管理都会遇见。所谓的循环引用是指在对象A中包含了一个指向B的指针，然后再对象B中包含一个指向A的指针，于是悲剧了。</p>
-<pre><code>var element = document.getElementById(<span class="string">'doc'</span>);
-var <span class="keyword">my</span> = {};
-<span class="keyword">my</span>.element = element;
-element.<span class="keyword">my</span> = <span class="keyword">my</span>;
-</code></pre><p>大家都引用，于是，可想而知。要避免这种问题，一定要在不使用的时候my.element = null，把它断开。</p>
-<p>那么，其他浏览器呢？还是标记清理的机制，比如一个函数的变量，在进入环境时标记上“进入环境”，执行完之后标记上“离开环境”，然后等待系统来释放。</p>
-<p>IE有一个手动释放的方法，window.CollectGarbage，调用它就立马释放已经标记离开环境的变量，不过很多文章都不建议这样做。</p>
-<p>那么一般都这样做，引用类型的释放</p>
-<pre><code><span class="keyword">var</span> my = {};
-<span class="comment">//使用完毕之后</span>
-my = <span class="literal">null</span>;
-</code></pre><p>让my脱离执行环境，标记上已经离开环境，然后等待系统执行垃圾回收，释放内存。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>一般来说内存管理主要有这么几种方式，引用计数和标记，而JavaScript采用的就是标记管理的方式。Js的内存管理是自动的，但是并不是说执行完后立马销毁，而是有时间周期性，相隔一段时间执行一下垃圾回收，把没有引用的内存全部销毁。</p>
-<p>OC中采用的是引用计数来手动管]]>
-    </summary>
-    
-      <category term="JavaScript" scheme="http://icepy.github.io/tags/JavaScript/"/>
     
   </entry>
   

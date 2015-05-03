@@ -108,7 +108,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 20.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 18.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 20.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 15.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.50px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 17.50px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.50px;">经验之谈</a>
 					</div>
 				</section>
 				
@@ -167,6 +167,75 @@
 	</div>
 </nav>
       
+  
+    <article id="post-django模型使用的一些心得" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/11/14/django模型使用的一些心得/" class="article-date">
+  	<time datetime="2014-11-14T12:30:31.000Z" itemprop="datePublished">11月 14 2014</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/">django</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/14/django模型使用的一些心得/">django模型使用的一些心得</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>近很一直在学习django，因为我需要使用它为自己的项目写一个前台页面和一个后台服务。它是一个关于咖啡的邮件订阅社区，既然有服务，自然需要数据库层的支持。这是一个很好的开始，学习django让我了解到python开发web应用真的非常快速，但是也有一个很明显的缺点。那就是国内，对django社区的支持度非常不好，这或许跟国内python的有关，不过也不要紧，学习就是这样，要啃难而上。</p>
+<p>说说在django中模型，对应的数据库层，也就是意味着django帮助我们完成了对数据库的访问，操作，通过它的模型类。</p>
+<blockquote>
+<p>django-admin.py startapp sendcloud</p>
+</blockquote>
+<p>通过上述的命令，我们可以完成一个app模块，这个模块中带有views.py models.py test.py，而models.py文件中，就是我们完成模型的一个最主要的文件。</p>
+<blockquote>
+<p>from django.db import models</p>
+</blockquote>
+<p>模型类，都需要继承自django.db.models类。通过它与manage.py来完成初始化等等动作。关于manage.py的命令，未来有时间，我会写写关于它的心得。</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">WeeklySyncList</span><span class="params">(models.Model)</span>:</span>
+    <span class="comment">#do something</span>
+    <span class="keyword">pass</span>
+</code></pre><p>一个模型类对于数据库层中的一个表，在我们定义好模型类之后，可以在命令行中输入：</p>
+<blockquote>
+<p>python manage.py sqlall sendcloud</p>
+</blockquote>
+<p>来完成对创建语法的查看以及错误信息的查看，准确没有错误之后，可以输入：</p>
+<blockquote>
+<p>python manage.py syncdb</p>
+</blockquote>
+<p>来初始数据库，django会帮助我们完成数据库层面的操作。</p>
+
+        
+          <p class="article-more-link">
+            <a href="/2014/11/14/django模型使用的一些心得/#more">more >></a>
+          </p>
+        
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
   
     <article id="post-携程邮轮开发部django分享" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -380,60 +449,6 @@
         
           <p class="article-more-link">
             <a href="/2014/11/14/在实际工作中node开发的一些见解与调试/#more">more >></a>
-          </p>
-        
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-对于中小项目我该如何组织我的代码" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/对于中小项目我该如何组织我的代码/" class="article-date">
-  	<time datetime="2014-11-14T11:19:11.000Z" itemprop="datePublished">11月 14 2014</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/经验之谈/">经验之谈</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/对于中小项目我该如何组织我的代码/">对于中小项目我该如何组织我的代码</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>从三个角度来分析</p>
-<ol>
-<li>我需要什么（need）</li>
-<li>我为什么需要这些（why this）</li>
-<li>我能做些什么（what can）</li>
-</ol>
-<p>在这里讨论的一个命题是为了一个不大不小的项目来组织一套可以应用的移动开发流程，能否达到预期的目标，能否使用于中小公司，以及业务不是企业级复杂的逻辑。对于现在越来越工程化的前端体系，组织好它，我可能需要很多额外的工具，来辅助我效率的开发。</p>
-<p>
-        
-          <p class="article-more-link">
-            <a href="/2014/11/14/对于中小项目我该如何组织我的代码/#more">more >></a>
           </p>
         
       

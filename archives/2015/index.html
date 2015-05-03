@@ -108,7 +108,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 20.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 18.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 20.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 15.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.50px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 17.50px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.50px;">经验之谈</a>
 					</div>
 				</section>
 				
@@ -167,6 +167,101 @@
 	</div>
 </nav>
       
+  
+    <article id="post-好用的WebKit-framework" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/05/01/好用的WebKit-framework/" class="article-date">
+  	<time datetime="2015-05-01T06:25:36.000Z" itemprop="datePublished">5月 1 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/01/好用的WebKit-framework/">好用的WebKit.framework</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>WebKit是iOS8推出的一个用于替代UIWebView的框架，解决了很多UIWebView的问题，比如释放内存，各种稀奇古怪的bug，而且还内置了手势的处理，一句话：好用。</p>
+<p>注意：<strong>2015年4月更新的苹果审核文档中明确标识，必须要用WebKit替换UIWebView，不然审核拒绝。</strong></p>
+<p>在使用WebKit框架的过程中，自己也遇到了一些问题，有些解决了，有些还未解决。</p>
+<ul>
+<li>WebKit目前还未能在storyboard中直接使用，需要用代码的方式创建，手动添加约束</li>
+<li>对于某些页面如果设置了overflow-x，这可能引起scrollView的contentSize的变化，进一步影响WKWebView的内置手势，swipe返回失效</li>
+<li>目前还未找到怎么处理NSURLCache的问题，也就是页面的缓存机制，看样子好像要自己实现</li>
+</ul>
+<p>如何创建一个WKWebView？首先要在link中引入WebKit.framework，然后使用代码的方式：</p>
+<pre><code>-(<span class="constant">WKWebView</span> *)<span class="constant">WKWebPageView</span>
+{
+    <span class="keyword">if</span> (!_WKWebPageView) {
+        _WKWebPageView = [[<span class="constant">WKWebView</span> alloc] <span class="symbol">initWithFrame:</span><span class="keyword">self</span>.view.bounds];
+        _WKWebPageView.navigationDelegate = <span class="keyword">self</span>;
+    }
+    <span class="keyword">return</span> _WKWebPageView;
+}
+</code></pre><p>WKWebView主要需要实现两个协议WKNavigationDelegate和WKUIDelegate，前一个用于一个页面的加载状态，包括第一次响应成功，加载中，加载完成，加载错误等，后面一个我个人感觉有点意思，主要用于改变UI界面，比如客户端JavaScript使用了一个alert，这个协议可以捕获到，然后使用原生的控件来替代。</p>
+<p>WebKit框架还提供了一个任务配置类WKWebViewConfiguration，跟NSURLSessionConfiguration的使用方式类似,可以重新初始化WKWebView的一些配置。</p>
+<p>WKNavigationDelegate协议，我主要使用了三个来处理我的应用，加载中，加载完成，加载错误的处理：</p>
+<pre><code><span class="pp">-<span class="params">(void)</span>webView:<span class="params">(<span class="variable">WKWebView</span> *)</span>webView didStartProvisionalNavigation:<span class="params">(<span class="variable">WKNavigation</span> *)</span>navigation
+{
+
+}
+
+-<span class="params">(void)</span>webView:<span class="params">(<span class="variable">WKWebView</span> *)</span>webView didFinishNavigation:<span class="params">(<span class="variable">WKNavigation</span> *)</span>navigation
+{
+
+}
+
+-<span class="params">(void)</span>webView:<span class="params">(<span class="variable">WKWebView</span> *)</span>webView didFailProvisionalNavigation:<span class="params">(<span class="variable">WKNavigation</span> *)</span>navigation withError:<span class="params">(<span class="variable">NSError</span> *)</span>error
+{
+
+}</span>
+</code></pre><p>另外一些属性我用KVO来监听：</p>
+<pre><code>[<span class="keyword">self</span>.<span class="constant">WKWebPageView</span> <span class="symbol">addObserver:</span><span class="keyword">self</span> <span class="symbol">forKeyPath:</span>@<span class="string">"estimatedProgress"</span> <span class="symbol">options:</span><span class="constant">NSKeyValueObservingOptionNew</span> <span class="symbol">context:</span><span class="keyword">nil</span>];
+[<span class="keyword">self</span>.<span class="constant">WKWebPageView</span> <span class="symbol">addObserver:</span><span class="keyword">self</span> <span class="symbol">forKeyPath:</span>@<span class="string">"title"</span> <span class="symbol">options:</span><span class="constant">NSKeyValueObservingOptionNew</span> <span class="symbol">context:</span><span class="keyword">nil</span>];
+[<span class="keyword">self</span>.<span class="constant">WKWebPageView</span> <span class="symbol">addObserver:</span><span class="keyword">self</span> <span class="symbol">forKeyPath:</span>@<span class="string">"URL"</span> <span class="symbol">options:</span><span class="constant">NSKeyValueObservingOptionNew</span> <span class="symbol">context:</span><span class="keyword">nil</span>];
+[<span class="keyword">self</span>.<span class="constant">WKWebPageView</span> <span class="symbol">addObserver:</span><span class="keyword">self</span> <span class="symbol">forKeyPath:</span>@<span class="string">"canGoBack"</span> <span class="symbol">options:</span><span class="constant">NSKeyValueObservingOptionNew</span> <span class="symbol">context:</span><span class="keyword">nil</span>];
+</code></pre><p>它们分别是，页面的加载进度，页面的标题，页面的URL，页面是否回退过</p>
+<p>WKWebView默认是没有开启内置手势的，可以通过allowsBackForwardNavigationGestures来设置</p>
+<p>与JavaScript的交互，我目前主要使用[self.WKWebPageView evaluateJavaScript:&lt;#(NSString <em>)#&gt; completionHandler:&lt;#^(id, NSError </em>)completionHandler#&gt;]来动态改变页面加载完成之后的css样式，还有WKUserScript <em>script = [[WKUserScript alloc] initWithSource:&lt;#(NSString </em>)#&gt; injectionTime:&lt;#(WKUserScriptInjectionTime)#&gt; forMainFrameOnly:&lt;#(BOOL)#&gt;]来创建脚本，它可以明确指定加载前后注入的方式。</p>
+<p><strong>注明：上述的两种创建脚本的方式都是单方向的</strong></p>
+<p>如果我们想互相调用，那么就要实现WKScriptMessageHandler协议了，具体的使用方式可以参考下面给出的的参考资料。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="http://nshipster.cn/wkwebkit/" target="_blank" rel="external">WKWebView-NSHipster</a></li>
+<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/WebKit/Reference/WKScriptMessageHandler_Ref/index.html" target="_blank" rel="external">WKScriptMessageHandler</a></li>
+<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/WebKit/Reference/WKWebView_Ref/index.html" target="_blank" rel="external">WKWebView</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKWebViewConfiguration_Ref/index.html" target="_blank" rel="external">WKWebViewConfiguration</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKUIDelegate_Ref/index.html" target="_blank" rel="external">WKUIDelegate</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKNavigationDelegate_Ref/index.html" target="_blank" rel="external">WKNavigationDelegate</a></li>
+</ul>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
   
     <article id="post-iOS的网络编程NSURL" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -602,56 +697,9 @@ NSLog(@<span class="string">"%@"</span>,str1);
 
 
   
-    <article id="post-陀螺" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/19/陀螺/" class="article-date">
-  	<time datetime="2015-03-19T08:25:26.000Z" itemprop="datePublished">3月 19 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/19/陀螺/">陀螺</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在生活中遇到了很多挫折，一个无所事事的状态，其实非常的糟糕，为什么这么说，因为人一旦无所谓，就会无所畏惧，就会混乱。也许走入社会一直以来，都非常的顺利，没有经历这些挫折，根本无法了解这个社会的残酷。</p>
-<p>最近一直喜欢听李健的歌，特别是这首《陀螺》，很真实的写照。人，应该要学会陀螺的心态，把一些负面的情绪，心态，全部转走。为什么？因为只有这样，才能调整好自己，用一个很轻松的状态去面对自己。陀螺，其实它一直在旋转，就好比，它会面对很多不断接触的东西，喜怒哀乐，而且一直停不下来。它要在沉默中转，在孤独中转，在欢笑中转，在泪水中转。</p>
-<p>如果我能陀螺的心，那该多好，但我还是我，一个非常任性的人。喜欢了，特别的喜欢。不喜欢了，特别的不喜欢。这样的对错是非观念非常强烈的一个人，在社会中，摸爬滚打，是非常不利的。我的情绪都表现在脸上，无形中，或许得罪或者让别人感觉到难堪。但是，如果我有一个陀螺的心，我能很从容，荣辱不惊的面对这些，迟早要转过这一页，不是么？</p>
-<p>李健不愧是一个用诗唱歌的人，这样的情绪，直透人心。是非曲折，道理谁都会明白，但是往往处理起来，却又很意想不到。时至今日，我该有一个陀螺的心了，不能再像以前那样，如此任性。虽然这些年里，欢笑，泪水相交织，度过了人生，很重要的一个时刻。从一个平平无奇的过路人，到了一个人爱编程，分享，写作的程序员，其实背后的付出，真的是，可以用‘心酸’二字。真正的摸爬滚打的真谛，我还未触及，因为这一路，有人帮助，有人提携，有人教授。于是，有了一次，比较真正的面对自我的过程。来到北京，去面试，去找工作。</p>
-<p>人是一个非常复杂的情绪化的动物，人也是一个很有欲望的动物。但是，为什么说，欲望能促进进步呢？很可能，欲望会转化为动力，动力就能推动人自身的进步。我有欲望吗？其实是有的，但是这样的欲望，又有些不切实际。时间，就像是一把锁，已经把过去的锁住了。我们没法改变时间，也没法去打开这把锁。而我欲望，这看来，确实很傻逼。</p>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/2015/page/2/">2</a><a class="page-number" href="/archives/2015/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2015/page/7/">7</a><a class="extend next" rel="next" href="/archives/2015/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/archives/2015/page/2/">2</a><a class="page-number" href="/archives/2015/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2015/page/8/">8</a><a class="extend next" rel="next" href="/archives/2015/page/2/">Next &raquo;</a>
     </nav>
   
 
