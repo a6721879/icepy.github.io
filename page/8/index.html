@@ -108,7 +108,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 20.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 15.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.50px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 17.50px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.50px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
 					</div>
 				</section>
 				
@@ -167,6 +167,67 @@
 	</div>
 </nav>
       
+  
+    <article id="post-this与prototype的区别" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/05/this与prototype的区别/" class="article-date">
+  	<time datetime="2015-01-05T11:15:53.000Z" itemprop="datePublished">1月 5 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/05/this与prototype的区别/">this与prototype的区别</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>this可以访问私有成员（用var声明的变量）私有方法（直接function或者内部），prototype无法访问</li>
+<li>Js首先查找自身的静态属性，方法，再查找上下文中可以访问的属性或方法，最后才查找prototype，谁先谁优先</li>
+<li>prototype比this要节约分配的空间，因为prototype有一个指向父类的指向，而this，每次实例化时都要分配存储空间</li>
+</ul>
+<pre><code>    <span class="keyword">var</span> Copy = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        <span class="keyword">var</span> d = <span class="string">"123"</span>;
+        <span class="keyword">this</span>._log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="built_in">console</span>.log(d);
+        }
+        <span class="keyword">this</span>.log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="built_in">console</span>.log(<span class="string">'yes'</span>);
+        }
+    }
+    Copy.prototype.log = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        <span class="built_in">console</span>.log(<span class="string">'no'</span>);
+    }
+    <span class="keyword">var</span> c = <span class="keyword">new</span> Copy();
+    c.log();
+</code></pre>
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
   
     <article id="post-iOS学习第一个月心得与总结" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -413,64 +474,6 @@ hexo <span class="keyword">server</span></span>
         
           <p class="article-more-link">
             <a href="/2014/11/14/正则的一些理解/#more">more >></a>
-          </p>
-        
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-关于django中CSRF开启的问题" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/关于django中CSRF开启的问题/" class="article-date">
-  	<time datetime="2014-11-14T12:33:12.000Z" itemprop="datePublished">11月 14 2014</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/">django</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/关于django中CSRF开启的问题/">关于django中CSRF开启的问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="django_处理CSRF机制保护下的POST表单提交">django 处理CSRF机制保护下的POST表单提交</h2>
-<p>昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后解决了。其实在解决这个问题之前，我们先要了解一下，CSRF到底是什么东东，为什么django提交一个POST表单这么困难呢。</p>
-<p><a href="http://baike.baidu.com/link?url=OnI0sPQAHpQHhtxWSXvQFhN3kJWI3CU_rP3Fo7MqnPY3rTdhUPpuca-3lzJ651LdMI7ouoLvdnnihhojFyKtva" target="_blank" rel="external">CSRF 是什么</a></p>
-<p><a href="https://docs.djangoproject.com/en/1.5/ref/contrib/csrf/" target="_blank" rel="external">django document CSRF</a></p>
-<p>原来CSRF是为了防止跨站请求伪造用的，当我明白了这个解释之后，我开始找寻django document上如何开启CSRF。</p>
-<p><strong>Add the middleware ‘django.middleware.csrf.CsrfViewMiddleware’ to your list of middleware classes, MIDDLEWARE_CLASSES. (It should come before any view middleware that assume that CSRF attacks have been dealt with.)</strong></p>
-<p>那我在想，如果我把django.middleware.csrf.CsrfViewMiddleware注释掉，是不是就可以不开启CSRF来提交POST表单，人们常说实践是检验真理的唯一标准，试验一下，原来是可以的。但是这并没有解决，我想解决的问题，于是我又把这个中间件，重新写在了MIDDLEWARE_CLASSES上。</p>
-<p>从官方的解释上来看，只要在MIDDLEWARE_CLASSES上加django.middleware.csrf.CsrfViewMiddleware就开启了CSRF机制。</p>
-<p>现在我需要在模板中加入一个tag ｛%csrf_token%｝，来存放一个隐藏的token input。</p>
-<p><strong>In the corresponding view functions, ensure that the ‘django.core.context_processors.csrf’ context processor is being used. Usually, this can be done in one of two ways:</strong></p>
-<p>从这里的解释来看，我还需要django.core.context_processors.csrf，于是我导入这个模块from django.core.context_processors import csrf，运行一下貌似，还不行，接着往下看。我发现django的解释，这里可以用两种方式来处理，最后响应的response，而且django还说了，POST表单提交不要跨链接。</p>
-<p>
-        
-          <p class="article-more-link">
-            <a href="/2014/11/14/关于django中CSRF开启的问题/#more">more >></a>
           </p>
         
       

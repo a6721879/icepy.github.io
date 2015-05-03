@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://icepy.github.io/"/>
-  <updated>2015-05-03T07:38:05.254Z</updated>
+  <updated>2015-05-03T13:43:49.893Z</updated>
   <id>http://icepy.github.io/</id>
   
   <author>
@@ -13,6 +13,140 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[NSArray]]></title>
+    <link href="http://icepy.github.io/2015/05/03/NSArray/"/>
+    <id>http://icepy.github.io/2015/05/03/NSArray/</id>
+    <published>2015-05-03T07:42:06.000Z</published>
+    <updated>2015-05-03T13:43:23.000Z</updated>
+    <content type="html"><![CDATA[<p>基础扎实才能使编程更加的得心应手，今天要写一些学习NSArray以及NSMutableArray的东西。</p>
+<p>创建一个数组其实跟创建NSString一样OC也提供了三种方式，语法糖，实例化，类方法。</p>
+<pre><code><span class="comment">//创建语法糖</span>
+<span class="built_in">NSArray</span> *arry = @[<span class="string">@"1"</span>,<span class="string">@"2"</span>,<span class="string">@"3"</span>,<span class="string">@"4"</span>];
+<span class="comment">//手动实例创建</span>
+<span class="built_in">NSArray</span> *arry1 = [[<span class="built_in">NSArray</span> alloc] initWithObjects:<span class="string">@"1"</span>,<span class="string">@"2"</span>, <span class="literal">nil</span>];
+<span class="comment">//类方法创建</span>
+<span class="built_in">NSArray</span> *arry2 = [<span class="built_in">NSArray</span> arrayWithObjects:<span class="string">@"1"</span>,<span class="string">@"2"</span>, <span class="literal">nil</span>];
+</code></pre><p>查找一个元素在数组中是否存在</p>
+<pre><code><span class="comment">//查找元素是否存在，在数组中</span>
+<span class="constant">BOOL isTrue</span> = [arry containsObject:@<span class="string">"1"</span>];
+</code></pre><p>获取数组的长度</p>
+<pre><code><span class="comment">//数组的长度</span>
+<span class="type">NSUInteger</span> <span class="built_in">count</span> = arry.<span class="built_in">count</span>;
+<span class="type">NSLog</span>(@<span class="string">"%zd"</span>,<span class="built_in">count</span>);
+</code></pre><p>获取第一个元素和获取最后一个元素</p>
+<pre><code><span class="comment">//获取第一个元素</span>
+<span class="keyword">id</span> first = arry<span class="variable">.firstObject</span>;
+<span class="comment">//获取最后一个元素</span>
+<span class="keyword">id</span> last = arry<span class="variable">.lastObject</span>;
+</code></pre><p>查找元素在数组中的位置，还可以指定一个range来确定查找的范围</p>
+<pre><code><span class="comment">//查找元素在数组中的位置</span>
+<span class="built_in">NSInteger</span> index = [arry indexOfObject:<span class="string">@"1"</span>];
+<span class="built_in">NSLog</span>(<span class="string">@"%zd"</span>,index);
+
+<span class="comment">//查找元素的位置，可以指定一个range</span>
+<span class="built_in">NSRange</span> arrRange = NSMakeRange(<span class="number">1</span>, <span class="number">2</span>);
+<span class="built_in">NSInteger</span> rangeIndex = [arry indexOfObject:<span class="string">@"3"</span> inRange:arrRange];
+<span class="built_in">NSLog</span>(<span class="string">@"%zd"</span>,rangeIndex);
+</code></pre><p>指定一个下标来获取元素</p>
+<pre><code><span class="comment">//指定一个下标获取元素</span>
+<span class="keyword">id</span> element = [arry objectAtIndex:<span class="number">1</span>];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,element);
+</code></pre><p>添加一个元素<strong>注意 NSArray是不可变的，所以添加的元素不是旧数组，而是创建了一个包含旧数组的新数组</strong>，还可以添加一个数组</p>
+<pre><code><span class="comment">//添加一个元素，返回一个新的数组</span>
+<span class="constant">NSArray *lcepy</span> = [arry arrayByAddingObject:@<span class="string">"lcepy"</span>];
+<span class="comment">//添加一个数组，返回一个新的数组</span>
+<span class="constant">NSArray *newLcepy</span> = [arry arrayByAddingObjectsFromArray:@[@<span class="string">"lcepy"</span>,@<span class="string">"github.io"</span>]];
+</code></pre><p>格式化一个数组</p>
+<pre><code><span class="comment">//通过一个分隔字符串来组建一个拼接字符串</span>
+<span class="built_in">NSString</span> *ress =  [newLcepy componentsJoinedByString:<span class="string">@"."</span>];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,ress);
+</code></pre><p>除了for循环，for in循环外的其它几种常用的遍历方式</p>
+<pre><code><span class="comment">//NSEnumerator是一个抽象类，可以使用它的nextObject来遍历元素，通常和while一起使用</span>
+NSEnumerator *enumer =  [newLcepy objectEnumerator];
+<span class="built_in">BOOL</span> isEnumer = <span class="literal">YES</span>;
+<span class="keyword">while</span> (isEnumer) {
+    <span class="keyword">id</span> enumerValue = [enumer nextObject];
+    <span class="keyword">if</span> (!enumerValue) {
+        isEnumer = <span class="literal">NO</span>;
+    }
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,enumerValue);
+}
+
+[arrays enumerateObjectsUsingBlock:^(<span class="keyword">id</span> obj, NSUInteger idx, <span class="built_in">BOOL</span> *stop) {
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,obj);
+    <span class="keyword">if</span> (idx &gt; <span class="number">3</span>) {
+        *stop = <span class="literal">YES</span>;
+    }
+}];
+</code></pre><p>假设如果数组中的元素都想向某个方法发送消息，那么可以这么使用，这样的方式，比如在想移除所有子视图这样的场景中非常好用</p>
+<pre><code><span class="comment">//假设有一个数组中的元素都想向某个方法发送消息，那么可以使用makeObjectsPerformSelector类定义了</span>
+[newLcepy makeObjectsPerformSelector:@selector(<span class="built_in">length</span>)];
+</code></pre><p>给数组排序的几种方式</p>
+<pre><code><span class="comment">//排序</span>
+<span class="built_in">NSArray</span> *arrays = @[@<span class="number">1</span>,@<span class="number">2</span>,@<span class="number">0</span>,@<span class="number">8</span>,@<span class="number">3</span>,@<span class="number">9</span>,@<span class="number">5</span>];
+
+<span class="comment">//正</span>
+<span class="built_in">NSArray</span> *minMax = [arrays sortedArrayUsingComparator:^NSComparisonResult(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) {
+    <span class="keyword">return</span> obj1 &gt; obj2;
+}];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,minMax);
+<span class="comment">//倒</span>
+<span class="built_in">NSArray</span> *maxMin = [arrays sortedArrayUsingComparator:^NSComparisonResult(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) {
+    <span class="keyword">return</span> obj1 &lt; obj2;
+}];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,maxMin);
+
+<span class="comment">//    [arrays sortedArrayWithOptions:&lt;#(NSSortOptions)#&gt; usingComparator:&lt;#^NSComparisonResult(id obj1, id obj2)cmptr#&gt;]</span>
+
+<span class="comment">//    [arrays sortedArrayUsingFunction:&lt;#(NSInteger (*)(__strong id, __strong id, void *))#&gt; context:&lt;#(void *)#&gt;]</span>
+
+SEL execu = <span class="keyword">@selector</span>(compare:);
+<span class="built_in">NSArray</span> *newArr = [arrays sortedArrayUsingSelector:execu];
+<span class="built_in">NSLog</span>(<span class="string">@"s%@"</span>,newArr);
+</code></pre><p>数组还可以进行筛选，NSPredicate这个类在使用Core Data时会经常用到</p>
+<pre><code>[arrays filteredArrayUsingPredicate:&lt;#(NSPredicate *)#&gt;]
+</code></pre><h3 id="NSMutableArray">NSMutableArray</h3>
+<p>创建NSMutableArray只有两种方式，alloc和类方法，这是一个可变的数组，可以增删改滴，也可以排序，NSArray存在的方法，NSMutableArray全部具备，只是它多了可以添加，删除，修改，替换的方法，这里不一一写例子了，可以自己实际操作一下。</p>
+<pre><code><span class="pp">- <span class="params">(void)</span>addObject:<span class="params">(id)</span>anObject;
+- <span class="params">(void)</span>insertObject:<span class="params">(id)</span>anObject atIndex:<span class="params">(<span class="variable">NSUInteger</span>)</span>index;
+- <span class="params">(void)</span>removeLastObject;
+- <span class="params">(void)</span>removeObjectAtIndex:<span class="params">(<span class="variable">NSUInteger</span>)</span>index;
+- <span class="params">(void)</span>replaceObjectAtIndex:<span class="params">(<span class="variable">NSUInteger</span>)</span>index withObject:<span class="params">(id)</span>anObject;
+- <span class="params">(void)</span>addObjectsFromArray:<span class="params">(<span class="variable">NSArray</span> *)</span>otherArray;
+- <span class="params">(void)</span>exchangeObjectAtIndex:<span class="params">(<span class="variable">NSUInteger</span>)</span>idx1 withObjectAtIndex:<span class="params">(<span class="variable">NSUInteger</span>)</span>idx2;
+- <span class="params">(void)</span>removeAllObjects;
+- <span class="params">(void)</span>removeObject:<span class="params">(id)</span>anObject inRange:<span class="params">(<span class="variable">NSRange</span>)</span>range;
+- <span class="params">(void)</span>removeObject:<span class="params">(id)</span>anObject;
+- <span class="params">(void)</span>removeObjectIdenticalTo:<span class="params">(id)</span>anObject inRange:<span class="params">(<span class="variable">NSRange</span>)</span>range;
+- <span class="params">(void)</span>removeObjectIdenticalTo:<span class="params">(id)</span>anObject;
+- <span class="params">(void)</span>removeObjectsFromIndices:<span class="params">(<span class="variable">NSUInteger</span> *)</span>indices numIndices:<span class="params">(<span class="variable">NSUInteger</span>)</span>cnt NS_DEPRECATED<span class="params">(<span class="number">10</span>_0, <span class="number">10</span>_6, <span class="number">2</span>_0, <span class="number">4</span>_0)</span>;
+- <span class="params">(void)</span>removeObjectsInArray:<span class="params">(<span class="variable">NSArray</span> *)</span>otherArray;
+- <span class="params">(void)</span>removeObjectsInRange:<span class="params">(<span class="variable">NSRange</span>)</span>range;
+- <span class="params">(void)</span>replaceObjectsInRange:<span class="params">(<span class="variable">NSRange</span>)</span>range withObjectsFromArray:<span class="params">(<span class="variable">NSArray</span> *)</span>otherArray range:<span class="params">(<span class="variable">NSRange</span>)</span>otherRange;
+- <span class="params">(void)</span>replaceObjectsInRange:<span class="params">(<span class="variable">NSRange</span>)</span>range withObjectsFromArray:<span class="params">(<span class="variable">NSArray</span> *)</span>otherArray;
+- <span class="params">(void)</span>setArray:<span class="params">(<span class="variable">NSArray</span> *)</span>otherArray;
+- <span class="params">(void)</span>sortUsingFunction:<span class="params">(<span class="variable">NSInteger</span> (*)</span><span class="params">(id, id, void *)</span>)compare context:<span class="params">(void *)</span>context;
+- <span class="params">(void)</span>sortUsingSelector:<span class="params">(<span class="variable">SEL</span>)</span>comparator;
+- <span class="params">(void)</span>insertObjects:<span class="params">(<span class="variable">NSArray</span> *)</span>objects atIndexes:<span class="params">(<span class="variable">NSIndexSet</span> *)</span>indexes;
+- <span class="params">(void)</span>removeObjectsAtIndexes:<span class="params">(<span class="variable">NSIndexSet</span> *)</span>indexes;
+- <span class="params">(void)</span>replaceObjectsAtIndexes:<span class="params">(<span class="variable">NSIndexSet</span> *)</span>indexes withObjects:<span class="params">(<span class="variable">NSArray</span> *)</span>objects;
+
+- <span class="params">(void)</span>setObject:<span class="params">(id)</span>obj atIndexedSubscript:<span class="params">(<span class="variable">NSUInteger</span>)</span>idx NS_AVAILABLE<span class="params">(<span class="number">10</span>_8, <span class="number">6</span>_0)</span>;
+
+- <span class="params">(void)</span>sortUsingComparator:<span class="params">(<span class="variable">NSComparator</span>)</span>cmptr NS_AVAILABLE<span class="params">(<span class="number">10</span>_6, <span class="number">4</span>_0)</span>;
+- <span class="params">(void)</span>sortWithOptions:<span class="params">(<span class="variable">NSSortOptions</span>)</span>opts usingComparator:<span class="params">(<span class="variable">NSComparator</span>)</span>cmptr NS_AVAILABLE<span class="params">(<span class="number">10</span>_6, <span class="number">4</span>_0)</span>;</span>
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<p>基础扎实才能使编程更加的得心应手，今天要写一些学习NSArray以及NSMutableArray的东西。</p>
+<p>创建一个数组其实跟创建NSString一样OC也提供了三种方式，语法糖，实例化，类方法。</p>
+<pre><code><span class="comm]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[好用的WebKit.framework]]></title>
@@ -1228,127 +1362,6 @@ NSString *str = [<span class="built_in">string</span> <span class="built_in">cop
     <![CDATA[<p>这是一个关于深拷贝和浅拷贝的问题，OC设计这个语法的目的就是创建一个副本，修改副本的时候不会改变原来的对象。</p>
 <blockquote>
 <p>对于这两个问题可以这么理解，浅拷贝也就是把指针赋值，大家用的都是地址。而深拷贝，则是创建了一个新的空间，虽然内容可能是一样的]]>
-    </summary>
-    
-      <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[iOS的内存管理]]></title>
-    <link href="http://icepy.github.io/2015/02/04/iOS%E7%9A%84%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
-    <id>http://icepy.github.io/2015/02/04/iOS的内存管理/</id>
-    <published>2015-02-04T15:00:33.000Z</published>
-    <updated>2015-02-06T11:56:21.000Z</updated>
-    <content type="html"><![CDATA[<p>在iOS开发中使用的是引用计数的方式来管理内存，也就是跟踪记录每个值被引用的次数。当声明一个变量来接收一个指针对象，引用次数就＋1，如果指针对象被添加到数组，字典，或者被其他指针对象所使用又＋1.如果使用完毕之后对它进行－1，一直到0，系统会立马释放这段内存。</p>
-<blockquote>
-<p>如果开启了ARC机制，编译器会帮助我们在代码中添加上内存管理的代码，而且在Xcode中比如retain这些都是不可以使用的</p>
-</blockquote>
-<p>在OC中可以使用retainCount来查看指针对象的引用次数。</p>
-<pre><code><span class="variable">Wower</span> *wower = [[<span class="variable">Wower</span> alloc] init<span class="variable">WithName</span>:@<span class="string">"lcepy"</span> <span class="keyword">and</span><span class="variable">T</span>:@<span class="string">"魔兽世界"</span>];
-<span class="variable">NSLog</span>(@<span class="string">"%zi"</span>,[wower retain<span class="variable">Count</span>]);
-</code></pre><p>一般来说如果在代码中使用了alloc，copy，retain，引用计数都是加一，而release则是引用计数减一，又比如把指针对象添加到数组，字典，内部的引用计数也会加一，但是这个的话，系统是会来管理的。又比如一些静态方法，也会由系统来管理，内部是会加一的。还有一种叫做自动释放池的玩意，autorelease，它的功能是整个执行过程结束，系统来管理释放的工作。</p>
-<p>一般来说基本类型的数据也就是C语言的如int这样的，直接赋值即可不用管理，在iOS中主要是对OC指针对象进行内存管理。在使用@property的时候，根据参数retain，copy，编译器会帮助我们生成getter，setter方法，而且还会帮助我们进行一下内存管理，比如：</p>
-<pre><code><span class="pp">-<span class="params">(void)</span>setterFound:<span class="params">(<span class="variable">Found</span> *)</span>found
-{
-    if <span class="params">(<span class="variable">_</span>found != found)</span> {
-        [_found release];
-        _found = found;
-        [_found retain];
-    }
-}</span>
-</code></pre><p>有一点要注意的是如果是retain，copy一般来说接收的都是OC对象，基本类型可以用assign。</p>
-<p>实例：</p>
-<pre><code><span class="comment">//.h文件</span>
-<span class="class"><span class="keyword">@interface</span> <span class="title">Found</span> : <span class="title">NSObject</span></span>
-
-<span class="keyword">@end</span>
-
-
-<span class="class"><span class="keyword">@interface</span> <span class="title">Wower</span> : <span class="title">NSObject</span></span>
-{
-    Found *_found;
-}
-
-<span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *name;
-<span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *game;
-
--(<span class="keyword">id</span>)initWithName:(<span class="built_in">NSString</span> *)name andT:(<span class="built_in">NSString</span> *)game;
--(<span class="keyword">void</span>)setterFound:(Found *)found;
-
-<span class="keyword">@end</span>
-<span class="comment">//.m文件</span>
-<span class="class"><span class="keyword">@implementation</span> <span class="title">Wower</span></span>
-
--(<span class="keyword">id</span>)initWithName:(<span class="built_in">NSString</span> *)name andT:(<span class="built_in">NSString</span> *)game
-{
-    <span class="keyword">self</span> = [<span class="keyword">super</span> init];
-    <span class="keyword">if</span> (<span class="keyword">self</span>) {
-        _name = name;
-        _game = game;
-    }
-    <span class="keyword">return</span> <span class="keyword">self</span>;
-}
-
-
--(<span class="keyword">void</span>)dealloc
-{
-
-    <span class="built_in">NSLog</span>(<span class="string">@"Found的引用计数%zi"</span>,[_found retainCount]);
-    [_found release];
-    <span class="built_in">NSLog</span>(<span class="string">@"Found的引用计数%zi"</span>,[_found retainCount]);
-    [<span class="keyword">super</span> dealloc];
-
-}
-
--(<span class="keyword">void</span>)showMessage
-{
-
-    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,_name);
-    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,_game);
-}
-
--(<span class="keyword">void</span>)setterFound:(Found *)found
-{
-    <span class="keyword">if</span> (_found != found) {
-        [_found release];
-        _found = found;
-        [_found retain];
-    }
-}
-<span class="keyword">@end</span>
-
-<span class="class"><span class="keyword">@implementation</span> <span class="title">Found</span></span>
-
--(<span class="keyword">void</span>)dealloc
-{
-    [<span class="keyword">super</span> dealloc];
-    <span class="built_in">NSLog</span>(<span class="string">@"释放"</span>);
-}
-
-<span class="keyword">@end</span>
-
-<span class="comment">//main文件</span>
-
-<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {
-    <span class="keyword">@autoreleasepool</span> {
-        Wower *wower = [[Wower alloc] initWithName:<span class="string">@"lcepy"</span> andT:<span class="string">@"魔兽世界"</span>];
-        <span class="built_in">NSLog</span>(<span class="string">@"%zi"</span>,[wower retainCount]);
-        Found *f = [[Found alloc] init];
-        [wower setterFound:f];
-        [wower release];
-        [f release];
-    }
-    <span class="keyword">return</span> <span class="number">0</span>;
-}
-</code></pre><p>dealloc是OC对象释放之后，系统会自动调用，这里一般都是来释放一些其他对象。在Wower类的dealloc中只释放了_found，而copy的那个却没有释放，那是因为@””快速创建的，一般来说这些都不需要自己来管理而是系统。</p>
-<blockquote>
-<p>关于OC的内存管理，其实有一个原则，就是谁创建谁释放，谁使用谁释放。在之前，创建了wower,f对象，于是它们要在外部释放，而我使用了setFound方法来把f对象设置到成员变量中，于是这里就成了wower对象的_found成员变量在使用，于是它有责任在dealloc的时候来把f对象的引用计数减1。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>在iOS开发中使用的是引用计数的方式来管理内存，也就是跟踪记录每个值被引用的次数。当声明一个变量来接收一个指针对象，引用次数就＋1，如果指针对象被添加到数组，字典，或者被其他指针对象所使用又＋1.如果使用完毕之后对它进行－1，一直到0，系统会立马释放这段内存。</p>
-<b]]>
     </summary>
     
       <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
