@@ -168,6 +168,153 @@
 </nav>
       
   
+    <article id="post-CoreData的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/05/05/CoreData的使用/" class="article-date">
+  	<time datetime="2015-05-05T02:31:04.000Z" itemprop="datePublished">5月 5 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/05/CoreData的使用/">CoreData的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>CoreData是Cocoa中处理数据，绑定数据的一个框架，如果不靠谱数据的平台一致性（iOS，Android），完全可以使用它替代SQLite。虽然，iOS也有一个C实现的SQLite库，但是语法层面比较琐碎，而且使用的是C函数。如果要使用，大家可以选择使用一个开源的库来替代<a href="https://github.com/ccgus/fmdb" target="_blank" rel="external">Obje-C版</a>和<a href="https://github.com/FahimF/SQLiteDB" target="_blank" rel="external">Swift版</a></p>
+<p>从代码层面上来看，要创建一个CoreData实例，需要四个步骤</p>
+<ul>
+<li>创建数据库文件的物理地址</li>
+<li>创建模型托管对象</li>
+<li>创建持久化存储调度器</li>
+<li>创建上下文</li>
+</ul>
+<p>正常情况下，上述四个步骤，我们只使用一次，建议惰性加载它</p>
+<pre><code>-(NSManagedObjectContext *)context
+{
+    <span class="keyword">if</span> (!_context) {
+        <span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
+        <span class="comment">//创建db url</span>
+        <span class="built_in">NSString</span> *dbPath = [<span class="keyword">self</span><span class="variable">.baseDoc</span> stringByAppendingPathComponent:<span class="string">@"manong.db"</span>];
+        <span class="built_in">NSURL</span> *dbUrl = [<span class="built_in">NSURL</span> fileURLWithPath:dbPath];
+        <span class="comment">//创建模型托管对象</span>
+        NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:<span class="literal">nil</span>];
+        <span class="comment">//创建持久化存储调度器</span>
+        NSPersistentStoreCoordinator *store = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+        [store addPersistentStoreWithType:NSSQLiteStoreType configuration:<span class="literal">nil</span> URL:dbUrl options:<span class="literal">nil</span> error:&amp;error];
+        <span class="comment">//创建上下文</span>
+        _context = [[NSManagedObjectContext alloc] init];
+        [_context setPersistentStoreCoordinator:store];
+    }
+    <span class="keyword">return</span> _context;
+}
+</code></pre><p>下面给出一张关系图</p>
+<p><img src="http://websources.qiniudn.com/iOS/CoreData类关系图.png" alt="CoreData类关系图"></p>
+<p>从上述的图中，其实可以看到一些有关系的模块</p>
+<ul>
+<li>Managed Object Model 用于描述数据模型，这里包括实体，属性，请求等</li>
+<li>Managed Object Context 参与对数据对象进行各项操作的上下文</li>
+<li>Managed Object 数据对象（用户使用的对象与上下文有关联）</li>
+<li>Persistent Store 相当于数据库文件的管理器，处理底层对数据库文件的读取与写入</li>
+</ul>
+<p><strong>基本上创建一个Managed Object文件不需要自己去手动创建，而且建议Xcode帮助我们创建的model文件不要修改</strong></p>
+<p>如果非要自己创建的话，那么继承NSManagedObject类吧</p>
+<pre><code><span class="preprocessor">#import <span class="title">&lt;Foundation/Foundation.h&gt;</span></span>
+<span class="preprocessor">#import <span class="title">&lt;CoreData/CoreData.h&gt;</span></span>
+
+<span class="class"><span class="keyword">@interface</span> <span class="title">ManongTag</span> : <span class="title">NSManagedObject</span></span>
+
+<span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, retain) <span class="built_in">NSNumber</span> * contentCount;
+<span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, retain) <span class="built_in">NSString</span> * tagKey;
+<span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, retain) <span class="built_in">NSString</span> * tagName;
+
+<span class="keyword">@end</span>
+</code></pre><h1 id="下面给出一张实际的操作图，如何使用CoreData。">下面给出一张实际的操作图，如何使用CoreData。</h1>
+<p><img src="http://websources.qiniudn.com/iOS/CoreData操作图形化.jpg" alt="CoreData操作图形化"> </p>
+<ul>
+<li>首先add Entity添加一个实体</li>
+<li>然后在Attributes中添加相应的属性，在Type中选择相应的数据类型</li>
+<li>Pelationships可以对实体进行关联，比如ManongTitle实体中关联了一个ManongContent实体</li>
+<li>&lt;橘黄色箭头&gt;可以设置多关联，在使用的时候它会是一个NSSet集合</li>
+<li>Style可以查看设计图</li>
+</ul>
+<p>如果想新增一条数据，需要三个步骤才能实现，第一先创建一个实体描述，第二创建一个ManagedObject对象，第三给上下文的save方法发送消息。</p>
+<pre><code>NSEntityDescription *mnTag = [NSEntityDescription entityForName:<span class="string">@"ManongTag"</span> inManagedObjectContext:<span class="keyword">self</span><span class="variable">.context</span>];
+ManongTag *manongTag = [[ManongTag alloc] initWithEntity:mnTag insertIntoManagedObjectContext:<span class="keyword">self</span><span class="variable">.context</span>];
+manongTag<span class="variable">.tagKey</span> = tagKey;
+manongTag<span class="variable">.tagName</span> = tagNmae;
+<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
+<span class="built_in">BOOL</span> success;
+[<span class="keyword">self</span><span class="variable">.context</span> save:&amp;error];
+success = error ? <span class="literal">NO</span> : <span class="literal">YES</span>;
+</code></pre><p>如果想在实体中查询数据，一般情况下两个步骤，如果是条件查询最少三个步骤，第一创建一个查询请求，第二创建一个谓词对象，第三给上下文的executeFetchRequest方法发送消息。</p>
+<pre><code><span class="comment">//查询所有的数据</span>
+<span class="constant">NSFetchRequest *request</span> = [[NSFetchRequest alloc] initWithEntityName:@<span class="string">"ManongDigest"</span>];
+<span class="constant">NSArray *arr</span> = [self.context executeFetchRequest:request error:&amp;error];
+
+<span class="comment">//条件查询</span>
+<span class="constant">NSFetchRequest *request</span> = [[NSFetchRequest alloc] initWithEntityName:@“ManongDigest”];
+<span class="constant">NSPredicate *dicate</span> = [NSPredicate predicateWithFormat:@<span class="string">"%K BEGINSWITH[c] %@"</span>,@<span class="string">"tagName"</span>,@<span class="string">"a"</span>];
+<span class="constant">NSArray *arr</span> = [self.context executeFetchRequest:request error:&amp;error];
+</code></pre><p>如果想更新某一条数据，正常情况下三个步骤，第一创建一个查询请求，第二修改MangedObject对象的属性，第三给上下文的save方法发送消息。</p>
+<pre><code>NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:<span class="string">@"ManongDigest"</span>];
+<span class="built_in">NSArray</span> *arr = [<span class="keyword">self</span><span class="variable">.context</span> executeFetchRequest:request error:&amp;error];
+<span class="keyword">for</span>(ManongDigest *digest <span class="keyword">in</span> arr)
+{
+    digest<span class="variable">.tagName</span> = <span class="string">@"lcepy"</span>;
+}
+<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
+[<span class="keyword">self</span><span class="variable">.context</span> save:&amp;error];
+<span class="keyword">if</span> (error) {
+    <span class="keyword">return</span> <span class="literal">NO</span>;
+}<span class="keyword">else</span>{
+    <span class="keyword">return</span> <span class="literal">YES</span>;
+}
+</code></pre><p>如果想删除某一条数据</p>
+<pre><code>NSFetchRequest *<span class="built_in">request</span> = [[NSFetchRequest alloc] initWithEntityName:@<span class="string">"ManongDigest"</span>];
+NSArray *arr = [self.context executeFetchRequest:<span class="built_in">request</span> <span class="keyword">error</span>:&amp;<span class="keyword">error</span>];
+<span class="keyword">if</span>(arr.count){
+    ManongDigest *digest = (ManongDigest *)arr[<span class="number">0</span>];
+    [self.context deleteObject:digest];
+}
+</code></pre><p>上述四种操作方式是最常用的，当然CoreData 的API肯定不止这四种，但是使用的逻辑思维基本上是，查询－处理－使用上下文或者创建实体－处理－使用上下文。</p>
+<p>这个框架算比较复杂的一个，学习起来曲线也比较大，需要耐心。</p>
+<p>参考资料</p>
+<ul>
+<li><a href="http://www.objc.io/issue-4/" target="_blank" rel="external">objc-CoreData</a></li>
+<li><a href="http://objccn.io/issue-4-2/" target="_blank" rel="external">一个完整的 Core Data 应用</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/CoreData_ObjC/index.html" target="_blank" rel="external">Core Data API</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSPredicate_Class/" target="_blank" rel="external">NSPredicate API</a></li>
+</ul>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-NSArray" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -636,77 +783,6 @@ NSLog(@<span class="string">"%@"</span>,str1);
 <li><a href="http://blog.devtang.com/blog/2012/02/14/nsstring-java-like-wrapper/" target="_blank" rel="external">给NSString添加java风格：（感觉有点意思）</a></li>
 <li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSString_Class/index.html" target="_blank" rel="external">NSString</a></li>
 </ul>
-
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-NSURLProtocol" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/04/13/NSURLProtocol/" class="article-date">
-  	<time datetime="2015-04-13T03:38:06.000Z" itemprop="datePublished">4月 13 2015</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/04/13/NSURLProtocol/">NSURLProtocol</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>阅读资料：</p>
-<ul>
-<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtocol_Class/index.html" target="_blank" rel="external">Apple Foundation NSURLProtocol</a></li>
-<li><a href="http://nshipster.cn/nsurlprotocol/" target="_blank" rel="external">http://nshipster.cn/nsurlprotocol/</a></li>
-</ul>
-<p>正如NSHipster在上篇文章所写的一样，iOS离不开网络，那么这就需要网络编程。cocoa提供了一系列的API来操作网络，比如NSURL，NSURLRequest，NSURLSession等等，以及处理网络的GCD，NSOperation多任务处理。</p>
-<p>那么NSURLProtocol，它有什么用呢？官方给它的解释是，可以重新定义已经加载的URL的行为或者定义一个新的URL。换句话来说，就是这个类可以监管应用的网络活动，只要是通过URL来进行的。</p>
-<p>NSURLProtocol是一个抽象类，也就是说它需要一个子类继承它才可以正常工作，关于怎么使用可以阅读NSHipster的文章，把子类注册到NSURLProtocol中。</p>
-<pre><code>+ (<span class="keyword">void</span>)consolelog:(<span class="built_in">UITextView</span> *)debugText
-{
-    debug = debugText;
-    [NSURLProtocol registerClass:<span class="keyword">self</span>];
-}
-</code></pre><h3 id="案例需求，监管应用的URL加载系统，并且支持web_client_console_log">案例需求，监管应用的URL加载系统，并且支持web client console log</h3>
-<p>案例可以在Github中查看<a href="https://github.com/lcepy/MFLog" target="_blank" rel="external">MFLog</a></p>
-<pre><code>+ (BOOL)registerClass:(<span class="class"><span class="keyword">Class</span>)<span class="title">protocolClass</span></span>
-</code></pre><p>把子类注册到NSURLProtocol中</p>
-<pre><code>+ (<span class="keyword">void</span>)unregisterClass:(<span class="keyword">Class</span>)protocolClass
-</code></pre><p>把子类从NSURLProtocol中移除</p>
-<p>NSURLProtocol提供了一系列的方法来操作一个URL Data，先看其一，一个静态方法。</p>
-<pre><code>+ (<span class="built_in">BOOL</span>)canInitWithRequest:(<span class="built_in">NSURLRequest</span> *)request
-</code></pre><p>canInitWithRequest <strong>注意，这些是覆盖父类NSURLProtocol的静态方法</strong>是系统询问，是否处理该请求URL，如果返回NO，不处理。如果返回YES，子类进一步控制。</p>
-<pre><code><span class="bullet">+ </span>(NSURLRequest <span class="emphasis">*)canonicalRequestForRequest:(NSURLRequest *</span>)request
-</code></pre><p>返回请求的原始request</p>
-<pre><code><span class="pp">- <span class="params">(void)</span>startLoading</span>
-</code></pre><p>加载此次请求，可以通过self.request获取当前URL的request对象</p>
-<pre><code><span class="pp">- <span class="params">(void)</span>stopLoading</span>
-</code></pre><p>此次请求完成时，可以在这个方法中处理</p>
-<p>每一个NSURLProtocol都有一个client属性，这个属性是NSURLProtocolClient。另外，还可以实现NSConnectionDataDelegate协议，把NSURLProtocol与NSURLConnection链接起来，这样就可以在statLoading调用之后，系统将回调NSConnectionDataDelegate中定义的各种方法，这个在自定义时非常有用。</p>
 
       
     </div>

@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://icepy.github.io/"/>
-  <updated>2015-05-03T13:43:49.893Z</updated>
+  <updated>2015-05-05T04:25:25.765Z</updated>
   <id>http://icepy.github.io/</id>
   
   <author>
@@ -13,6 +13,126 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[CoreData的使用]]></title>
+    <link href="http://icepy.github.io/2015/05/05/CoreData%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
+    <id>http://icepy.github.io/2015/05/05/CoreData的使用/</id>
+    <published>2015-05-05T02:31:04.000Z</published>
+    <updated>2015-05-05T04:25:02.000Z</updated>
+    <content type="html"><![CDATA[<p>CoreData是Cocoa中处理数据，绑定数据的一个框架，如果不靠谱数据的平台一致性（iOS，Android），完全可以使用它替代SQLite。虽然，iOS也有一个C实现的SQLite库，但是语法层面比较琐碎，而且使用的是C函数。如果要使用，大家可以选择使用一个开源的库来替代<a href="https://github.com/ccgus/fmdb" target="_blank" rel="external">Obje-C版</a>和<a href="https://github.com/FahimF/SQLiteDB" target="_blank" rel="external">Swift版</a></p>
+<p>从代码层面上来看，要创建一个CoreData实例，需要四个步骤</p>
+<ul>
+<li>创建数据库文件的物理地址</li>
+<li>创建模型托管对象</li>
+<li>创建持久化存储调度器</li>
+<li>创建上下文</li>
+</ul>
+<p>正常情况下，上述四个步骤，我们只使用一次，建议惰性加载它</p>
+<pre><code>-(NSManagedObjectContext *)context
+{
+    <span class="keyword">if</span> (!_context) {
+        <span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
+        <span class="comment">//创建db url</span>
+        <span class="built_in">NSString</span> *dbPath = [<span class="keyword">self</span><span class="variable">.baseDoc</span> stringByAppendingPathComponent:<span class="string">@"manong.db"</span>];
+        <span class="built_in">NSURL</span> *dbUrl = [<span class="built_in">NSURL</span> fileURLWithPath:dbPath];
+        <span class="comment">//创建模型托管对象</span>
+        NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:<span class="literal">nil</span>];
+        <span class="comment">//创建持久化存储调度器</span>
+        NSPersistentStoreCoordinator *store = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+        [store addPersistentStoreWithType:NSSQLiteStoreType configuration:<span class="literal">nil</span> URL:dbUrl options:<span class="literal">nil</span> error:&amp;error];
+        <span class="comment">//创建上下文</span>
+        _context = [[NSManagedObjectContext alloc] init];
+        [_context setPersistentStoreCoordinator:store];
+    }
+    <span class="keyword">return</span> _context;
+}
+</code></pre><p>下面给出一张关系图</p>
+<p><img src="http://websources.qiniudn.com/iOS/CoreData类关系图.png" alt="CoreData类关系图"></p>
+<p>从上述的图中，其实可以看到一些有关系的模块</p>
+<ul>
+<li>Managed Object Model 用于描述数据模型，这里包括实体，属性，请求等</li>
+<li>Managed Object Context 参与对数据对象进行各项操作的上下文</li>
+<li>Managed Object 数据对象（用户使用的对象与上下文有关联）</li>
+<li>Persistent Store 相当于数据库文件的管理器，处理底层对数据库文件的读取与写入</li>
+</ul>
+<p><strong>基本上创建一个Managed Object文件不需要自己去手动创建，而且建议Xcode帮助我们创建的model文件不要修改</strong></p>
+<p>如果非要自己创建的话，那么继承NSManagedObject类吧</p>
+<pre><code><span class="preprocessor">#import <span class="title">&lt;Foundation/Foundation.h&gt;</span></span>
+<span class="preprocessor">#import <span class="title">&lt;CoreData/CoreData.h&gt;</span></span>
+
+<span class="class"><span class="keyword">@interface</span> <span class="title">ManongTag</span> : <span class="title">NSManagedObject</span></span>
+
+<span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, retain) <span class="built_in">NSNumber</span> * contentCount;
+<span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, retain) <span class="built_in">NSString</span> * tagKey;
+<span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, retain) <span class="built_in">NSString</span> * tagName;
+
+<span class="keyword">@end</span>
+</code></pre><h1 id="下面给出一张实际的操作图，如何使用CoreData。">下面给出一张实际的操作图，如何使用CoreData。</h1>
+<p><img src="http://websources.qiniudn.com/iOS/CoreData操作图形化.jpg" alt="CoreData操作图形化"> </p>
+<ul>
+<li>首先add Entity添加一个实体</li>
+<li>然后在Attributes中添加相应的属性，在Type中选择相应的数据类型</li>
+<li>Pelationships可以对实体进行关联，比如ManongTitle实体中关联了一个ManongContent实体</li>
+<li>&lt;橘黄色箭头&gt;可以设置多关联，在使用的时候它会是一个NSSet集合</li>
+<li>Style可以查看设计图</li>
+</ul>
+<p>如果想新增一条数据，需要三个步骤才能实现，第一先创建一个实体描述，第二创建一个ManagedObject对象，第三给上下文的save方法发送消息。</p>
+<pre><code>NSEntityDescription *mnTag = [NSEntityDescription entityForName:<span class="string">@"ManongTag"</span> inManagedObjectContext:<span class="keyword">self</span><span class="variable">.context</span>];
+ManongTag *manongTag = [[ManongTag alloc] initWithEntity:mnTag insertIntoManagedObjectContext:<span class="keyword">self</span><span class="variable">.context</span>];
+manongTag<span class="variable">.tagKey</span> = tagKey;
+manongTag<span class="variable">.tagName</span> = tagNmae;
+<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
+<span class="built_in">BOOL</span> success;
+[<span class="keyword">self</span><span class="variable">.context</span> save:&amp;error];
+success = error ? <span class="literal">NO</span> : <span class="literal">YES</span>;
+</code></pre><p>如果想在实体中查询数据，一般情况下两个步骤，如果是条件查询最少三个步骤，第一创建一个查询请求，第二创建一个谓词对象，第三给上下文的executeFetchRequest方法发送消息。</p>
+<pre><code><span class="comment">//查询所有的数据</span>
+<span class="constant">NSFetchRequest *request</span> = [[NSFetchRequest alloc] initWithEntityName:@<span class="string">"ManongDigest"</span>];
+<span class="constant">NSArray *arr</span> = [self.context executeFetchRequest:request error:&amp;error];
+
+<span class="comment">//条件查询</span>
+<span class="constant">NSFetchRequest *request</span> = [[NSFetchRequest alloc] initWithEntityName:@“ManongDigest”];
+<span class="constant">NSPredicate *dicate</span> = [NSPredicate predicateWithFormat:@<span class="string">"%K BEGINSWITH[c] %@"</span>,@<span class="string">"tagName"</span>,@<span class="string">"a"</span>];
+<span class="constant">NSArray *arr</span> = [self.context executeFetchRequest:request error:&amp;error];
+</code></pre><p>如果想更新某一条数据，正常情况下三个步骤，第一创建一个查询请求，第二修改MangedObject对象的属性，第三给上下文的save方法发送消息。</p>
+<pre><code>NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:<span class="string">@"ManongDigest"</span>];
+<span class="built_in">NSArray</span> *arr = [<span class="keyword">self</span><span class="variable">.context</span> executeFetchRequest:request error:&amp;error];
+<span class="keyword">for</span>(ManongDigest *digest <span class="keyword">in</span> arr)
+{
+    digest<span class="variable">.tagName</span> = <span class="string">@"lcepy"</span>;
+}
+<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
+[<span class="keyword">self</span><span class="variable">.context</span> save:&amp;error];
+<span class="keyword">if</span> (error) {
+    <span class="keyword">return</span> <span class="literal">NO</span>;
+}<span class="keyword">else</span>{
+    <span class="keyword">return</span> <span class="literal">YES</span>;
+}
+</code></pre><p>如果想删除某一条数据</p>
+<pre><code>NSFetchRequest *<span class="built_in">request</span> = [[NSFetchRequest alloc] initWithEntityName:@<span class="string">"ManongDigest"</span>];
+NSArray *arr = [self.context executeFetchRequest:<span class="built_in">request</span> <span class="keyword">error</span>:&amp;<span class="keyword">error</span>];
+<span class="keyword">if</span>(arr.count){
+    ManongDigest *digest = (ManongDigest *)arr[<span class="number">0</span>];
+    [self.context deleteObject:digest];
+}
+</code></pre><p>上述四种操作方式是最常用的，当然CoreData 的API肯定不止这四种，但是使用的逻辑思维基本上是，查询－处理－使用上下文或者创建实体－处理－使用上下文。</p>
+<p>这个框架算比较复杂的一个，学习起来曲线也比较大，需要耐心。</p>
+<p>参考资料</p>
+<ul>
+<li><a href="http://www.objc.io/issue-4/" target="_blank" rel="external">objc-CoreData</a></li>
+<li><a href="http://objccn.io/issue-4-2/" target="_blank" rel="external">一个完整的 Core Data 应用</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/CoreData_ObjC/index.html" target="_blank" rel="external">Core Data API</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSPredicate_Class/" target="_blank" rel="external">NSPredicate API</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>CoreData是Cocoa中处理数据，绑定数据的一个框架，如果不靠谱数据的平台一致性（iOS，Android），完全可以使用它替代SQLite。虽然，iOS也有一个C实现的SQLite库，但是语法层面比较琐碎，而且使用的是C函数。如果要使用，大家可以选择使用一个开源的库来]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[NSArray]]></title>
@@ -1310,61 +1430,6 @@ var <span class="built_in">value</span>, values = [], i, key
     </summary>
     
       <category term="JavaScript" scheme="http://icepy.github.io/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[iOS的copy语法]]></title>
-    <link href="http://icepy.github.io/2015/02/05/iOS%E7%9A%84copy%E8%AF%AD%E6%B3%95/"/>
-    <id>http://icepy.github.io/2015/02/05/iOS的copy语法/</id>
-    <published>2015-02-05T10:01:43.000Z</published>
-    <updated>2015-03-20T11:55:35.000Z</updated>
-    <content type="html"><![CDATA[<p>这是一个关于深拷贝和浅拷贝的问题，OC设计这个语法的目的就是创建一个副本，修改副本的时候不会改变原来的对象。</p>
-<blockquote>
-<p>对于这两个问题可以这么理解，浅拷贝也就是把指针赋值，大家用的都是地址。而深拷贝，则是创建了一个新的空间，虽然内容可能是一样的，但是大家使用的空间，地址都是不同的。</p>
-</blockquote>
-<p>在OC中可以使用copy或者mutableCopy语法来实现深拷贝和浅拷贝，要求实现NSCopying或者NSMutableCopying协议。</p>
-<p>copy和mutableCopy是有区别的，区别在于NSString和NSMutableString的区别，如果使用NSString调用copy创建出来的新对象那就是NSString，如果是使用NSString的mutableCopy创建出来的新对象那就是NSMutableString。前者是不可变的，后者是可变的，它的空间不是固定的。</p>
-<pre><code>NSString *<span class="typename">string</span> = [[NSString alloc] initWithFormat:@<span class="string">"123"</span>,<span class="number">10</span>];
-
-NSMutableString *str = [<span class="typename">string</span> mutableCopy];
-
-[<span class="typename">string</span> <span class="keyword">release</span>];
-[str <span class="keyword">release</span>];
-</code></pre><p>遵守上面所说的创建一个副本，修改副本的时候不会改变原来的对象，其实这里可以看内存地址就可以看出来，它们是不同的。</p>
-<pre><code><span class="attr_selector">[str appendString:@"123"]</span>;
-
-<span class="function">NSlog</span>(<span class="at_rule">@<span class="string">"%@"</span>,string);</span>
-<span class="function">NSlog</span>(<span class="at_rule">@<span class="string">"%@"</span>,str);</span>
-</code></pre><p>从打印的结果可以很明显的看的出来，从内存的角度上来看，因为是新对象，所以它的引用计数是加1的，所以copy或者mutableCopy都需要release。</p>
-<p>如果使用copy语法，因为有一个机制不可变的元素，所以OC就直接把原来的对象返回，并且引用计数加1，于是这就是浅拷贝了，而mutableCopy就是深拷贝了。</p>
-<p>如果在OC中反过来又是什么样的情况呢？比如使用NSMutableString调用它的copy方法，会产生什么样的情况呢？</p>
-<pre><code>NSMutableString *<span class="built_in">string</span> = [[NSMutableString alloc]stringWithForma<span class="variable">t:</span>@<span class="string">"123"</span>,<span class="number">10</span>];
-NSString *str = [<span class="built_in">string</span> <span class="built_in">copy</span>];
-</code></pre><p>如果从可变成不可变使用的copy却是一个深拷贝，产生一个新的对象，它的引用计数为1。如果可变的使用mutableCopy产生一个对象，它也是深拷贝，产生一个新对象，引用计数为1，所以都需要release。</p>
-<blockquote>
-<p>总结一下，只有一种情况是浅拷贝，不可变对象调用它的copy方法为浅拷贝，再原对象上计数加1.而其他的不管是调用copy还是mutableCopy都是深拷贝，产生一个新的对象，计数为1。</p>
-</blockquote>
-<h3 id="如何自定义的类提供copy或者mutableCopy">如何自定义的类提供copy或者mutableCopy</h3>
-<p>如果要自己实现自定义对象的copy或者mutableCopy语法，首先要实现NSCopying或者NSMutableCopying协议，它们的原理都是一样的，按NSCopying来讲解一个例子。</p>
-<pre><code>-(<span class="property">id</span>)copyWithZone:(NSZone *)zone
-{
-    Pser *<span class="keyword">copy</span> = [[[self <span class="type">class</span>] allocWithZone:zone] init];
-    <span class="keyword">copy</span>.<span class="property">name</span> = _name;
-<span class="command">    return</span> <span class="keyword">copy</span>;
-}
-</code></pre><p>主要是实现copyWithZone方法，系统会为copy分配一个空间，以存储创建出来的副本。它不要求在copyWithZone内部进行内存管理，因为外部还需要使用。一般来说，使用copy还需要注意一些问题，也就是父子的问题。假设父类有实现copyWithZone方法，一般来说在子类中需要覆盖一下，然后调用它的父类的copyWithZone。而且在需要使用self class来实例对象，谁使用self就是谁，这样才能说子类调用之后，接收的还是子类，而不是父类。</p>
-<pre><code> <span class="title">[super copyWithZone:zone]</span><span class="comment">;</span>
-</code></pre><p>然后再进一步的操作。</p>
-<p>NSMutableCopying的操作步骤是一模一样的，注意的问题也是如同。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>这是一个关于深拷贝和浅拷贝的问题，OC设计这个语法的目的就是创建一个副本，修改副本的时候不会改变原来的对象。</p>
-<blockquote>
-<p>对于这两个问题可以这么理解，浅拷贝也就是把指针赋值，大家用的都是地址。而深拷贝，则是创建了一个新的空间，虽然内容可能是一样的]]>
-    </summary>
-    
-      <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
     
   </entry>
   
