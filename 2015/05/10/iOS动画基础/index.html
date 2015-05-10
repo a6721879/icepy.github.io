@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>iOS动画基础 | icepy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="貌似在哪个领域里，动画的实现都赋予了软件非常生动的交互，所以我们必须要掌握并学好它。在学习动画之前，首推Core Animation Programming Guide核心动画编程指南，去了解一下官方的术语，定义，以及指导，这很有帮助。
+顾名思义，动画也就是让我们的view可以动起来，所谓的view实际上都会继承于UIView，而每一个UIView都有一个CALayer对象，它们两个是分开的，分别">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS动画基础">
+<meta property="og:url" content="http://icepy.github.io/2015/05/10/iOS动画基础/">
+<meta property="og:site_name" content="icepy">
+<meta property="og:description" content="貌似在哪个领域里，动画的实现都赋予了软件非常生动的交互，所以我们必须要掌握并学好它。在学习动画之前，首推Core Animation Programming Guide核心动画编程指南，去了解一下官方的术语，定义，以及指导，这很有帮助。
+顾名思义，动画也就是让我们的view可以动起来，所谓的view实际上都会继承于UIView，而每一个UIView都有一个CALayer对象，它们两个是分开的，分别">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS动画基础">
+<meta name="twitter:description" content="貌似在哪个领域里，动画的实现都赋予了软件非常生动的交互，所以我们必须要掌握并学好它。在学习动画之前，首推Core Animation Programming Guide核心动画编程指南，去了解一下官方的术语，定义，以及指导，这很有帮助。
+顾名思义，动画也就是让我们的view可以动起来，所谓的view实际上都会继承于UIView，而每一个UIView都有一个CALayer对象，它们两个是分开的，分别">
+
+  
+    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  
+
+  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<div class="profilepic">
+			<img src="http://websources.qiniudn.com/img/me.jpg">
+		</div>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">icepy</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟!</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">纪录学习的点滴</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud">
+						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					一个玩js iOS py的小伙子 PS：若有问题可邮件 xiangwenwe@foxmail.com
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay"></div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://websources.qiniudn.com/img/me.jpg">
+			</div>
+
+			<hgroup>
+			  <h1 class="header-author"><a href="/">icepy</a></h1>
+			</hgroup>
+			
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟!</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">纪录学习的点滴</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <article id="post-iOS动画基础" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/05/10/iOS动画基础/" class="article-date">
+  	<time datetime="2015-05-09T17:02:06.000Z" itemprop="datePublished">5月 10 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      iOS动画基础
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>貌似在哪个领域里，动画的实现都赋予了软件非常生动的交互，所以我们必须要掌握并学好它。在学习动画之前，首推<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004514" target="_blank" rel="external">Core Animation Programming Guide</a>核心动画编程指南，去了解一下官方的术语，定义，以及指导，这很有帮助。</p>
+<p>顾名思义，动画也就是让我们的view可以动起来，所谓的view实际上都会继承于UIView，而每一个UIView都有一个CALayer对象，它们两个是分开的，分别用于不同的地方。可以看见的是，UIView用于显示，CALayer用于绘制。（注明：CALayer属于QuartzCore框架）</p>
+<p>UIView自身（注明：UIView属于UIKit框架）会有描述位置的信息，比如frame，transform。在使用一些比较简单的动画时，我们应该首选考虑的是使用UIView提供的一些方法，去改变frame，transform等属性。</p>
+<pre><code><span class="title">[UIView animateWithDuration:1.6 animations:^{
+
+}]</span><span class="comment">;</span>
+</code></pre><p>对于高度复杂一些的动画，就需要我们对Core Animation整个的熟悉和了解了。这里，我建议先阅读一下<a href="http://objccn.io/issue-12-1/" target="_blank" rel="external">动画理解</a>，把一些概念性的东西了解清楚。比如Core Animation维护的层次结构，什么叫模型层树(model layer tree)，什么叫表现层树(presentation layer tree)，而且你务必要理解，当把动画添加到一个layer的时候，是不直接修改其属性的。</p>
+<p>在清楚这些概念性的问题后，你可以去学习一些动画类了，比如CABasicAnimation，CATransform3D，CAKeyframeAnimation,CAAnimationGroup,CAAnimation，另外你务必要记住一点，CAAnimation是这些动画类的鼻祖(它是一个抽象类，不能直接使用)，而且要搞清楚CALayer。</p>
+<p>举例一些简单的例子</p>
+<p><strong>使用CABasicAnimation</strong></p>
+<pre><code>CABasicAnimation *<span class="variable">animation =</span> [CABasicAnimation animation];
+animation.<span class="variable">keyPath =</span> @<span class="string">"position.x"</span>;
+animation.<span class="variable">duration =</span> <span class="number">1</span>;
+animation.<span class="variable">fromValue =</span> @<span class="number">50</span>;
+animation.<span class="variable">toValue =</span> @<span class="number">250</span>;
+[view.layer addAnimation:animation forKey:@<span class="string">"left"</span>];
+</code></pre><p>为了验证动画究竟修改了那个地方的值，我打印了一下view的frame，NSLog(@”%@”,NSStringFromCGRect(view.frame))，这里可以看的出来，view的frame值没有发生改变，而且在模拟器中，动画结束了，view又回到了原来的位置。说明啊，动画的执行和view的渲染是分开的，如果你还不理解，请继续阅读《核心动画编程指南》或者简单的《动画理解》。</p>
+<p>如果我们不想动画结束后view回到原来的位置，可以使用</p>
+<pre><code>animation.<span class="variable">fillMode =</span> kCAFillModeForwards;
+animation.<span class="variable">removedOnCompletion =</span> NO;
+</code></pre><p><strong>使用CAKeyframeAnimation</strong></p>
+<pre><code><span class="constant">CAKeyframeAnimation</span> *animation = [<span class="constant">CAKeyframeAnimation</span> animation];
+animation.keyPath = @<span class="string">"position.x"</span>;
+animation.values = @[<span class="variable">@0</span>,<span class="variable">@10</span>,@-<span class="number">10</span>,<span class="variable">@10</span>,<span class="variable">@0</span>];
+animation.keyTimes = @[ <span class="variable">@0</span>, @(<span class="number">1</span> / <span class="number">6.0</span>), @(<span class="number">3</span> / <span class="number">6.0</span>), @(<span class="number">5</span> / <span class="number">6.0</span>), <span class="variable">@1</span> ];
+animation.duration = <span class="number">0</span>.<span class="number">4</span>;
+animation.additive = <span class="constant">YES</span>;
+[view.layer <span class="symbol">addAnimation:</span>animation <span class="symbol">forKey:</span>@<span class="string">"shake"</span>];
+</code></pre><p><strong>使用CAAnimationGroup</strong></p>
+<pre><code>CABasicAnimation *<span class="variable">right =</span> [CABasicAnimation animation];
+right.<span class="variable">keyPath =</span> @<span class="string">"position.x"</span>;
+right.<span class="variable">duration =</span> <span class="number">1</span>;
+right.<span class="variable">toValue =</span> @<span class="number">250</span>;
+right.<span class="variable">timingFunction =</span> [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+
+CABasicAnimation *<span class="variable">top =</span> [CABasicAnimation animation];
+top.<span class="variable">keyPath =</span> @<span class="string">"position.y"</span>;
+top.<span class="variable">duration =</span> <span class="number">1</span>;
+top.<span class="variable">toValue =</span> @<span class="number">10</span>;
+right.<span class="variable">timingFunction =</span> [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+
+CAAnimationGroup *<span class="variable">animationsGroup =</span> [CAAnimationGroup animation];
+animationsGroup.<span class="variable">animations =</span> @[right,top];
+[view.layer addAnimation:animationsGroup forKey:@<span class="string">"group"</span>];
+</code></pre><p>阅读资料：</p>
+<ul>
+<li><a href="http://objccn.io/issue-12/" target="_blank" rel="external">#12动画</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/CoreAnimation_framework/index.html#//apple_ref/doc/uid/TP40004513" target="_blank" rel="external">Core Animation Reference Collection</a></li>
+</ul>
+
+      
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/05/05/CoreData的使用/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">CoreData的使用</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="iOS动画基础" data-title="iOS动画基础" data-url="http://icepy.github.io/2015/05/10/iOS动画基础/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lcepy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 icepy
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+  <script src="/js/main.js" type="text/javascript"></script>
+
+
+  </div>
+</body>
+</html>

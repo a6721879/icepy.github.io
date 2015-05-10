@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟!]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://icepy.github.io/"/>
-  <updated>2015-05-05T04:25:25.765Z</updated>
+  <updated>2015-05-10T08:22:18.232Z</updated>
   <id>http://icepy.github.io/</id>
   
   <author>
@@ -13,6 +13,70 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[iOS动画基础]]></title>
+    <link href="http://icepy.github.io/2015/05/10/iOS%E5%8A%A8%E7%94%BB%E5%9F%BA%E7%A1%80/"/>
+    <id>http://icepy.github.io/2015/05/10/iOS动画基础/</id>
+    <published>2015-05-09T17:02:06.000Z</published>
+    <updated>2015-05-10T08:21:49.000Z</updated>
+    <content type="html"><![CDATA[<p>貌似在哪个领域里，动画的实现都赋予了软件非常生动的交互，所以我们必须要掌握并学好它。在学习动画之前，首推<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004514" target="_blank" rel="external">Core Animation Programming Guide</a>核心动画编程指南，去了解一下官方的术语，定义，以及指导，这很有帮助。</p>
+<p>顾名思义，动画也就是让我们的view可以动起来，所谓的view实际上都会继承于UIView，而每一个UIView都有一个CALayer对象，它们两个是分开的，分别用于不同的地方。可以看见的是，UIView用于显示，CALayer用于绘制。（注明：CALayer属于QuartzCore框架）</p>
+<p>UIView自身（注明：UIView属于UIKit框架）会有描述位置的信息，比如frame，transform。在使用一些比较简单的动画时，我们应该首选考虑的是使用UIView提供的一些方法，去改变frame，transform等属性。</p>
+<pre><code><span class="title">[UIView animateWithDuration:1.6 animations:^{
+
+}]</span><span class="comment">;</span>
+</code></pre><p>对于高度复杂一些的动画，就需要我们对Core Animation整个的熟悉和了解了。这里，我建议先阅读一下<a href="http://objccn.io/issue-12-1/" target="_blank" rel="external">动画理解</a>，把一些概念性的东西了解清楚。比如Core Animation维护的层次结构，什么叫模型层树(model layer tree)，什么叫表现层树(presentation layer tree)，而且你务必要理解，当把动画添加到一个layer的时候，是不直接修改其属性的。</p>
+<p>在清楚这些概念性的问题后，你可以去学习一些动画类了，比如CABasicAnimation，CATransform3D，CAKeyframeAnimation,CAAnimationGroup,CAAnimation，另外你务必要记住一点，CAAnimation是这些动画类的鼻祖(它是一个抽象类，不能直接使用)，而且要搞清楚CALayer。</p>
+<p>举例一些简单的例子</p>
+<p><strong>使用CABasicAnimation</strong></p>
+<pre><code>CABasicAnimation *<span class="variable">animation =</span> [CABasicAnimation animation];
+animation.<span class="variable">keyPath =</span> @<span class="string">"position.x"</span>;
+animation.<span class="variable">duration =</span> <span class="number">1</span>;
+animation.<span class="variable">fromValue =</span> @<span class="number">50</span>;
+animation.<span class="variable">toValue =</span> @<span class="number">250</span>;
+[view.layer addAnimation:animation forKey:@<span class="string">"left"</span>];
+</code></pre><p>为了验证动画究竟修改了那个地方的值，我打印了一下view的frame，NSLog(@”%@”,NSStringFromCGRect(view.frame))，这里可以看的出来，view的frame值没有发生改变，而且在模拟器中，动画结束了，view又回到了原来的位置。说明啊，动画的执行和view的渲染是分开的，如果你还不理解，请继续阅读《核心动画编程指南》或者简单的《动画理解》。</p>
+<p>如果我们不想动画结束后view回到原来的位置，可以使用</p>
+<pre><code>animation.<span class="variable">fillMode =</span> kCAFillModeForwards;
+animation.<span class="variable">removedOnCompletion =</span> NO;
+</code></pre><p><strong>使用CAKeyframeAnimation</strong></p>
+<pre><code><span class="constant">CAKeyframeAnimation</span> *animation = [<span class="constant">CAKeyframeAnimation</span> animation];
+animation.keyPath = @<span class="string">"position.x"</span>;
+animation.values = @[<span class="variable">@0</span>,<span class="variable">@10</span>,@-<span class="number">10</span>,<span class="variable">@10</span>,<span class="variable">@0</span>];
+animation.keyTimes = @[ <span class="variable">@0</span>, @(<span class="number">1</span> / <span class="number">6.0</span>), @(<span class="number">3</span> / <span class="number">6.0</span>), @(<span class="number">5</span> / <span class="number">6.0</span>), <span class="variable">@1</span> ];
+animation.duration = <span class="number">0</span>.<span class="number">4</span>;
+animation.additive = <span class="constant">YES</span>;
+[view.layer <span class="symbol">addAnimation:</span>animation <span class="symbol">forKey:</span>@<span class="string">"shake"</span>];
+</code></pre><p><strong>使用CAAnimationGroup</strong></p>
+<pre><code>CABasicAnimation *<span class="variable">right =</span> [CABasicAnimation animation];
+right.<span class="variable">keyPath =</span> @<span class="string">"position.x"</span>;
+right.<span class="variable">duration =</span> <span class="number">1</span>;
+right.<span class="variable">toValue =</span> @<span class="number">250</span>;
+right.<span class="variable">timingFunction =</span> [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+
+CABasicAnimation *<span class="variable">top =</span> [CABasicAnimation animation];
+top.<span class="variable">keyPath =</span> @<span class="string">"position.y"</span>;
+top.<span class="variable">duration =</span> <span class="number">1</span>;
+top.<span class="variable">toValue =</span> @<span class="number">10</span>;
+right.<span class="variable">timingFunction =</span> [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+
+CAAnimationGroup *<span class="variable">animationsGroup =</span> [CAAnimationGroup animation];
+animationsGroup.<span class="variable">animations =</span> @[right,top];
+[view.layer addAnimation:animationsGroup forKey:@<span class="string">"group"</span>];
+</code></pre><p>阅读资料：</p>
+<ul>
+<li><a href="http://objccn.io/issue-12/" target="_blank" rel="external">#12动画</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/CoreAnimation_framework/index.html#//apple_ref/doc/uid/TP40004513" target="_blank" rel="external">Core Animation Reference Collection</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>貌似在哪个领域里，动画的实现都赋予了软件非常生动的交互，所以我们必须要掌握并学好它。在学习动画之前，首推<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreA]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[CoreData的使用]]></title>
@@ -1394,42 +1458,6 @@ var <span class="built_in">value</span>, values = [], i, key
     </summary>
     
       <category term="iOS" scheme="http://icepy.github.io/tags/iOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[复习JavaScript十二之理解作用域]]></title>
-    <link href="http://icepy.github.io/2015/02/05/%E5%A4%8D%E4%B9%A0JavaScript%E5%8D%81%E4%BA%8C%E4%B9%8B%E7%90%86%E8%A7%A3%E4%BD%9C%E7%94%A8%E5%9F%9F/"/>
-    <id>http://icepy.github.io/2015/02/05/复习JavaScript十二之理解作用域/</id>
-    <published>2015-02-05T10:17:09.000Z</published>
-    <updated>2015-02-24T11:47:42.000Z</updated>
-    <content type="html"><![CDATA[<p>理解作用域链是Js编程中一个必须要具备的，作用域决定了变量和函数有权力访问哪些数据。在Web浏览器中，全局执行环境是window对象，这也意味着所有的全局变量或者方法都是window对象的属性或方法。当个函数在被调用的时候都会创建自己的执行环境，而这个函数中所写的代码就开始进入这个函数的执行环境，于是由变量对象构建起了一个作用域链。</p>
-<pre><code><span class="keyword">var</span> wow = <span class="string">'魔兽世界'</span>;
-<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> _wow = <span class="string">'123'</span>;
-}
-</code></pre><p>在这个例子中全局环境中包含了两个对象（全局环境的变量对象不算），window.wow和window.message，而这个message函数中又包含了两个对象，它自己的变量对象（其中定义了arguments对象）和全局环境的变量对象。当这个函数开始执行时，message自己的变量对象中定义了_wow，而它的全局环境的变量对象有wow，假设在message中alert一下wow，实际上是message中包含的全局环境的变量对象.wow，于是可以访问。</p>
-<pre><code><span class="keyword">var</span> wow = <span class="string">'123'</span>;
-<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> wow = <span class="string">'456'</span>;
-}
-</code></pre><p>如果执行message函数alert一下wow，它的作用域是这样开始搜索的，先搜索message自己的变量对象中是否存在wow，如果有就访问并且立马停止搜索，如果没有则继续往上访问它，有wow，则访问并且立马停止搜索，以此类推一直搜索到全局环境上的变量对象，如果这里都没，恭喜你，这里要抛错了。</p>
-<pre><code><span class="keyword">var</span> c = <span class="string">'123'</span>;
-<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> g = <span class="string">'123'</span>;
-    <span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        <span class="keyword">var</span> d = <span class="string">'123'</span>;
-    }
-}
-</code></pre><p>在这个例子中包含有三个执行环境，全局环境，message的环境，a的环境。从这里可以看出message自身包含两个对象，自己的变量对象和全局环境中的变量对象，而函数a则包含了三个，自身的变量对象，message的变量对象和全局变量对象。</p>
-<p>当开始执行这函数时，在函数a中可以访问到变量g，那是因为函数a包含了message的变量对象，于是在自身没有开始搜索上一级的变量对象时发现了，于是可以访问。那么访问c的原理也是如此，当自身和上一级的message的变量对象都没有，但是全局变量对象中存在，于是访问成功。</p>
-<p>了解这个作用域，对于Js编程是至关重要的，不然可能会出现，明明想要的预期结果是123，但是变成了456，为什么？那就是因为一级一级的搜索，可能会存在覆盖，或者搜索到别的地方就立即停止搜索了。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>理解作用域链是Js编程中一个必须要具备的，作用域决定了变量和函数有权力访问哪些数据。在Web浏览器中，全局执行环境是window对象，这也意味着所有的全局变量或者方法都是window对象的属性或方法。当个函数在被调用的时候都会创建自己的执行环境，而这个函数中所写的代码就开始]]>
-    </summary>
-    
-      <category term="JavaScript" scheme="http://icepy.github.io/tags/JavaScript/"/>
     
   </entry>
   

@@ -168,6 +168,153 @@
 </nav>
       
   
+    <article id="post-iOS的内存管理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/04/iOS的内存管理/" class="article-date">
+  	<time datetime="2015-02-04T15:00:33.000Z" itemprop="datePublished">2月 4 2015</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/04/iOS的内存管理/">iOS的内存管理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在iOS开发中使用的是引用计数的方式来管理内存，也就是跟踪记录每个值被引用的次数。当声明一个变量来接收一个指针对象，引用次数就＋1，如果指针对象被添加到数组，字典，或者被其他指针对象所使用又＋1.如果使用完毕之后对它进行－1，一直到0，系统会立马释放这段内存。</p>
+<blockquote>
+<p>如果开启了ARC机制，编译器会帮助我们在代码中添加上内存管理的代码，而且在Xcode中比如retain这些都是不可以使用的</p>
+</blockquote>
+<p>在OC中可以使用retainCount来查看指针对象的引用次数。</p>
+<pre><code><span class="variable">Wower</span> *wower = [[<span class="variable">Wower</span> alloc] init<span class="variable">WithName</span>:@<span class="string">"lcepy"</span> <span class="keyword">and</span><span class="variable">T</span>:@<span class="string">"魔兽世界"</span>];
+<span class="variable">NSLog</span>(@<span class="string">"%zi"</span>,[wower retain<span class="variable">Count</span>]);
+</code></pre><p>一般来说如果在代码中使用了alloc，copy，retain，引用计数都是加一，而release则是引用计数减一，又比如把指针对象添加到数组，字典，内部的引用计数也会加一，但是这个的话，系统是会来管理的。又比如一些静态方法，也会由系统来管理，内部是会加一的。还有一种叫做自动释放池的玩意，autorelease，它的功能是整个执行过程结束，系统来管理释放的工作。</p>
+<p>一般来说基本类型的数据也就是C语言的如int这样的，直接赋值即可不用管理，在iOS中主要是对OC指针对象进行内存管理。在使用@property的时候，根据参数retain，copy，编译器会帮助我们生成getter，setter方法，而且还会帮助我们进行一下内存管理，比如：</p>
+<pre><code><span class="pp">-<span class="params">(void)</span>setterFound:<span class="params">(<span class="variable">Found</span> *)</span>found
+{
+    if <span class="params">(<span class="variable">_</span>found != found)</span> {
+        [_found release];
+        _found = found;
+        [_found retain];
+    }
+}</span>
+</code></pre><p>有一点要注意的是如果是retain，copy一般来说接收的都是OC对象，基本类型可以用assign。</p>
+<p>实例：</p>
+<pre><code><span class="comment">//.h文件</span>
+<span class="class"><span class="keyword">@interface</span> <span class="title">Found</span> : <span class="title">NSObject</span></span>
+
+<span class="keyword">@end</span>
+
+
+<span class="class"><span class="keyword">@interface</span> <span class="title">Wower</span> : <span class="title">NSObject</span></span>
+{
+    Found *_found;
+}
+
+<span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *name;
+<span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *game;
+
+-(<span class="keyword">id</span>)initWithName:(<span class="built_in">NSString</span> *)name andT:(<span class="built_in">NSString</span> *)game;
+-(<span class="keyword">void</span>)setterFound:(Found *)found;
+
+<span class="keyword">@end</span>
+<span class="comment">//.m文件</span>
+<span class="class"><span class="keyword">@implementation</span> <span class="title">Wower</span></span>
+
+-(<span class="keyword">id</span>)initWithName:(<span class="built_in">NSString</span> *)name andT:(<span class="built_in">NSString</span> *)game
+{
+    <span class="keyword">self</span> = [<span class="keyword">super</span> init];
+    <span class="keyword">if</span> (<span class="keyword">self</span>) {
+        _name = name;
+        _game = game;
+    }
+    <span class="keyword">return</span> <span class="keyword">self</span>;
+}
+
+
+-(<span class="keyword">void</span>)dealloc
+{
+
+    <span class="built_in">NSLog</span>(<span class="string">@"Found的引用计数%zi"</span>,[_found retainCount]);
+    [_found release];
+    <span class="built_in">NSLog</span>(<span class="string">@"Found的引用计数%zi"</span>,[_found retainCount]);
+    [<span class="keyword">super</span> dealloc];
+
+}
+
+-(<span class="keyword">void</span>)showMessage
+{
+
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,_name);
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,_game);
+}
+
+-(<span class="keyword">void</span>)setterFound:(Found *)found
+{
+    <span class="keyword">if</span> (_found != found) {
+        [_found release];
+        _found = found;
+        [_found retain];
+    }
+}
+<span class="keyword">@end</span>
+
+<span class="class"><span class="keyword">@implementation</span> <span class="title">Found</span></span>
+
+-(<span class="keyword">void</span>)dealloc
+{
+    [<span class="keyword">super</span> dealloc];
+    <span class="built_in">NSLog</span>(<span class="string">@"释放"</span>);
+}
+
+<span class="keyword">@end</span>
+
+<span class="comment">//main文件</span>
+
+<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {
+    <span class="keyword">@autoreleasepool</span> {
+        Wower *wower = [[Wower alloc] initWithName:<span class="string">@"lcepy"</span> andT:<span class="string">@"魔兽世界"</span>];
+        <span class="built_in">NSLog</span>(<span class="string">@"%zi"</span>,[wower retainCount]);
+        Found *f = [[Found alloc] init];
+        [wower setterFound:f];
+        [wower release];
+        [f release];
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><p>dealloc是OC对象释放之后，系统会自动调用，这里一般都是来释放一些其他对象。在Wower类的dealloc中只释放了_found，而copy的那个却没有释放，那是因为@””快速创建的，一般来说这些都不需要自己来管理而是系统。</p>
+<blockquote>
+<p>关于OC的内存管理，其实有一个原则，就是谁创建谁释放，谁使用谁释放。在之前，创建了wower,f对象，于是它们要在外部释放，而我使用了setFound方法来把f对象设置到成员变量中，于是这里就成了wower对象的_found成员变量在使用，于是它有责任在dealloc的时候来把f对象的引用计数减1。</p>
+</blockquote>
+
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-UINavigationController的理解" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">

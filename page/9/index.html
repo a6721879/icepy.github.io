@@ -168,6 +168,70 @@
 </nav>
       
   
+    <article id="post-用Hexo写博客" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/11/22/用Hexo写博客/" class="article-date">
+  	<time datetime="2014-11-21T16:12:00.000Z" itemprop="datePublished">11月 22 2014</time>
+</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nodejs/">nodejs</a></li></ul>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/22/用Hexo写博客/">用Hexo写博客</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在看下面内容之前，请先确认是否已经安装nodejs，若无则先安装。</p>
+<p>访问<a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>，查看例子：</p>
+<pre><code>npm <span class="operator"><span class="keyword">install</span> hexo -g
+hexo init blog
+cd blog
+npm <span class="keyword">install</span>
+hexo <span class="keyword">server</span></span>
+</code></pre><p>hexo主要有如下几个命令来操作：</p>
+<blockquote>
+<p>hexo init  初始化一个hexo项目</p>
+<p>hexo server 监听4000端口启动一个服务器，可以预览，端口可以在_config.yml文件中修改</p>
+<p>hexo generate 输出静态文件，在public目录下</p>
+<p>hexo new 生成一个md文件，这个文件就是我们要写的博客文件了</p>
+<p>hexo clean 清除public目录以及缓存，其实这个缓存就是db.json文件</p>
+<p>hexo deploy 如果在_conig.yml文件中配置了这项，它会帮助我们发布到网络</p>
+</blockquote>
+<p>一般大项的配置都是在顶层的_config.yml配置文件中配置，比如博客作者名，标题，时间格式，资源文件目录，静态资源文件目录，插件等等。而具体的博客配置，比如菜单之类的都在themes具体的主题_config.yml文件中配置。</p>
+
+        
+          <p class="article-more-link">
+            <a href="/2014/11/22/用Hexo写博客/#more">more >></a>
+          </p>
+        
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-正则的一些理解" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -394,54 +458,6 @@
         
           <p class="article-more-link">
             <a href="/2014/11/14/携程邮轮开发部django分享/#more">more >></a>
-          </p>
-        
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-django静态资源配置的问题" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/django静态资源配置的问题/" class="article-date">
-  	<time datetime="2014-11-14T12:16:20.000Z" itemprop="datePublished">11月 14 2014</time>
-</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/">django</a></li></ul>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/django静态资源配置的问题/">django静态资源配置的问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在初始化一个django项目时，我还遇见了一个比较头疼的问题，静态资源的配置，硬编码问题。其实，按照正常的部署来说，静态资源，比如（.css .js img）等，应该另启动一个服务器，去做静态资源的处理，这样是非常常见的，和语言无关，脱离了动态开发内容，特别的适合做内容分发。但是，考虑到前期，我想能在django中集合这样的资源类型，于是，碰到了比较纠结的问题。另外，在django初始化的项目中，竟然还不能在注释中打中文，是不是很疼，没关系，往下看，能解决这样的问题。</p>
-
-        
-          <p class="article-more-link">
-            <a href="/2014/11/14/django静态资源配置的问题/#more">more >></a>
           </p>
         
       
