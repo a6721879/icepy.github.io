@@ -4,13 +4,15 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>复习JavaScript十一之理解内存管理 | icepy</title>
+    <title>NSDictionary | icepy</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="icepy">
     
-    <meta name="description" content="一般来说内存管理主要有这么几种方式，引用计数和标记，而JavaScript采用的就是标记管理的方式。Js的内存管理是自动的，但是并不是说执行完后立马销毁，而是有时间周期性，相隔一段时间执行一下垃圾回收，把没有引用的内存全部销毁。
-OC中采用的是引用计数来手动管理内存，这样的方式比较好，可以让开发者自">
+    <meta name="description" content="使用字典，能很好的组织数据，OC中的字典有三种方式
+//创建字典
+NSDictionary *dic = [[NSDictionary alloc] initWithObjectsAndKeys:@&quot;value&quot;,@&quot;key&quot;,@&quot;github&quot;,@&quot;build&quot;, nil];
+NSDictiona">
     
     
     
@@ -80,15 +82,15 @@ var _hmt = _hmt || [];
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/02/04/复习JavaScript十一之理解内存管理/" title="复习JavaScript十一之理解内存管理" itemprop="url">复习JavaScript十一之理解内存管理</a>
+      <a href="/2015/05/16/NSDictionary/" title="NSDictionary" itemprop="url">NSDictionary</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://lcepy.github.io" title="icepy">icepy</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-02-04T10:53:09.000Z" itemprop="datePublished">2月 4 2015</time>
-    更新日期:<time datetime="2015-02-24T11:47:32.000Z" itemprop="dateModified">2月 24 2015</time>
+    <time datetime="2015-05-16T11:20:01.000Z" itemprop="datePublished">5月 16 2015</time>
+    更新日期:<time datetime="2015-05-17T13:10:25.000Z" itemprop="dateModified">5月 17 2015</time>
     
   </p>
 </header>
@@ -100,28 +102,55 @@ var _hmt = _hmt || [];
 		
 		</div>
 		
-		<p>一般来说内存管理主要有这么几种方式，引用计数和标记，而JavaScript采用的就是标记管理的方式。Js的内存管理是自动的，但是并不是说执行完后立马销毁，而是有时间周期性，相隔一段时间执行一下垃圾回收，把没有引用的内存全部销毁。</p>
-<p>OC中采用的是引用计数来手动管理内存，这样的方式比较好，可以让开发者自己来管理。当然也有不好的地方，如果遗忘了释放，很可能引起应用的崩溃。</p>
-<p>总体来看在IE中因为COM组件的原因，可能会发生循环引用的问题，这个问题在引用计数的内存管理都会遇见。所谓的循环引用是指在对象A中包含了一个指向B的指针，然后再对象B中包含一个指向A的指针，于是悲剧了。</p>
-<pre><code>var element = document.getElementById(<span class="string">'doc'</span>);
-var <span class="keyword">my</span> = {};
-<span class="keyword">my</span>.element = element;
-element.<span class="keyword">my</span> = <span class="keyword">my</span>;
-</code></pre><p>大家都引用，于是，可想而知。要避免这种问题，一定要在不使用的时候my.element = null，把它断开。</p>
-<p>那么，其他浏览器呢？还是标记清理的机制，比如一个函数的变量，在进入环境时标记上“进入环境”，执行完之后标记上“离开环境”，然后等待系统来释放。</p>
-<p>IE有一个手动释放的方法，window.CollectGarbage，调用它就立马释放已经标记离开环境的变量，不过很多文章都不建议这样做。</p>
-<p>那么一般都这样做，引用类型的释放</p>
-<pre><code><span class="keyword">var</span> my = {};
-<span class="comment">//使用完毕之后</span>
-my = <span class="literal">null</span>;
-</code></pre><p>让my脱离执行环境，标记上已经离开环境，然后等待系统执行垃圾回收，释放内存。</p>
-  
+		<p>使用字典，能很好的组织数据，OC中的字典有三种方式</p>
+<pre><code><span class="comment">//创建字典</span>
+<span class="built_in">NSDictionary</span> *dic = [[<span class="built_in">NSDictionary</span> alloc] initWithObjectsAndKeys:<span class="string">@"value"</span>,<span class="string">@"key"</span>,<span class="string">@"github"</span>,<span class="string">@"build"</span>, <span class="literal">nil</span>];
+<span class="built_in">NSDictionary</span> *dic1 = @{<span class="string">@"key1"</span>:<span class="string">@"value1"</span>};
+<span class="built_in">NSDictionary</span> *dic2 = [<span class="built_in">NSDictionary</span> dictionaryWithObjectsAndKeys:<span class="string">@"value2"</span>,<span class="string">@"key2"</span>, <span class="literal">nil</span>];
+</code></pre><p>包含多少个键值对</p>
+<pre><code><span class="comment">//包含多少个键值对</span>
+<span class="function">NSLog</span>(<span class="at_rule">@<span class="string">"%zd"</span>,dic.count);</span>
+</code></pre><p>通过已知的key名来获取值</p>
+<pre><code><span class="comment">//已知key来获取值</span>
+NSString *<span class="keyword">value</span> = [dic objectForKey:<span class="string">@"key"</span>];
+NSLog(<span class="string">@"%@"</span>,<span class="keyword">value</span>);
+</code></pre><p>获取所有的key和获取所有的值</p>
+<pre><code><span class="comment">//获取所有的key名或者值，返回一个不可变数组</span>
+<span class="built_in">NSArray</span> *keys = [dic allKeys];
+<span class="built_in">NSArray</span> *values = [dic allValues];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,keys);
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,values);
+</code></pre><p>通过一个数组key获取值</p>
+<pre><code><span class="built_in">NSArray</span> *vals = [dic objectsForKeys:@[<span class="string">@"key"</span>] notFoundMarker:<span class="string">@"not"</span>];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,vals);
+</code></pre><p>遍历</p>
+<pre><code>[dic enumerateKeysAndObjectsUsingBlock:^(<span class="keyword">id</span> key, <span class="keyword">id</span> obj, <span class="built_in">BOOL</span> *stop) {
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,key);
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,obj);
+}];
+</code></pre><p>排序</p>
+<pre><code><span class="built_in">NSArray</span> *kesArray =  [dic keysSortedByValueUsingComparator:^NSComparisonResult(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) {
+    <span class="built_in">NSString</span> *ke1 = obj1;
+    <span class="built_in">NSString</span> *ke2 = obj2;
+    <span class="keyword">return</span> [ke1 compare:ke2];
+}];
+</code></pre><p>过滤</p>
+<pre><code>[dic keysOfEntriesPassingTes<span class="variable">t:</span>&lt;#^BOOL(id key, id obj, BOOL *<span class="keyword">stop</span>)predicate#&gt;];
+</code></pre><p>Mutable版的字典，多了增删的方法</p>
+<pre><code><span class="built_in">NSMutableDictionary</span> *dicmutable = [<span class="built_in">NSMutableDictionary</span> dictionaryWithDictionary:dic];
+</code></pre><p>添加</p>
+<pre><code>[dicmutable <span class="keyword">set</span>Object:@<span class="string">"icepy"</span> <span class="keyword">for</span>Key:@<span class="string">"io"</span>];
+NSLog(@<span class="string">"%@"</span>,dicmutable);
+</code></pre><p>删除</p>
+<pre><code><span class="attr_selector">[dicmutable removeObjectForKey:@"build"]</span>;
+<span class="function">NSLog</span>(<span class="at_rule">@<span class="string">"%@"</span>,dicmutable);</span>
+</code></pre>  
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/JavaScript/">JavaScript</a>
+  <span></span> <a href="/tags/iOS/">iOS</a>
   </div>
 
 
@@ -157,19 +186,11 @@ my = <span class="literal">null</span>;
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/02/04/iOS的内存管理/" title="iOS的内存管理">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  iOS的内存管理</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/02/03/复习JavaScript十之理解引用类型和匿名函数闭包/"  title="复习JavaScript十之理解引用类型和匿名函数闭包">
+<a href="/2015/05/10/iOS动画基础/"  title="iOS动画基础">
  <strong>NEXT:</strong><br/> 
- <span>复习JavaScript十之理解引用类型和匿名函数闭包
+ <span>iOS动画基础
 </span>
 </a>
 </div>
