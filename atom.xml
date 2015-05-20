@@ -4,7 +4,7 @@
   <subtitle><![CDATA[draw world]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-05-17T13:11:43.149Z</updated>
+  <updated>2015-05-20T08:45:31.319Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -13,6 +13,226 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[使用Worker实现一个多线程数据缓存模块]]></title>
+    <link href="http://lcepy.github.io/2015/05/20/%E4%BD%BF%E7%94%A8Worker%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%95%B0%E6%8D%AE%E7%BC%93%E5%AD%98%E6%A8%A1%E5%9D%97/"/>
+    <id>http://lcepy.github.io/2015/05/20/使用Worker实现一个多线程数据缓存模块/</id>
+    <published>2015-05-20T08:24:18.000Z</published>
+    <updated>2015-05-20T08:44:43.000Z</updated>
+    <content type="html"><![CDATA[<p>Worker是一个可以在后台运行的任务，并提供了一个JavaScript接口让我们来使用它。Worker能够被轻松的创建，还能向它的创建者发送消息。 你只要调用 Worker() 构造函数，指定一个需要运行在 worker 线程内的脚本，就能够很容易的创建一个 worker。</p>
+<p>Worker这个API的使用非常的简单</p>
+<ul>
+<li>postMessage()  向worker内部发送消息</li>
+<li>terminate() 立即停止当前的worker</li>
+<li>onmessage 一个消息事件，worker内部向前台发送消息 </li>
+<li>onerror 一个错误事件，运行环境出错时，worker内部向前台发送消息</li>
+</ul>
+<p>属性</p>
+<ul>
+<li>message 一个可读的错误消息</li>
+<li>filename 错误所在的文件名</li>
+<li>lineno 错误所在的文本行号 </li>
+</ul>
+<p>JavaScript Client Code</p>
+<pre><code><span class="keyword">var</span> workerQueue = [];
+<span class="keyword">var</span> cacheSystem = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> isWork         = !!Worker;
+    <span class="keyword">var</span> dataSource     = {};
+    <span class="keyword">var</span> contains     = [];
+    <span class="keyword">var</span> lock        = <span class="literal">false</span>;
+    <span class="keyword">var</span> count         = <span class="number">0</span>;
+    <span class="keyword">var</span> getDash     = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        <span class="keyword">var</span> dash         = localStorage.getItem(<span class="string">'scanUseDashDataSource'</span>);
+        <span class="keyword">var</span> dashData     = dash ? <span class="built_in">JSON</span>.parse(dash).data : contains;
+        <span class="keyword">return</span> dashData; 
+    }
+    <span class="keyword">return</span>    {
+        allObject:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">var</span> d = localStorage.getItem(<span class="string">'scanUseModalDataSource'</span>);
+            <span class="keyword">return</span> d ? d = <span class="built_in">JSON</span>.parse(d).data : <span class="literal">null</span>;
+        },
+        objectForKey:<span class="function"><span class="keyword">function</span><span class="params">(key)</span></span>{
+            <span class="keyword">return</span> <span class="keyword">this</span>.allObject()[key];
+        },
+        allKeys:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">var</span> o = <span class="keyword">this</span>.allObject();
+            <span class="keyword">return</span> o ? <span class="built_in">Object</span>.keys(o) : contains;
+        },
+        allValues:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">var</span> o = <span class="keyword">this</span>.allObject();
+            <span class="keyword">if</span>(!o){
+                <span class="keyword">return</span> contains;
+            }
+            <span class="keyword">var</span> c = [];
+            <span class="keyword">for</span>(<span class="keyword">var</span> k <span class="keyword">in</span> o){
+                c.push(o[k].data);
+            }
+            <span class="keyword">return</span> c;
+        },
+        allDash:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">return</span> getDash();
+        },
+        setObject:<span class="function"><span class="keyword">function</span><span class="params">(value)</span></span>{
+            <span class="keyword">var</span> s             = <span class="keyword">this</span>;
+            <span class="keyword">var</span> metadata     = <span class="keyword">this</span>.allObject() || {};
+            metadata[value] = {<span class="string">"data"</span>:<span class="literal">null</span>,<span class="string">"work"</span>:<span class="literal">false</span>,<span class="string">"error"</span>:<span class="literal">false</span>};
+            <span class="keyword">var</span> dashData     = <span class="keyword">this</span>.allDash();    
+            <span class="comment">//如果有网络，提交给后台线程去处理网络请求</span>
+            <span class="built_in">window</span>.networkState = <span class="number">1</span>;
+            <span class="keyword">if</span>(isWork &amp;&amp; <span class="built_in">window</span>.networkState &gt; <span class="number">0</span>){
+                <span class="keyword">var</span> worker = <span class="keyword">new</span> Worker(<span class="string">'fetchThread.js'</span>);
+                worker.addEventListener(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span><span class="params">(evt)</span></span>{
+                    <span class="built_in">console</span>.log(evt);
+                    <span class="keyword">var</span> obj = s.allObject();
+                    <span class="keyword">var</span> sp     = evt.data.split(<span class="string">'@icepy-&gt;'</span>);
+                    <span class="keyword">var</span> tag = sp[<span class="number">0</span>];
+                    <span class="keyword">var</span> dat = sp[<span class="number">1</span>];
+                    <span class="keyword">var</span> o   = obj[tag];
+                    <span class="keyword">var</span> r   = <span class="built_in">JSON</span>.parse(dat);
+                    <span class="keyword">if</span>(o){
+                        <span class="comment">//把后台得到的数据添加到data中</span>
+                        o.data     = r;
+                        <span class="comment">//标记work已经完成</span>
+                        o.work  = <span class="literal">true</span>;
+                        <span class="comment">//标记执行线程锁</span>
+                        lock     = <span class="literal">false</span>;
+                        <span class="keyword">if</span>(r.error){
+                            o.error = <span class="literal">true</span>;
+                        }
+                        localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:obj}));
+                        workerQueue[count][<span class="number">2</span>] = <span class="literal">true</span>;
+                        count++;
+                        <span class="keyword">var</span> work = workerQueue[count];
+                        <span class="keyword">if</span>(work){
+                            <span class="keyword">if</span>(work[<span class="number">2</span>]){
+                                <span class="keyword">var</span> i = count++;
+                                <span class="keyword">var</span> f = <span class="literal">true</span>;
+                                <span class="keyword">do</span>{
+                                    <span class="keyword">var</span> _work = workerQueue[i];
+                                    <span class="keyword">if</span>(!_work[<span class="number">2</span>]){
+                                        _work[<span class="number">1</span>].postMessage(_work[<span class="number">0</span>]);
+                                        f = <span class="literal">false</span>;
+                                        count = i;
+                                        <span class="keyword">break</span>;
+                                    }
+                                    i++;
+                                }<span class="keyword">while</span>(f);
+                            }<span class="keyword">else</span>{
+                                work[<span class="number">1</span>].postMessage(work[<span class="number">0</span>]);
+                            }
+                        }<span class="keyword">else</span>{
+                            workerQueue.length = <span class="number">0</span>;
+                            count = <span class="number">0</span>;
+                        }
+                    }
+
+                });
+                worker.addEventListener(<span class="string">'error'</span>,<span class="function"><span class="keyword">function</span><span class="params">(evt)</span></span>{
+                    <span class="built_in">console</span>.log(<span class="string">'错误信息处理'</span>);
+                });
+                <span class="comment">//把线程加入队列</span>
+                workerQueue.push([value,worker,<span class="literal">false</span>]);
+                <span class="keyword">if</span>(!lock){
+                    lock = <span class="literal">true</span>;
+                    worker.postMessage(value);
+                }
+            }
+            <span class="keyword">if</span>(!(dashData.indexOf(value) &gt; -<span class="number">1</span>)){
+                dashData.push(value);
+            }
+            localStorage.setItem(<span class="string">'scanUseDashDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:dashData}));
+            localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
+        },
+        setValue:<span class="function"><span class="keyword">function</span><span class="params">(key,value)</span></span>{
+            <span class="keyword">var</span> metadata = <span class="keyword">this</span>.allObject();
+            metadata[key].data = value.concat();
+            metadata[key].work = <span class="literal">true</span>;
+            localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
+        },
+        removeObjectForKey:<span class="function"><span class="keyword">function</span><span class="params">(key)</span></span>{
+            <span class="keyword">var</span> metadata     = <span class="keyword">this</span>.allObject();
+            <span class="keyword">var</span> dash         = <span class="keyword">this</span>.allDash();
+            dash.splice(dash.indexOf(key),<span class="number">1</span>);
+            <span class="keyword">this</span>.pop(key);
+            <span class="keyword">delete</span> metadata[key];
+            localStorage.setItem(<span class="string">'scanUseDashDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:dash}));
+            localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
+        },
+        repeat:<span class="function"><span class="keyword">function</span><span class="params">(v)</span></span>{
+            <span class="keyword">var</span> d = <span class="keyword">this</span>.allKeys();
+                i = <span class="number">0</span>;
+            <span class="keyword">if</span>(!d.length){
+                <span class="keyword">return</span> <span class="literal">false</span>;
+            }<span class="keyword">else</span>{
+                <span class="keyword">var</span> lock = <span class="literal">false</span>;
+                <span class="keyword">if</span>(d.indexOf(v) &gt; -<span class="number">1</span>){
+                    lock = <span class="literal">true</span>;
+                }
+                <span class="keyword">return</span> lock;
+            }
+        },
+        pop:<span class="function"><span class="keyword">function</span><span class="params">(key,d)</span></span>{
+            <span class="keyword">if</span>(!d){
+                d = <span class="keyword">this</span>.allObject();
+            }
+            <span class="keyword">if</span>(isWork){
+                <span class="keyword">var</span> i = <span class="number">0</span>;
+                <span class="keyword">var</span> e = workerQueue.length;
+                <span class="keyword">if</span>(e &gt; <span class="number">0</span>){
+                    <span class="keyword">for</span>(;i&lt;e;i++){
+                        <span class="keyword">var</span> work = workerQueue[i];
+                        <span class="keyword">if</span>(work &amp;&amp; work[<span class="number">0</span>] === key){
+                            work[<span class="number">2</span>] = <span class="literal">true</span>;
+                            work[<span class="number">1</span>].terminate();
+                            <span class="keyword">break</span>;
+                        }
+                    }
+                }
+            }
+        },
+        isWork:isWork
+    }
+}();
+</code></pre><p>JavaScript Thread Code</p>
+<pre><code>addEventListener(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span><span class="params">(evt)</span></span>{
+    <span class="keyword">var</span> parameter     = evt.data;
+    <span class="keyword">var</span> xhr         = <span class="keyword">new</span> XMLHttpRequest();
+    <span class="keyword">var</span> headers        = {};
+    xhr.onreadystatechange = <span class="function"><span class="keyword">function</span><span class="params">(e)</span></span>{
+           <span class="keyword">if</span>(xhr.readyState === <span class="number">4</span>){
+               clearInterval(abortTimeout);
+               <span class="keyword">if</span>((xhr.status &gt;= <span class="number">200</span> &amp;&amp; xhr.status &lt; <span class="number">300</span>) || xhr.status == <span class="number">304</span>){
+                   postMessage(parameter+<span class="string">'@icepy-&gt;'</span>+xhr.responseText);
+                   close();
+               }
+           }
+       }
+    xhr.open(<span class="string">'POST'</span>,<span class="string">'http://127.0.0.1:8001/'</span>,<span class="literal">true</span>);
+       xhr.send(parameter);
+       <span class="keyword">var</span> abortTimeout = setInterval(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+           xhr.abort();
+           postMessage(parameter+<span class="string">'@icepy-&gt;'</span>+<span class="string">'{"error":"timeout"}'</span>);
+           close();
+       },<span class="number">1000</span>*<span class="number">13</span>);
+
+       xhr.onerror = <span class="function"><span class="keyword">function</span><span class="params">(e)</span></span>{
+           postMessage(parameter+<span class="string">'@icepy-&gt;'</span>+<span class="string">'{"error":"notnetwork"}'</span>);
+           close();
+       }     
+});
+</code></pre><p>阅读资料</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Worker" target="_blank" rel="external">https://developer.mozilla.org/zh-CN/docs/Web/API/Worker</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>Worker是一个可以在后台运行的任务，并提供了一个JavaScript接口让我们来使用它。Worker能够被轻松的创建，还能向它的创建者发送消息。 你只要调用 Worker() 构造函数，指定一个需要运行在 worker 线程内的脚本，就能够很容易的创建一个 worker]]>
+    </summary>
+    
+      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[NSDictionary]]></title>
@@ -1238,197 +1458,6 @@ dropview.transform
     </summary>
     
       <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[阅读部分zepto源代码]]></title>
-    <link href="http://lcepy.github.io/2015/02/15/%E9%98%85%E8%AF%BB%E9%83%A8%E5%88%86zepto%E6%BA%90%E4%BB%A3%E7%A0%81/"/>
-    <id>http://lcepy.github.io/2015/02/15/阅读部分zepto源代码/</id>
-    <published>2015-02-15T06:11:30.000Z</published>
-    <updated>2015-03-27T16:49:41.000Z</updated>
-    <content type="html"><![CDATA[<p>zepto初始化时，是$符号来获取元素对象，如果是空则会返回一个数组，从源代码上面来看，是这样的：</p>
-<pre><code>$ = <span class="function"><span class="keyword">function</span><span class="params">(selector, context)</span></span>{
-    <span class="keyword">return</span> zepto.init(selector, context)
-  }
-</code></pre><p>可以传入两个参数，一个selector，一个context，在这个函数内部会调用zepto.init方法。</p>
-<pre><code>zepto.init = <span class="function"><span class="keyword">function</span><span class="params">(selector, context)</span> </span>{
-<span class="keyword">var</span> dom
-<span class="comment">// If nothing given, return an empty Zepto collection</span>
-<span class="keyword">if</span> (!selector) <span class="keyword">return</span> zepto.Z()
-<span class="comment">// Optimize for string selectors</span>
-<span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> selector == <span class="string">'string'</span>) {
-  selector = selector.trim()
-  <span class="comment">// If it's a html fragment, create nodes from it</span>
-  <span class="comment">// Note: In both Chrome 21 and Firefox 15, DOM error 12</span>
-  <span class="comment">// is thrown if the fragment doesn't begin with &lt;</span>
-  <span class="keyword">if</span> (selector[<span class="number">0</span>] == <span class="string">'&lt;'</span> &amp;&amp; fragmentRE.test(selector))
-    dom = zepto.fragment(selector, <span class="built_in">RegExp</span>.$<span class="number">1</span>, context), selector = <span class="literal">null</span>
-  <span class="comment">// If there's a context, create a collection on that context first, and select</span>
-  <span class="comment">// nodes from there</span>
-  <span class="keyword">else</span> <span class="keyword">if</span> (context !== <span class="literal">undefined</span>) <span class="keyword">return</span> $(context).find(selector)
-  <span class="comment">// If it's a CSS selector, use it to select nodes.</span>
-  <span class="keyword">else</span> dom = zepto.qsa(<span class="built_in">document</span>, selector)
-}
-<span class="comment">// If a function is given, call it when the DOM is ready</span>
-<span class="keyword">else</span> <span class="keyword">if</span> (isFunction(selector)) <span class="keyword">return</span> $(<span class="built_in">document</span>).ready(selector)
-<span class="comment">// If a Zepto collection is given, just return it</span>
-<span class="keyword">else</span> <span class="keyword">if</span> (zepto.isZ(selector)) <span class="keyword">return</span> selector
-<span class="keyword">else</span> {
-  <span class="comment">// normalize array if an array of nodes is given</span>
-  <span class="keyword">if</span> (isArray(selector)) dom = compact(selector)
-  <span class="comment">// Wrap DOM nodes.```</span>
-  <span class="keyword">else</span> <span class="keyword">if</span> (isObject(selector))
-    dom = [selector], selector = <span class="literal">null</span>
-  <span class="comment">// If it's a html fragment, create nodes from it</span>
-  <span class="keyword">else</span> <span class="keyword">if</span> (fragmentRE.test(selector))
-    dom = zepto.fragment(selector.trim(), <span class="built_in">RegExp</span>.$<span class="number">1</span>, context), selector = <span class="literal">null</span>
-  <span class="comment">// If there's a context, create a collection on that context first, and select</span>
-  <span class="comment">// nodes from there</span>
-  <span class="keyword">else</span> <span class="keyword">if</span> (context !== <span class="literal">undefined</span>) <span class="keyword">return</span> $(context).find(selector)
-  <span class="comment">// And last but no least, if it's a CSS selector, use it to select nodes.</span>
-  <span class="keyword">else</span> dom = zepto.qsa(<span class="built_in">document</span>, selector)
-}
-<span class="comment">// create a new Zepto collection from the nodes found</span>
-<span class="keyword">return</span> zepto.Z(dom, selector)
-
-  }
-
-zepto.Z = <span class="function"><span class="keyword">function</span><span class="params">(dom, selector)</span> </span>{
-    dom = dom || []
-    dom.__proto__ = $.fn
-    dom.selector = selector || <span class="string">''</span>
-    <span class="keyword">return</span> dom
-  }
-</code></pre><p>如果什么都不传入，它在init内部会调用Z，并且返回一个空的数组，这个数组的原型会指向$.fn，$.fn是一个字面量的对象，全部是zepto的一些其他方法。</p>
-<p>如果context有值，它会指定一个上下文，也就是范围$(context).find(selector)，如果context没有值，则会对selector的值进行检索，如果selector是一个标签字符串，则调用zepto.fragment方法来获取dom对象。如果selector不是标签字符串，则调用zepto.qsa方法，得到DOM对象，在qsa方法中会检查#，.也就是id和class，如果id有返回的是从getElementById中获取的dom对象，如果是class则调用数组的slice方法call一下比如querySelectorAll等，在获取dom对象时，就已经进行了装载，最后调用zepto.Z方法，返回这个数组。</p>
-<pre><code>zepto.qsa = <span class="function"><span class="keyword">function</span><span class="params">(element, selector)</span></span>{
-<span class="keyword">var</span> found,
-    maybeID = selector[<span class="number">0</span>] == <span class="string">'#'</span>,
-    maybeClass = !maybeID &amp;&amp; selector[<span class="number">0</span>] == <span class="string">'.'</span>,
-    nameOnly = maybeID || maybeClass ? selector.slice(<span class="number">1</span>) : selector, <span class="comment">// Ensure that a 1 char tag name still gets checked</span>
-    isSimple = simpleSelectorRE.test(nameOnly)
-<span class="keyword">return</span> (isDocument(element) &amp;&amp; isSimple &amp;&amp; maybeID) ?
-  ( (found = element.getElementById(nameOnly)) ? [found] : [] ) :
-  (element.nodeType !== <span class="number">1</span> &amp;&amp; element.nodeType !== <span class="number">9</span>) ? [] :
-  slice.call(
-    isSimple &amp;&amp; !maybeID ?
-      maybeClass ? element.getElementsByClassName(nameOnly) : <span class="comment">// If it's simple, it could be a class</span>
-      element.getElementsByTagName(selector) : <span class="comment">// Or a tag</span>
-      element.querySelectorAll(selector) <span class="comment">// Or it's not simple, and we need to query all</span>
-  )
-  }
-
-  zepto.fragment = <span class="function"><span class="keyword">function</span><span class="params">(html, name, properties)</span> </span>{
-<span class="keyword">var</span> dom, nodes, container
-
-<span class="comment">// A special case optimization for a single tag</span>
-<span class="keyword">if</span> (singleTagRE.test(html)) dom = $(<span class="built_in">document</span>.createElement(<span class="built_in">RegExp</span>.$<span class="number">1</span>))
-
-<span class="keyword">if</span> (!dom) {
-  <span class="keyword">if</span> (html.replace) html = html.replace(tagExpanderRE, <span class="string">"&lt;$1&gt;&lt;/$2&gt;"</span>)
-  <span class="keyword">if</span> (name === <span class="literal">undefined</span>) name = fragmentRE.test(html) &amp;&amp; <span class="built_in">RegExp</span>.$<span class="number">1</span>
-  <span class="keyword">if</span> (!(name <span class="keyword">in</span> containers)) name = <span class="string">'*'</span>
-
-  container = containers[name]
-  container.innerHTML = <span class="string">''</span> + html
-  dom = $.each(slice.call(container.childNodes), <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    container.removeChild(<span class="keyword">this</span>)
-  })
-}
-
-<span class="keyword">if</span> (isPlainObject(properties)) {
-  nodes = $(dom)
-  $.each(properties, <span class="function"><span class="keyword">function</span><span class="params">(key, value)</span> </span>{
-    <span class="keyword">if</span> (methodAttributes.indexOf(key) &gt; -<span class="number">1</span>) nodes[key](value)
-    <span class="keyword">else</span> nodes.attr(key, value)
-  })
-}
-
-<span class="keyword">return</span> dom
-  }
-</code></pre><p>其实这个数组，就是我们使用到的真正的东西了，在Z方法内部，主要就是两个动作，把dom的原型指向$.fn，把dom的selector属性指向selector，这样就可以使用到zepto中的其他可以使用的方法了。</p>
-<p>而平时的开发中对于类型的判断是使用的很多的东西，我们可能需要对数据的类型进行检查，以满足预期的结果，而zepto中也提供了一揽子的解决方案，用于类型的判断，函数，字符串，对象，数组等。</p>
-<pre><code>$.each(<span class="string">"Boolean Number String Function Array Date RegExp Object Error"</span>.split(<span class="string">" "</span>),    <span class="function"><span class="keyword">function</span><span class="params">(i, name)</span> </span>{
-class2type[ <span class="string">"[object "</span> + name + <span class="string">"]"</span> ] = name.toLowerCase()
-  })
-</code></pre><p>其实从这里就可以看的出来zepto使用的是什么方式来检索数据类型，借用的就是Object对象的toString方法把全类型字符串打印出来，然后再根据这些字符串来分别处理。在zepto的源代码中，它没有这么写，Object.prototype.toString.call(obj)，而是直接toString.call(obj)，这是因为这个toString是一个内置对象，作用域我想我们都明白，在客户端它是如何搜索的。</p>
-<p>在得到了全类型的字符串后，可以去class2type的map中取出值来进行比对，来返回正确的类型。</p>
-<pre><code><span class="function"><span class="keyword">function</span> <span class="title">isObject</span><span class="params">(obj)</span>     </span>{ <span class="keyword">return</span> type(obj) == <span class="string">"object"</span> }
-<span class="function"><span class="keyword">function</span> <span class="title">isFunction</span><span class="params">(value)</span> </span>{ <span class="keyword">return</span> type(value) == <span class="string">"function"</span> }
-<span class="function"><span class="keyword">function</span> <span class="title">type</span><span class="params">(obj)</span> </span>{
-<span class="keyword">return</span> obj == <span class="literal">null</span> ? <span class="built_in">String</span>(obj) :
-  class2type[toString.call(obj)] || <span class="string">"object"</span>
-  }
-</code></pre><p>数组zepto使用的最新的API，Array提供的isArray方法。</p>
-<pre><code>isArray = <span class="built_in">Array</span>.isArray ||
-  <span class="function"><span class="keyword">function</span><span class="params">(object)</span></span>{ <span class="keyword">return</span> object <span class="keyword">instanceof</span> <span class="built_in">Array</span> }
-</code></pre><p>zepto还提供了检测document，window等。</p>
-<pre><code><span class="function"><span class="keyword">function</span> <span class="title">isWindow</span><span class="params">(obj)</span>     </span>{ <span class="keyword">return</span> obj != <span class="literal">null</span> &amp;&amp; obj == obj.window }
-  <span class="function"><span class="keyword">function</span> <span class="title">isDocument</span><span class="params">(obj)</span>   </span>{ <span class="keyword">return</span> obj != <span class="literal">null</span> &amp;&amp; obj.nodeType == obj.DOCUMENT_NODE }
-  <span class="function"><span class="keyword">function</span> <span class="title">isPlainObject</span><span class="params">(obj)</span> </span>{
- <span class="comment">//getPrototypeOf 返回一个对象的原型 ，这里是不是跟Object.prototype相等</span>
- <span class="keyword">return</span> isObject(obj) &amp;&amp; !isWindow(obj) &amp;&amp; <span class="built_in">Object</span>.getPrototypeOf(obj) == <span class="built_in">Object</span>.prototype
-}
-</code></pre><p>each顾名思义是用来遍历的</p>
-<pre><code>$.each = <span class="function"><span class="keyword">function</span><span class="params">(elements, callback)</span></span>{
-<span class="keyword">var</span> i, key
-<span class="keyword">if</span> (likeArray(elements)) {
-  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; elements.length; i++)
-    <span class="comment">//函数的默认返回值是undefined ，那么什么情况下会成 false  ?</span>
-    <span class="keyword">if</span> (<span class="keyword">callback</span>.call(elements[i], i, elements[i]) === <span class="literal">false</span>) <span class="keyword">return</span> elements
-} <span class="keyword">else</span> {
-  <span class="keyword">for</span> (key <span class="keyword">in</span> elements)
-    <span class="keyword">if</span> (<span class="keyword">callback</span>.call(elements[key], key, elements[key]) === <span class="literal">false</span>) <span class="keyword">return</span> elements
-}
-
-<span class="keyword">return</span> elements
-  } 
-</code></pre><p>唯一有个问题，看看有其他朋友知晓不，什么情况下callback.call会等于false？按道理来说，如果检查typeof callback === ‘function’，这样的情况，我认为可以理解。毕竟函数的默认返回值就是undefined，但是它也不是“强类型”相等的，所以我不明白它的意义何在？</p>
-<p>在学习map函数之前，先学习几个比较有用的方法，比如判断一个对象是否是空对象，给字符串两边去空白等。判断空对象，主要是利用了in语法，它可以遍历对象的属性，如果是空对象for循环会直接跳过。</p>
-<pre><code>$.isEmptyObject = <span class="function"><span class="keyword">function</span><span class="params">(obj)</span> </span>{
-    <span class="keyword">var</span> name
-    <span class="keyword">for</span> (name <span class="keyword">in</span> obj) <span class="keyword">return</span> <span class="literal">false</span>
-    <span class="keyword">return</span> <span class="literal">true</span>
-  }
-</code></pre><p>判断一个元素是否在数组中，借用了在最上面申明的一个空数组的indexOf。</p>
-<pre><code>$.inArray = <span class="function"><span class="keyword">function</span><span class="params">(elem, array, i)</span></span>{
-    <span class="keyword">return</span> emptyArray.indexOf.call(array, elem, i)
-  }
-</code></pre><p>给字符串左右两边去空白，这个是借用了String包装对象的trim方法。</p>
-<pre><code>$.trim = <span class="function"><span class="keyword">function</span><span class="params">(str)</span> </span>{
-    <span class="keyword">return</span> str == <span class="literal">null</span> ? <span class="string">""</span> : <span class="built_in">String</span>.prototype.trim.call(str)
-  }
-</code></pre><p>map函数是一个很有意思很有用的函数，它可以帮助开发者进行映射到每一个元素上，新版的数组也提供了map方法，考虑到某些浏览器没有实现这个，所以zepto帮助我们实现了它。</p>
-<pre><code>$.map = <span class="function"><span class="keyword">function</span>(<span class="title">elements</span>, <span class="title">callback</span>){</span>
-var <span class="built_in">value</span>, values = [], i, key
-<span class="keyword">if</span> (likeArray(elements))
-  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; elements.<span class="built_in">length</span>; i++) {
-    <span class="built_in">value</span> = callback(elements[i], i)
-    <span class="keyword">if</span> (<span class="built_in">value</span> != <span class="constant">null</span>) values.push(<span class="built_in">value</span>)
-  }
-<span class="keyword">else</span>
-      <span class="keyword">for</span> (key <span class="operator">in</span> elements) {
-        <span class="built_in">value</span> = callback(elements[key], key)
-        <span class="keyword">if</span> (<span class="built_in">value</span> != <span class="constant">null</span>) values.push(<span class="built_in">value</span>)
-      }
-    <span class="constant">return</span> flatten(values)
-  }
-</code></pre><p>likeArray是判断了下length属性是不是number，如果是，遍历，然后装载到values数组中，如果是对象就用for in，最后的flatten是借用一下concat，copy一个副本出来返回。</p>
-<p>read函数，是在开发中非常有用的函数，主要是用来当DOM文档准备好之后，再加载或直接某些Js片段。就是怕，某些情况下，比如Js片段已经写好了，这里面要获取某个DOM节点，实际上这里会是null，然后执行其他操作就抛错误了，因为在浏览器中，这个节点还不存在。</p>
-<pre><code><span class="comment">//读取readyState状态</span>
-  <span class="keyword">if</span> (readyRE.test(<span class="built_in">document</span>.readyState) &amp;&amp; <span class="built_in">document</span>.body) callback($)
-<span class="comment">//监听DOMContentLoaded事件</span>
-  <span class="keyword">else</span> <span class="built_in">document</span>.addEventListener(<span class="string">'DOMContentLoaded'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{ callback($) }, <span class="literal">false</span>)
-  <span class="keyword">return</span>  <span class="keyword">this</span>
-</code></pre><p>zepto因为是移动端的开发，所以它监听的是DOMContentLoaded事件，这个事件是一个原生方法，新版API中提供了这个，而对IE10兼容，则是判断document的readyState属性，保证它是complete|loaded|interactive，这也意味着已经准备好了，并且还要判断body是否存在，才执行callback函数。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>zepto初始化时，是$符号来获取元素对象，如果是空则会返回一个数组，从源代码上面来看，是这样的：</p>
-<pre><code>$ = <span class="function"><span class="keyword">function</span><span cl]]>
-    </summary>
-    
-      <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
     
   </entry>
   

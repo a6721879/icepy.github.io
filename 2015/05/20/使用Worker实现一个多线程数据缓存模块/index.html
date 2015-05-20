@@ -1,0 +1,560 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>使用Worker实现一个多线程数据缓存模块 | icepy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="icepy">
+    
+    <meta name="description" content="Worker是一个可以在后台运行的任务，并提供了一个JavaScript接口让我们来使用它。Worker能够被轻松的创建，还能向它的创建者发送消息。 你只要调用 Worker() 构造函数，指定一个需要运行在 worker 线程内的脚本，就能够很容易的创建一个 worker。
+Worker这个API">
+    
+    
+    
+    
+    <link rel="alternate" href="/atom.xml## RSS address." title="icepy" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/catman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/catman.jpg">
+    
+    <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+    
+
+
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?16dce8818578643d2c8f0ed9bc5696ec";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    <link href='http://fonts.useso.com/css?family=Tangerine:700' rel='stylesheet' type='text/css'>
+<link href='http://fonts.useso.com/css?family=Covered+By+Your+Grace' rel='stylesheet' type='text/css'>
+<link href='http://fonts.useso.com/css?family=Philosopher' rel='stylesheet' type='text/css'>
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="icepy" title="icepy"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="icepy">icepy</a></h1>
+				<h2 class="blog-motto">draw world</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/20/使用Worker实现一个多线程数据缓存模块/" title="使用Worker实现一个多线程数据缓存模块" itemprop="url">使用Worker实现一个多线程数据缓存模块</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://lcepy.github.io" title="icepy">icepy</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-05-20T08:24:18.000Z" itemprop="datePublished">5月 20 2015</time>
+    更新日期:<time datetime="2015-05-20T08:44:43.000Z" itemprop="dateModified">5月 20 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		</div>
+		
+		<p>Worker是一个可以在后台运行的任务，并提供了一个JavaScript接口让我们来使用它。Worker能够被轻松的创建，还能向它的创建者发送消息。 你只要调用 Worker() 构造函数，指定一个需要运行在 worker 线程内的脚本，就能够很容易的创建一个 worker。</p>
+<p>Worker这个API的使用非常的简单</p>
+<ul>
+<li>postMessage()  向worker内部发送消息</li>
+<li>terminate() 立即停止当前的worker</li>
+<li>onmessage 一个消息事件，worker内部向前台发送消息 </li>
+<li>onerror 一个错误事件，运行环境出错时，worker内部向前台发送消息</li>
+</ul>
+<p>属性</p>
+<ul>
+<li>message 一个可读的错误消息</li>
+<li>filename 错误所在的文件名</li>
+<li>lineno 错误所在的文本行号 </li>
+</ul>
+<p>JavaScript Client Code</p>
+<pre><code><span class="keyword">var</span> workerQueue = [];
+<span class="keyword">var</span> cacheSystem = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> isWork         = !!Worker;
+    <span class="keyword">var</span> dataSource     = {};
+    <span class="keyword">var</span> contains     = [];
+    <span class="keyword">var</span> lock        = <span class="literal">false</span>;
+    <span class="keyword">var</span> count         = <span class="number">0</span>;
+    <span class="keyword">var</span> getDash     = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        <span class="keyword">var</span> dash         = localStorage.getItem(<span class="string">'scanUseDashDataSource'</span>);
+        <span class="keyword">var</span> dashData     = dash ? <span class="built_in">JSON</span>.parse(dash).data : contains;
+        <span class="keyword">return</span> dashData; 
+    }
+    <span class="keyword">return</span>    {
+        allObject:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">var</span> d = localStorage.getItem(<span class="string">'scanUseModalDataSource'</span>);
+            <span class="keyword">return</span> d ? d = <span class="built_in">JSON</span>.parse(d).data : <span class="literal">null</span>;
+        },
+        objectForKey:<span class="function"><span class="keyword">function</span><span class="params">(key)</span></span>{
+            <span class="keyword">return</span> <span class="keyword">this</span>.allObject()[key];
+        },
+        allKeys:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">var</span> o = <span class="keyword">this</span>.allObject();
+            <span class="keyword">return</span> o ? <span class="built_in">Object</span>.keys(o) : contains;
+        },
+        allValues:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">var</span> o = <span class="keyword">this</span>.allObject();
+            <span class="keyword">if</span>(!o){
+                <span class="keyword">return</span> contains;
+            }
+            <span class="keyword">var</span> c = [];
+            <span class="keyword">for</span>(<span class="keyword">var</span> k <span class="keyword">in</span> o){
+                c.push(o[k].data);
+            }
+            <span class="keyword">return</span> c;
+        },
+        allDash:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">return</span> getDash();
+        },
+        setObject:<span class="function"><span class="keyword">function</span><span class="params">(value)</span></span>{
+            <span class="keyword">var</span> s             = <span class="keyword">this</span>;
+            <span class="keyword">var</span> metadata     = <span class="keyword">this</span>.allObject() || {};
+            metadata[value] = {<span class="string">"data"</span>:<span class="literal">null</span>,<span class="string">"work"</span>:<span class="literal">false</span>,<span class="string">"error"</span>:<span class="literal">false</span>};
+            <span class="keyword">var</span> dashData     = <span class="keyword">this</span>.allDash();    
+            <span class="comment">//如果有网络，提交给后台线程去处理网络请求</span>
+            <span class="built_in">window</span>.networkState = <span class="number">1</span>;
+            <span class="keyword">if</span>(isWork &amp;&amp; <span class="built_in">window</span>.networkState &gt; <span class="number">0</span>){
+                <span class="keyword">var</span> worker = <span class="keyword">new</span> Worker(<span class="string">'fetchThread.js'</span>);
+                worker.addEventListener(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span><span class="params">(evt)</span></span>{
+                    <span class="built_in">console</span>.log(evt);
+                    <span class="keyword">var</span> obj = s.allObject();
+                    <span class="keyword">var</span> sp     = evt.data.split(<span class="string">'@icepy-&gt;'</span>);
+                    <span class="keyword">var</span> tag = sp[<span class="number">0</span>];
+                    <span class="keyword">var</span> dat = sp[<span class="number">1</span>];
+                    <span class="keyword">var</span> o   = obj[tag];
+                    <span class="keyword">var</span> r   = <span class="built_in">JSON</span>.parse(dat);
+                    <span class="keyword">if</span>(o){
+                        <span class="comment">//把后台得到的数据添加到data中</span>
+                        o.data     = r;
+                        <span class="comment">//标记work已经完成</span>
+                        o.work  = <span class="literal">true</span>;
+                        <span class="comment">//标记执行线程锁</span>
+                        lock     = <span class="literal">false</span>;
+                        <span class="keyword">if</span>(r.error){
+                            o.error = <span class="literal">true</span>;
+                        }
+                        localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:obj}));
+                        workerQueue[count][<span class="number">2</span>] = <span class="literal">true</span>;
+                        count++;
+                        <span class="keyword">var</span> work = workerQueue[count];
+                        <span class="keyword">if</span>(work){
+                            <span class="keyword">if</span>(work[<span class="number">2</span>]){
+                                <span class="keyword">var</span> i = count++;
+                                <span class="keyword">var</span> f = <span class="literal">true</span>;
+                                <span class="keyword">do</span>{
+                                    <span class="keyword">var</span> _work = workerQueue[i];
+                                    <span class="keyword">if</span>(!_work[<span class="number">2</span>]){
+                                        _work[<span class="number">1</span>].postMessage(_work[<span class="number">0</span>]);
+                                        f = <span class="literal">false</span>;
+                                        count = i;
+                                        <span class="keyword">break</span>;
+                                    }
+                                    i++;
+                                }<span class="keyword">while</span>(f);
+                            }<span class="keyword">else</span>{
+                                work[<span class="number">1</span>].postMessage(work[<span class="number">0</span>]);
+                            }
+                        }<span class="keyword">else</span>{
+                            workerQueue.length = <span class="number">0</span>;
+                            count = <span class="number">0</span>;
+                        }
+                    }
+
+                });
+                worker.addEventListener(<span class="string">'error'</span>,<span class="function"><span class="keyword">function</span><span class="params">(evt)</span></span>{
+                    <span class="built_in">console</span>.log(<span class="string">'错误信息处理'</span>);
+                });
+                <span class="comment">//把线程加入队列</span>
+                workerQueue.push([value,worker,<span class="literal">false</span>]);
+                <span class="keyword">if</span>(!lock){
+                    lock = <span class="literal">true</span>;
+                    worker.postMessage(value);
+                }
+            }
+            <span class="keyword">if</span>(!(dashData.indexOf(value) &gt; -<span class="number">1</span>)){
+                dashData.push(value);
+            }
+            localStorage.setItem(<span class="string">'scanUseDashDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:dashData}));
+            localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
+        },
+        setValue:<span class="function"><span class="keyword">function</span><span class="params">(key,value)</span></span>{
+            <span class="keyword">var</span> metadata = <span class="keyword">this</span>.allObject();
+            metadata[key].data = value.concat();
+            metadata[key].work = <span class="literal">true</span>;
+            localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
+        },
+        removeObjectForKey:<span class="function"><span class="keyword">function</span><span class="params">(key)</span></span>{
+            <span class="keyword">var</span> metadata     = <span class="keyword">this</span>.allObject();
+            <span class="keyword">var</span> dash         = <span class="keyword">this</span>.allDash();
+            dash.splice(dash.indexOf(key),<span class="number">1</span>);
+            <span class="keyword">this</span>.pop(key);
+            <span class="keyword">delete</span> metadata[key];
+            localStorage.setItem(<span class="string">'scanUseDashDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:dash}));
+            localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
+        },
+        repeat:<span class="function"><span class="keyword">function</span><span class="params">(v)</span></span>{
+            <span class="keyword">var</span> d = <span class="keyword">this</span>.allKeys();
+                i = <span class="number">0</span>;
+            <span class="keyword">if</span>(!d.length){
+                <span class="keyword">return</span> <span class="literal">false</span>;
+            }<span class="keyword">else</span>{
+                <span class="keyword">var</span> lock = <span class="literal">false</span>;
+                <span class="keyword">if</span>(d.indexOf(v) &gt; -<span class="number">1</span>){
+                    lock = <span class="literal">true</span>;
+                }
+                <span class="keyword">return</span> lock;
+            }
+        },
+        pop:<span class="function"><span class="keyword">function</span><span class="params">(key,d)</span></span>{
+            <span class="keyword">if</span>(!d){
+                d = <span class="keyword">this</span>.allObject();
+            }
+            <span class="keyword">if</span>(isWork){
+                <span class="keyword">var</span> i = <span class="number">0</span>;
+                <span class="keyword">var</span> e = workerQueue.length;
+                <span class="keyword">if</span>(e &gt; <span class="number">0</span>){
+                    <span class="keyword">for</span>(;i&lt;e;i++){
+                        <span class="keyword">var</span> work = workerQueue[i];
+                        <span class="keyword">if</span>(work &amp;&amp; work[<span class="number">0</span>] === key){
+                            work[<span class="number">2</span>] = <span class="literal">true</span>;
+                            work[<span class="number">1</span>].terminate();
+                            <span class="keyword">break</span>;
+                        }
+                    }
+                }
+            }
+        },
+        isWork:isWork
+    }
+}();
+</code></pre><p>JavaScript Thread Code</p>
+<pre><code>addEventListener(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span><span class="params">(evt)</span></span>{
+    <span class="keyword">var</span> parameter     = evt.data;
+    <span class="keyword">var</span> xhr         = <span class="keyword">new</span> XMLHttpRequest();
+    <span class="keyword">var</span> headers        = {};
+    xhr.onreadystatechange = <span class="function"><span class="keyword">function</span><span class="params">(e)</span></span>{
+           <span class="keyword">if</span>(xhr.readyState === <span class="number">4</span>){
+               clearInterval(abortTimeout);
+               <span class="keyword">if</span>((xhr.status &gt;= <span class="number">200</span> &amp;&amp; xhr.status &lt; <span class="number">300</span>) || xhr.status == <span class="number">304</span>){
+                   postMessage(parameter+<span class="string">'@icepy-&gt;'</span>+xhr.responseText);
+                   close();
+               }
+           }
+       }
+    xhr.open(<span class="string">'POST'</span>,<span class="string">'http://127.0.0.1:8001/'</span>,<span class="literal">true</span>);
+       xhr.send(parameter);
+       <span class="keyword">var</span> abortTimeout = setInterval(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+           xhr.abort();
+           postMessage(parameter+<span class="string">'@icepy-&gt;'</span>+<span class="string">'{"error":"timeout"}'</span>);
+           close();
+       },<span class="number">1000</span>*<span class="number">13</span>);
+
+       xhr.onerror = <span class="function"><span class="keyword">function</span><span class="params">(e)</span></span>{
+           postMessage(parameter+<span class="string">'@icepy-&gt;'</span>+<span class="string">'{"error":"notnetwork"}'</span>);
+           close();
+       }     
+});
+</code></pre><p>阅读资料</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Worker" target="_blank" rel="external">https://developer.mozilla.org/zh-CN/docs/Web/API/Worker</a></li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JavaScript/">JavaScript</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  
+<div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a class="jiathis_button_twitter">Twitter</a>
+    <a class="jiathis_button_evernote">EverNote</a>
+    <a href="http://www.jiathis.com/share?uid=1501277" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+</div>
+<script type="text/javascript" >
+    var jiathis_config={
+    data_track_clickback:true,
+    sm:"copy,renren,cqq",
+    pic:"",
+    summary:"",
+     ralateuid:{"tsina":"2455876310"},hideMore:false}
+    
+  </script> 
+<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=
+" charset="utf-8"></script>      
+
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/05/16/NSDictionary/"  title="NSDictionary">
+ <strong>NEXT:</strong><br/> 
+ <span>NSDictionary
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+    </div>
+  </div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml## RSS address." target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>17</sup></a></li>
+		
+			<li><a href="/tags/django/" title="django">django<sup>4</sup></a></li>
+		
+			<li><a href="/tags/iOS/" title="iOS">iOS<sup>20</sup></a></li>
+		
+			<li><a href="/tags/nodejs/" title="nodejs">nodejs<sup>2</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+			<li><a href="/tags/生活/" title="生活">生活<sup>5</sup></a></li>
+		
+			<li><a href="/tags/简历/" title="简历">简历<sup>1</sup></a></li>
+		
+			<li><a href="/tags/经验之谈/" title="经验之谈">经验之谈<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/u/2455876310" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/lcepy" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/leaf-hsiao/catman" target="_blank" title="Catman">Catman</a> © 2015 
+		
+		<a href="http://lcepy.github.io" target="_blank" title="icepy">icepy</a>
+		
+		</p>
+</div>
+</footer>
+    <div id="top" style="position:fixed;bottom:100px;right:30px;cursor: pointer;">
+        <a title="top"><img src="/img/top.png"/ width="50px"></a>
+    </div>
+    <script src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,208-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      m = $('#main'),
+      a = $('#asidepart'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside'),
+      w  = $(window).width();
+  if ( w>1070 ) {
+  	m.addClass('moveMain');
+  	a.css('display', 'none').addClass('fadeIn');
+  	o.css('display', 'block');
+  };
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+  	if ( w>1070 ) {
+  	  ta.css('display', 'block').addClass('fadeIn');
+  	};
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,250-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"lcepy"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+
+
+
+  </body>
+</html>
