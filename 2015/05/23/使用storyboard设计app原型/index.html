@@ -4,13 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>复习JavaScript八之操作XML | icepy</title>
+    <title>使用storyboard设计app原型 | icepy</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="icepy">
     
-    <meta name="description" content="在以前XML是存储和传输数据的事实标准（客户端没有出现JSON之前），那个时候浏览器还不支持解析XML，于是很多开发者需要自己写一个XML解析器。原理，就是把XML也转化成DOM文档，然后通过DOM API来获取。
-而现在，在客户端（浏览器）编程中几乎很少会使用到XML，数据的交换都应用在JSON上">
+    <meta name="description" content="今天我想写一下自己利用storyboard+swift快速设计一款App原型的经历，这是突然发现Xcode的强大之处带来的优势，你可以设计一个如下图的原型。
+
+先创建一个项目＋创建一个storyboard＋拖拽一个ViewController到storyboard中（默认你知道怎么创建一个项目，怎么">
     
     
     
@@ -80,15 +81,15 @@ var _hmt = _hmt || [];
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/02/02/复习JavaScript八之操作XML/" title="复习JavaScript八之操作XML" itemprop="url">复习JavaScript八之操作XML</a>
+      <a href="/2015/05/23/使用storyboard设计app原型/" title="使用storyboard设计app原型" itemprop="url">使用storyboard设计app原型</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://lcepy.github.io" title="icepy">icepy</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-02-02T09:50:14.000Z" itemprop="datePublished">2月 2 2015</time>
-    更新日期:<time datetime="2015-02-24T11:47:17.000Z" itemprop="dateModified">2月 24 2015</time>
+    <time datetime="2015-05-23T12:48:13.000Z" itemprop="datePublished">5月 23 2015</time>
+    更新日期:<time datetime="2015-05-23T15:01:45.000Z" itemprop="dateModified">5月 23 2015</time>
     
   </p>
 </header>
@@ -97,51 +98,41 @@ var _hmt = _hmt || [];
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#IE版本"><span class="toc-number">1.</span> <span class="toc-text">IE版本</span></a></li></ol>
+		
 		</div>
 		
-		<p>在以前XML是存储和传输数据的事实标准（客户端没有出现JSON之前），那个时候浏览器还不支持解析XML，于是很多开发者需要自己写一个XML解析器。原理，就是把XML也转化成DOM文档，然后通过DOM API来获取。</p>
-<p>而现在，在客户端（浏览器）编程中几乎很少会使用到XML，数据的交换都应用在JSON上了，了解这个有一个好处，就是在做服务端编程，比如SAOP协议时就会用到，还有桌面的客户端，或者是移动客户端上，比如iOS，它把一些数据，比如NSArray写入到本地，实际上就是一个XML文本，当然在代码层面上，是看不出来有解析的，如果读取这个文件，是直接转成NSArray对象的。</p>
-<blockquote>
-<p>IE有它自己的实现对XML的支持，下面说的两个类型，在IE中都不支持</p>
-</blockquote>
-<p>将XML字符串序列化成DOM文档，主要是使用DOMparser类来实现，其他的用法跟获取DOM节点一样。</p>
-<pre><code><span class="keyword">var</span> parser = <span class="keyword">new</span> DOMparser();
-<span class="keyword">var</span> xmlDomObject = parser.parserFromString(<span class="string">'&lt;root&gt;&lt;child/&gt;&lt;/root&gt;'</span>,<span class="string">'text/xml'</span>);
-
-xmlDomObject.getElementsByTagName(<span class="string">'child'</span>);
-</code></pre><p>将DOM文档反序列化成XML字符串，主要是使用XMLSerializer类型，使用上述的xmlDomObject对象。</p>
-<pre><code><span class="built_in">var</span> serializer <span class="subst">=</span> <span class="literal">new</span> XMLSerializer();
-<span class="built_in">var</span> <span class="built_in">xml</span> <span class="subst">=</span> serializer<span class="built_in">.</span>serializeToString(xmlDomObject);
-</code></pre><p>如果XML解析有错误都会返回一个parsererror标签，获取的时候就可以判断是否有这个标签来决定解析是否有错误。</p>
-<p>据说DOM3版本的XML操作只有一个浏览器实现了，所以当资料了解就好。</p>
-<h3 id="IE版本">IE版本</h3>
-<blockquote>
-<p>IE版本的XML解析主要是使用它的ActiveXObject类型来实现</p>
-</blockquote>
-<p>在IE中想要解析XML就必须先创建一个空的DOM文档，然后通过这个文档来获取。</p>
-<pre><code>var xmldom = createDocument();
-xmldom.loadXML(<span class="comment">'<span class="xmlDocTag">&lt;root&gt;</span><span class="xmlDocTag">&lt;child/&gt;</span><span class="xmlDocTag">&lt;/root&gt;</span>');</span>
-
-xmldom.getElementsByTagName(<span class="comment">'child');</span>
-</code></pre><p>如果解析有错误，可以检查parseError对象。</p>
-<pre><code><span class="keyword">if</span>(xmldom.parseError !== <span class="number">0</span>){
-    //<span class="keyword">do</span> 
-}
-</code></pre><p>在IE中进行序列化非常的方便，因为它都内置在了DOM文档中，每一个DOM节点都有一个xml属性，它就保存着XML字符串。</p>
-<pre><code>xmldom<span class="built_in">.</span><span class="built_in">xml</span>
-</code></pre><p>最后IE还提供了一个可以加载远程XML文件的方法load，它就接收一个参数，远程XML的URL地址。当然，也可以使用async属性来设置同步还是异步，默认是异步（true）。</p>
-<pre><code><span class="keyword">var</span> xmldom = createDocument();
-xmldom.<span class="keyword">async</span> = <span class="keyword">false</span>;
-xmldom.load(<span class="string">'http://xxx.sss.xml'</span>);
-</code></pre><p>如果是异步还要监听一下onreadystatechange事件，判断readystate状态，这个跟Ajax的使用是一样的。</p>
+		<p>今天我想写一下自己利用storyboard+swift快速设计一款App原型的经历，这是突然发现Xcode的强大之处带来的优势，你可以设计一个如下图的原型。</p>
+<p><img src="http://websources.qiniudn.com/iOS/prototype.png" alt=""></p>
+<p>先创建一个项目＋创建一个storyboard＋拖拽一个ViewController到storyboard中（默认你知道怎么创建一个项目，怎么新建一个storyboard，以及怎么拖拽一个ViewController到storyboard中）</p>
+<p><img src="http://websources.qiniudn.com/iOS/storyboard.png" alt=""></p>
+<p>给ViewController设置启动，这个设置针对storyboard是唯一的，也就是只能设置一个</p>
+<p><img src="http://websources.qiniudn.com/iOS/initViewController.png" alt=""></p>
+<p>给ViewController设置身份ID(identity)，它应该是唯一的，而且后期如果有多个storyboard时场景的跳转会使用到</p>
+<pre><code><span class="keyword">var</span> sd:<span class="type">UIStoryboard</span> = <span class="type">UIStoryboard</span>(name: <span class="string">"Cycling"</span>, bundle: <span class="built_in">nil</span>)
+<span class="keyword">var</span> cyc:<span class="type">CyclingInitViewController</span> = sd.instantiateViewControllerWithIdentifier(<span class="string">"CyclingInit"</span>) <span class="keyword">as</span>! <span class="type">CyclingInitViewController</span>
+<span class="keyword">self</span>.navigationController?.pushViewController(cyc, animated: <span class="built_in">true</span>)
+</code></pre><p><img src="http://websources.qiniudn.com/iOS/identity.png" alt=""></p>
+<p>给ViewController应用一个NavgationController，每一个视图控制器中都有一个navigationController和navigationItem。（注意：前者应该算一个公共的，后者navigationItem是每个控制器自身独有的）在使用的时候需要注意这些，以保证标题，以及导航栏上的bar可以设置正确</p>
+<p><img src="http://websources.qiniudn.com/iOS/navigationC.png" alt=""></p>
+<p>拖拽一个label到视图中，我们可以通过属性板来设置它的一些属性，比如字体大小，颜色，是否居中。属性有很多，基本上和代码中的UILabel可以一一对应起来。</p>
+<p><img src="http://websources.qiniudn.com/iOS/attributes.png" alt=""></p>
+<p>在Size面板中可以调整x,y以及高宽</p>
+<p><img src="http://websources.qiniudn.com/iOS/size.png" alt=""></p>
+<p>接下来应该是一个最重要的活儿了，autolayout技术对视图进行约束，这是接下来想对UI进行正确排版所使用的技术，关于它的细节问题，你需要慢慢了解，我只能告诉你怎样在storyboard中利用Xcode给我们提供的工具去连线，去进行约束。</p>
+<p>第一种方式，利用右下角的小三角形，对约束进行重置（简单的约束，Xcode非常智能的帮你排版了）</p>
+<p><img src="http://websources.qiniudn.com/iOS/constraintsimage.png" alt=""></p>
+<p>第二种方式，利用连线去设置constraints，属性比较多，可以记一下，上下左右高宽都有，还有居中什么的</p>
+<p><img src="http://websources.qiniudn.com/iOS/constraints3.png" alt=""></p>
+<p>第三种方式，利用代码去设置constraints（一般来说，我们是在设计原型，如果用代码…感觉杀鸡焉用牛刀了）推荐一个库<a href="https://github.com/SnapKit/Masonry" target="_blank" rel="external">Masonry</a>（注明：现在还没有swift版的）</p>
+<p>最后大家看看我们设计的一个结果吧，源代码可以在Github上查看<a href="https://github.com/lcepy/storyboard-app-prototype" target="_blank" rel="external">storyboard-app-prototype</a></p>
+<p><img src="http://websources.qiniudn.com/iOS/result.png" alt=""></p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/JavaScript/">JavaScript</a>
+  <span></span> <a href="/tags/iOS/">iOS</a>
   </div>
 
 
@@ -177,19 +168,11 @@ xmldom.load(<span class="string">'http://xxx.sss.xml'</span>);
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/02/03/复习JavaScript九之客户端存储方案/" title="复习JavaScript九之客户端存储方案">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  复习JavaScript九之客户端存储方案</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/02/01/UINavigationController的理解/"  title="UINavigationController的理解">
+<a href="/2015/05/20/使用Worker实现一个多线程数据缓存模块/"  title="使用Worker实现一个多线程数据缓存模块">
  <strong>NEXT:</strong><br/> 
- <span>UINavigationController的理解
+ <span>使用Worker实现一个多线程数据缓存模块
 </span>
 </a>
 </div>
@@ -206,7 +189,7 @@ xmldom.load(<span class="string">'http://xxx.sss.xml'</span>);
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#IE版本"><span class="toc-number">1.</span> <span class="toc-text">IE版本</span></a></li></ol>
+  
   </div>
 
 <div id="asidepart">

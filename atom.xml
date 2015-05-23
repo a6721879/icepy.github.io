@@ -4,7 +4,7 @@
   <subtitle><![CDATA[draw world]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-05-20T08:45:31.319Z</updated>
+  <updated>2015-05-23T15:01:57.700Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -13,6 +13,47 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[使用storyboard设计app原型]]></title>
+    <link href="http://lcepy.github.io/2015/05/23/%E4%BD%BF%E7%94%A8storyboard%E8%AE%BE%E8%AE%A1app%E5%8E%9F%E5%9E%8B/"/>
+    <id>http://lcepy.github.io/2015/05/23/使用storyboard设计app原型/</id>
+    <published>2015-05-23T12:48:13.000Z</published>
+    <updated>2015-05-23T15:01:45.000Z</updated>
+    <content type="html"><![CDATA[<p>今天我想写一下自己利用storyboard+swift快速设计一款App原型的经历，这是突然发现Xcode的强大之处带来的优势，你可以设计一个如下图的原型。</p>
+<p><img src="http://websources.qiniudn.com/iOS/prototype.png" alt=""></p>
+<p>先创建一个项目＋创建一个storyboard＋拖拽一个ViewController到storyboard中（默认你知道怎么创建一个项目，怎么新建一个storyboard，以及怎么拖拽一个ViewController到storyboard中）</p>
+<p><img src="http://websources.qiniudn.com/iOS/storyboard.png" alt=""></p>
+<p>给ViewController设置启动，这个设置针对storyboard是唯一的，也就是只能设置一个</p>
+<p><img src="http://websources.qiniudn.com/iOS/initViewController.png" alt=""></p>
+<p>给ViewController设置身份ID(identity)，它应该是唯一的，而且后期如果有多个storyboard时场景的跳转会使用到</p>
+<pre><code><span class="keyword">var</span> sd:<span class="type">UIStoryboard</span> = <span class="type">UIStoryboard</span>(name: <span class="string">"Cycling"</span>, bundle: <span class="built_in">nil</span>)
+<span class="keyword">var</span> cyc:<span class="type">CyclingInitViewController</span> = sd.instantiateViewControllerWithIdentifier(<span class="string">"CyclingInit"</span>) <span class="keyword">as</span>! <span class="type">CyclingInitViewController</span>
+<span class="keyword">self</span>.navigationController?.pushViewController(cyc, animated: <span class="built_in">true</span>)
+</code></pre><p><img src="http://websources.qiniudn.com/iOS/identity.png" alt=""></p>
+<p>给ViewController应用一个NavgationController，每一个视图控制器中都有一个navigationController和navigationItem。（注意：前者应该算一个公共的，后者navigationItem是每个控制器自身独有的）在使用的时候需要注意这些，以保证标题，以及导航栏上的bar可以设置正确</p>
+<p><img src="http://websources.qiniudn.com/iOS/navigationC.png" alt=""></p>
+<p>拖拽一个label到视图中，我们可以通过属性板来设置它的一些属性，比如字体大小，颜色，是否居中。属性有很多，基本上和代码中的UILabel可以一一对应起来。</p>
+<p><img src="http://websources.qiniudn.com/iOS/attributes.png" alt=""></p>
+<p>在Size面板中可以调整x,y以及高宽</p>
+<p><img src="http://websources.qiniudn.com/iOS/size.png" alt=""></p>
+<p>接下来应该是一个最重要的活儿了，autolayout技术对视图进行约束，这是接下来想对UI进行正确排版所使用的技术，关于它的细节问题，你需要慢慢了解，我只能告诉你怎样在storyboard中利用Xcode给我们提供的工具去连线，去进行约束。</p>
+<p>第一种方式，利用右下角的小三角形，对约束进行重置（简单的约束，Xcode非常智能的帮你排版了）</p>
+<p><img src="http://websources.qiniudn.com/iOS/constraintsimage.png" alt=""></p>
+<p>第二种方式，利用连线去设置constraints，属性比较多，可以记一下，上下左右高宽都有，还有居中什么的</p>
+<p><img src="http://websources.qiniudn.com/iOS/constraints3.png" alt=""></p>
+<p>第三种方式，利用代码去设置constraints（一般来说，我们是在设计原型，如果用代码…感觉杀鸡焉用牛刀了）推荐一个库<a href="https://github.com/SnapKit/Masonry" target="_blank" rel="external">Masonry</a>（注明：现在还没有swift版的）</p>
+<p>最后大家看看我们设计的一个结果吧，源代码可以在Github上查看<a href="https://github.com/lcepy/storyboard-app-prototype" target="_blank" rel="external">storyboard-app-prototype</a></p>
+<p><img src="http://websources.qiniudn.com/iOS/result.png" alt=""></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>今天我想写一下自己利用storyboard+swift快速设计一款App原型的经历，这是突然发现Xcode的强大之处带来的优势，你可以设计一个如下图的原型。</p>
+<p><img src="http://websources.qiniudn.com/iOS/prototy]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[使用Worker实现一个多线程数据缓存模块]]></title>
@@ -1427,37 +1468,6 @@ dropview.transform
     </summary>
     
       <category term="简历" scheme="http://lcepy.github.io/tags/%E7%AE%80%E5%8E%86/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[UIViewController的生命周期]]></title>
-    <link href="http://lcepy.github.io/2015/02/16/UIViewController%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/"/>
-    <id>http://lcepy.github.io/2015/02/16/UIViewController的生命周期/</id>
-    <published>2015-02-16T13:54:06.000Z</published>
-    <updated>2015-03-20T11:55:51.000Z</updated>
-    <content type="html"><![CDATA[<p>关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理。</p>
-<p><strong>呈现视图的顺序</strong></p>
-<p>它内部的顺序是这样的，先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或storyborad，如果这个也没有则走loadView方法，loadView方法系统调用，也可以重载它。当我们重载它时，可以[super loadView] 父类帮助我们创建一个空的view，如果不调用父类，那么就要自己创建一个UIView，并且self.view = UIView。</p>
-<p>如果在调用loadView时不调用父类，也不创建，如果使用self.view的getter method并且view等于nil，会发生自我循环调用。一般情况下，不要在初始化时做view相当的动作。在viewDiload中调用一些网络访问的动作，可以在初始化方法中做一些关于模型数据的准备工作。</p>
-<p>如果覆盖了loadView，则必须创建UIViewController的view属性。如果没有覆盖该方法，UIViewController会默认调用initWithNibName方法来初始化并加载view。</p>
-<p><strong>生命周期</strong></p>
-<p>一般来说我们需要知道应用程序什么时候在屏幕上，什么时候从屏幕上消失，这个就是生命周期了。初始化的方法可以在viewDidLoad，这个方法在生命周期中只会调用一次，当然不要忘记了调用它的父类的viewDidLoad方法，[super viewDidLoad]。在调用这个方法时，实际上视图并没有在屏幕上确定下来，于是一般来说，如果视图的几何操作，不要放在这个方法中执行。</p>
-<p>viewWillAppear，这个方法会被多次调用，一般来说一次性的初始化不要放在这个方法中实现，但是如果是基于模型的动态初始化，可以放置在这个方法中实现。这个方法会在视图即将要在屏幕上呈现之前调用。</p>
-<p>当视图从屏幕上消失时，也会得到通知，viewWillDisappear方法。这个方法是在视图将要从屏幕消失之前调用。</p>
-<p>viewDidAppear视图已经呈现在屏幕上调用 viewDidDisappear视图已经从屏幕上消失调用。</p>
-<p>viewWillLayoutSubviews  viewDidLayoutSubviews 这两个方法可以在，比如从竖屏到横屏，系统会自动元素的位置，第一个方法是在移动之前调用，第二个方法是在移动完成之后调用，需要设置Autorotation属性。</p>
-<p>didReceiveMemoryWarning 当内存不足时，系统会调用这个方法，发送警告。 </p>
-<h2 id="顺序">顺序</h2>
-<p>viewDidLoad -&gt; viewWillAppear -&gt; viewDidAppear -&gt; viewWillDisappear -&gt; viewDidDisappear</p>
-<p>关于layout的顺序</p>
-<p>viewWillLayoutSubviews -&gt; viewDidLayoutSubviews</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理]]>
-    </summary>
-    
-      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
     
   </entry>
   
