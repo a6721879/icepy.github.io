@@ -1,224 +1,985 @@
-
-  <!DOCTYPE HTML>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   
-    <title>Tag: JavaScript | icepy</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
-    
-    <meta name="author" content="icepy">
-    
-    <meta name="description" content="在生活中奔跑">
-    
-    
-    
-    
-    <link rel="alternate" href="/atom.xml## RSS address." title="icepy" type="application/atom+xml">
-    
-    
-    <link rel="icon" href="/img/favicon.ico">
-    
-    
-    <link rel="apple-touch-icon" href="/img/catman.jpg">
-    <link rel="apple-touch-icon-precomposed" href="/img/catman.jpg">
-    
-    <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <title>Tag: JavaScript | icepy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在生活中奔跑">
+<meta property="og:type" content="website">
+<meta property="og:title" content="icepy">
+<meta property="og:url" content="http://lcepy.github.io/tags/JavaScript/">
+<meta property="og:site_name" content="icepy">
+<meta property="og:description" content="在生活中奔跑">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="icepy">
+<meta name="twitter:description" content="在生活中奔跑">
 
-    
+  
+    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
 
-
-<script type="text/javascript">
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?16dce8818578643d2c8f0ed9bc5696ec";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-
-    <link href='http://fonts.useso.com/css?family=Tangerine:700' rel='stylesheet' type='text/css'>
-<link href='http://fonts.useso.com/css?family=Covered+By+Your+Grace' rel='stylesheet' type='text/css'>
-<link href='http://fonts.useso.com/css?family=Philosopher' rel='stylesheet' type='text/css'>
+  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/img/me.jpg" class="js-avatar">
+		</a>
 
-    <body>
-      <header>
-        <div>
+		<hgroup>
+		  <h1 class="header-author"><a href="/">icepy</a></h1>
+		</hgroup>
+
 		
-			<div id="imglogo">
-				<a href="/"><img src="/img/logo.svg" alt="icepy" title="icepy"/></a>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
 			</div>
-			
-			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="icepy">icepy</a></h1>
-				<h2 class="blog-motto">draw world</h2>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+								<a class="mail" target="_blank" href="/xiangwenwe@foxmail.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">忆往昔峥嵘岁月稠</div>
+				</section>
+				
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
-			</a></div>
-			<nav class="animated">
-				<ul>
-					
-						<li><a href="/">首页</a></li>
-					
-						<li><a href="/archives">归档</a></li>
-					
-					<li>
-					
-					</li>
-				</ul>
-			</nav>			
+		</div>
+	</header>				
 </div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">icepy</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/img/me.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">icepy</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+						<a class="mail" target="_blank" href="/xiangwenwe@foxmail.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap">
+  
+    <article id="post-使用Worker实现一个多线程数据缓存模块" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/05/20/使用Worker实现一个多线程数据缓存模块/" class="article-date">
+  	<time datetime="2015-05-20T08:24:18.000Z" itemprop="datePublished">5月 20 2015</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/20/使用Worker实现一个多线程数据缓存模块/">使用Worker实现一个多线程数据缓存模块</a>
+    </h1>
+  
 
       </header>
-      <div id="container">
-        
-
-<div class="archive-title" >
-  <h2 class="tag-icon">JavaScript</h2>
-  
-</div>
-<div id="main" class="archive-part clearfix">
-  <div id="archive-page">
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2015/05/20/使用Worker实现一个多线程数据缓存模块/" title="使用Worker实现一个多线程数据缓存模块" itemprop="url">
-  
-    <h1 itemprop="name">使用Worker实现一个多线程数据缓存模块</h1>
+      
     
-    <time datetime="2015-05-20T08:24:18.000Z" itemprop="datePublished">5月 20 2015</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2015/03/06/JavaScript解析URL字符串/" title="JavaScript解析URL字符串" itemprop="url">
-  
-    <h1 itemprop="name">JavaScript解析URL字符串</h1>
-    
-    <time datetime="2015-03-06T06:38:32.000Z" itemprop="datePublished">3月 6 2015</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2015/03/04/JavaScript中的深拷贝与浅拷贝/" title="JavaScript中的深拷贝与浅拷贝" itemprop="url">
-  
-    <h1 itemprop="name">JavaScript中的深拷贝与浅拷贝</h1>
-    
-    <time datetime="2015-03-04T12:56:49.000Z" itemprop="datePublished">3月 4 2015</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2015/02/15/阅读部分zepto源代码/" title="阅读部分zepto源代码" itemprop="url">
-  
-    <h1 itemprop="name">阅读部分zepto源代码</h1>
-    
-    <time datetime="2015-02-15T06:11:30.000Z" itemprop="datePublished">2月 15 2015</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2015/02/05/复习JavaScript十二之理解作用域/" title="复习JavaScript十二之理解作用域" itemprop="url">
-  
-    <h1 itemprop="name">复习JavaScript十二之理解作用域</h1>
-    
-    <time datetime="2015-02-05T10:17:09.000Z" itemprop="datePublished">2月 5 2015</time>
-  </a>
-</section>
-
-
-  <nav id="page-nav" class="clearfix archive-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/tags/JavaScript/page/2/">2</a><a class="page-number" href="/tags/JavaScript/page/3/">3</a><a class="page-number" href="/tags/JavaScript/page/4/">4</a><a class="extend next" rel="next" href="/tags/JavaScript/page/2/">Next &raquo;</a>
-  </nav>
-
-  </div>
-</div>
-
-      </div>
-      <footer><div id="footer" >
-	
-	<div class="line">
-		<span></span>
-		<div class="author"></div>
-	</div>
-	
-	
-	<div class="social-font clearfix">
-		
-		<a href="http://weibo.com/u/2455876310" target="_blank" title="weibo"></a>
-		
-		
-		
-		<a href="https://github.com/lcepy" target="_blank" title="github"></a>
-		
-		
-		
-	</div>
-		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/leaf-hsiao/catman" target="_blank" title="Catman">Catman</a> © 2015 
-		
-		<a href="http://lcepy.github.io" target="_blank" title="icepy">icepy</a>
-		
-		</p>
-</div>
-</footer>
-      <script src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.navbar').click(function(){
-    $('header nav').toggleClass('shownav');
-  });
-  var myWidth = 0;
-  function getSize(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-  };
-  var m = $('#main'),
-      a = $('#asidepart'),
-      c = $('.closeaside'),
-      o = $('.openaside');
-  $(window).resize(function(){
-    getSize(); 
-    if (myWidth >= 1024) {
-      $('header nav').removeClass('shownav');
-    }else
-    {
-      m.removeClass('moveMain');
-      a.css('display', 'block').removeClass('fadeOut');
-      o.css('display', 'none');
-        
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Worker是一个可以在后台运行的任务，并提供了一个JavaScript接口让我们来使用它。Worker能够被轻松的创建，还能向它的创建者发送消息。 你只要调用 Worker() 构造函数，指定一个需要运行在 worker 线程内的脚本，就能够很容易的创建一个 worker。</p>
+<p>Worker这个API的使用非常的简单</p>
+<ul>
+<li>postMessage()  向worker内部发送消息</li>
+<li>terminate() 立即停止当前的worker</li>
+<li>onmessage 一个消息事件，worker内部向前台发送消息 </li>
+<li>onerror 一个错误事件，运行环境出错时，worker内部向前台发送消息</li>
+</ul>
+<p>属性</p>
+<ul>
+<li>message 一个可读的错误消息</li>
+<li>filename 错误所在的文件名</li>
+<li>lineno 错误所在的文本行号 </li>
+</ul>
+<p>JavaScript Client Code</p>
+<pre><code><span class="keyword">var</span> workerQueue = [];
+<span class="keyword">var</span> cacheSystem = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> isWork         = !!Worker;
+    <span class="keyword">var</span> dataSource     = {};
+    <span class="keyword">var</span> contains     = [];
+    <span class="keyword">var</span> lock        = <span class="literal">false</span>;
+    <span class="keyword">var</span> count         = <span class="number">0</span>;
+    <span class="keyword">var</span> getDash     = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        <span class="keyword">var</span> dash         = localStorage.getItem(<span class="string">'scanUseDashDataSource'</span>);
+        <span class="keyword">var</span> dashData     = dash ? <span class="built_in">JSON</span>.parse(dash).data : contains;
+        <span class="keyword">return</span> dashData; 
     }
-  });
-  c.click(function(){
-    a.addClass('fadeOut').css('display', 'none');
-    o.css('display', 'block').addClass('fadeIn');
-    m.addClass('moveMain');
-  });
-  o.click(function(){
-    o.css('display', 'none').removeClass('beforeFadeIn');
-    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
-    m.removeClass('moveMain');
-  });
-  $(window).scroll(function(){
-    o.css("top",Math.max(80,208-$(this).scrollTop()));
-  });
+    <span class="keyword">return</span>    {
+        allObject:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">var</span> d = localStorage.getItem(<span class="string">'scanUseModalDataSource'</span>);
+            <span class="keyword">return</span> d ? d = <span class="built_in">JSON</span>.parse(d).data : <span class="literal">null</span>;
+        },
+        objectForKey:<span class="function"><span class="keyword">function</span><span class="params">(key)</span></span>{
+            <span class="keyword">return</span> <span class="keyword">this</span>.allObject()[key];
+        },
+        allKeys:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">var</span> o = <span class="keyword">this</span>.allObject();
+            <span class="keyword">return</span> o ? <span class="built_in">Object</span>.keys(o) : contains;
+        },
+        allValues:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">var</span> o = <span class="keyword">this</span>.allObject();
+            <span class="keyword">if</span>(!o){
+                <span class="keyword">return</span> contains;
+            }
+            <span class="keyword">var</span> c = [];
+            <span class="keyword">for</span>(<span class="keyword">var</span> k <span class="keyword">in</span> o){
+                c.push(o[k].data);
+            }
+            <span class="keyword">return</span> c;
+        },
+        allDash:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">return</span> getDash();
+        },
+        setObject:<span class="function"><span class="keyword">function</span><span class="params">(value)</span></span>{
+            <span class="keyword">var</span> s             = <span class="keyword">this</span>;
+            <span class="keyword">var</span> metadata     = <span class="keyword">this</span>.allObject() || {};
+            metadata[value] = {<span class="string">"data"</span>:<span class="literal">null</span>,<span class="string">"work"</span>:<span class="literal">false</span>,<span class="string">"error"</span>:<span class="literal">false</span>};
+            <span class="keyword">var</span> dashData     = <span class="keyword">this</span>.allDash();    
+            <span class="comment">//如果有网络，提交给后台线程去处理网络请求</span>
+            <span class="built_in">window</span>.networkState = <span class="number">1</span>;
+            <span class="keyword">if</span>(isWork &amp;&amp; <span class="built_in">window</span>.networkState &gt; <span class="number">0</span>){
+                <span class="keyword">var</span> worker = <span class="keyword">new</span> Worker(<span class="string">'fetchThread.js'</span>);
+                worker.addEventListener(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span><span class="params">(evt)</span></span>{
+                    <span class="built_in">console</span>.log(evt);
+                    <span class="keyword">var</span> obj = s.allObject();
+                    <span class="keyword">var</span> sp     = evt.data.split(<span class="string">'@icepy-&gt;'</span>);
+                    <span class="keyword">var</span> tag = sp[<span class="number">0</span>];
+                    <span class="keyword">var</span> dat = sp[<span class="number">1</span>];
+                    <span class="keyword">var</span> o   = obj[tag];
+                    <span class="keyword">var</span> r   = <span class="built_in">JSON</span>.parse(dat);
+                    <span class="keyword">if</span>(o){
+                        <span class="comment">//把后台得到的数据添加到data中</span>
+                        o.data     = r;
+                        <span class="comment">//标记work已经完成</span>
+                        o.work  = <span class="literal">true</span>;
+                        <span class="comment">//标记执行线程锁</span>
+                        lock     = <span class="literal">false</span>;
+                        <span class="keyword">if</span>(r.error){
+                            o.error = <span class="literal">true</span>;
+                        }
+                        localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:obj}));
+                        workerQueue[count][<span class="number">2</span>] = <span class="literal">true</span>;
+                        count++;
+                        <span class="keyword">var</span> work = workerQueue[count];
+                        <span class="keyword">if</span>(work){
+                            <span class="keyword">if</span>(work[<span class="number">2</span>]){
+                                <span class="keyword">var</span> i = count++;
+                                <span class="keyword">var</span> f = <span class="literal">true</span>;
+                                <span class="keyword">do</span>{
+                                    <span class="keyword">var</span> _work = workerQueue[i];
+                                    <span class="keyword">if</span>(!_work[<span class="number">2</span>]){
+                                        _work[<span class="number">1</span>].postMessage(_work[<span class="number">0</span>]);
+                                        f = <span class="literal">false</span>;
+                                        count = i;
+                                        <span class="keyword">break</span>;
+                                    }
+                                    i++;
+                                }<span class="keyword">while</span>(f);
+                            }<span class="keyword">else</span>{
+                                work[<span class="number">1</span>].postMessage(work[<span class="number">0</span>]);
+                            }
+                        }<span class="keyword">else</span>{
+                            workerQueue.length = <span class="number">0</span>;
+                            count = <span class="number">0</span>;
+                        }
+                    }
+
+                });
+                worker.addEventListener(<span class="string">'error'</span>,<span class="function"><span class="keyword">function</span><span class="params">(evt)</span></span>{
+                    <span class="built_in">console</span>.log(<span class="string">'错误信息处理'</span>);
+                });
+                <span class="comment">//把线程加入队列</span>
+                workerQueue.push([value,worker,<span class="literal">false</span>]);
+                <span class="keyword">if</span>(!lock){
+                    lock = <span class="literal">true</span>;
+                    worker.postMessage(value);
+                }
+            }
+            <span class="keyword">if</span>(!(dashData.indexOf(value) &gt; -<span class="number">1</span>)){
+                dashData.push(value);
+            }
+            localStorage.setItem(<span class="string">'scanUseDashDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:dashData}));
+            localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
+        },
+        setValue:<span class="function"><span class="keyword">function</span><span class="params">(key,value)</span></span>{
+            <span class="keyword">var</span> metadata = <span class="keyword">this</span>.allObject();
+            metadata[key].data = value.concat();
+            metadata[key].work = <span class="literal">true</span>;
+            localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
+        },
+        removeObjectForKey:<span class="function"><span class="keyword">function</span><span class="params">(key)</span></span>{
+            <span class="keyword">var</span> metadata     = <span class="keyword">this</span>.allObject();
+            <span class="keyword">var</span> dash         = <span class="keyword">this</span>.allDash();
+            dash.splice(dash.indexOf(key),<span class="number">1</span>);
+            <span class="keyword">this</span>.pop(key);
+            <span class="keyword">delete</span> metadata[key];
+            localStorage.setItem(<span class="string">'scanUseDashDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:dash}));
+            localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
+        },
+        repeat:<span class="function"><span class="keyword">function</span><span class="params">(v)</span></span>{
+            <span class="keyword">var</span> d = <span class="keyword">this</span>.allKeys();
+                i = <span class="number">0</span>;
+            <span class="keyword">if</span>(!d.length){
+                <span class="keyword">return</span> <span class="literal">false</span>;
+            }<span class="keyword">else</span>{
+                <span class="keyword">var</span> lock = <span class="literal">false</span>;
+                <span class="keyword">if</span>(d.indexOf(v) &gt; -<span class="number">1</span>){
+                    lock = <span class="literal">true</span>;
+                }
+                <span class="keyword">return</span> lock;
+            }
+        },
+        pop:<span class="function"><span class="keyword">function</span><span class="params">(key,d)</span></span>{
+            <span class="keyword">if</span>(!d){
+                d = <span class="keyword">this</span>.allObject();
+            }
+            <span class="keyword">if</span>(isWork){
+                <span class="keyword">var</span> i = <span class="number">0</span>;
+                <span class="keyword">var</span> e = workerQueue.length;
+                <span class="keyword">if</span>(e &gt; <span class="number">0</span>){
+                    <span class="keyword">for</span>(;i&lt;e;i++){
+                        <span class="keyword">var</span> work = workerQueue[i];
+                        <span class="keyword">if</span>(work &amp;&amp; work[<span class="number">0</span>] === key){
+                            work[<span class="number">2</span>] = <span class="literal">true</span>;
+                            work[<span class="number">1</span>].terminate();
+                            <span class="keyword">break</span>;
+                        }
+                    }
+                }
+            }
+        },
+        isWork:isWork
+    }
+}();
+</code></pre><p>JavaScript Thread Code</p>
+<pre><code>addEventListener(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span><span class="params">(evt)</span></span>{
+    <span class="keyword">var</span> parameter     = evt.data;
+    <span class="keyword">var</span> xhr         = <span class="keyword">new</span> XMLHttpRequest();
+    <span class="keyword">var</span> headers        = {};
+    xhr.onreadystatechange = <span class="function"><span class="keyword">function</span><span class="params">(e)</span></span>{
+           <span class="keyword">if</span>(xhr.readyState === <span class="number">4</span>){
+               clearInterval(abortTimeout);
+               <span class="keyword">if</span>((xhr.status &gt;= <span class="number">200</span> &amp;&amp; xhr.status &lt; <span class="number">300</span>) || xhr.status == <span class="number">304</span>){
+                   postMessage(parameter+<span class="string">'@icepy-&gt;'</span>+xhr.responseText);
+                   close();
+               }
+           }
+       }
+    xhr.open(<span class="string">'POST'</span>,<span class="string">'http://127.0.0.1:8001/'</span>,<span class="literal">true</span>);
+       xhr.send(parameter);
+       <span class="keyword">var</span> abortTimeout = setInterval(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+           xhr.abort();
+           postMessage(parameter+<span class="string">'@icepy-&gt;'</span>+<span class="string">'{"error":"timeout"}'</span>);
+           close();
+       },<span class="number">1000</span>*<span class="number">13</span>);
+
+       xhr.onerror = <span class="function"><span class="keyword">function</span><span class="params">(e)</span></span>{
+           postMessage(parameter+<span class="string">'@icepy-&gt;'</span>+<span class="string">'{"error":"notnetwork"}'</span>);
+           close();
+       }     
+});
+</code></pre><p>阅读资料</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Worker" target="_blank" rel="external">https://developer.mozilla.org/zh-CN/docs/Web/API/Worker</a></li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-JavaScript解析URL字符串" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/06/JavaScript解析URL字符串/" class="article-date">
+  	<time datetime="2015-03-06T06:38:32.000Z" itemprop="datePublished">3月 6 2015</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/06/JavaScript解析URL字符串/">JavaScript解析URL字符串</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>说到解析URL思路应该有多种多样的，比如一点一点的分解，先indexOf(‘?’)判断是否有参数，完了之后split(‘?’)一下，后面的参数继续split(‘&amp;’)成一个数组然后循环再split(‘=’)组装成一个一个key和vaule的键值对对象。前面那一部分也可以继续分解，把端口，协议，路径等等分解出来。或者用正则表达式，一个一个的分解。除了上述的思路，其实还有一个更简单的办法，利用a标签。</p>
+<pre><code><span class="keyword">var</span> parseURL = function(url){
+    <span class="keyword">var</span> temp =  document.createElement('a');
+    temp.href = url;
+    <span class="keyword">var</span> <span class="literal">result</span> = {
+        <span class="string">"port"</span>:temp.port,
+        <span class="string">"protocol"</span>:temp.protocol.replace(':',''),
+        <span class="string">"hash"</span>:temp.hash.replace('<span class="comment">#',''),</span>
+        <span class="string">"host"</span>:temp.host,
+        <span class="string">"href"</span>:temp.href,
+        <span class="string">"hostname"</span>:temp.hostname,
+        <span class="string">"pathname"</span>:temp.pathname,
+        <span class="string">"search"</span>:temp.search,
+        <span class="string">"query"</span>:{}
+    }
+    <span class="keyword">var</span> seg = <span class="literal">result</span>.search.replace(/^\?/,'').split('&amp;'),
+        leng = seg.length,
+        i = <span class="number">0</span>,
+        target;
+    <span class="keyword">for</span>(;i&lt;leng;i++){
+        <span class="keyword">if</span>(!seg[i])<span class="keyword">continue</span>;
+        target = seg[i].split('=');
+        <span class="literal">result</span>.query[target[<span class="number">0</span>]] = target[<span class="number">1</span>];
+    }
+    temp = null;
+    <span class="keyword">return</span> <span class="literal">result</span>;
+}
+<span class="keyword">var</span> url = 'https://github.com:<span class="number">8989</span>?key=value&amp;hub=<span class="number">123</span>ASFDGGR<span class="comment">#github';</span>
+parseURL(url);
+</code></pre><p>最后使用完了，把对象的引用设置为null，等待内存回收。</p>
+<p>说到URL就不得不提一下编码和解码的函数，Js里提供了三组，其中最常用的一组是encodeURIComponent和decodeURIComponent。</p>
+<p>通过对三个函数的分析，我们可以知道：escape()除了 ASCII 字母、数字和特定的符号外，对传进来的字符串全部进行转义编码，因此如果想对URL编码，最好不要使用此方法。而encodeURI() 用于编码整个URI,因为URI中的合法字符都不会被编码转换。encodeURIComponent方法在编码单个URIComponent（指请求参数）应当是最常用的，它可以讲参数中的中文、特殊字符进行转义，而不会影响整个URL。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-JavaScript中的深拷贝与浅拷贝" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/04/JavaScript中的深拷贝与浅拷贝/" class="article-date">
+  	<time datetime="2015-03-04T12:56:49.000Z" itemprop="datePublished">3月 4 2015</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/04/JavaScript中的深拷贝与浅拷贝/">JavaScript中的深拷贝与浅拷贝</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>关于拷贝的问题，主要分为深拷贝和浅拷贝，但是如果从空间分配上来说JavaScript的拷贝不应该算是深拷贝，比如：</p>
+<pre><code><span class="keyword">var</span> d = {};
+<span class="keyword">for</span>(k <span class="keyword">in</span> a){
+    d[k] = a[k];
+}
+<span class="keyword">return</span> d;
+</code></pre><p>今天突然想到了这么一个问题，在C语言中，所谓的拷贝，就是分两种情况，一种是把指针地址拷贝给另外一个变量，虽然也开辟的了一个内存空间，在栈上也存在着一个地址，我对这个变量进行修改，同一个指针是会改变其值的，这种拷贝叫浅拷贝。另外一种情况，直接开辟一个新空间，把需要复制的值都复制在这个新的空间中，这种拷贝叫中深拷贝。</p>
+<p>如果看到上述的一段Js代码，很多人说它是浅拷贝，假设传入一个a对象，拷贝完成之后返回一个d，当我修改返回对象的值时并不能同时修改a对象，于是，在这里我有一个很大的疑问，在Js中到底什么是浅拷贝，什么是深拷贝的问题？</p>
+<p>这一点上感觉Js真的很奇葩，如果在开发iOS中，不可变对象copy一下，依然是不可变，所以是浅拷贝，拷贝了指针变量中存储的地址值。如果是可变对象copy一下，到不可变，空间变化了，包括不可变mutableCopy到不可变，空间依然变化了，所以是深拷贝。但是JavaScript中对于这一点要考虑一种情况，值类型，和引用类型，这个基础知识，我相信大家都非常清楚。数字，字符串等都是值类型，object，array等都是引用类型。</p>
+<pre><code><span class="keyword">var</span> a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];
+<span class="keyword">var</span> b = a;
+
+b.push(<span class="number">4</span>);
+<span class="built_in">console</span>.log(a); <span class="comment">//[1,2,3,4]</span>
+
+<span class="keyword">var</span> numb = <span class="number">123</span>;
+<span class="keyword">var</span> _numb = numb;
+_numb = <span class="number">567</span>;
+
+<span class="built_in">console</span>.log(numb); <span class="comment">//123</span>
+</code></pre><p>从这个例子中可以看的出来，它们使用的都是＝符号，而数组a发生了变化，numb数字却没有发生变化。那么从这里，可以有一个总结，所谓了深拷贝，浅拷贝的问题，应该针对的是有多个嵌套发生的情况。不然假设是这样的情况，还能叫浅拷贝么？</p>
+<pre><code><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> = </span>{<span class="string">"de"</span>:<span class="number">123</span>};
+<span class="keyword">var</span> o = copy(<span class="keyword">object</span>);
+
+o.de = <span class="number">456</span>;
+
+console.log(<span class="keyword">object</span>) <span class="comment">//{"de":123}</span>
+</code></pre><p>明显对象o中的de属性修改并没有影响到原始对象，一个对象中的属性是一个字符串，如果从内存空间的角度上来说，这里明显是开辟了新的空间，还能说是浅拷贝么？那么针对另外一种情况。</p>
+<pre><code><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> = </span>{
+    <span class="string">"de"</span>:{
+        <span class="string">"d"</span>:<span class="number">123</span>
+    }
+}
+
+<span class="keyword">var</span> o = deepCopy(<span class="keyword">object</span>);
+o.de.d = <span class="string">"asd"</span>;
+</code></pre><p>如果一个对象中的第一层属性，不是值类型，只单层循环，这样来看的话确实是一个浅拷贝，因为在Js中引用类型用＝赋值，实际上是引用，这样说的通。所以，深拷贝，还需要做一些处理，把object，array等引用类型识别出来，深层递归到最后一层，一个一个的拷贝。</p>
+<pre><code><span class="keyword">var</span> deepCopy = <span class="function"><span class="keyword">function</span><span class="params">(o)</span></span>{
+    <span class="keyword">var</span> target = {};
+    <span class="keyword">if</span>(<span class="keyword">typeof</span> o !== <span class="string">'object'</span> &amp;&amp; !<span class="built_in">Array</span>.isArray(o)){
+        <span class="keyword">return</span> o;
+    }
+    <span class="keyword">for</span>(<span class="keyword">var</span> k <span class="keyword">in</span> o){
+        target[k] = deepCopy(o[k]);
+    }
+    <span class="keyword">return</span> target;
+}
+</code></pre><p>思路是如此，这个例子只考虑了两种情况，对象和数组，为了验证这样的思路，最后的结果与预期是一样的。</p>
+<pre><code><span class="keyword">var</span> _copy = {
+    <span class="string">'object'</span>:{
+        <span class="string">'name'</span>:<span class="string">'wen'</span>
+    },
+    <span class="string">'array'</span>:[<span class="number">1</span>,<span class="number">2</span>]
+
+}
+<span class="keyword">var</span> h = deepCopy(_copy);
+h.object.name = <span class="string">'lcepy'</span>;
+h.array[<span class="number">1</span>] = <span class="number">8</span>;
+<span class="built_in">console</span>.log(h);
+<span class="built_in">console</span>.log(_copy);
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-阅读部分zepto源代码" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/15/阅读部分zepto源代码/" class="article-date">
+  	<time datetime="2015-02-15T06:11:30.000Z" itemprop="datePublished">2月 15 2015</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/15/阅读部分zepto源代码/">阅读部分zepto源代码</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>zepto初始化时，是$符号来获取元素对象，如果是空则会返回一个数组，从源代码上面来看，是这样的：</p>
+<pre><code>$ = <span class="function"><span class="keyword">function</span><span class="params">(selector, context)</span></span>{
+    <span class="keyword">return</span> zepto.init(selector, context)
+  }
+</code></pre><p>可以传入两个参数，一个selector，一个context，在这个函数内部会调用zepto.init方法。</p>
+<pre><code>zepto.init = <span class="function"><span class="keyword">function</span><span class="params">(selector, context)</span> </span>{
+<span class="keyword">var</span> dom
+<span class="comment">// If nothing given, return an empty Zepto collection</span>
+<span class="keyword">if</span> (!selector) <span class="keyword">return</span> zepto.Z()
+<span class="comment">// Optimize for string selectors</span>
+<span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> selector == <span class="string">'string'</span>) {
+  selector = selector.trim()
+  <span class="comment">// If it's a html fragment, create nodes from it</span>
+  <span class="comment">// Note: In both Chrome 21 and Firefox 15, DOM error 12</span>
+  <span class="comment">// is thrown if the fragment doesn't begin with &lt;</span>
+  <span class="keyword">if</span> (selector[<span class="number">0</span>] == <span class="string">'&lt;'</span> &amp;&amp; fragmentRE.test(selector))
+    dom = zepto.fragment(selector, <span class="built_in">RegExp</span>.$<span class="number">1</span>, context), selector = <span class="literal">null</span>
+  <span class="comment">// If there's a context, create a collection on that context first, and select</span>
+  <span class="comment">// nodes from there</span>
+  <span class="keyword">else</span> <span class="keyword">if</span> (context !== <span class="literal">undefined</span>) <span class="keyword">return</span> $(context).find(selector)
+  <span class="comment">// If it's a CSS selector, use it to select nodes.</span>
+  <span class="keyword">else</span> dom = zepto.qsa(<span class="built_in">document</span>, selector)
+}
+<span class="comment">// If a function is given, call it when the DOM is ready</span>
+<span class="keyword">else</span> <span class="keyword">if</span> (isFunction(selector)) <span class="keyword">return</span> $(<span class="built_in">document</span>).ready(selector)
+<span class="comment">// If a Zepto collection is given, just return it</span>
+<span class="keyword">else</span> <span class="keyword">if</span> (zepto.isZ(selector)) <span class="keyword">return</span> selector
+<span class="keyword">else</span> {
+  <span class="comment">// normalize array if an array of nodes is given</span>
+  <span class="keyword">if</span> (isArray(selector)) dom = compact(selector)
+  <span class="comment">// Wrap DOM nodes.```</span>
+  <span class="keyword">else</span> <span class="keyword">if</span> (isObject(selector))
+    dom = [selector], selector = <span class="literal">null</span>
+  <span class="comment">// If it's a html fragment, create nodes from it</span>
+  <span class="keyword">else</span> <span class="keyword">if</span> (fragmentRE.test(selector))
+    dom = zepto.fragment(selector.trim(), <span class="built_in">RegExp</span>.$<span class="number">1</span>, context), selector = <span class="literal">null</span>
+  <span class="comment">// If there's a context, create a collection on that context first, and select</span>
+  <span class="comment">// nodes from there</span>
+  <span class="keyword">else</span> <span class="keyword">if</span> (context !== <span class="literal">undefined</span>) <span class="keyword">return</span> $(context).find(selector)
+  <span class="comment">// And last but no least, if it's a CSS selector, use it to select nodes.</span>
+  <span class="keyword">else</span> dom = zepto.qsa(<span class="built_in">document</span>, selector)
+}
+<span class="comment">// create a new Zepto collection from the nodes found</span>
+<span class="keyword">return</span> zepto.Z(dom, selector)
+
+  }
+
+zepto.Z = <span class="function"><span class="keyword">function</span><span class="params">(dom, selector)</span> </span>{
+    dom = dom || []
+    dom.__proto__ = $.fn
+    dom.selector = selector || <span class="string">''</span>
+    <span class="keyword">return</span> dom
+  }
+</code></pre><p>如果什么都不传入，它在init内部会调用Z，并且返回一个空的数组，这个数组的原型会指向$.fn，$.fn是一个字面量的对象，全部是zepto的一些其他方法。</p>
+<p>如果context有值，它会指定一个上下文，也就是范围$(context).find(selector)，如果context没有值，则会对selector的值进行检索，如果selector是一个标签字符串，则调用zepto.fragment方法来获取dom对象。如果selector不是标签字符串，则调用zepto.qsa方法，得到DOM对象，在qsa方法中会检查#，.也就是id和class，如果id有返回的是从getElementById中获取的dom对象，如果是class则调用数组的slice方法call一下比如querySelectorAll等，在获取dom对象时，就已经进行了装载，最后调用zepto.Z方法，返回这个数组。</p>
+<pre><code>zepto.qsa = <span class="function"><span class="keyword">function</span><span class="params">(element, selector)</span></span>{
+<span class="keyword">var</span> found,
+    maybeID = selector[<span class="number">0</span>] == <span class="string">'#'</span>,
+    maybeClass = !maybeID &amp;&amp; selector[<span class="number">0</span>] == <span class="string">'.'</span>,
+    nameOnly = maybeID || maybeClass ? selector.slice(<span class="number">1</span>) : selector, <span class="comment">// Ensure that a 1 char tag name still gets checked</span>
+    isSimple = simpleSelectorRE.test(nameOnly)
+<span class="keyword">return</span> (isDocument(element) &amp;&amp; isSimple &amp;&amp; maybeID) ?
+  ( (found = element.getElementById(nameOnly)) ? [found] : [] ) :
+  (element.nodeType !== <span class="number">1</span> &amp;&amp; element.nodeType !== <span class="number">9</span>) ? [] :
+  slice.call(
+    isSimple &amp;&amp; !maybeID ?
+      maybeClass ? element.getElementsByClassName(nameOnly) : <span class="comment">// If it's simple, it could be a class</span>
+      element.getElementsByTagName(selector) : <span class="comment">// Or a tag</span>
+      element.querySelectorAll(selector) <span class="comment">// Or it's not simple, and we need to query all</span>
+  )
+  }
+
+  zepto.fragment = <span class="function"><span class="keyword">function</span><span class="params">(html, name, properties)</span> </span>{
+<span class="keyword">var</span> dom, nodes, container
+
+<span class="comment">// A special case optimization for a single tag</span>
+<span class="keyword">if</span> (singleTagRE.test(html)) dom = $(<span class="built_in">document</span>.createElement(<span class="built_in">RegExp</span>.$<span class="number">1</span>))
+
+<span class="keyword">if</span> (!dom) {
+  <span class="keyword">if</span> (html.replace) html = html.replace(tagExpanderRE, <span class="string">"&lt;$1&gt;&lt;/$2&gt;"</span>)
+  <span class="keyword">if</span> (name === <span class="literal">undefined</span>) name = fragmentRE.test(html) &amp;&amp; <span class="built_in">RegExp</span>.$<span class="number">1</span>
+  <span class="keyword">if</span> (!(name <span class="keyword">in</span> containers)) name = <span class="string">'*'</span>
+
+  container = containers[name]
+  container.innerHTML = <span class="string">''</span> + html
+  dom = $.each(slice.call(container.childNodes), <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    container.removeChild(<span class="keyword">this</span>)
+  })
+}
+
+<span class="keyword">if</span> (isPlainObject(properties)) {
+  nodes = $(dom)
+  $.each(properties, <span class="function"><span class="keyword">function</span><span class="params">(key, value)</span> </span>{
+    <span class="keyword">if</span> (methodAttributes.indexOf(key) &gt; -<span class="number">1</span>) nodes[key](value)
+    <span class="keyword">else</span> nodes.attr(key, value)
+  })
+}
+
+<span class="keyword">return</span> dom
+  }
+</code></pre><p>其实这个数组，就是我们使用到的真正的东西了，在Z方法内部，主要就是两个动作，把dom的原型指向$.fn，把dom的selector属性指向selector，这样就可以使用到zepto中的其他可以使用的方法了。</p>
+<p>而平时的开发中对于类型的判断是使用的很多的东西，我们可能需要对数据的类型进行检查，以满足预期的结果，而zepto中也提供了一揽子的解决方案，用于类型的判断，函数，字符串，对象，数组等。</p>
+<pre><code>$.each(<span class="string">"Boolean Number String Function Array Date RegExp Object Error"</span>.split(<span class="string">" "</span>),    <span class="function"><span class="keyword">function</span><span class="params">(i, name)</span> </span>{
+class2type[ <span class="string">"[object "</span> + name + <span class="string">"]"</span> ] = name.toLowerCase()
+  })
+</code></pre><p>其实从这里就可以看的出来zepto使用的是什么方式来检索数据类型，借用的就是Object对象的toString方法把全类型字符串打印出来，然后再根据这些字符串来分别处理。在zepto的源代码中，它没有这么写，Object.prototype.toString.call(obj)，而是直接toString.call(obj)，这是因为这个toString是一个内置对象，作用域我想我们都明白，在客户端它是如何搜索的。</p>
+<p>在得到了全类型的字符串后，可以去class2type的map中取出值来进行比对，来返回正确的类型。</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">isObject</span><span class="params">(obj)</span>     </span>{ <span class="keyword">return</span> type(obj) == <span class="string">"object"</span> }
+<span class="function"><span class="keyword">function</span> <span class="title">isFunction</span><span class="params">(value)</span> </span>{ <span class="keyword">return</span> type(value) == <span class="string">"function"</span> }
+<span class="function"><span class="keyword">function</span> <span class="title">type</span><span class="params">(obj)</span> </span>{
+<span class="keyword">return</span> obj == <span class="literal">null</span> ? <span class="built_in">String</span>(obj) :
+  class2type[toString.call(obj)] || <span class="string">"object"</span>
+  }
+</code></pre><p>数组zepto使用的最新的API，Array提供的isArray方法。</p>
+<pre><code>isArray = <span class="built_in">Array</span>.isArray ||
+  <span class="function"><span class="keyword">function</span><span class="params">(object)</span></span>{ <span class="keyword">return</span> object <span class="keyword">instanceof</span> <span class="built_in">Array</span> }
+</code></pre><p>zepto还提供了检测document，window等。</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">isWindow</span><span class="params">(obj)</span>     </span>{ <span class="keyword">return</span> obj != <span class="literal">null</span> &amp;&amp; obj == obj.window }
+  <span class="function"><span class="keyword">function</span> <span class="title">isDocument</span><span class="params">(obj)</span>   </span>{ <span class="keyword">return</span> obj != <span class="literal">null</span> &amp;&amp; obj.nodeType == obj.DOCUMENT_NODE }
+  <span class="function"><span class="keyword">function</span> <span class="title">isPlainObject</span><span class="params">(obj)</span> </span>{
+ <span class="comment">//getPrototypeOf 返回一个对象的原型 ，这里是不是跟Object.prototype相等</span>
+ <span class="keyword">return</span> isObject(obj) &amp;&amp; !isWindow(obj) &amp;&amp; <span class="built_in">Object</span>.getPrototypeOf(obj) == <span class="built_in">Object</span>.prototype
+}
+</code></pre><p>each顾名思义是用来遍历的</p>
+<pre><code>$.each = <span class="function"><span class="keyword">function</span><span class="params">(elements, callback)</span></span>{
+<span class="keyword">var</span> i, key
+<span class="keyword">if</span> (likeArray(elements)) {
+  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; elements.length; i++)
+    <span class="comment">//函数的默认返回值是undefined ，那么什么情况下会成 false  ?</span>
+    <span class="keyword">if</span> (<span class="keyword">callback</span>.call(elements[i], i, elements[i]) === <span class="literal">false</span>) <span class="keyword">return</span> elements
+} <span class="keyword">else</span> {
+  <span class="keyword">for</span> (key <span class="keyword">in</span> elements)
+    <span class="keyword">if</span> (<span class="keyword">callback</span>.call(elements[key], key, elements[key]) === <span class="literal">false</span>) <span class="keyword">return</span> elements
+}
+
+<span class="keyword">return</span> elements
+  } 
+</code></pre><p>唯一有个问题，看看有其他朋友知晓不，什么情况下callback.call会等于false？按道理来说，如果检查typeof callback === ‘function’，这样的情况，我认为可以理解。毕竟函数的默认返回值就是undefined，但是它也不是“强类型”相等的，所以我不明白它的意义何在？</p>
+<p>在学习map函数之前，先学习几个比较有用的方法，比如判断一个对象是否是空对象，给字符串两边去空白等。判断空对象，主要是利用了in语法，它可以遍历对象的属性，如果是空对象for循环会直接跳过。</p>
+<pre><code>$.isEmptyObject = <span class="function"><span class="keyword">function</span><span class="params">(obj)</span> </span>{
+    <span class="keyword">var</span> name
+    <span class="keyword">for</span> (name <span class="keyword">in</span> obj) <span class="keyword">return</span> <span class="literal">false</span>
+    <span class="keyword">return</span> <span class="literal">true</span>
+  }
+</code></pre><p>判断一个元素是否在数组中，借用了在最上面申明的一个空数组的indexOf。</p>
+<pre><code>$.inArray = <span class="function"><span class="keyword">function</span><span class="params">(elem, array, i)</span></span>{
+    <span class="keyword">return</span> emptyArray.indexOf.call(array, elem, i)
+  }
+</code></pre><p>给字符串左右两边去空白，这个是借用了String包装对象的trim方法。</p>
+<pre><code>$.trim = <span class="function"><span class="keyword">function</span><span class="params">(str)</span> </span>{
+    <span class="keyword">return</span> str == <span class="literal">null</span> ? <span class="string">""</span> : <span class="built_in">String</span>.prototype.trim.call(str)
+  }
+</code></pre><p>map函数是一个很有意思很有用的函数，它可以帮助开发者进行映射到每一个元素上，新版的数组也提供了map方法，考虑到某些浏览器没有实现这个，所以zepto帮助我们实现了它。</p>
+<pre><code>$.map = <span class="function"><span class="keyword">function</span>(<span class="title">elements</span>, <span class="title">callback</span>){</span>
+var <span class="built_in">value</span>, values = [], i, key
+<span class="keyword">if</span> (likeArray(elements))
+  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; elements.<span class="built_in">length</span>; i++) {
+    <span class="built_in">value</span> = callback(elements[i], i)
+    <span class="keyword">if</span> (<span class="built_in">value</span> != <span class="constant">null</span>) values.push(<span class="built_in">value</span>)
+  }
+<span class="keyword">else</span>
+      <span class="keyword">for</span> (key <span class="operator">in</span> elements) {
+        <span class="built_in">value</span> = callback(elements[key], key)
+        <span class="keyword">if</span> (<span class="built_in">value</span> != <span class="constant">null</span>) values.push(<span class="built_in">value</span>)
+      }
+    <span class="constant">return</span> flatten(values)
+  }
+</code></pre><p>likeArray是判断了下length属性是不是number，如果是，遍历，然后装载到values数组中，如果是对象就用for in，最后的flatten是借用一下concat，copy一个副本出来返回。</p>
+<p>read函数，是在开发中非常有用的函数，主要是用来当DOM文档准备好之后，再加载或直接某些Js片段。就是怕，某些情况下，比如Js片段已经写好了，这里面要获取某个DOM节点，实际上这里会是null，然后执行其他操作就抛错误了，因为在浏览器中，这个节点还不存在。</p>
+<pre><code><span class="comment">//读取readyState状态</span>
+  <span class="keyword">if</span> (readyRE.test(<span class="built_in">document</span>.readyState) &amp;&amp; <span class="built_in">document</span>.body) callback($)
+<span class="comment">//监听DOMContentLoaded事件</span>
+  <span class="keyword">else</span> <span class="built_in">document</span>.addEventListener(<span class="string">'DOMContentLoaded'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{ callback($) }, <span class="literal">false</span>)
+  <span class="keyword">return</span>  <span class="keyword">this</span>
+</code></pre><p>zepto因为是移动端的开发，所以它监听的是DOMContentLoaded事件，这个事件是一个原生方法，新版API中提供了这个，而对IE10兼容，则是判断document的readyState属性，保证它是complete|loaded|interactive，这也意味着已经准备好了，并且还要判断body是否存在，才执行callback函数。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-复习JavaScript十二之理解作用域" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/05/复习JavaScript十二之理解作用域/" class="article-date">
+  	<time datetime="2015-02-05T10:17:09.000Z" itemprop="datePublished">2月 5 2015</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/05/复习JavaScript十二之理解作用域/">复习JavaScript十二之理解作用域</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>理解作用域链是Js编程中一个必须要具备的，作用域决定了变量和函数有权力访问哪些数据。在Web浏览器中，全局执行环境是window对象，这也意味着所有的全局变量或者方法都是window对象的属性或方法。当个函数在被调用的时候都会创建自己的执行环境，而这个函数中所写的代码就开始进入这个函数的执行环境，于是由变量对象构建起了一个作用域链。</p>
+<pre><code><span class="keyword">var</span> wow = <span class="string">'魔兽世界'</span>;
+<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> _wow = <span class="string">'123'</span>;
+}
+</code></pre><p>在这个例子中全局环境中包含了两个对象（全局环境的变量对象不算），window.wow和window.message，而这个message函数中又包含了两个对象，它自己的变量对象（其中定义了arguments对象）和全局环境的变量对象。当这个函数开始执行时，message自己的变量对象中定义了_wow，而它的全局环境的变量对象有wow，假设在message中alert一下wow，实际上是message中包含的全局环境的变量对象.wow，于是可以访问。</p>
+<pre><code><span class="keyword">var</span> wow = <span class="string">'123'</span>;
+<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> wow = <span class="string">'456'</span>;
+}
+</code></pre><p>如果执行message函数alert一下wow，它的作用域是这样开始搜索的，先搜索message自己的变量对象中是否存在wow，如果有就访问并且立马停止搜索，如果没有则继续往上访问它，有wow，则访问并且立马停止搜索，以此类推一直搜索到全局环境上的变量对象，如果这里都没，恭喜你，这里要抛错了。</p>
+<pre><code><span class="keyword">var</span> c = <span class="string">'123'</span>;
+<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> g = <span class="string">'123'</span>;
+    <span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        <span class="keyword">var</span> d = <span class="string">'123'</span>;
+    }
+}
+</code></pre><p>在这个例子中包含有三个执行环境，全局环境，message的环境，a的环境。从这里可以看出message自身包含两个对象，自己的变量对象和全局环境中的变量对象，而函数a则包含了三个，自身的变量对象，message的变量对象和全局变量对象。</p>
+<p>当开始执行这函数时，在函数a中可以访问到变量g，那是因为函数a包含了message的变量对象，于是在自身没有开始搜索上一级的变量对象时发现了，于是可以访问。那么访问c的原理也是如此，当自身和上一级的message的变量对象都没有，但是全局变量对象中存在，于是访问成功。</p>
+<p>了解这个作用域，对于Js编程是至关重要的，不然可能会出现，明明想要的预期结果是123，但是变成了456，为什么？那就是因为一级一级的搜索，可能会存在覆盖，或者搜索到别的地方就立即停止搜索了。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/tags/JavaScript/page/2/">2</a><a class="page-number" href="/tags/JavaScript/page/3/">3</a><a class="page-number" href="/tags/JavaScript/page/4/">4</a><a class="extend next" rel="next" href="/tags/JavaScript/page/2/">Next &raquo;</a>
+    </nav>
+  
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 icepy
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+
+<script src="/js/mobile.js" type="text/javascript"></script>
+
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
 });
 </script>
 
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
 
-
-
-
-    </body>
-   </html>
+  </div>
+</body>
+</html>

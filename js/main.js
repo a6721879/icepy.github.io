@@ -26,7 +26,8 @@ var Main = (function(){
 		var tags = $(".tagcloud a");
 		tags.css({"font-size": "12px"});
 		for(var i=0,len=tags.length; i<len; i++){
-			var num = parseInt(Math.random()*5+1);
+			//var num = parseInt(Math.random()*5+1);
+			var num = tags.eq(i).html().length % 5 +1;
 			tags[i].className = "";
 			tags.eq(i).addClass("color"+num);
 		}
@@ -106,12 +107,37 @@ var Main = (function(){
 		}
 	}
 
+	var enterAnm = function(){
+		//avatar
+		$(".js-avatar").attr("src", $(".js-avatar").attr("lazy-src"));
+		$(".js-avatar")[0].onload = function(){
+			$(".js-avatar").addClass("show");
+		}
+
+		//article
+		function showArticle(){
+			$(".article").each(function(){
+				if( $(this).offset().top <= $(window).scrollTop()+$(window).height()*0.75 && !$(this).hasClass('show') ) {
+					$(this).addClass("show");
+				}
+			});
+		}
+		$(window).on('scroll', function(){
+			showArticle();
+		});
+		showArticle();
+	}
+
 	return {
 		init: function(){
 			resetTags();
 			bind();
+			enterAnm();
 			fancyInit();
 			Tips.init();
+			new Mobile({
+				ctn: document.getElementsByClassName("slider-trigger")[0]
+			});
 		}
 	}
 })();
