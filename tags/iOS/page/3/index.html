@@ -168,87 +168,6 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-NSURLProtocol" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/04/13/NSURLProtocol/" class="article-date">
-  	<time datetime="2015-04-13T03:38:06.000Z" itemprop="datePublished">4月 13 2015</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/04/13/NSURLProtocol/">NSURLProtocol</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>阅读资料：</p>
-<ul>
-<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtocol_Class/index.html" target="_blank" rel="external">Apple Foundation NSURLProtocol</a></li>
-<li><a href="http://nshipster.cn/nsurlprotocol/" target="_blank" rel="external">http://nshipster.cn/nsurlprotocol/</a></li>
-</ul>
-<p>正如NSHipster在上篇文章所写的一样，iOS离不开网络，那么这就需要网络编程。cocoa提供了一系列的API来操作网络，比如NSURL，NSURLRequest，NSURLSession等等，以及处理网络的GCD，NSOperation多任务处理。</p>
-<p>那么NSURLProtocol，它有什么用呢？官方给它的解释是，可以重新定义已经加载的URL的行为或者定义一个新的URL。换句话来说，就是这个类可以监管应用的网络活动，只要是通过URL来进行的。</p>
-<p>NSURLProtocol是一个抽象类，也就是说它需要一个子类继承它才可以正常工作，关于怎么使用可以阅读NSHipster的文章，把子类注册到NSURLProtocol中。</p>
-<pre><code>+ (<span class="keyword">void</span>)consolelog:(<span class="built_in">UITextView</span> *)debugText
-{
-    debug = debugText;
-    [NSURLProtocol registerClass:<span class="keyword">self</span>];
-}
-</code></pre><h3 id="案例需求，监管应用的URL加载系统，并且支持web_client_console_log">案例需求，监管应用的URL加载系统，并且支持web client console log</h3>
-<p>案例可以在Github中查看<a href="https://github.com/lcepy/MFLog" target="_blank" rel="external">MFLog</a></p>
-<pre><code>+ (BOOL)registerClass:(<span class="class"><span class="keyword">Class</span>)<span class="title">protocolClass</span></span>
-</code></pre><p>把子类注册到NSURLProtocol中</p>
-<pre><code>+ (<span class="keyword">void</span>)unregisterClass:(<span class="keyword">Class</span>)protocolClass
-</code></pre><p>把子类从NSURLProtocol中移除</p>
-<p>NSURLProtocol提供了一系列的方法来操作一个URL Data，先看其一，一个静态方法。</p>
-<pre><code>+ (<span class="built_in">BOOL</span>)canInitWithRequest:(<span class="built_in">NSURLRequest</span> *)request
-</code></pre><p>canInitWithRequest <strong>注意，这些是覆盖父类NSURLProtocol的静态方法</strong>是系统询问，是否处理该请求URL，如果返回NO，不处理。如果返回YES，子类进一步控制。</p>
-<pre><code><span class="bullet">+ </span>(NSURLRequest <span class="emphasis">*)canonicalRequestForRequest:(NSURLRequest *</span>)request
-</code></pre><p>返回请求的原始request</p>
-<pre><code><span class="pp">- <span class="params">(void)</span>startLoading</span>
-</code></pre><p>加载此次请求，可以通过self.request获取当前URL的request对象</p>
-<pre><code><span class="pp">- <span class="params">(void)</span>stopLoading</span>
-</code></pre><p>此次请求完成时，可以在这个方法中处理</p>
-<p>每一个NSURLProtocol都有一个client属性，这个属性是NSURLProtocolClient。另外，还可以实现NSConnectionDataDelegate协议，把NSURLProtocol与NSURLConnection链接起来，这样就可以在statLoading调用之后，系统将回调NSConnectionDataDelegate中定义的各种方法，这个在自定义时非常有用。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
     <article id="post-纪录开发第一个iOS客户端遇见的坑" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -610,6 +529,92 @@ requ.bind(<span class="string">'click'</span>,<span class="function"><span class
 </ul>
 <p>比如要查看效果，可以右边的属性栏中选择Orientation中的Landscape，就变成了横屏。如果想删除约束，可以在左侧的文档大纲中进行删除，假设一个视图没有约束，也可以在文档大纲中来add约束。</p>
 <p>如果想要查看一个约束，可以在Show the size inspector中查看constraints。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-有趣味的iOS动画实现" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/03/有趣味的iOS动画实现/" class="article-date">
+  	<time datetime="2015-03-03T01:40:21.000Z" itemprop="datePublished">3月 3 2015</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/03/有趣味的iOS动画实现/">有趣味的iOS动画实现</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，甚至apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。</p>
+<p>想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，也就是几个属性。</p>
+<pre><code>dropview.frame;
+dropview.<span class="keyword">center</span>;
+dropview.bounds;
+dropview.transform
+</code></pre><p>动画，是顾名思义的，在平面或者多维度的移动，frame中记录了当前视图相对于父视图左上角顶点的左边，而center则是中心原点，transform则代表了比如旋转等等矩阵的改变属性。</p>
+<p>最简单的动画，就是操作这些属性，改变其值，使用的是UIView的类方法，比如：</p>
+<pre><code>[UIView animateWithDuration:<span class="number">1.0</span> animations:^{
+
+} completion:^(BOOL finished) {
+
+}]
+</code></pre><p>其实我最近研究了一下UIDynamicAnimator，它提供了一个模拟真实物理世界的动画与交互系统，比如可以定义一些行为，重力行为，碰撞行为等等。</p>
+<pre><code>-(<span class="constant">UIDynamicAnimator</span> *)animator
+{
+    <span class="keyword">if</span> (!_animator) {
+        _animator = [[<span class="constant">UIDynamicAnimator</span> alloc] <span class="symbol">initWithReferenceView:</span><span class="keyword">self</span>.gameview];
+    }
+    <span class="keyword">return</span> _animator;
+}
+</code></pre><p>UIDynamicAnimator需要一个通用的视图，而动画则是在这个视图上发生，所以init的时候添加了一个通用视图上去。然后可以去实现其他的物理类，比如重力，把它add到UIDynamicAnimator中。</p>
+<pre><code>-(<span class="type">UIGravityBehavior</span> *)gravit
+{
+    <span class="keyword">if</span> (!_gravit) {
+        _gravit = [[<span class="type">UIGravityBehavior</span> alloc] <span class="keyword">init</span>];
+        _gravit.magnitude = <span class="number">0.9</span>;
+        [<span class="keyword">self</span>.animator addBehavior:_gravit];
+    }
+    <span class="keyword">return</span> _gravit;
+}
+</code></pre><p>最后一步是要把需要被实现物理动画的视图，添加到重力系统中去。</p>
+<pre><code><span class="title">[self.gravit addItem:dropview]</span><span class="comment">;</span>
+</code></pre><p>从技术实现的角度上来说，iOS平台实现这些动画，包括绘制，物理交互，都非常的简单，主要是要注意一些细节的处理，比如当前动画停止之后处理什么，在动画执行过程中，可能会出现一些情况，然后处理，或者是几个动画的连接延迟等等。</p>
 
       
     </div>
