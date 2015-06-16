@@ -4,7 +4,7 @@
   <subtitle><![CDATA[曾记否，到中流击水，浪遏飞舟！]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://lcepy.github.io/"/>
-  <updated>2015-06-16T09:38:19.669Z</updated>
+  <updated>2015-06-16T12:07:20.158Z</updated>
   <id>http://lcepy.github.io/</id>
   
   <author>
@@ -13,6 +13,53 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[利用AVFoundation实现扫描条码]]></title>
+    <link href="http://lcepy.github.io/2015/06/16/%E5%88%A9%E7%94%A8AVFoundation%E5%AE%9E%E7%8E%B0%E6%89%AB%E6%8F%8F%E6%9D%A1%E7%A0%81/"/>
+    <id>http://lcepy.github.io/2015/06/16/利用AVFoundation实现扫描条码/</id>
+    <published>2015-06-16T09:39:05.000Z</published>
+    <updated>2015-06-16T10:46:22.000Z</updated>
+    <content type="html"><![CDATA[<p>iOS7中添加了一组原生支持扫描的组件，通过AVCaptureMetaDataOutput可以扫描各式各样的QR码，条形码，你所需要做的就是写好UI，并将它设置为AVCaptureSession的输出，再实现相应的协议即可。而且，这玩意可以跟Passbook相结合，有许多潜力可以实现，官方也非常推荐大家使用这个API。</p>
+<blockquote>
+<p>import AVFoundation</p>
+<p>实现 AVCaptureMetadataOutputObjectsDelegate协议</p>
+</blockquote>
+<p>要实现这个扫描器，首先需要导入AVFoundation框架，这是一个专门处理音频，视频的框架。</p>
+<p>创建一个AV设备，使用AVMediaTypeVideo常量</p>
+<pre><code><span class="keyword">let</span> <span class="variable">captureDevice =</span> AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+</code></pre><p>然后建立一个输入</p>
+<pre><code><span class="keyword">let</span> input:AnyObject! = AVCaptureDeviceInput.deviceInputWithDevice(captureDevice, <span class="keyword">error</span>: &amp;<span class="keyword">error</span>)
+</code></pre><p>现在，我们来看一看，最关键的部分，创建输出会话，不过在此之前，我们需要先使用AVCaptureSession创建一个会话，将输入端添加到会话中。</p>
+<pre><code><span class="keyword">self</span>.captureSession = AVCaptureSession()
+<span class="keyword">self</span>.captureSession?.addInput(input <span class="keyword">as</span>! AVCaptureInput)
+</code></pre><p>接着，我们开始使用AVCaptureMetadataOutput创建一个输出端</p>
+<pre><code><span class="keyword">let</span> <span class="variable">captureMetadataOutput =</span> AVCaptureMetadataOutput()
+captureMetadataOutput.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
+captureMetadataOutput.<span class="variable">metadataObjectTypes =</span> [AVMetadataObjectTypeEAN13Code,AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode128Code,AVMetadataObjectTypeQRCode]
+</code></pre><p>指定要实现的扫描常量，添加一个协议，GCD可以使用在主线程中，并把它添加到会话中。</p>
+<pre><code><span class="keyword">self</span>.captureSession?.addOutput(captureMetadataOutput)
+</code></pre><p>然后我们还需要使用AVCaptureVideoPreviewLayer创建一个画布，用来显示扫描的展示区域，并添加到当前视图的layer中。</p>
+<pre><code><span class="keyword">self</span>.videoPreviewLayer = <span class="constant">AVCaptureVideoPreviewLayer</span>(<span class="symbol">session:</span> <span class="keyword">self</span>.captureSession)
+<span class="keyword">self</span>.videoPreviewLayer?.videoGravity = <span class="constant">AVLayerVideoGravityResizeAspect</span>
+<span class="keyword">self</span>.videoPreviewLayer?.frame = <span class="keyword">self</span>.view.bounds
+<span class="keyword">self</span>.view.layer.addSublayer(<span class="keyword">self</span>.videoPreviewLayer)
+</code></pre><p>最后启动这个会话</p>
+<pre><code><span class="keyword">self</span>.captureSession?.startRunning()
+</code></pre><p>到这里，整个扫描条码的程序就已经准备就绪了，但是如果你还需要获取扫描相应的结果，那么需要实现它的协议，并实现func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!, fromConnection connection: AVCaptureConnection!) {} 方法。</p>
+<p>metadataObjects是一个AnyObject的数组，在这里，还需要进步的判断，获取第一个元素转化为AVMetadataMachineReadableCodeObject，通过type，可以判断扫描的类型，是二维码，还是条形码，还是其他，而值，则是在AVMetadataMachineReadableCodeObject的stringValue属性。</p>
+<pre><code><span class="keyword">let</span> metadata = metadataObjects[<span class="number">0</span>] <span class="keyword">as</span>! AVMetadataMachineReadableCodeObject
+<span class="comment">//metadata.type</span>
+<span class="comment">//metadata.stringValue</span>
+</code></pre><p>扫描的Demo可以查看<a href="https://github.com/lcepy/Mockingbird" target="_blank" rel="external">Mockingbird</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>iOS7中添加了一组原生支持扫描的组件，通过AVCaptureMetaDataOutput可以扫描各式各样的QR码，条形码，你所需要做的就是写好UI，并将它设置为AVCaptureSession的输出，再实现相应的协议即可。而且，这玩意可以跟Passbook相结合，有许多潜]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[上架AppStore的经历]]></title>
@@ -1426,56 +1473,6 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
     </summary>
     
       <category term="JavaScript" scheme="http://lcepy.github.io/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[有趣味的iOS动画实现]]></title>
-    <link href="http://lcepy.github.io/2015/03/03/%E6%9C%89%E8%B6%A3%E5%91%B3%E7%9A%84iOS%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/"/>
-    <id>http://lcepy.github.io/2015/03/03/有趣味的iOS动画实现/</id>
-    <published>2015-03-03T01:40:21.000Z</published>
-    <updated>2015-03-04T12:37:16.000Z</updated>
-    <content type="html"><![CDATA[<p>在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，甚至apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。</p>
-<p>想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，也就是几个属性。</p>
-<pre><code>dropview.frame;
-dropview.<span class="keyword">center</span>;
-dropview.bounds;
-dropview.transform
-</code></pre><p>动画，是顾名思义的，在平面或者多维度的移动，frame中记录了当前视图相对于父视图左上角顶点的左边，而center则是中心原点，transform则代表了比如旋转等等矩阵的改变属性。</p>
-<p>最简单的动画，就是操作这些属性，改变其值，使用的是UIView的类方法，比如：</p>
-<pre><code>[UIView animateWithDuration:<span class="number">1.0</span> animations:^{
-
-} completion:^(BOOL finished) {
-
-}]
-</code></pre><p>其实我最近研究了一下UIDynamicAnimator，它提供了一个模拟真实物理世界的动画与交互系统，比如可以定义一些行为，重力行为，碰撞行为等等。</p>
-<pre><code>-(<span class="constant">UIDynamicAnimator</span> *)animator
-{
-    <span class="keyword">if</span> (!_animator) {
-        _animator = [[<span class="constant">UIDynamicAnimator</span> alloc] <span class="symbol">initWithReferenceView:</span><span class="keyword">self</span>.gameview];
-    }
-    <span class="keyword">return</span> _animator;
-}
-</code></pre><p>UIDynamicAnimator需要一个通用的视图，而动画则是在这个视图上发生，所以init的时候添加了一个通用视图上去。然后可以去实现其他的物理类，比如重力，把它add到UIDynamicAnimator中。</p>
-<pre><code>-(<span class="type">UIGravityBehavior</span> *)gravit
-{
-    <span class="keyword">if</span> (!_gravit) {
-        _gravit = [[<span class="type">UIGravityBehavior</span> alloc] <span class="keyword">init</span>];
-        _gravit.magnitude = <span class="number">0.9</span>;
-        [<span class="keyword">self</span>.animator addBehavior:_gravit];
-    }
-    <span class="keyword">return</span> _gravit;
-}
-</code></pre><p>最后一步是要把需要被实现物理动画的视图，添加到重力系统中去。</p>
-<pre><code><span class="title">[self.gravit addItem:dropview]</span><span class="comment">;</span>
-</code></pre><p>从技术实现的角度上来说，iOS平台实现这些动画，包括绘制，物理交互，都非常的简单，主要是要注意一些细节的处理，比如当前动画停止之后处理什么，在动画执行过程中，可能会出现一些情况，然后处理，或者是几个动画的连接延迟等等。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，甚至apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。</p>
-<p>想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，]]>
-    </summary>
-    
-      <category term="iOS" scheme="http://lcepy.github.io/tags/iOS/"/>
     
   </entry>
   
