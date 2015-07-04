@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>有趣味的iOS动画实现 | icepy</title>
+  <title>有趣味的iOS动画实现 | 行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，甚至apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。
 想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，也就是几个属性。
@@ -13,14 +13,15 @@ dropview.bounds;
 dropview.tr">
 <meta property="og:type" content="article">
 <meta property="og:title" content="有趣味的iOS动画实现">
-<meta property="og:url" content="http://lcepy.github.io/2015/03/03/有趣味的iOS动画实现/">
-<meta property="og:site_name" content="icepy">
+<meta property="og:url" content="http://lcepy.github.io/2015/03/03/有趣味的iOS动画实现/index.html">
+<meta property="og:site_name" content="行者">
 <meta property="og:description" content="在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，甚至apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。
 想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，也就是几个属性。
 dropview.frame;
 dropview.center;
 dropview.bounds;
 dropview.tr">
+<meta property="og:updated_time" content="2015-07-04T15:16:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="有趣味的iOS动画实现">
 <meta name="twitter:description" content="在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，甚至apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。
@@ -29,16 +30,13 @@ dropview.frame;
 dropview.center;
 dropview.bounds;
 dropview.tr">
-
   
-    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
   <div id="container">
@@ -47,7 +45,9 @@ dropview.tr">
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
+			
 			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
 		</a>
 
 		<hgroup>
@@ -55,7 +55,7 @@ dropview.tr">
 		</hgroup>
 
 		
-		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 		
 
 		
@@ -68,11 +68,6 @@ dropview.tr">
 						</div>
 						<div class="icon-wrap icon-ribbon hide" data-idx="1">
 							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
 						</div>
 						
 						
@@ -89,8 +84,6 @@ dropview.tr">
 					<ul class="tips-inner">
 						<li>菜单</li>
 						<li>标签</li>
-						
-						<li>友情链接</li>
 						
 						
 						<li>关于我</li>
@@ -117,7 +110,7 @@ dropview.tr">
 							
 								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 					        
 								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 					        
@@ -128,26 +121,18 @@ dropview.tr">
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
 				
 				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://resume.github.io/?lcepy">icepyResume</a>
-			        
-			        </div>
-				</section>
-				
 
 				
 				
-				<section class="switch-part switch-part4">
+				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">携来百侣曾游,忆往昔峥嵘岁月稠。</div>
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
 				</section>
 				
 			</div>
@@ -170,7 +155,7 @@ dropview.tr">
 			  <h1 class="header-author">icepy</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -187,7 +172,7 @@ dropview.tr">
 					
 						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 			        
 						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 			        
@@ -200,7 +185,7 @@ dropview.tr">
   
     <div class="article-meta">
       <a href="/2015/03/03/有趣味的iOS动画实现/" class="article-date">
-  	<time datetime="2015-03-03T01:40:21.000Z" itemprop="datePublished">3月 3 2015</time>
+  	<time datetime="2015-03-03T01:40:21.000Z" itemprop="datePublished">2015-03-03</time>
 </a>
     </div>
   
@@ -235,32 +220,32 @@ dropview.tr">
       
         <p>在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，甚至apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。</p>
 <p>想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，也就是几个属性。</p>
-<pre><code>dropview.frame;
-dropview.<span class="keyword">center</span>;
-dropview.bounds;
-dropview.transform
+<pre><code><span class="tag">dropview</span><span class="class">.frame</span>;
+<span class="tag">dropview</span><span class="class">.center</span>;
+<span class="tag">dropview</span><span class="class">.bounds</span>;
+<span class="tag">dropview</span><span class="class">.transform</span>
 </code></pre><p>动画，是顾名思义的，在平面或者多维度的移动，frame中记录了当前视图相对于父视图左上角顶点的左边，而center则是中心原点，transform则代表了比如旋转等等矩阵的改变属性。</p>
 <p>最简单的动画，就是操作这些属性，改变其值，使用的是UIView的类方法，比如：</p>
-<pre><code>[UIView animateWithDuration:<span class="number">1.0</span> animations:^{
+<pre><code><span class="collection">[UIView animateWithDuration:1.0 animations:<span class="comment">^{
 
-} completion:^(BOOL finished) {
+}</span> completion:^<span class="list">(<span class="keyword">BOOL</span> finished)</span> <span class="collection">{
 
-}]
+}</span>]</span>
 </code></pre><p>其实我最近研究了一下UIDynamicAnimator，它提供了一个模拟真实物理世界的动画与交互系统，比如可以定义一些行为，重力行为，碰撞行为等等。</p>
-<pre><code>-(<span class="constant">UIDynamicAnimator</span> *)animator
+<pre><code>-(<span class="built_in">UIDynamicAnimator</span> *)animator
 {
     <span class="keyword">if</span> (!_animator) {
-        _animator = [[<span class="constant">UIDynamicAnimator</span> alloc] <span class="symbol">initWithReferenceView:</span><span class="keyword">self</span>.gameview];
+        _animator = [[<span class="built_in">UIDynamicAnimator</span> alloc] initWithReferenceView:<span class="keyword">self</span><span class="variable">.gameview</span>];
     }
     <span class="keyword">return</span> _animator;
 }
 </code></pre><p>UIDynamicAnimator需要一个通用的视图，而动画则是在这个视图上发生，所以init的时候添加了一个通用视图上去。然后可以去实现其他的物理类，比如重力，把它add到UIDynamicAnimator中。</p>
-<pre><code>-(<span class="type">UIGravityBehavior</span> *)gravit
+<pre><code>-(<span class="built_in">UIGravityBehavior</span> *)gravit
 {
     <span class="keyword">if</span> (!_gravit) {
-        _gravit = [[<span class="type">UIGravityBehavior</span> alloc] <span class="keyword">init</span>];
-        _gravit.magnitude = <span class="number">0.9</span>;
-        [<span class="keyword">self</span>.animator addBehavior:_gravit];
+        _gravit = [[<span class="built_in">UIGravityBehavior</span> alloc] init];
+        _gravit<span class="variable">.magnitude</span> = <span class="number">0.9</span>;
+        [<span class="keyword">self</span><span class="variable">.animator</span> addBehavior:_gravit];
     }
     <span class="keyword">return</span> _gravit;
 }
@@ -335,6 +320,7 @@ dropview.transform
 
 
 
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -352,20 +338,27 @@ dropview.transform
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 
-
-
-<script src="/js/mobile.js" type="text/javascript"></script>
-
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
 
 
 
 
 
-
-<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -386,7 +379,6 @@ MathJax.Hub.Queue(function() {
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
 
 
   </div>

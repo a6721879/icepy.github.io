@@ -3,30 +3,28 @@
 <head>
   <meta charset="utf-8">
   
-  <title>django模型使用的一些心得 | icepy</title>
+  <title>django模型使用的一些心得 | 行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="近很一直在学习django，因为我需要使用它为自己的项目写一个前台页面和一个后台服务。它是一个关于咖啡的邮件订阅社区，既然有服务，自然需要数据库层的支持。这是一个很好的开始，学习django让我了解到python开发web应用真的非常快速，但是也有一个很明显的缺点。那就是国内，对django社区的支持度非常不好，这或许跟国内python的有关，不过也不要紧，学习就是这样，要啃难而上。
 说说在dja">
 <meta property="og:type" content="article">
 <meta property="og:title" content="django模型使用的一些心得">
-<meta property="og:url" content="http://lcepy.github.io/2014/11/14/django模型使用的一些心得/">
-<meta property="og:site_name" content="icepy">
+<meta property="og:url" content="http://lcepy.github.io/2014/11/14/django模型使用的一些心得/index.html">
+<meta property="og:site_name" content="行者">
 <meta property="og:description" content="近很一直在学习django，因为我需要使用它为自己的项目写一个前台页面和一个后台服务。它是一个关于咖啡的邮件订阅社区，既然有服务，自然需要数据库层的支持。这是一个很好的开始，学习django让我了解到python开发web应用真的非常快速，但是也有一个很明显的缺点。那就是国内，对django社区的支持度非常不好，这或许跟国内python的有关，不过也不要紧，学习就是这样，要啃难而上。
 说说在dja">
+<meta property="og:updated_time" content="2015-07-04T15:16:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="django模型使用的一些心得">
 <meta name="twitter:description" content="近很一直在学习django，因为我需要使用它为自己的项目写一个前台页面和一个后台服务。它是一个关于咖啡的邮件订阅社区，既然有服务，自然需要数据库层的支持。这是一个很好的开始，学习django让我了解到python开发web应用真的非常快速，但是也有一个很明显的缺点。那就是国内，对django社区的支持度非常不好，这或许跟国内python的有关，不过也不要紧，学习就是这样，要啃难而上。
 说说在dja">
-
   
-    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
   <div id="container">
@@ -35,7 +33,9 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
+			
 			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
 		</a>
 
 		<hgroup>
@@ -43,7 +43,7 @@
 		</hgroup>
 
 		
-		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 		
 
 		
@@ -56,11 +56,6 @@
 						</div>
 						<div class="icon-wrap icon-ribbon hide" data-idx="1">
 							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
 						</div>
 						
 						
@@ -77,8 +72,6 @@
 					<ul class="tips-inner">
 						<li>菜单</li>
 						<li>标签</li>
-						
-						<li>友情链接</li>
 						
 						
 						<li>关于我</li>
@@ -105,7 +98,7 @@
 							
 								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 					        
 								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 					        
@@ -116,26 +109,18 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
 				
 				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://resume.github.io/?lcepy">icepyResume</a>
-			        
-			        </div>
-				</section>
-				
 
 				
 				
-				<section class="switch-part switch-part4">
+				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">携来百侣曾游,忆往昔峥嵘岁月稠。</div>
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
 				</section>
 				
 			</div>
@@ -158,7 +143,7 @@
 			  <h1 class="header-author">icepy</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -175,7 +160,7 @@
 					
 						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 			        
 						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 			        
@@ -188,7 +173,7 @@
   
     <div class="article-meta">
       <a href="/2014/11/14/django模型使用的一些心得/" class="article-date">
-  	<time datetime="2014-11-14T12:30:31.000Z" itemprop="datePublished">11月 14 2014</time>
+  	<time datetime="2014-11-14T12:30:31.000Z" itemprop="datePublished">2014-11-14</time>
 </a>
     </div>
   
@@ -244,23 +229,21 @@
 </blockquote>
 <p>来初始数据库，django会帮助我们完成数据库层面的操作。</p>
 <a id="more"></a>
-
-<h2 id="说说我的应用中使用到的东西">说说我的应用中使用到的东西</h2>
-<p>我的应用是一个关于咖啡资料的邮件订阅社区，前台页面主要是输入email完成订阅，激活订阅，退订，历史期刊的分页查看，最新一期查看。这里，我使用了三个表来描述它，（这个数据库中还有另外的表，在描述后台服务，这里仅仅用前台来说说我学习的过程。）用户订阅表，用户退订表，期刊表。在语言层面，就需要三个模型类，来描述它了。</p>
+<h2 id="说说我的应用中使用到的东西">说说我的应用中使用到的东西</h2><p>我的应用是一个关于咖啡资料的邮件订阅社区，前台页面主要是输入email完成订阅，激活订阅，退订，历史期刊的分页查看，最新一期查看。这里，我使用了三个表来描述它，（这个数据库中还有另外的表，在描述后台服务，这里仅仅用前台来说说我学习的过程。）用户订阅表，用户退订表，期刊表。在语言层面，就需要三个模型类，来描述它了。</p>
 <p>另外：这个应用，已经开源在github上，大家通过它可以访问到<a href="https://github.com/lcepy/AtomCoffee-Client" target="_blank" rel="external">点击这里</a></p>
 <p>我用到的字段类型，主要是三个字段varchar date int，主要是用于订阅的email，订阅时间，激活时间，是否激活的状态。</p>
 <p>在django中，因为我们不是使用原始查询，所以还需要在模型类中定义相应的字段，这一部分需要学习，对应的就是数据库中的字段类型，但是django有它自己的描述。</p>
 <p><strong>用户订阅时插入数据库</strong></p>
-<pre><code>models.WeeklyActivation(<span class="variable">activation_email=</span>address,<span class="variable">activation_key=</span>_ac_sha_key)
+<pre><code>models.<span class="function"><span class="title">WeeklyActivation</span><span class="params">(activation_email=address,activation_key=_ac_sha_key)</span></span>
 </code></pre><p>用户条件的一条email，会经过在后台的验证，验证成功之后就插入一条新的纪录。从代码上来看，基本上实例化一个类。</p>
 <p><strong>查询数据库</strong></p>
 <p>在验证email之后，我会根据提交的信息，先去数据库中查询一下是否有这个email地址，另外它是否是激活的状态。</p>
-<pre><code><span class="attribute">models.WeeklyActivation.objects.filter(activation_email</span>=<span class="string">address)</span>
+<pre><code>models<span class="class">.WeeklyActivation</span><span class="class">.objects</span><span class="class">.filter</span>(activation_email=address)
 </code></pre><p>如果存在，并且已经激活，自然就不用插入一条新的纪录了。如果订阅时间，超过了两个小时，系统就需要发送一封信的订阅激活邮件了。</p>
 <p>在django模型类中，objects叫做管理器，通过它，可以完成一些不同的操作，比如查询，过滤，等等。</p>
 <p><strong>更新数据</strong></p>
 <p>当用户收到一封激活email时，用户点击URL过来，需要更新一下激活状态，初始化状态都是0。</p>
-<pre><code><span class="variable">week =</span> models.WeeklyActivation.objects.filter(<span class="variable">activation_key=</span>offset)
+<pre><code>week = models<span class="class">.WeeklyActivation</span><span class="class">.objects</span><span class="class">.filter</span>(activation_key=offset)
 </code></pre><p>根据用户点击过来的URL获取到激活key，根据激活KEY查询一条记录，如果存在则通过week完成其他的操作。</p>
 <p>这里还有地方要注意，查询返回的结果是一个list，要week = week[0]，然后再来操作，更新完成之后不要忘记调用week.save()方法，不然更新不会成功。</p>
 <p><strong>原生查询</strong></p>
@@ -336,6 +319,7 @@
 
 
 
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -353,20 +337,27 @@
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 
-
-
-<script src="/js/mobile.js" type="text/javascript"></script>
-
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
 
 
 
 
 
-
-<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -387,7 +378,6 @@ MathJax.Hub.Queue(function() {
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
 
 
   </div>

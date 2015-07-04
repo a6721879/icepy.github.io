@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>复习JavaScript七之DOM | icepy</title>
+  <title>复习JavaScript七之DOM | 行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。
 理解层级结构与关系
@@ -11,28 +11,26 @@
 （页面又称为文档）文档中所有的节点之间">
 <meta property="og:type" content="article">
 <meta property="og:title" content="复习JavaScript七之DOM">
-<meta property="og:url" content="http://lcepy.github.io/2015/01/28/复习JavaScript七之DOM/">
-<meta property="og:site_name" content="icepy">
+<meta property="og:url" content="http://lcepy.github.io/2015/01/28/复习JavaScript七之DOM/index.html">
+<meta property="og:site_name" content="行者">
 <meta property="og:description" content="DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。
 理解层级结构与关系
 在浏览器中比如HTML页面是由很多有层次结构的标签组成的，而为这些标签提供查询，添加，删除等等方法主要就是DOM在提供支持。
 （页面又称为文档）文档中所有的节点之间">
+<meta property="og:updated_time" content="2015-07-04T15:16:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="复习JavaScript七之DOM">
 <meta name="twitter:description" content="DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。
 理解层级结构与关系
 在浏览器中比如HTML页面是由很多有层次结构的标签组成的，而为这些标签提供查询，添加，删除等等方法主要就是DOM在提供支持。
 （页面又称为文档）文档中所有的节点之间">
-
   
-    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
   <div id="container">
@@ -41,7 +39,9 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
+			
 			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
 		</a>
 
 		<hgroup>
@@ -49,7 +49,7 @@
 		</hgroup>
 
 		
-		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 		
 
 		
@@ -62,11 +62,6 @@
 						</div>
 						<div class="icon-wrap icon-ribbon hide" data-idx="1">
 							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
 						</div>
 						
 						
@@ -83,8 +78,6 @@
 					<ul class="tips-inner">
 						<li>菜单</li>
 						<li>标签</li>
-						
-						<li>友情链接</li>
 						
 						
 						<li>关于我</li>
@@ -111,7 +104,7 @@
 							
 								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 					        
 								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 					        
@@ -122,26 +115,18 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
 				
 				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://resume.github.io/?lcepy">icepyResume</a>
-			        
-			        </div>
-				</section>
-				
 
 				
 				
-				<section class="switch-part switch-part4">
+				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">携来百侣曾游,忆往昔峥嵘岁月稠。</div>
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
 				</section>
 				
 			</div>
@@ -164,7 +149,7 @@
 			  <h1 class="header-author">icepy</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -181,7 +166,7 @@
 					
 						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 			        
 						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 			        
@@ -194,7 +179,7 @@
   
     <div class="article-meta">
       <a href="/2015/01/28/复习JavaScript七之DOM/" class="article-date">
-  	<time datetime="2015-01-28T11:51:01.000Z" itemprop="datePublished">1月 28 2015</time>
+  	<time datetime="2015-01-28T11:51:01.000Z" itemprop="datePublished">2015-01-28</time>
 </a>
     </div>
   
@@ -231,12 +216,12 @@
 <p><strong>理解层级结构与关系</strong></p>
 <p>在浏览器中比如HTML页面是由很多有层次结构的标签组成的，而为这些标签提供查询，添加，删除等等方法主要就是DOM在提供支持。</p>
 <p>（页面又称为文档）文档中所有的节点之间都存在这样或那样的关系，比如下面一个经典的HTML：</p>
-<pre><code><span class="tag">&lt;<span class="title">html</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">head</span>&gt;</span><span class="tag">&lt;/<span class="title">head</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">body</span>&gt;</span><span class="tag">&lt;/<span class="title">body</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+<pre><code><span class="tag">&lt;html&gt;</span>
+    <span class="tag">&lt;head&gt;</span><span class="tag">&lt;/head&gt;</span>
+    <span class="tag">&lt;body&gt;</span><span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span>
 </code></pre><p>一个标签又可以称为一个元素，head和body那就是兄弟关系，它们都来自一个父系html，又可以说html的子元素是head和body，可能这样描述还不太明显，这样就用原生Js操作DOM来的方式来看看层级结构。</p>
-<pre><code><span class="keyword">var</span> html = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'html'</span>)[<span class="number">0</span>];
+<pre><code><span class="reserved">var</span> html = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'html'</span>)[<span class="number">0</span>];
 </code></pre><p>先通过getElementsByTagName获取html根元素的节点，每一个元素都有一个childNodes集合和一个parentNode分别代表子节点集合和父节点，<strong>如果不存在，则都是null，如果是集合不存在，则是一个[]</strong>。</p>
 <blockquote>
 <p>html的childNodes //[head,body] html的parentNode // document</p>
@@ -244,8 +229,7 @@
 <p>每一个元素也都有一个firstChild和lastChild来分别代表第一个子元素和最后一个子元素</p>
 <p>每一个元素也都有一个nextSibling和previousSibling分别代表前面一个元素和后面一个元素，以当前自己为参照物。</p>
 <p>从这样可以看出来，它就像族谱一样对元素的关系进行了定义，通过理解这些层级关系，利用DOM提供的API可以很顺利的进行操作。</p>
-<h3 id="操作DOM">操作DOM</h3>
-<p><strong>常见的获取方式</strong></p>
+<h3 id="操作DOM">操作DOM</h3><p><strong>常见的获取方式</strong></p>
 <ul>
 <li>document.getElementById （通过ID来获取到节点）</li>
 <li>document.getElementsByTagName （通过节点标签来获取）</li>
@@ -286,11 +270,10 @@
 <p><strong>一些小技巧</strong></p>
 <p>每一个元素都存在一个contains方法，用来检测传入的节点是不是当前节点的子节点，火狐对于的方法名叫compareDocumentPosition。</p>
 <p>如果要获取一个文本节点可以使用innerText（纯文本）来获取字符串，如果要获取所有的包括标签的字符串可以使用innerHTML。它们还有一种outer系列对应的方法，主要的区别是前者（outerText）会替换节点，后者(outerHTML)会修改调用它的元素，一般基本没人使用。它们可以获取，也可以通过赋值来设置新的节点。</p>
-<h3 id="DOM2和DOM3">DOM2和DOM3</h3>
-<p>对于这两级在DOM中基本上IE没啥支持，或者说支持的非常少，像style对象，CSS的一些对象外。</p>
+<h3 id="DOM2和DOM3">DOM2和DOM3</h3><p>对于这两级在DOM中基本上IE没啥支持，或者说支持的非常少，像style对象，CSS的一些对象外。</p>
 <p>这里最大的变化是增加了对XML命名空间的支持，元素样式的访问，节点的遍历以及range。当然目前来看，节点的遍历，range，XML命名空间在开发中使用的非常少，可以当资料来阅读，了解有这么回事，用到的时候再查询。而元素样式的访问，这个在开发中普遍使用的较多，因为在没法使用css3动画的浏览器中，可以通过改变样式来到达动画的目的。</p>
-<pre><code><span class="keyword">var</span> doc = <span class="built_in">document</span>.getElementById(<span class="string">'doc'</span>);
-doc.style.width = <span class="string">'100px'</span>;
+<pre><code>var <span class="annotation">doc</span> = document.getElementById(<span class="string">'doc'</span>);
+<span class="annotation">doc</span>.style.width = <span class="string">'100px'</span>;
 </code></pre><p>对于iframe的访问这里增加了一个contentDocument对象来进行引用，还有节点的比较，isSameNode和isEqualNode，这两个的区别在于，前者是否引用的同一个节点对象，后者是指两个节点是否是相同的类型。不过，它们使用的也不多，了解就好。</p>
 <p><strong>元素的大小</strong></p>
 <p>这个部分需要理解，因为关乎到元素在浏览器上的位置显示，跟动画有关系，四个属性。</p>
@@ -383,6 +366,7 @@ doc.style.width = <span class="string">'100px'</span>;
 
 
 
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -400,20 +384,27 @@ doc.style.width = <span class="string">'100px'</span>;
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 
-
-
-<script src="/js/mobile.js" type="text/javascript"></script>
-
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
 
 
 
 
 
-
-<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -434,7 +425,6 @@ MathJax.Hub.Queue(function() {
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
 
 
   </div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>利用AVFoundation实现扫描条码 | icepy</title>
+  <title>利用AVFoundation实现扫描条码 | 行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="iOS7中添加了一组原生支持扫描的组件，通过AVCaptureMetaDataOutput可以扫描各式各样的QR码，条形码，你所需要做的就是写好UI，并将它设置为AVCaptureSession的输出，再实现相应的协议即可。而且，这玩意可以跟Passbook相结合，有许多潜力可以实现，官方也非常推荐大家使用这个API。
 
@@ -11,8 +11,8 @@ import AVFoundation
 实现 AVCaptureMetada">
 <meta property="og:type" content="article">
 <meta property="og:title" content="利用AVFoundation实现扫描条码">
-<meta property="og:url" content="http://lcepy.github.io/2015/06/16/利用AVFoundation实现扫描条码/">
-<meta property="og:site_name" content="icepy">
+<meta property="og:url" content="http://lcepy.github.io/2015/06/16/利用AVFoundation实现扫描条码/index.html">
+<meta property="og:site_name" content="行者">
 <meta property="og:description" content="iOS7中添加了一组原生支持扫描的组件，通过AVCaptureMetaDataOutput可以扫描各式各样的QR码，条形码，你所需要做的就是写好UI，并将它设置为AVCaptureSession的输出，再实现相应的协议即可。而且，这玩意可以跟Passbook相结合，有许多潜力可以实现，官方也非常推荐大家使用这个API。
 
 import AVFoundation
@@ -20,22 +20,20 @@ import AVFoundation
 <meta property="og:image" content="http://7qncz5.com1.z0.glb.clouddn.com/iOS/bridging-header-file.png">
 <meta property="og:image" content="http://7qncz5.com1.z0.glb.clouddn.com/iOS/defines-module-yes.png">
 <meta property="og:image" content="http://7qncz5.com1.z0.glb.clouddn.com/iOS/import-swift-file.png">
+<meta property="og:updated_time" content="2015-07-04T15:16:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="利用AVFoundation实现扫描条码">
 <meta name="twitter:description" content="iOS7中添加了一组原生支持扫描的组件，通过AVCaptureMetaDataOutput可以扫描各式各样的QR码，条形码，你所需要做的就是写好UI，并将它设置为AVCaptureSession的输出，再实现相应的协议即可。而且，这玩意可以跟Passbook相结合，有许多潜力可以实现，官方也非常推荐大家使用这个API。
 
 import AVFoundation
 实现 AVCaptureMetada">
-
   
-    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
   <div id="container">
@@ -44,7 +42,9 @@ import AVFoundation
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
+			
 			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
 		</a>
 
 		<hgroup>
@@ -52,7 +52,7 @@ import AVFoundation
 		</hgroup>
 
 		
-		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 		
 
 		
@@ -65,11 +65,6 @@ import AVFoundation
 						</div>
 						<div class="icon-wrap icon-ribbon hide" data-idx="1">
 							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
 						</div>
 						
 						
@@ -86,8 +81,6 @@ import AVFoundation
 					<ul class="tips-inner">
 						<li>菜单</li>
 						<li>标签</li>
-						
-						<li>友情链接</li>
 						
 						
 						<li>关于我</li>
@@ -114,7 +107,7 @@ import AVFoundation
 							
 								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 					        
 								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 					        
@@ -125,26 +118,18 @@ import AVFoundation
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
 				
 				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://resume.github.io/?lcepy">icepyResume</a>
-			        
-			        </div>
-				</section>
-				
 
 				
 				
-				<section class="switch-part switch-part4">
+				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">携来百侣曾游,忆往昔峥嵘岁月稠。</div>
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
 				</section>
 				
 			</div>
@@ -167,7 +152,7 @@ import AVFoundation
 			  <h1 class="header-author">icepy</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -184,7 +169,7 @@ import AVFoundation
 					
 						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 			        
 						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 			        
@@ -197,7 +182,7 @@ import AVFoundation
   
     <div class="article-meta">
       <a href="/2015/06/16/利用AVFoundation实现扫描条码/" class="article-date">
-  	<time datetime="2015-06-16T09:39:05.000Z" itemprop="datePublished">6月 16 2015</time>
+  	<time datetime="2015-06-16T09:39:05.000Z" itemprop="datePublished">2015-06-16</time>
 </a>
     </div>
   
@@ -237,33 +222,32 @@ import AVFoundation
 </blockquote>
 <p>要实现这个扫描器，首先需要导入AVFoundation框架，这是一个专门处理音频，视频的框架。</p>
 <p>创建一个AV设备，使用AVMediaTypeVideo常量</p>
-<pre><code><span class="keyword">let</span> <span class="variable">captureDevice =</span> AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+<pre><code>let captureDevice = AVCaptureDevice.<span class="function"><span class="title">defaultDeviceWithMediaType</span><span class="params">(AVMediaTypeVideo)</span></span>
 </code></pre><p>然后建立一个输入</p>
-<pre><code><span class="keyword">let</span> input:AnyObject! = AVCaptureDeviceInput.deviceInputWithDevice(captureDevice, <span class="keyword">error</span>: &amp;<span class="keyword">error</span>)
+<pre><code>let <span class="tag">input</span>:AnyObject! = AVCaptureDeviceInput.<span class="function"><span class="title">deviceInputWithDevice</span><span class="params">(captureDevice, error: &amp;error)</span></span>
 </code></pre><p>现在，我们来看一看，最关键的部分，创建输出会话，不过在此之前，我们需要先使用AVCaptureSession创建一个会话，将输入端添加到会话中。</p>
-<pre><code><span class="keyword">self</span>.captureSession = AVCaptureSession()
-<span class="keyword">self</span>.captureSession?.addInput(input <span class="keyword">as</span>! AVCaptureInput)
+<pre><code><span class="keyword">self</span><span class="variable">.captureSession</span> = <span class="built_in">AVCaptureSession</span>()
+<span class="keyword">self</span><span class="variable">.captureSession</span>?<span class="variable">.addInput</span>(input as! <span class="built_in">AVCaptureInput</span>)
 </code></pre><p>接着，我们开始使用AVCaptureMetadataOutput创建一个输出端</p>
-<pre><code><span class="keyword">let</span> <span class="variable">captureMetadataOutput =</span> AVCaptureMetadataOutput()
-captureMetadataOutput.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
-captureMetadataOutput.<span class="variable">metadataObjectTypes =</span> [AVMetadataObjectTypeEAN13Code,AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode128Code,AVMetadataObjectTypeQRCode]
+<pre><code>let captureMetadataOutput = <span class="function"><span class="title">AVCaptureMetadataOutput</span><span class="params">()</span></span>
+captureMetadataOutput.<span class="function"><span class="title">setMetadataObjectsDelegate</span><span class="params">(self, queue: dispatch_get_main_queue()</span></span>)
+captureMetadataOutput<span class="class">.metadataObjectTypes</span> = [AVMetadataObjectTypeEAN13Code,AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode128Code,AVMetadataObjectTypeQRCode]
 </code></pre><p>指定要实现的扫描常量，添加一个协议，GCD可以使用在主线程中，并把它添加到会话中。</p>
-<pre><code><span class="keyword">self</span>.captureSession?.addOutput(captureMetadataOutput)
+<pre><code><span class="tag">self</span><span class="class">.captureSession</span>?<span class="class">.addOutput</span>(<span class="tag">captureMetadataOutput</span>)
 </code></pre><p>然后我们还需要使用AVCaptureVideoPreviewLayer创建一个画布，用来显示扫描的展示区域，并添加到当前视图的layer中。</p>
-<pre><code><span class="keyword">self</span>.videoPreviewLayer = <span class="constant">AVCaptureVideoPreviewLayer</span>(<span class="symbol">session:</span> <span class="keyword">self</span>.captureSession)
-<span class="keyword">self</span>.videoPreviewLayer?.videoGravity = <span class="constant">AVLayerVideoGravityResizeAspect</span>
-<span class="keyword">self</span>.videoPreviewLayer?.frame = <span class="keyword">self</span>.view.bounds
-<span class="keyword">self</span>.view.layer.addSublayer(<span class="keyword">self</span>.videoPreviewLayer)
+<pre><code><span class="keyword">self</span><span class="variable">.videoPreviewLayer</span> = <span class="built_in">AVCaptureVideoPreviewLayer</span>(session: <span class="keyword">self</span><span class="variable">.captureSession</span>)
+<span class="keyword">self</span><span class="variable">.videoPreviewLayer</span>?<span class="variable">.videoGravity</span> = <span class="built_in">AVLayerVideoGravityResizeAspect</span>
+<span class="keyword">self</span><span class="variable">.videoPreviewLayer</span>?<span class="variable">.frame</span> = <span class="keyword">self</span><span class="variable">.view</span><span class="variable">.bounds</span>
+<span class="keyword">self</span><span class="variable">.view</span><span class="variable">.layer</span><span class="variable">.addSublayer</span>(<span class="keyword">self</span><span class="variable">.videoPreviewLayer</span>)
 </code></pre><p>最后启动这个会话</p>
-<pre><code><span class="keyword">self</span>.captureSession?.startRunning()
+<pre><code><span class="tag">self</span><span class="class">.captureSession</span>?<span class="class">.startRunning</span>()
 </code></pre><p>到这里，整个扫描条码的程序就已经准备就绪了，但是如果你还需要获取扫描相应的结果，那么需要实现它的协议，并实现func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!, fromConnection connection: AVCaptureConnection!) {} 方法。</p>
 <p>metadataObjects是一个AnyObject的数组，在这里，还需要进步的判断，获取第一个元素转化为AVMetadataMachineReadableCodeObject，通过type，可以判断扫描的类型，是二维码，还是条形码，还是其他，而值，则是在AVMetadataMachineReadableCodeObject的stringValue属性。</p>
 <pre><code><span class="keyword">let</span> metadata = metadataObjects[<span class="number">0</span>] <span class="keyword">as</span>! AVMetadataMachineReadableCodeObject
 <span class="comment">//metadata.type</span>
 <span class="comment">//metadata.stringValue</span>
 </code></pre><p>扫描的Demo可以查看<a href="https://github.com/lcepy/Mockingbird" target="_blank" rel="external">Mockingbird</a></p>
-<h2 id="在Objective-C项目中使用">在Objective-C项目中使用</h2>
-<p>runpath $(inherited)@executable_path/Frameworks</p>
+<h2 id="在Objective-C项目中使用">在Objective-C项目中使用</h2><p>runpath $(inherited)@executable_path/Frameworks</p>
 <p>三步走图片，可查</p>
 <p><img src="http://7qncz5.com1.z0.glb.clouddn.com/iOS/bridging-header-file.png" alt=""></p>
 <p><img src="http://7qncz5.com1.z0.glb.clouddn.com/iOS/defines-module-yes.png" alt=""></p>
@@ -327,6 +311,7 @@ captureMetadataOutput.<span class="variable">metadataObjectTypes =</span> [AVMet
 
 
 
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -344,20 +329,27 @@ captureMetadataOutput.<span class="variable">metadataObjectTypes =</span> [AVMet
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 
-
-
-<script src="/js/mobile.js" type="text/javascript"></script>
-
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
 
 
 
 
 
-
-<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -378,7 +370,6 @@ MathJax.Hub.Queue(function() {
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
 
 
   </div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>复习JavaScript十之理解引用类型和匿名函数闭包 | icepy</title>
+  <title>复习JavaScript十之理解引用类型和匿名函数闭包 | 行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="引用类型虽然看起来和类很相似，但是它们却是不同的概念，引用类型的值，也就是对象是引用类型的一个实例。在Js中引用类型主要有Object，Array，Date，正则，Function等。
 Object之前已经复习过了，Array是用的非常频繁的一个引用类型。
@@ -11,28 +11,26 @@ Array
 在Js中数组可以存储任意的数据，而且它的大小是可以动态调整的类似于OC中的NSMutableArray。创建数组可以使用构造函数的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="复习JavaScript十之理解引用类型和匿名函数闭包">
-<meta property="og:url" content="http://lcepy.github.io/2015/02/03/复习JavaScript十之理解引用类型和匿名函数闭包/">
-<meta property="og:site_name" content="icepy">
+<meta property="og:url" content="http://lcepy.github.io/2015/02/03/复习JavaScript十之理解引用类型和匿名函数闭包/index.html">
+<meta property="og:site_name" content="行者">
 <meta property="og:description" content="引用类型虽然看起来和类很相似，但是它们却是不同的概念，引用类型的值，也就是对象是引用类型的一个实例。在Js中引用类型主要有Object，Array，Date，正则，Function等。
 Object之前已经复习过了，Array是用的非常频繁的一个引用类型。
 Array
 在Js中数组可以存储任意的数据，而且它的大小是可以动态调整的类似于OC中的NSMutableArray。创建数组可以使用构造函数的">
+<meta property="og:updated_time" content="2015-07-04T15:16:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="复习JavaScript十之理解引用类型和匿名函数闭包">
 <meta name="twitter:description" content="引用类型虽然看起来和类很相似，但是它们却是不同的概念，引用类型的值，也就是对象是引用类型的一个实例。在Js中引用类型主要有Object，Array，Date，正则，Function等。
 Object之前已经复习过了，Array是用的非常频繁的一个引用类型。
 Array
 在Js中数组可以存储任意的数据，而且它的大小是可以动态调整的类似于OC中的NSMutableArray。创建数组可以使用构造函数的">
-
   
-    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
   <div id="container">
@@ -41,7 +39,9 @@ Array
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
+			
 			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
 		</a>
 
 		<hgroup>
@@ -49,7 +49,7 @@ Array
 		</hgroup>
 
 		
-		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 		
 
 		
@@ -62,11 +62,6 @@ Array
 						</div>
 						<div class="icon-wrap icon-ribbon hide" data-idx="1">
 							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
 						</div>
 						
 						
@@ -83,8 +78,6 @@ Array
 					<ul class="tips-inner">
 						<li>菜单</li>
 						<li>标签</li>
-						
-						<li>友情链接</li>
 						
 						
 						<li>关于我</li>
@@ -111,7 +104,7 @@ Array
 							
 								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 					        
 								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 					        
@@ -122,26 +115,18 @@ Array
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
 				
 				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://resume.github.io/?lcepy">icepyResume</a>
-			        
-			        </div>
-				</section>
-				
 
 				
 				
-				<section class="switch-part switch-part4">
+				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">携来百侣曾游,忆往昔峥嵘岁月稠。</div>
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
 				</section>
 				
 			</div>
@@ -164,7 +149,7 @@ Array
 			  <h1 class="header-author">icepy</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -181,7 +166,7 @@ Array
 					
 						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 			        
 						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 			        
@@ -194,7 +179,7 @@ Array
   
     <div class="article-meta">
       <a href="/2015/02/03/复习JavaScript十之理解引用类型和匿名函数闭包/" class="article-date">
-  	<time datetime="2015-02-03T11:02:01.000Z" itemprop="datePublished">2月 3 2015</time>
+  	<time datetime="2015-02-03T11:02:01.000Z" itemprop="datePublished">2015-02-03</time>
 </a>
     </div>
   
@@ -284,8 +269,7 @@ date1 &lt; date2
 <li>replace 替换，第一个参数可以是正则表达式也可以是字符串，第二个参数是要替换的字符串</li>
 <li>localeCompare比较字符串，如果字符串相等返回0，如果字符串的字母排在参数字符串之前，返回负数，如果是之后，返回正数。</li>
 </ul>
-<h3 id="理解匿名函数和闭包">理解匿名函数和闭包</h3>
-<p>匿名函数又叫拉姆达函数，主要是在把函数当值传递的时候用，或者是把函数当返回值，比如：</p>
+<h3 id="理解匿名函数和闭包">理解匿名函数和闭包</h3><p>匿名函数又叫拉姆达函数，主要是在把函数当值传递的时候用，或者是把函数当返回值，比如：</p>
 <pre><code><span class="function"><span class="keyword">function</span> <span class="title">d</span><span class="params">(callback)</span></span>{
     <span class="keyword">callback</span>();
 }
@@ -340,11 +324,11 @@ g();
 </span>    -<span class="ruby">&gt;c</span>
 </code></pre><p>上述的i和a[0]里的i是同一个i，那么结果就是10。</p>
 <p>进一步处理</p>
-<pre><code><span class="function"><span class="keyword">function</span> <span class="title">save_i</span><span class="params">()</span></span>{
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">save_i</span>(<span class="params"></span>)</span>{
     <span class="keyword">var</span> a = [];
     <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
-        a[i] = <span class="function"><span class="keyword">function</span><span class="params">(k)</span></span>{
-            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        a[i] = <span class="function"><span class="keyword">function</span>(<span class="params">k</span>)</span>{
+            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
                 <span class="keyword">return</span> k;
             };
         }(i)
@@ -440,6 +424,7 @@ g();
 
 
 
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -457,20 +442,27 @@ g();
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 
-
-
-<script src="/js/mobile.js" type="text/javascript"></script>
-
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
 
 
 
 
 
-
-<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -491,7 +483,6 @@ MathJax.Hub.Queue(function() {
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
 
 
   </div>

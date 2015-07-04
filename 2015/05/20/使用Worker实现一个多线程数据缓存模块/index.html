@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>使用Worker实现一个多线程数据缓存模块 | icepy</title>
+  <title>使用Worker实现一个多线程数据缓存模块 | 行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Worker是一个可以在后台运行的任务，并提供了一个JavaScript接口让我们来使用它。Worker能够被轻松的创建，还能向它的创建者发送消息。 你只要调用 Worker() 构造函数，指定一个需要运行在 worker 线程内的脚本，就能够很容易的创建一个 worker。
 Worker这个API的使用非常的简单
@@ -12,13 +12,14 @@ postMessage()  向worker内部发送消息
 terminate()">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Worker实现一个多线程数据缓存模块">
-<meta property="og:url" content="http://lcepy.github.io/2015/05/20/使用Worker实现一个多线程数据缓存模块/">
-<meta property="og:site_name" content="icepy">
+<meta property="og:url" content="http://lcepy.github.io/2015/05/20/使用Worker实现一个多线程数据缓存模块/index.html">
+<meta property="og:site_name" content="行者">
 <meta property="og:description" content="Worker是一个可以在后台运行的任务，并提供了一个JavaScript接口让我们来使用它。Worker能够被轻松的创建，还能向它的创建者发送消息。 你只要调用 Worker() 构造函数，指定一个需要运行在 worker 线程内的脚本，就能够很容易的创建一个 worker。
 Worker这个API的使用非常的简单
 
 postMessage()  向worker内部发送消息
 terminate()">
+<meta property="og:updated_time" content="2015-07-04T15:16:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Worker实现一个多线程数据缓存模块">
 <meta name="twitter:description" content="Worker是一个可以在后台运行的任务，并提供了一个JavaScript接口让我们来使用它。Worker能够被轻松的创建，还能向它的创建者发送消息。 你只要调用 Worker() 构造函数，指定一个需要运行在 worker 线程内的脚本，就能够很容易的创建一个 worker。
@@ -26,16 +27,13 @@ Worker这个API的使用非常的简单
 
 postMessage()  向worker内部发送消息
 terminate()">
-
   
-    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
   <div id="container">
@@ -44,7 +42,9 @@ terminate()">
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
+			
 			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
 		</a>
 
 		<hgroup>
@@ -52,7 +52,7 @@ terminate()">
 		</hgroup>
 
 		
-		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 		
 
 		
@@ -65,11 +65,6 @@ terminate()">
 						</div>
 						<div class="icon-wrap icon-ribbon hide" data-idx="1">
 							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
 						</div>
 						
 						
@@ -86,8 +81,6 @@ terminate()">
 					<ul class="tips-inner">
 						<li>菜单</li>
 						<li>标签</li>
-						
-						<li>友情链接</li>
 						
 						
 						<li>关于我</li>
@@ -114,7 +107,7 @@ terminate()">
 							
 								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 					        
 								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 					        
@@ -125,26 +118,18 @@ terminate()">
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
 				
 				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://resume.github.io/?lcepy">icepyResume</a>
-			        
-			        </div>
-				</section>
-				
 
 				
 				
-				<section class="switch-part switch-part4">
+				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">携来百侣曾游,忆往昔峥嵘岁月稠。</div>
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
 				</section>
 				
 			</div>
@@ -167,7 +152,7 @@ terminate()">
 			  <h1 class="header-author">icepy</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -184,7 +169,7 @@ terminate()">
 					
 						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 			        
 						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 			        
@@ -197,7 +182,7 @@ terminate()">
   
     <div class="article-meta">
       <a href="/2015/05/20/使用Worker实现一个多线程数据缓存模块/" class="article-date">
-  	<time datetime="2015-05-20T08:24:18.000Z" itemprop="datePublished">5月 20 2015</time>
+  	<time datetime="2015-05-20T08:24:18.000Z" itemprop="datePublished">2015-05-20</time>
 </a>
     </div>
   
@@ -246,30 +231,30 @@ terminate()">
 </ul>
 <p>JavaScript Client Code</p>
 <pre><code><span class="keyword">var</span> workerQueue = [];
-<span class="keyword">var</span> cacheSystem = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+<span class="keyword">var</span> cacheSystem = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
     <span class="keyword">var</span> isWork         = !!Worker;
     <span class="keyword">var</span> dataSource     = {};
     <span class="keyword">var</span> contains     = [];
     <span class="keyword">var</span> lock        = <span class="literal">false</span>;
     <span class="keyword">var</span> count         = <span class="number">0</span>;
-    <span class="keyword">var</span> getDash     = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> getDash     = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
         <span class="keyword">var</span> dash         = localStorage.getItem(<span class="string">'scanUseDashDataSource'</span>);
         <span class="keyword">var</span> dashData     = dash ? <span class="built_in">JSON</span>.parse(dash).data : contains;
         <span class="keyword">return</span> dashData; 
     }
     <span class="keyword">return</span>    {
-        allObject:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        allObject:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
             <span class="keyword">var</span> d = localStorage.getItem(<span class="string">'scanUseModalDataSource'</span>);
             <span class="keyword">return</span> d ? d = <span class="built_in">JSON</span>.parse(d).data : <span class="literal">null</span>;
         },
-        objectForKey:<span class="function"><span class="keyword">function</span><span class="params">(key)</span></span>{
+        objectForKey:<span class="function"><span class="keyword">function</span>(<span class="params">key</span>)</span>{
             <span class="keyword">return</span> <span class="keyword">this</span>.allObject()[key];
         },
-        allKeys:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        allKeys:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
             <span class="keyword">var</span> o = <span class="keyword">this</span>.allObject();
             <span class="keyword">return</span> o ? <span class="built_in">Object</span>.keys(o) : contains;
         },
-        allValues:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        allValues:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
             <span class="keyword">var</span> o = <span class="keyword">this</span>.allObject();
             <span class="keyword">if</span>(!o){
                 <span class="keyword">return</span> contains;
@@ -280,10 +265,10 @@ terminate()">
             }
             <span class="keyword">return</span> c;
         },
-        allDash:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        allDash:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
             <span class="keyword">return</span> getDash();
         },
-        setObject:<span class="function"><span class="keyword">function</span><span class="params">(value)</span></span>{
+        setObject:<span class="function"><span class="keyword">function</span>(<span class="params">value</span>)</span>{
             <span class="keyword">var</span> s             = <span class="keyword">this</span>;
             <span class="keyword">var</span> metadata     = <span class="keyword">this</span>.allObject() || {};
             metadata[value] = {<span class="string">"data"</span>:<span class="literal">null</span>,<span class="string">"work"</span>:<span class="literal">false</span>,<span class="string">"error"</span>:<span class="literal">false</span>};
@@ -292,7 +277,7 @@ terminate()">
             <span class="built_in">window</span>.networkState = <span class="number">1</span>;
             <span class="keyword">if</span>(isWork &amp;&amp; <span class="built_in">window</span>.networkState &gt; <span class="number">0</span>){
                 <span class="keyword">var</span> worker = <span class="keyword">new</span> Worker(<span class="string">'fetchThread.js'</span>);
-                worker.addEventListener(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span><span class="params">(evt)</span></span>{
+                worker.addEventListener(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">evt</span>)</span>{
                     <span class="built_in">console</span>.log(evt);
                     <span class="keyword">var</span> obj = s.allObject();
                     <span class="keyword">var</span> sp     = evt.data.split(<span class="string">'@icepy-&gt;'</span>);
@@ -338,7 +323,7 @@ terminate()">
                     }
 
                 });
-                worker.addEventListener(<span class="string">'error'</span>,<span class="function"><span class="keyword">function</span><span class="params">(evt)</span></span>{
+                worker.addEventListener(<span class="string">'error'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">evt</span>)</span>{
                     <span class="built_in">console</span>.log(<span class="string">'错误信息处理'</span>);
                 });
                 <span class="comment">//把线程加入队列</span>
@@ -354,13 +339,13 @@ terminate()">
             localStorage.setItem(<span class="string">'scanUseDashDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:dashData}));
             localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
         },
-        setValue:<span class="function"><span class="keyword">function</span><span class="params">(key,value)</span></span>{
+        setValue:<span class="function"><span class="keyword">function</span>(<span class="params">key,value</span>)</span>{
             <span class="keyword">var</span> metadata = <span class="keyword">this</span>.allObject();
             metadata[key].data = value.concat();
             metadata[key].work = <span class="literal">true</span>;
             localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
         },
-        removeObjectForKey:<span class="function"><span class="keyword">function</span><span class="params">(key)</span></span>{
+        removeObjectForKey:<span class="function"><span class="keyword">function</span>(<span class="params">key</span>)</span>{
             <span class="keyword">var</span> metadata     = <span class="keyword">this</span>.allObject();
             <span class="keyword">var</span> dash         = <span class="keyword">this</span>.allDash();
             dash.splice(dash.indexOf(key),<span class="number">1</span>);
@@ -369,7 +354,7 @@ terminate()">
             localStorage.setItem(<span class="string">'scanUseDashDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:dash}));
             localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
         },
-        repeat:<span class="function"><span class="keyword">function</span><span class="params">(v)</span></span>{
+        repeat:<span class="function"><span class="keyword">function</span>(<span class="params">v</span>)</span>{
             <span class="keyword">var</span> d = <span class="keyword">this</span>.allKeys();
                 i = <span class="number">0</span>;
             <span class="keyword">if</span>(!d.length){
@@ -382,7 +367,7 @@ terminate()">
                 <span class="keyword">return</span> lock;
             }
         },
-        pop:<span class="function"><span class="keyword">function</span><span class="params">(key,d)</span></span>{
+        pop:<span class="function"><span class="keyword">function</span>(<span class="params">key,d</span>)</span>{
             <span class="keyword">if</span>(!d){
                 d = <span class="keyword">this</span>.allObject();
             }
@@ -405,32 +390,32 @@ terminate()">
     }
 }();
 </code></pre><p>JavaScript Thread Code</p>
-<pre><code>addEventListener(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span><span class="params">(evt)</span></span>{
-    <span class="keyword">var</span> parameter     = evt.data;
-    <span class="keyword">var</span> xhr         = <span class="keyword">new</span> XMLHttpRequest();
-    <span class="keyword">var</span> headers        = {};
-    xhr.onreadystatechange = <span class="function"><span class="keyword">function</span><span class="params">(e)</span></span>{
-           <span class="keyword">if</span>(xhr.readyState === <span class="number">4</span>){
-               clearInterval(abortTimeout);
-               <span class="keyword">if</span>((xhr.status &gt;= <span class="number">200</span> &amp;&amp; xhr.status &lt; <span class="number">300</span>) || xhr.status == <span class="number">304</span>){
-                   postMessage(parameter+<span class="string">'@icepy-&gt;'</span>+xhr.responseText);
-                   close();
+<pre><code>addEventListener<span class="list">(<span class="quoted">'message</span>',function<span class="list">(<span class="keyword">evt</span>)</span>{
+    var parameter     = evt.data<span class="comment">;</span>
+    var xhr         = new XMLHttpRequest<span class="list">()</span><span class="comment">;</span>
+    var headers        = {}<span class="comment">;</span>
+    xhr.onreadystatechange = function<span class="list">(<span class="keyword">e</span>)</span>{
+           if<span class="list">(<span class="keyword">xhr</span>.readyState === <span class="number">4</span>)</span>{
+               clearInterval<span class="list">(<span class="keyword">abortTimeout</span>)</span><span class="comment">;</span>
+               if<span class="list">(<span class="list">(<span class="keyword">xhr</span>.status &gt;= <span class="number">200</span> <span class="keyword">&amp;&amp;</span> xhr.status &lt; <span class="number">300</span>)</span> || xhr.status == <span class="number">304</span>)</span>{
+                   postMessage<span class="list">(<span class="keyword">parameter+</span>'@icepy-&gt;<span class="quoted">'+xhr</span>.responseText)</span><span class="comment">;</span>
+                   close<span class="list">()</span><span class="comment">;</span>
                }
            }
        }
-    xhr.open(<span class="string">'POST'</span>,<span class="string">'http://127.0.0.1:8001/'</span>,<span class="literal">true</span>);
-       xhr.send(parameter);
-       <span class="keyword">var</span> abortTimeout = setInterval(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-           xhr.abort();
-           postMessage(parameter+<span class="string">'@icepy-&gt;'</span>+<span class="string">'{"error":"timeout"}'</span>);
-           close();
-       },<span class="number">1000</span>*<span class="number">13</span>);
+    xhr.open<span class="list">(<span class="quoted">'POST</span>',<span class="quoted">'http</span><span class="keyword">://127</span>.<span class="number">0.0</span>.<span class="number">1</span>:<span class="number">8001</span>/',true)</span><span class="comment">;</span>
+       xhr.send<span class="list">(<span class="keyword">parameter</span>)</span><span class="comment">;</span>
+       var abortTimeout = setInterval<span class="list">(<span class="keyword">function</span><span class="list">()</span>{
+           xhr.abort<span class="list">()</span><span class="comment">;</span>
+           postMessage<span class="list">(<span class="keyword">parameter+</span>'@icepy-&gt;<span class="quoted">'+</span>'{<span class="string">"error"</span>:<span class="string">"timeout"</span>}')</span><span class="comment">;</span>
+           close<span class="list">()</span><span class="comment">;</span>
+       },<span class="number">1000</span><span class="variable">*13);
 
-       xhr.onerror = <span class="function"><span class="keyword">function</span><span class="params">(e)</span></span>{
-           postMessage(parameter+<span class="string">'@icepy-&gt;'</span>+<span class="string">'{"error":"notnetwork"}'</span>);
+       xhr.onerror = function(e){
+           postMessage(parameter+'@icepy-&gt;'+'{"error":"notnetwork"}');
            close();
        }     
-});
+});</span></span></span>
 </code></pre><p>阅读资料</p>
 <ul>
 <li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Worker" target="_blank" rel="external">https://developer.mozilla.org/zh-CN/docs/Web/API/Worker</a></li>
@@ -503,6 +488,7 @@ terminate()">
 
 
 
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -520,20 +506,27 @@ terminate()">
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 
-
-
-<script src="/js/mobile.js" type="text/javascript"></script>
-
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
 
 
 
 
 
-
-<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -554,7 +547,6 @@ MathJax.Hub.Queue(function() {
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
 
 
   </div>

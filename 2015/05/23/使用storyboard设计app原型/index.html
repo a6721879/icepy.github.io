@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>使用storyboard设计app原型 | icepy</title>
+  <title>使用storyboard设计app原型 | 行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="今天我想写一下自己利用storyboard+swift快速设计一款App原型的经历，这是突然发现Xcode的强大之处带来的优势，你可以设计一个如下图的原型。
 
 先创建一个项目＋创建一个storyboard＋拖拽一个ViewController到storyboard中（默认你知道怎么创建一个项目，怎么新建一个storyboard，以及怎么拖拽一个ViewController到storyboard中）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用storyboard设计app原型">
-<meta property="og:url" content="http://lcepy.github.io/2015/05/23/使用storyboard设计app原型/">
-<meta property="og:site_name" content="icepy">
+<meta property="og:url" content="http://lcepy.github.io/2015/05/23/使用storyboard设计app原型/index.html">
+<meta property="og:site_name" content="行者">
 <meta property="og:description" content="今天我想写一下自己利用storyboard+swift快速设计一款App原型的经历，这是突然发现Xcode的强大之处带来的优势，你可以设计一个如下图的原型。
 
 先创建一个项目＋创建一个storyboard＋拖拽一个ViewController到storyboard中（默认你知道怎么创建一个项目，怎么新建一个storyboard，以及怎么拖拽一个ViewController到storyboard中）">
@@ -25,21 +25,19 @@
 <meta property="og:image" content="http://websources.qiniudn.com/iOS/constraintsimage.png">
 <meta property="og:image" content="http://websources.qiniudn.com/iOS/constraints3.png">
 <meta property="og:image" content="http://websources.qiniudn.com/iOS/result.png">
+<meta property="og:updated_time" content="2015-07-04T15:16:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用storyboard设计app原型">
 <meta name="twitter:description" content="今天我想写一下自己利用storyboard+swift快速设计一款App原型的经历，这是突然发现Xcode的强大之处带来的优势，你可以设计一个如下图的原型。
 
 先创建一个项目＋创建一个storyboard＋拖拽一个ViewController到storyboard中（默认你知道怎么创建一个项目，怎么新建一个storyboard，以及怎么拖拽一个ViewController到storyboard中）">
-
   
-    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
   <div id="container">
@@ -48,7 +46,9 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
+			
 			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
 		</a>
 
 		<hgroup>
@@ -56,7 +56,7 @@
 		</hgroup>
 
 		
-		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 		
 
 		
@@ -69,11 +69,6 @@
 						</div>
 						<div class="icon-wrap icon-ribbon hide" data-idx="1">
 							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
 						</div>
 						
 						
@@ -90,8 +85,6 @@
 					<ul class="tips-inner">
 						<li>菜单</li>
 						<li>标签</li>
-						
-						<li>友情链接</li>
 						
 						
 						<li>关于我</li>
@@ -118,7 +111,7 @@
 							
 								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 					        
 								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 					        
@@ -129,26 +122,18 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
 				
 				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://resume.github.io/?lcepy">icepyResume</a>
-			        
-			        </div>
-				</section>
-				
 
 				
 				
-				<section class="switch-part switch-part4">
+				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">携来百侣曾游,忆往昔峥嵘岁月稠。</div>
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
 				</section>
 				
 			</div>
@@ -171,7 +156,7 @@
 			  <h1 class="header-author">icepy</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -188,7 +173,7 @@
 					
 						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 			        
 						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 			        
@@ -201,7 +186,7 @@
   
     <div class="article-meta">
       <a href="/2015/05/23/使用storyboard设计app原型/" class="article-date">
-  	<time datetime="2015-05-23T12:48:13.000Z" itemprop="datePublished">5月 23 2015</time>
+  	<time datetime="2015-05-23T12:48:13.000Z" itemprop="datePublished">2015-05-23</time>
 </a>
     </div>
   
@@ -241,9 +226,9 @@
 <p>给ViewController设置启动，这个设置针对storyboard是唯一的，也就是只能设置一个</p>
 <p><img src="http://websources.qiniudn.com/iOS/initViewController.png" alt=""></p>
 <p>给ViewController设置身份ID(identity)，它应该是唯一的，而且后期如果有多个storyboard时场景的跳转会使用到</p>
-<pre><code><span class="keyword">var</span> sd:<span class="type">UIStoryboard</span> = <span class="type">UIStoryboard</span>(name: <span class="string">"Cycling"</span>, bundle: <span class="built_in">nil</span>)
-<span class="keyword">var</span> cyc:<span class="type">CyclingInitViewController</span> = sd.instantiateViewControllerWithIdentifier(<span class="string">"CyclingInit"</span>) <span class="keyword">as</span>! <span class="type">CyclingInitViewController</span>
-<span class="keyword">self</span>.navigationController?.pushViewController(cyc, animated: <span class="built_in">true</span>)
+<pre><code>var <span class="string">sd:</span>UIStoryboard = UIStoryboard(<span class="string">name:</span> <span class="string">"Cycling"</span>, <span class="string">bundle:</span> nil)
+var <span class="string">cyc:</span>CyclingInitViewController = sd.instantiateViewControllerWithIdentifier(<span class="string">"CyclingInit"</span>) <span class="keyword">as</span>! CyclingInitViewController
+self.navigationController?.pushViewController(cyc, animated: <span class="literal">true</span>)
 </code></pre><p><img src="http://websources.qiniudn.com/iOS/identity.png" alt=""></p>
 <p>给ViewController应用一个NavgationController，每一个视图控制器中都有一个navigationController和navigationItem。（注意：前者应该算一个公共的，后者navigationItem是每个控制器自身独有的）在使用的时候需要注意这些，以保证标题，以及导航栏上的bar可以设置正确</p>
 <p><img src="http://websources.qiniudn.com/iOS/navigationC.png" alt=""></p>
@@ -327,6 +312,7 @@
 
 
 
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -344,20 +330,27 @@
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 
-
-
-<script src="/js/mobile.js" type="text/javascript"></script>
-
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
 
 
 
 
 
-
-<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -378,7 +371,6 @@ MathJax.Hub.Queue(function() {
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
 
 
   </div>

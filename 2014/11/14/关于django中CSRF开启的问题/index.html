@@ -3,30 +3,25 @@
 <head>
   <meta charset="utf-8">
   
-  <title>关于django中CSRF开启的问题 | icepy</title>
+  <title>关于django中CSRF开启的问题 | 行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="django 处理CSRF机制保护下的POST表单提交
-昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后">
+  <meta name="description" content="django 处理CSRF机制保护下的POST表单提交昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后解">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于django中CSRF开启的问题">
-<meta property="og:url" content="http://lcepy.github.io/2014/11/14/关于django中CSRF开启的问题/">
-<meta property="og:site_name" content="icepy">
-<meta property="og:description" content="django 处理CSRF机制保护下的POST表单提交
-昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后">
+<meta property="og:url" content="http://lcepy.github.io/2014/11/14/关于django中CSRF开启的问题/index.html">
+<meta property="og:site_name" content="行者">
+<meta property="og:description" content="django 处理CSRF机制保护下的POST表单提交昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后解">
+<meta property="og:updated_time" content="2015-07-04T15:16:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于django中CSRF开启的问题">
-<meta name="twitter:description" content="django 处理CSRF机制保护下的POST表单提交
-昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后">
-
+<meta name="twitter:description" content="django 处理CSRF机制保护下的POST表单提交昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后解">
   
-    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
   <div id="container">
@@ -35,7 +30,9 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
+			
 			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
 		</a>
 
 		<hgroup>
@@ -43,7 +40,7 @@
 		</hgroup>
 
 		
-		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 		
 
 		
@@ -56,11 +53,6 @@
 						</div>
 						<div class="icon-wrap icon-ribbon hide" data-idx="1">
 							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
 						</div>
 						
 						
@@ -77,8 +69,6 @@
 					<ul class="tips-inner">
 						<li>菜单</li>
 						<li>标签</li>
-						
-						<li>友情链接</li>
 						
 						
 						<li>关于我</li>
@@ -105,7 +95,7 @@
 							
 								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 					        
 								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 					        
@@ -116,26 +106,18 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
 				
 				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://resume.github.io/?lcepy">icepyResume</a>
-			        
-			        </div>
-				</section>
-				
 
 				
 				
-				<section class="switch-part switch-part4">
+				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">携来百侣曾游,忆往昔峥嵘岁月稠。</div>
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
 				</section>
 				
 			</div>
@@ -158,7 +140,7 @@
 			  <h1 class="header-author">icepy</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -175,7 +157,7 @@
 					
 						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 			        
 						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 			        
@@ -188,7 +170,7 @@
   
     <div class="article-meta">
       <a href="/2014/11/14/关于django中CSRF开启的问题/" class="article-date">
-  	<time datetime="2014-11-14T12:33:12.000Z" itemprop="datePublished">11月 14 2014</time>
+  	<time datetime="2014-11-14T12:33:12.000Z" itemprop="datePublished">2014-11-14</time>
 </a>
     </div>
   
@@ -221,8 +203,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="django_处理CSRF机制保护下的POST表单提交">django 处理CSRF机制保护下的POST表单提交</h2>
-<p>昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后解决了。其实在解决这个问题之前，我们先要了解一下，CSRF到底是什么东东，为什么django提交一个POST表单这么困难呢。</p>
+        <h2 id="django_处理CSRF机制保护下的POST表单提交">django 处理CSRF机制保护下的POST表单提交</h2><p>昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后解决了。其实在解决这个问题之前，我们先要了解一下，CSRF到底是什么东东，为什么django提交一个POST表单这么困难呢。</p>
 <p><a href="http://baike.baidu.com/link?url=OnI0sPQAHpQHhtxWSXvQFhN3kJWI3CU_rP3Fo7MqnPY3rTdhUPpuca-3lzJ651LdMI7ouoLvdnnihhojFyKtva" target="_blank" rel="external">CSRF 是什么</a></p>
 <p><a href="https://docs.djangoproject.com/en/1.5/ref/contrib/csrf/" target="_blank" rel="external">django document CSRF</a></p>
 <p>原来CSRF是为了防止跨站请求伪造用的，当我明白了这个解释之后，我开始找寻django document上如何开启CSRF。</p>
@@ -232,7 +213,8 @@
 <p>现在我需要在模板中加入一个tag ｛%csrf_token%｝，来存放一个隐藏的token input。</p>
 <p><strong>In the corresponding view functions, ensure that the ‘django.core.context_processors.csrf’ context processor is being used. Usually, this can be done in one of two ways:</strong></p>
 <p>从这里的解释来看，我还需要django.core.context_processors.csrf，于是我导入这个模块from django.core.context_processors import csrf，运行一下貌似，还不行，接着往下看。我发现django的解释，这里可以用两种方式来处理，最后响应的response，而且django还说了，POST表单提交不要跨链接。</p>
-<p><a id="more"></a><br><strong>Use RequestContext, which always uses ‘django.core.context_processors.csrf’ (no matter what your TEMPLATE_CONTEXT_PROCESSORS setting). If you are using generic views or contrib apps, you are covered already, since these apps use RequestContext throughout.</strong></p>
+<a id="more"></a>
+<p><strong>Use RequestContext, which always uses ‘django.core.context_processors.csrf’ (no matter what your TEMPLATE_CONTEXT_PROCESSORS setting). If you are using generic views or contrib apps, you are covered already, since these apps use RequestContext throughout.</strong></p>
 <p>方式一，是使用RequestContext来代替你模板的Context，并且你的apps必须都要使用它，而不是Context。</p>
 <p><strong>Manually import and use the processor to generate the CSRF token and add it to the template context. e.g.</strong></p>
 <p>方式二，手动的导入这个模块并调用此函数生成的token，并把它传入你模板的上下文中。</p>
@@ -242,7 +224,7 @@
 &lt;html&gt;
     &lt;head&gt;&lt;/head&gt;
     &lt;body&gt;
-        &lt;h1&gt;&lt;/h1&gt;
+        &lt;h1&gt;&lt;!--￼<span class="number">0</span>--&gt;&lt;/h1&gt;
         &lt;form action=<span class="string">"/"</span> <span class="keyword">method</span>=<span class="string">"post"</span>&gt;
              ｛%csrf_token%｝
             &lt;input <span class="keyword">type</span>=<span class="string">"email"</span> name=<span class="string">"address"</span>&gt;
@@ -272,7 +254,7 @@ def index(request):
     <span class="keyword">return</span> render_to_response('xxx.html',c,data)
     pass
 
-urls.py <span class="comment">##路由配置文件，我的views是一个app所以需要导入xxx.views</span>
+urls.py <span class="comment">##路由配置文件，我的views是一个app所以需要导入<span class="doctag"><span class="keyword">xxx</span>.</span>views</span>
 <span class="keyword">import</span> xxx.views
 urlpatterns = patterns('',
     <span class="comment"># Examples:</span>
@@ -354,6 +336,7 @@ urlpatterns = patterns('',
 
 
 
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -371,20 +354,27 @@ urlpatterns = patterns('',
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 
-
-
-<script src="/js/mobile.js" type="text/javascript"></script>
-
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
 
 
 
 
 
-
-<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -405,7 +395,6 @@ MathJax.Hub.Queue(function() {
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
 
 
   </div>

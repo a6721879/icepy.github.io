@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>NSURLProtocol | icepy</title>
+  <title>NSURLProtocol | 行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="阅读资料：
 
@@ -13,14 +13,15 @@ http://nshipster.cn/nsurlprotocol/
 正如NSHipster在上篇文章所写的一样，iOS离不开网络，那么这就需要网络编程。cocoa提供了一系列的API来操作网络，比如NSURL，NSURLRequest，NSURLSession等等，以及处理网络的GCD，NSOperation多任务处理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="NSURLProtocol">
-<meta property="og:url" content="http://lcepy.github.io/2015/04/13/NSURLProtocol/">
-<meta property="og:site_name" content="icepy">
+<meta property="og:url" content="http://lcepy.github.io/2015/04/13/NSURLProtocol/index.html">
+<meta property="og:site_name" content="行者">
 <meta property="og:description" content="阅读资料：
 
 Apple Foundation NSURLProtocol
 http://nshipster.cn/nsurlprotocol/
 
 正如NSHipster在上篇文章所写的一样，iOS离不开网络，那么这就需要网络编程。cocoa提供了一系列的API来操作网络，比如NSURL，NSURLRequest，NSURLSession等等，以及处理网络的GCD，NSOperation多任务处理">
+<meta property="og:updated_time" content="2015-07-04T15:16:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NSURLProtocol">
 <meta name="twitter:description" content="阅读资料：
@@ -29,16 +30,13 @@ Apple Foundation NSURLProtocol
 http://nshipster.cn/nsurlprotocol/
 
 正如NSHipster在上篇文章所写的一样，iOS离不开网络，那么这就需要网络编程。cocoa提供了一系列的API来操作网络，比如NSURL，NSURLRequest，NSURLSession等等，以及处理网络的GCD，NSOperation多任务处理">
-
   
-    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
   <div id="container">
@@ -47,7 +45,9 @@ http://nshipster.cn/nsurlprotocol/
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
+			
 			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
 		</a>
 
 		<hgroup>
@@ -55,7 +55,7 @@ http://nshipster.cn/nsurlprotocol/
 		</hgroup>
 
 		
-		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 		
 
 		
@@ -68,11 +68,6 @@ http://nshipster.cn/nsurlprotocol/
 						</div>
 						<div class="icon-wrap icon-ribbon hide" data-idx="1">
 							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
 						</div>
 						
 						
@@ -89,8 +84,6 @@ http://nshipster.cn/nsurlprotocol/
 					<ul class="tips-inner">
 						<li>菜单</li>
 						<li>标签</li>
-						
-						<li>友情链接</li>
 						
 						
 						<li>关于我</li>
@@ -117,7 +110,7 @@ http://nshipster.cn/nsurlprotocol/
 							
 								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 					        
 								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 					        
@@ -128,26 +121,18 @@ http://nshipster.cn/nsurlprotocol/
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
 				
 				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://resume.github.io/?lcepy">icepyResume</a>
-			        
-			        </div>
-				</section>
-				
 
 				
 				
-				<section class="switch-part switch-part4">
+				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">携来百侣曾游,忆往昔峥嵘岁月稠。</div>
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
 				</section>
 				
 			</div>
@@ -170,7 +155,7 @@ http://nshipster.cn/nsurlprotocol/
 			  <h1 class="header-author">icepy</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -187,7 +172,7 @@ http://nshipster.cn/nsurlprotocol/
 					
 						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 			        
 						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 			        
@@ -200,7 +185,7 @@ http://nshipster.cn/nsurlprotocol/
   
     <div class="article-meta">
       <a href="/2015/04/13/NSURLProtocol/" class="article-date">
-  	<time datetime="2015-04-13T03:38:06.000Z" itemprop="datePublished">4月 13 2015</time>
+  	<time datetime="2015-04-13T03:38:06.000Z" itemprop="datePublished">2015-04-13</time>
 </a>
     </div>
   
@@ -241,25 +226,24 @@ http://nshipster.cn/nsurlprotocol/
 <p>正如NSHipster在上篇文章所写的一样，iOS离不开网络，那么这就需要网络编程。cocoa提供了一系列的API来操作网络，比如NSURL，NSURLRequest，NSURLSession等等，以及处理网络的GCD，NSOperation多任务处理。</p>
 <p>那么NSURLProtocol，它有什么用呢？官方给它的解释是，可以重新定义已经加载的URL的行为或者定义一个新的URL。换句话来说，就是这个类可以监管应用的网络活动，只要是通过URL来进行的。</p>
 <p>NSURLProtocol是一个抽象类，也就是说它需要一个子类继承它才可以正常工作，关于怎么使用可以阅读NSHipster的文章，把子类注册到NSURLProtocol中。</p>
-<pre><code>+ (<span class="keyword">void</span>)consolelog:(<span class="built_in">UITextView</span> *)debugText
+<pre><code>+ (<span class="tag">void</span>)<span class="rule"><span class="attribute">consolelog</span>:<span class="value">(UITextView *)debugText
 {
-    debug = debugText;
-    [NSURLProtocol registerClass:<span class="keyword">self</span>];
+    debug = debugText</span></span>;
+    <span class="attr_selector">[NSURLProtocol registerClass:self]</span>;
 }
-</code></pre><h3 id="案例需求，监管应用的URL加载系统，并且支持web_client_console_log">案例需求，监管应用的URL加载系统，并且支持web client console log</h3>
-<p>案例可以在Github中查看<a href="https://github.com/lcepy/MFLog" target="_blank" rel="external">MFLog</a></p>
-<pre><code>+ (BOOL)registerClass:(<span class="class"><span class="keyword">Class</span>)<span class="title">protocolClass</span></span>
+</code></pre><h3 id="案例需求，监管应用的URL加载系统，并且支持web_client_console_log">案例需求，监管应用的URL加载系统，并且支持web client console log</h3><p>案例可以在Github中查看<a href="https://github.com/lcepy/MFLog" target="_blank" rel="external">MFLog</a></p>
+<pre><code>+ <span class="comment">(BOOL)</span>registerClass:<span class="comment">(Class)</span>protocolClass
 </code></pre><p>把子类注册到NSURLProtocol中</p>
 <pre><code>+ (<span class="keyword">void</span>)unregisterClass:(<span class="keyword">Class</span>)protocolClass
 </code></pre><p>把子类从NSURLProtocol中移除</p>
 <p>NSURLProtocol提供了一系列的方法来操作一个URL Data，先看其一，一个静态方法。</p>
 <pre><code>+ (<span class="built_in">BOOL</span>)canInitWithRequest:(<span class="built_in">NSURLRequest</span> *)request
 </code></pre><p>canInitWithRequest <strong>注意，这些是覆盖父类NSURLProtocol的静态方法</strong>是系统询问，是否处理该请求URL，如果返回NO，不处理。如果返回YES，子类进一步控制。</p>
-<pre><code><span class="bullet">+ </span>(NSURLRequest <span class="emphasis">*)canonicalRequestForRequest:(NSURLRequest *</span>)request
+<pre><code>+ <span class="list">(<span class="keyword">NSURLRequest</span> <span class="variable">*)canonicalRequestForRequest:(NSURLRequest *</span>)</span>request
 </code></pre><p>返回请求的原始request</p>
-<pre><code><span class="pp">- <span class="params">(void)</span>startLoading</span>
+<pre><code>- <span class="list">(<span class="keyword">void</span>)</span>startLoading
 </code></pre><p>加载此次请求，可以通过self.request获取当前URL的request对象</p>
-<pre><code><span class="pp">- <span class="params">(void)</span>stopLoading</span>
+<pre><code>- <span class="list">(<span class="keyword">void</span>)</span>stopLoading
 </code></pre><p>此次请求完成时，可以在这个方法中处理</p>
 <p>每一个NSURLProtocol都有一个client属性，这个属性是NSURLProtocolClient。另外，还可以实现NSConnectionDataDelegate协议，把NSURLProtocol与NSURLConnection链接起来，这样就可以在statLoading调用之后，系统将回调NSConnectionDataDelegate中定义的各种方法，这个在自定义时非常有用。</p>
 
@@ -330,6 +314,7 @@ http://nshipster.cn/nsurlprotocol/
 
 
 
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -347,20 +332,27 @@ http://nshipster.cn/nsurlprotocol/
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 
-
-
-<script src="/js/mobile.js" type="text/javascript"></script>
-
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
 
 
 
 
 
-
-<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -381,7 +373,6 @@ MathJax.Hub.Queue(function() {
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
 
 
   </div>

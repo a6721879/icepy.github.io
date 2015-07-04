@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>在实际工作中node开发的一些见解与调试 | icepy</title>
+  <title>在实际工作中node开发的一些见解与调试 | 行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="真实情况是这样的 
 
@@ -16,8 +16,8 @@
 为了解决工作中的上述问题，于是就想到了网络代理与客户端mock的功能，并且能很好的识别出错误，以及分发请求，glob-proxy">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在实际工作中node开发的一些见解与调试">
-<meta property="og:url" content="http://lcepy.github.io/2014/11/14/在实际工作中node开发的一些见解与调试/">
-<meta property="og:site_name" content="icepy">
+<meta property="og:url" content="http://lcepy.github.io/2014/11/14/在实际工作中node开发的一些见解与调试/index.html">
+<meta property="og:site_name" content="行者">
 <meta property="og:description" content="真实情况是这样的 
 
 开发，前端与后端物理性的隔离，前端通过restful接口请求相应的数据，并在客户端渲染。
@@ -27,6 +27,7 @@
 
 治标不治本的解决方案
 为了解决工作中的上述问题，于是就想到了网络代理与客户端mock的功能，并且能很好的识别出错误，以及分发请求，glob-proxy">
+<meta property="og:updated_time" content="2015-07-04T15:16:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在实际工作中node开发的一些见解与调试">
 <meta name="twitter:description" content="真实情况是这样的 
@@ -38,16 +39,13 @@
 
 治标不治本的解决方案
 为了解决工作中的上述问题，于是就想到了网络代理与客户端mock的功能，并且能很好的识别出错误，以及分发请求，glob-proxy">
-
   
-    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
   <div id="container">
@@ -56,7 +54,9 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
+			
 			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
 		</a>
 
 		<hgroup>
@@ -64,7 +64,7 @@
 		</hgroup>
 
 		
-		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 		
 
 		
@@ -77,11 +77,6 @@
 						</div>
 						<div class="icon-wrap icon-ribbon hide" data-idx="1">
 							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
 						</div>
 						
 						
@@ -98,8 +93,6 @@
 					<ul class="tips-inner">
 						<li>菜单</li>
 						<li>标签</li>
-						
-						<li>友情链接</li>
 						
 						
 						<li>关于我</li>
@@ -126,7 +119,7 @@
 							
 								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 					        
 								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 					        
@@ -137,26 +130,18 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
 				
 				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://resume.github.io/?lcepy">icepyResume</a>
-			        
-			        </div>
-				</section>
-				
 
 				
 				
-				<section class="switch-part switch-part4">
+				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">携来百侣曾游,忆往昔峥嵘岁月稠。</div>
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
 				</section>
 				
 			</div>
@@ -179,7 +164,7 @@
 			  <h1 class="header-author">icepy</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -196,7 +181,7 @@
 					
 						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 			        
 						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 			        
@@ -209,7 +194,7 @@
   
     <div class="article-meta">
       <a href="/2014/11/14/在实际工作中node开发的一些见解与调试/" class="article-date">
-  	<time datetime="2014-11-14T12:04:45.000Z" itemprop="datePublished">11月 14 2014</time>
+  	<time datetime="2014-11-14T12:04:45.000Z" itemprop="datePublished">2014-11-14</time>
 </a>
     </div>
   
@@ -268,15 +253,13 @@
 </ol>
 <p>web安全性与性能方面的考虑，或许是对前端开发人员的一种制约。请求=消耗，这样的消耗是不是用户能接受的？这样的工作方式，是不是能节约成本，并且对整体项目是不是有益处的。而且安全性方面，可以考虑把node这一层，在前期做为一个代理层，node只处理表面的数据，最终通过SOAP或者SOCKET提交给.net平台去做验证？而web上的安全性考虑，比如CSRF XSS这些都可以放在node这一层来做。</p>
 <p>我觉得这样的方式，是可行的。对于公司而言，那4个问题最大的成本，而对开发者来说，那4个问题很烦。</p>
-<h1 id="node_debug">node debug</h1>
-<blockquote>
+<h1 id="node_debug">node debug</h1><blockquote>
 <p>npm install -g supervisor</p>
 <p>npm install -g node-inspector</p>
 </blockquote>
 <p>这两个工具，在nodejs开发中是非常有用的，debug并不是太难，写这个的原因，是想记录下来。首先，安装这两个模块，全局模式。如果是linux或mac系统，输入sudo给予权限即可。</p>
 <p>一般情况下node-inspector使用默认端口8080，当然也可以改变端口。输入node-inspector —help，可以查看命令行的帮助信息，如：『截取了部分帮助信息』</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby">-help</span></div><div class="line"></div><div class="line">-<span class="ruby">-version</span></div><div class="line"></div><div class="line">-<span class="ruby">-web-port={number}</span></div><div class="line"></div><div class="line">-<span class="ruby">-web-host={string}</span></div><div class="line"></div><div class="line">-<span class="ruby">-debug-port={number}</span></div></pre></td></tr></table></figure>
-
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-<span class="ruby">-help</span><br><span class="line"></span></span><br><span class="line">-<span class="ruby">-version</span><br><span class="line"></span></span><br><span class="line">-<span class="ruby">-web-port=&#123;number&#125;</span><br><span class="line"></span></span><br><span class="line">-<span class="ruby">-web-host=&#123;string&#125;</span><br><span class="line"></span></span><br><span class="line">-<span class="ruby">-debug-port=&#123;number&#125;</span></span><br></pre></td></tr></table></figure>
 <p>如果想要改变端口，可以在命令行中输入node-inspector —web-port=xxx —debug-port=xx。<br>而supervisor，则是一个非常有用的监听工具，能帮助我们重启node服务。我一般的做法是与node-inspector配合使用。比如，我会先开启一个debug的端口。node-inspector —web-port=8055 默认的debug端口依然是5858。然后在chrome中打开<a href="http://127.0.0.1:8080/debug?prot=5858，调出debug页面。然后另外启用一个命令行，输入supervisor" target="_blank" rel="external">http://127.0.0.1:8080/debug?prot=5858，调出debug页面。然后另外启用一个命令行，输入supervisor</a> —debug xx.js来运行这份debug监听。</p>
 <p><em>主题配置采用的是 theme flatland</em></p>
 <ol>
@@ -351,6 +334,7 @@
 
 
 
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -368,20 +352,27 @@
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 
-
-
-<script src="/js/mobile.js" type="text/javascript"></script>
-
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
 
 
 
 
 
-
-<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -402,7 +393,6 @@ MathJax.Hub.Queue(function() {
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
 
 
   </div>

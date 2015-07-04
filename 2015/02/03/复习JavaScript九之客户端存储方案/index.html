@@ -3,39 +3,34 @@
 <head>
   <meta charset="utf-8">
   
-  <title>复习JavaScript九之客户端存储方案 | icepy</title>
+  <title>复习JavaScript九之客户端存储方案 | 行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="随着Web应用越来越复杂，总是有很多需求需要在客户端存储一些特定的信息，用来描述访问者或者跟访问者相关的信息。于是，就有了这些客户端存储的方案，供开发者选择以及使用。
-cookie
-说起来cookie的出现是非常早的，用于在客户端存储会话信息，它要求服务器对任意的HTTP请求发送Set-Cookie HTTP头作为响应的一部分，例如：
+cookie说起来cookie的出现是非常早的，用于在客户端存储会话信息，它要求服务器对任意的HTTP请求发送Set-Cookie HTTP头作为响应的一部分，例如：
 HTTP/1.1 200 OK
-Content-Type: t">
+Content-Type: te">
 <meta property="og:type" content="article">
 <meta property="og:title" content="复习JavaScript九之客户端存储方案">
-<meta property="og:url" content="http://lcepy.github.io/2015/02/03/复习JavaScript九之客户端存储方案/">
-<meta property="og:site_name" content="icepy">
+<meta property="og:url" content="http://lcepy.github.io/2015/02/03/复习JavaScript九之客户端存储方案/index.html">
+<meta property="og:site_name" content="行者">
 <meta property="og:description" content="随着Web应用越来越复杂，总是有很多需求需要在客户端存储一些特定的信息，用来描述访问者或者跟访问者相关的信息。于是，就有了这些客户端存储的方案，供开发者选择以及使用。
-cookie
-说起来cookie的出现是非常早的，用于在客户端存储会话信息，它要求服务器对任意的HTTP请求发送Set-Cookie HTTP头作为响应的一部分，例如：
+cookie说起来cookie的出现是非常早的，用于在客户端存储会话信息，它要求服务器对任意的HTTP请求发送Set-Cookie HTTP头作为响应的一部分，例如：
 HTTP/1.1 200 OK
-Content-Type: t">
+Content-Type: te">
+<meta property="og:updated_time" content="2015-07-04T15:16:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="复习JavaScript九之客户端存储方案">
 <meta name="twitter:description" content="随着Web应用越来越复杂，总是有很多需求需要在客户端存储一些特定的信息，用来描述访问者或者跟访问者相关的信息。于是，就有了这些客户端存储的方案，供开发者选择以及使用。
-cookie
-说起来cookie的出现是非常早的，用于在客户端存储会话信息，它要求服务器对任意的HTTP请求发送Set-Cookie HTTP头作为响应的一部分，例如：
+cookie说起来cookie的出现是非常早的，用于在客户端存储会话信息，它要求服务器对任意的HTTP请求发送Set-Cookie HTTP头作为响应的一部分，例如：
 HTTP/1.1 200 OK
-Content-Type: t">
-
+Content-Type: te">
   
-    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
   <div id="container">
@@ -44,7 +39,9 @@ Content-Type: t">
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
+			
 			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
 		</a>
 
 		<hgroup>
@@ -52,7 +49,7 @@ Content-Type: t">
 		</hgroup>
 
 		
-		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 		
 
 		
@@ -65,11 +62,6 @@ Content-Type: t">
 						</div>
 						<div class="icon-wrap icon-ribbon hide" data-idx="1">
 							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
 						</div>
 						
 						
@@ -86,8 +78,6 @@ Content-Type: t">
 					<ul class="tips-inner">
 						<li>菜单</li>
 						<li>标签</li>
-						
-						<li>友情链接</li>
 						
 						
 						<li>关于我</li>
@@ -114,7 +104,7 @@ Content-Type: t">
 							
 								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 					        
 								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 					        
@@ -125,26 +115,18 @@ Content-Type: t">
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
 				
 				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://resume.github.io/?lcepy">icepyResume</a>
-			        
-			        </div>
-				</section>
-				
 
 				
 				
-				<section class="switch-part switch-part4">
+				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">携来百侣曾游,忆往昔峥嵘岁月稠。</div>
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
 				</section>
 				
 			</div>
@@ -167,7 +149,7 @@ Content-Type: t">
 			  <h1 class="header-author">icepy</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -184,7 +166,7 @@ Content-Type: t">
 					
 						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 			        
 						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 			        
@@ -197,7 +179,7 @@ Content-Type: t">
   
     <div class="article-meta">
       <a href="/2015/02/03/复习JavaScript九之客户端存储方案/" class="article-date">
-  	<time datetime="2015-02-03T09:43:48.000Z" itemprop="datePublished">2月 3 2015</time>
+  	<time datetime="2015-02-03T09:43:48.000Z" itemprop="datePublished">2015-02-03</time>
 </a>
     </div>
   
@@ -231,8 +213,7 @@ Content-Type: t">
     <div class="article-entry" itemprop="articleBody">
       
         <p>随着Web应用越来越复杂，总是有很多需求需要在客户端存储一些特定的信息，用来描述访问者或者跟访问者相关的信息。于是，就有了这些客户端存储的方案，供开发者选择以及使用。</p>
-<h3 id="cookie">cookie</h3>
-<p>说起来cookie的出现是非常早的，用于在客户端存储会话信息，它要求服务器对任意的HTTP请求发送Set-Cookie HTTP头作为响应的一部分，例如：</p>
+<h3 id="cookie">cookie</h3><p>说起来cookie的出现是非常早的，用于在客户端存储会话信息，它要求服务器对任意的HTTP请求发送Set-Cookie HTTP头作为响应的一部分，例如：</p>
 <pre><code><span class="status">HTTP/1.1 <span class="number">200</span> OK</span>
 <span class="attribute">Content-Type</span>: <span class="string">text/html</span>
 <span class="attribute">Set-Cookie</span>: <span class="string">name=value</span>
@@ -247,36 +228,34 @@ Content-Type: t">
 </ul>
 <p>cookie在浏览器上的保存是由几个方面组成的，理解这个对于使用Js操作cookie是一个必备条件，它由名称也就是每一项的key，每一项的值value，域名的限制，路径对于哪一个页面起作用，时间，以及安全标识secure。</p>
 <p>在客户端主要是使用document.cookie来进行操作，获取和设置都是这一个。而去获取是一个全的字符串，还需要进一步的处理才能得到值。如果是设置，也是需要设置一个全的字符串。对于这个，最好都要encodeURIComponent一下，获取的时候decodeURIComponent一下。</p>
-<pre><code><span class="keyword">var</span> setCookie = <span class="function"><span class="keyword">function</span><span class="params">(name,value,expires,path,domain,secure)</span></span>{
+<pre><code><span class="keyword">var</span> setCookie = <span class="function"><span class="keyword">function</span>(<span class="params">name,value,expires,path,domain,secure</span>)</span>{
     <span class="keyword">var</span> cookieText = <span class="built_in">encodeURIComponent</span>(name)+<span class="string">'='</span>+<span class="built_in">encodeURIComponent</span>(value);
 
     <span class="comment">//各项的拼接</span>
     <span class="built_in">document</span>.cookie = cookieText;
 }
 </code></pre><p>聪明的开发者为了绕开浏览器上对于条数的限制，研究出了一个方式，把真实的值设置在子cookie上。</p>
-<pre><code><span class="variable">name=</span><span class="variable">name=</span>value
-</code></pre><h3 id="IE上的客户端存储userData">IE上的客户端存储userData</h3>
-<p>在IE中引入了一个userData的方案来存储客户端数据，允许每个文档最多128KB，每个域1MB的数据量。想使用它首选在那个元素上应用一个css。</p>
-<pre><code>&lt;<span class="keyword">div</span> style=<span class="string">"behavior:url(#default#userData)"</span>&gt;&lt;/<span class="keyword">div</span>&gt;
+<pre><code><span class="keyword">name</span>=<span class="keyword">name</span>=<span class="keyword">value</span>
+</code></pre><h3 id="IE上的客户端存储userData">IE上的客户端存储userData</h3><p>在IE中引入了一个userData的方案来存储客户端数据，允许每个文档最多128KB，每个域1MB的数据量。想使用它首选在那个元素上应用一个css。</p>
+<pre><code>&lt;div style=<span class="string">"behavior:url(<span class="subst">#<span class="keyword">default</span></span><span class="subst">#userData</span>)"</span>&gt;&lt;/div&gt;
 </code></pre><p>使用的时候跟设置dom属性一样，唯一有一个不同的地方是最后要调用save方法，告诉它存储在哪个数据仓库上。</p>
-<pre><code><span class="keyword">var</span> dataStore = <span class="built_in">document</span>.getElementById(<span class="string">'dataStore'</span>);
+<pre><code><span class="reserved">var</span> dataStore = <span class="built_in">document</span>.getElementById(<span class="string">'dataStore'</span>);
 dataStore.setAttribute(<span class="string">'name'</span>,<span class="string">'lcepy'</span>);
 dataStore.save(<span class="string">'MyNameInfo'</span>);
 </code></pre><p>获取</p>
 <pre><code>dataStore.<span class="built_in">load</span>(<span class="string">'MyNameInfo'</span>);
 dataStore.getAttribute(<span class="string">'name'</span>);
-</code></pre><h3 id="HTML5的客户端存储方案">HTML5的客户端存储方案</h3>
-<blockquote>
+</code></pre><h3 id="HTML5的客户端存储方案">HTML5的客户端存储方案</h3><blockquote>
 <p>支持度以及使用比较广泛的是Web Storage API，当然客户端还有本地数据IndexDB等等，这些也是可以存储客户端数据，但是它们支持的很少。在做移动端开发时，localStorage的使用是非常频繁的，还要注意一点是个别比如safair浏览器有隐私模式，本地缓存是不起作用的，无法读取，所以要做一些额外的处理。</p>
 </blockquote>
 <p>主要的是两个sessionStorage和localStorage两套API来应用，它们是有区别的，前者只在浏览器运行时存在，也可以跨页面，前提是页面不能关闭。后者是永久存在的，如果用户不删除，那么它永远不会删除。它们的使用方式都是一样的，包括API。至于分配的空间，要看各浏览器的态度的，一般情况下是5MB，还有一点它是跟域走的。</p>
-<pre><code><span class="title">interface</span> Storage{
-    <span class="title">readonly</span> attribute unsigned long legth;
-    <span class="title">getter</span> DOMString key();
-    <span class="title">getter</span> any getItem();
-    <span class="title">setter</span> creator void setItem();
-    <span class="title">deleter</span> void removeItem();
-    <span class="title">viod</span> clear();
+<pre><code><span class="keyword">interface</span> <span class="title">Storage</span>{
+    <span class="keyword">readonly</span> attribute unsigned <span class="keyword">long</span> legth;
+    <span class="function">getter DOMString <span class="title">key</span>(<span class="params"></span>)</span>;
+    <span class="function">getter any <span class="title">getItem</span>(<span class="params"></span>)</span>;
+    <span class="function">setter creator <span class="keyword">void</span> <span class="title">setItem</span>(<span class="params"></span>)</span>;
+    <span class="function">deleter <span class="keyword">void</span> <span class="title">removeItem</span>(<span class="params"></span>)</span>;
+    <span class="function">viod <span class="title">clear</span>(<span class="params"></span>)</span>;
 }
 </code></pre><ul>
 <li>length 描述Storage对象中存储的key=value数量</li>
@@ -287,14 +266,14 @@ dataStore.getAttribute(<span class="string">'name'</span>);
 <li>clear 删除全部的数据</li>
 </ul>
 <p>使用：</p>
-<pre><code><span class="transposed_variable">localStorage.</span>setItem(<span class="string">'name'</span>,<span class="string">'lcepy'</span>);
-<span class="transposed_variable">localStorage.</span>getItem(<span class="string">'name'</span>);
-<span class="transposed_variable">localStorage.</span>key(<span class="number">0</span>);
-<span class="transposed_variable">localStorage.</span><span class="built_in">length</span>;
-<span class="transposed_variable">localStorage.</span>removeItem(<span class="string">'name'</span>);
-<span class="transposed_variable">localStorage.</span><span class="keyword">clear</span>();
+<pre><code><span class="built_in">local</span>Storage.setItem(<span class="string">'name'</span>,<span class="string">'lcepy'</span>);
+<span class="built_in">local</span>Storage.getItem(<span class="string">'name'</span>);
+<span class="built_in">local</span>Storage.key(<span class="number">0</span>);
+<span class="built_in">local</span>Storage.length;
+<span class="built_in">local</span>Storage.removeItem(<span class="string">'name'</span>);
+<span class="built_in">local</span>Storage.clear();
 </code></pre><p>另外API中还有一套事件用于本地存储发生改变时的通知</p>
-<pre><code><span class="built_in">window</span>.addEventLister(<span class="string">'storage'</span>,<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{},<span class="literal">true</span>);
+<pre><code><span class="built_in">window</span>.addEventLister(<span class="string">'storage'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{},<span class="literal">true</span>);
 </code></pre><p>event对象中包含有</p>
 <ul>
 <li>key 存储了被更新或者删除的键</li>
@@ -371,6 +350,7 @@ dataStore.getAttribute(<span class="string">'name'</span>);
 
 
 
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -388,20 +368,27 @@ dataStore.getAttribute(<span class="string">'name'</span>);
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 
-
-
-<script src="/js/mobile.js" type="text/javascript"></script>
-
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
 
 
 
 
 
-
-<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -422,7 +409,6 @@ MathJax.Hub.Queue(function() {
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
 
 
   </div>

@@ -3,33 +3,28 @@
 <head>
   <meta charset="utf-8">
   
-  <title>正则的一些理解 | icepy</title>
+  <title>正则的一些理解 | 行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="今天写到这里，是想总结一下，自己重新学习正则表达式之后，对它的一个全新的认识。我想描述一个中心思想，学习任何东西，编程，音乐，基础是非常important的，就好像吉他里基础不在于认识六线谱而是在于节拍。
-从人类的角度来阅读正则
-在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。">
+从人类的角度来阅读正则在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。p">
 <meta property="og:type" content="article">
 <meta property="og:title" content="正则的一些理解">
-<meta property="og:url" content="http://lcepy.github.io/2014/11/14/正则的一些理解/">
-<meta property="og:site_name" content="icepy">
+<meta property="og:url" content="http://lcepy.github.io/2014/11/14/正则的一些理解/index.html">
+<meta property="og:site_name" content="行者">
 <meta property="og:description" content="今天写到这里，是想总结一下，自己重新学习正则表达式之后，对它的一个全新的认识。我想描述一个中心思想，学习任何东西，编程，音乐，基础是非常important的，就好像吉他里基础不在于认识六线谱而是在于节拍。
-从人类的角度来阅读正则
-在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。">
+从人类的角度来阅读正则在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。p">
+<meta property="og:updated_time" content="2015-07-04T15:16:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="正则的一些理解">
 <meta name="twitter:description" content="今天写到这里，是想总结一下，自己重新学习正则表达式之后，对它的一个全新的认识。我想描述一个中心思想，学习任何东西，编程，音乐，基础是非常important的，就好像吉他里基础不在于认识六线谱而是在于节拍。
-从人类的角度来阅读正则
-在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。">
-
+从人类的角度来阅读正则在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。p">
   
-    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
   <div id="container">
@@ -38,7 +33,9 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
+			
 			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
 		</a>
 
 		<hgroup>
@@ -46,7 +43,7 @@
 		</hgroup>
 
 		
-		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 		
 
 		
@@ -59,11 +56,6 @@
 						</div>
 						<div class="icon-wrap icon-ribbon hide" data-idx="1">
 							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
 						</div>
 						
 						
@@ -80,8 +72,6 @@
 					<ul class="tips-inner">
 						<li>菜单</li>
 						<li>标签</li>
-						
-						<li>友情链接</li>
 						
 						
 						<li>关于我</li>
@@ -108,7 +98,7 @@
 							
 								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 					        
 								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 					        
@@ -119,26 +109,18 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
 				
 				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://resume.github.io/?lcepy">icepyResume</a>
-			        
-			        </div>
-				</section>
-				
 
 				
 				
-				<section class="switch-part switch-part4">
+				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">携来百侣曾游,忆往昔峥嵘岁月稠。</div>
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
 				</section>
 				
 			</div>
@@ -161,7 +143,7 @@
 			  <h1 class="header-author">icepy</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -178,7 +160,7 @@
 					
 						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 			        
 						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 			        
@@ -191,7 +173,7 @@
   
     <div class="article-meta">
       <a href="/2014/11/14/正则的一些理解/" class="article-date">
-  	<time datetime="2014-11-14T13:50:22.000Z" itemprop="datePublished">11月 14 2014</time>
+  	<time datetime="2014-11-14T13:50:22.000Z" itemprop="datePublished">2014-11-14</time>
 </a>
     </div>
   
@@ -225,8 +207,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>今天写到这里，是想总结一下，自己重新学习正则表达式之后，对它的一个全新的认识。我想描述一个中心思想，学习任何东西，编程，音乐，基础是非常important的，就好像吉他里基础不在于认识六线谱而是在于节拍。</p>
-<h2 id="从人类的角度来阅读正则">从人类的角度来阅读正则</h2>
-<p>在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。python中也有很多高效处理字符串的方式，比如步距，比如正则，嘿嘿。</p>
+<h2 id="从人类的角度来阅读正则">从人类的角度来阅读正则</h2><p>在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。python中也有很多高效处理字符串的方式，比如步距，比如正则，嘿嘿。</p>
 <p>import re</p>
 <p>g = re.search(‘\d+(.\d*)?’,’0.2556223.556655’)</p>
 <p>g.group(0)</p>
@@ -246,8 +227,7 @@
 <p>这样，一段复杂的表达式，往往可以通过分解的步骤来阅读它，但是，它需要基础，基础在于对这些特殊字符，元，的了解。再复杂的正则，也可以从右往左来阅读它，并用人类的语言，写在纸上，这会是一个非常棒的方式。</p>
 <p>我喜欢，写在纸上，它让我对这一个部分，非常的清晰，了解，不信，可以试试？</p>
 <p><strong>注释：因为是python的正则，所以去掉了一些特殊的</strong></p>
-<h2 id="认识常用的基础">认识常用的基础</h2>
-<p>字符 | 描述</p>
+<h2 id="认识常用的基础">认识常用的基础</h2><p>字符 | 描述</p>
 <p>.|匹配任意字符，除(\n)之外的字符</p>
 <p>\ | 转意字符</p>
 <p>[…] | 字符集</p>
@@ -338,6 +318,7 @@
 
 
 
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -355,20 +336,27 @@
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 
-
-
-<script src="/js/mobile.js" type="text/javascript"></script>
-
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
 
 
 
 
 
-
-<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -389,7 +377,6 @@ MathJax.Hub.Queue(function() {
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
 
 
   </div>

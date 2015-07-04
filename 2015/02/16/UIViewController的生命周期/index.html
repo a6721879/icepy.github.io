@@ -3,33 +3,31 @@
 <head>
   <meta charset="utf-8">
   
-  <title>UIViewController的生命周期 | icepy</title>
+  <title>UIViewController的生命周期 | 行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理。
 呈现视图的顺序
 它内部的顺序是这样的，先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或story">
 <meta property="og:type" content="article">
 <meta property="og:title" content="UIViewController的生命周期">
-<meta property="og:url" content="http://lcepy.github.io/2015/02/16/UIViewController的生命周期/">
-<meta property="og:site_name" content="icepy">
+<meta property="og:url" content="http://lcepy.github.io/2015/02/16/UIViewController的生命周期/index.html">
+<meta property="og:site_name" content="行者">
 <meta property="og:description" content="关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理。
 呈现视图的顺序
 它内部的顺序是这样的，先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或story">
+<meta property="og:updated_time" content="2015-07-04T15:16:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UIViewController的生命周期">
 <meta name="twitter:description" content="关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理。
 呈现视图的顺序
 它内部的顺序是这样的，先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或story">
-
   
-    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
   <div id="container">
@@ -38,7 +36,9 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
+			
 			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
 		</a>
 
 		<hgroup>
@@ -46,7 +46,7 @@
 		</hgroup>
 
 		
-		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 		
 
 		
@@ -59,11 +59,6 @@
 						</div>
 						<div class="icon-wrap icon-ribbon hide" data-idx="1">
 							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
 						</div>
 						
 						
@@ -80,8 +75,6 @@
 					<ul class="tips-inner">
 						<li>菜单</li>
 						<li>标签</li>
-						
-						<li>友情链接</li>
 						
 						
 						<li>关于我</li>
@@ -108,7 +101,7 @@
 							
 								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 					        
 								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 					        
@@ -119,26 +112,18 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
 				
 				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://resume.github.io/?lcepy">icepyResume</a>
-			        
-			        </div>
-				</section>
-				
 
 				
 				
-				<section class="switch-part switch-part4">
+				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">携来百侣曾游,忆往昔峥嵘岁月稠。</div>
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
 				</section>
 				
 			</div>
@@ -161,7 +146,7 @@
 			  <h1 class="header-author">icepy</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -178,7 +163,7 @@
 					
 						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 			        
 						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 			        
@@ -191,7 +176,7 @@
   
     <div class="article-meta">
       <a href="/2015/02/16/UIViewController的生命周期/" class="article-date">
-  	<time datetime="2015-02-16T13:54:06.000Z" itemprop="datePublished">2月 16 2015</time>
+  	<time datetime="2015-02-16T13:54:06.000Z" itemprop="datePublished">2015-02-16</time>
 </a>
     </div>
   
@@ -236,8 +221,7 @@
 <p>viewDidAppear视图已经呈现在屏幕上调用 viewDidDisappear视图已经从屏幕上消失调用。</p>
 <p>viewWillLayoutSubviews  viewDidLayoutSubviews 这两个方法可以在，比如从竖屏到横屏，系统会自动元素的位置，第一个方法是在移动之前调用，第二个方法是在移动完成之后调用，需要设置Autorotation属性。</p>
 <p>didReceiveMemoryWarning 当内存不足时，系统会调用这个方法，发送警告。 </p>
-<h2 id="顺序">顺序</h2>
-<p>viewDidLoad -&gt; viewWillAppear -&gt; viewDidAppear -&gt; viewWillDisappear -&gt; viewDidDisappear</p>
+<h2 id="顺序">顺序</h2><p>viewDidLoad -&gt; viewWillAppear -&gt; viewDidAppear -&gt; viewWillDisappear -&gt; viewDidDisappear</p>
 <p>关于layout的顺序</p>
 <p>viewWillLayoutSubviews -&gt; viewDidLayoutSubviews</p>
 
@@ -308,6 +292,7 @@
 
 
 
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -325,20 +310,27 @@
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 
-
-
-<script src="/js/mobile.js" type="text/javascript"></script>
-
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
 
 
 
 
 
-
-<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -359,7 +351,6 @@ MathJax.Hub.Queue(function() {
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
 
 
   </div>

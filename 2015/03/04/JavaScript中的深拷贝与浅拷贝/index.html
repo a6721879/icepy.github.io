@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>JavaScript中的深拷贝与浅拷贝 | icepy</title>
+  <title>JavaScript中的深拷贝与浅拷贝 | 行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="关于拷贝的问题，主要分为深拷贝和浅拷贝，但是如果从空间分配上来说JavaScript的拷贝不应该算是深拷贝，比如：
 var d = {};
@@ -14,8 +14,8 @@ return d;
 今天突然想到了这么一个问题，在C语言中，所谓的拷贝，就是分两种情况，一种是把指针地址拷贝给另外一个变量，虽然也开辟的了一个内存空间，在栈上也存在着一个地址，我对这个变量进行修改">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JavaScript中的深拷贝与浅拷贝">
-<meta property="og:url" content="http://lcepy.github.io/2015/03/04/JavaScript中的深拷贝与浅拷贝/">
-<meta property="og:site_name" content="icepy">
+<meta property="og:url" content="http://lcepy.github.io/2015/03/04/JavaScript中的深拷贝与浅拷贝/index.html">
+<meta property="og:site_name" content="行者">
 <meta property="og:description" content="关于拷贝的问题，主要分为深拷贝和浅拷贝，但是如果从空间分配上来说JavaScript的拷贝不应该算是深拷贝，比如：
 var d = {};
 for(k in a){
@@ -23,6 +23,7 @@ for(k in a){
 }
 return d;
 今天突然想到了这么一个问题，在C语言中，所谓的拷贝，就是分两种情况，一种是把指针地址拷贝给另外一个变量，虽然也开辟的了一个内存空间，在栈上也存在着一个地址，我对这个变量进行修改">
+<meta property="og:updated_time" content="2015-07-04T15:16:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaScript中的深拷贝与浅拷贝">
 <meta name="twitter:description" content="关于拷贝的问题，主要分为深拷贝和浅拷贝，但是如果从空间分配上来说JavaScript的拷贝不应该算是深拷贝，比如：
@@ -32,16 +33,13 @@ for(k in a){
 }
 return d;
 今天突然想到了这么一个问题，在C语言中，所谓的拷贝，就是分两种情况，一种是把指针地址拷贝给另外一个变量，虽然也开辟的了一个内存空间，在栈上也存在着一个地址，我对这个变量进行修改">
-
   
-    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
   <div id="container">
@@ -50,7 +48,9 @@ return d;
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
+			
 			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
 		</a>
 
 		<hgroup>
@@ -58,7 +58,7 @@ return d;
 		</hgroup>
 
 		
-		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 		
 
 		
@@ -71,11 +71,6 @@ return d;
 						</div>
 						<div class="icon-wrap icon-ribbon hide" data-idx="1">
 							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
 						</div>
 						
 						
@@ -92,8 +87,6 @@ return d;
 					<ul class="tips-inner">
 						<li>菜单</li>
 						<li>标签</li>
-						
-						<li>友情链接</li>
 						
 						
 						<li>关于我</li>
@@ -120,7 +113,7 @@ return d;
 							
 								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 					        
 								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 					        
@@ -131,26 +124,18 @@ return d;
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
 				
 				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://resume.github.io/?lcepy">icepyResume</a>
-			        
-			        </div>
-				</section>
-				
 
 				
 				
-				<section class="switch-part switch-part4">
+				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">携来百侣曾游,忆往昔峥嵘岁月稠。</div>
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
 				</section>
 				
 			</div>
@@ -173,7 +158,7 @@ return d;
 			  <h1 class="header-author">icepy</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -190,7 +175,7 @@ return d;
 					
 						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 			        
 						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 			        
@@ -203,7 +188,7 @@ return d;
   
     <div class="article-meta">
       <a href="/2015/03/04/JavaScript中的深拷贝与浅拷贝/" class="article-date">
-  	<time datetime="2015-03-04T12:56:49.000Z" itemprop="datePublished">3月 4 2015</time>
+  	<time datetime="2015-03-04T12:56:49.000Z" itemprop="datePublished">2015-03-04</time>
 </a>
     </div>
   
@@ -237,43 +222,43 @@ return d;
     <div class="article-entry" itemprop="articleBody">
       
         <p>关于拷贝的问题，主要分为深拷贝和浅拷贝，但是如果从空间分配上来说JavaScript的拷贝不应该算是深拷贝，比如：</p>
-<pre><code><span class="keyword">var</span> d = {};
+<pre><code><span class="keyword">var</span> <span class="keyword">d</span> = {};
 <span class="keyword">for</span>(k <span class="keyword">in</span> a){
-    d[k] = a[k];
+    <span class="keyword">d</span>[k] = a[k];
 }
-<span class="keyword">return</span> d;
+<span class="keyword">return</span> <span class="keyword">d</span>;
 </code></pre><p>今天突然想到了这么一个问题，在C语言中，所谓的拷贝，就是分两种情况，一种是把指针地址拷贝给另外一个变量，虽然也开辟的了一个内存空间，在栈上也存在着一个地址，我对这个变量进行修改，同一个指针是会改变其值的，这种拷贝叫浅拷贝。另外一种情况，直接开辟一个新空间，把需要复制的值都复制在这个新的空间中，这种拷贝叫中深拷贝。</p>
 <p>如果看到上述的一段Js代码，很多人说它是浅拷贝，假设传入一个a对象，拷贝完成之后返回一个d，当我修改返回对象的值时并不能同时修改a对象，于是，在这里我有一个很大的疑问，在Js中到底什么是浅拷贝，什么是深拷贝的问题？</p>
 <p>这一点上感觉Js真的很奇葩，如果在开发iOS中，不可变对象copy一下，依然是不可变，所以是浅拷贝，拷贝了指针变量中存储的地址值。如果是可变对象copy一下，到不可变，空间变化了，包括不可变mutableCopy到不可变，空间依然变化了，所以是深拷贝。但是JavaScript中对于这一点要考虑一种情况，值类型，和引用类型，这个基础知识，我相信大家都非常清楚。数字，字符串等都是值类型，object，array等都是引用类型。</p>
-<pre><code><span class="keyword">var</span> a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];
-<span class="keyword">var</span> b = a;
+<pre><code><span class="variable"><span class="keyword">var</span> a</span> = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];
+<span class="variable"><span class="keyword">var</span> b</span> = a;
 
 b.push(<span class="number">4</span>);
-<span class="built_in">console</span>.log(a); <span class="comment">//[1,2,3,4]</span>
+console.log(a); <span class="comment">//[1,2,3,4]</span>
 
-<span class="keyword">var</span> numb = <span class="number">123</span>;
-<span class="keyword">var</span> _numb = numb;
+<span class="variable"><span class="keyword">var</span> numb</span> = <span class="number">123</span>;
+<span class="variable"><span class="keyword">var</span> _numb</span> = numb;
 _numb = <span class="number">567</span>;
 
-<span class="built_in">console</span>.log(numb); <span class="comment">//123</span>
+console.log(numb); <span class="comment">//123</span>
 </code></pre><p>从这个例子中可以看的出来，它们使用的都是＝符号，而数组a发生了变化，numb数字却没有发生变化。那么从这里，可以有一个总结，所谓了深拷贝，浅拷贝的问题，应该针对的是有多个嵌套发生的情况。不然假设是这样的情况，还能叫浅拷贝么？</p>
-<pre><code><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> = </span>{<span class="string">"de"</span>:<span class="number">123</span>};
-<span class="keyword">var</span> o = copy(<span class="keyword">object</span>);
+<pre><code><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> =</span> {<span class="string">"de"</span>:<span class="number">123</span>};
+<span class="keyword">var</span> o = copy(<span class="class"><span class="keyword">object</span>);</span>
 
 o.de = <span class="number">456</span>;
 
-console.log(<span class="keyword">object</span>) <span class="comment">//{"de":123}</span>
+console.log(<span class="class"><span class="keyword">object</span>) <span class="title">//</span>{</span><span class="string">"de"</span>:<span class="number">123</span>}
 </code></pre><p>明显对象o中的de属性修改并没有影响到原始对象，一个对象中的属性是一个字符串，如果从内存空间的角度上来说，这里明显是开辟了新的空间，还能说是浅拷贝么？那么针对另外一种情况。</p>
-<pre><code><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> = </span>{
+<pre><code><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> =</span> {
     <span class="string">"de"</span>:{
         <span class="string">"d"</span>:<span class="number">123</span>
     }
 }
 
-<span class="keyword">var</span> o = deepCopy(<span class="keyword">object</span>);
+<span class="keyword">var</span> o = deepCopy(<span class="class"><span class="keyword">object</span>);</span>
 o.de.d = <span class="string">"asd"</span>;
 </code></pre><p>如果一个对象中的第一层属性，不是值类型，只单层循环，这样来看的话确实是一个浅拷贝，因为在Js中引用类型用＝赋值，实际上是引用，这样说的通。所以，深拷贝，还需要做一些处理，把object，array等引用类型识别出来，深层递归到最后一层，一个一个的拷贝。</p>
-<pre><code><span class="keyword">var</span> deepCopy = <span class="function"><span class="keyword">function</span><span class="params">(o)</span></span>{
+<pre><code><span class="keyword">var</span> deepCopy = <span class="function"><span class="keyword">function</span>(<span class="params">o</span>)</span>{
     <span class="keyword">var</span> target = {};
     <span class="keyword">if</span>(<span class="keyword">typeof</span> o !== <span class="string">'object'</span> &amp;&amp; !<span class="built_in">Array</span>.isArray(o)){
         <span class="keyword">return</span> o;
@@ -284,14 +269,14 @@ o.de.d = <span class="string">"asd"</span>;
     <span class="keyword">return</span> target;
 }
 </code></pre><p>思路是如此，这个例子只考虑了两种情况，对象和数组，为了验证这样的思路，最后的结果与预期是一样的。</p>
-<pre><code><span class="keyword">var</span> _copy = {
+<pre><code><span class="reserved">var</span> _copy = {
     <span class="string">'object'</span>:{
         <span class="string">'name'</span>:<span class="string">'wen'</span>
     },
     <span class="string">'array'</span>:[<span class="number">1</span>,<span class="number">2</span>]
 
 }
-<span class="keyword">var</span> h = deepCopy(_copy);
+<span class="reserved">var</span> h = deepCopy(_copy);
 h.object.name = <span class="string">'lcepy'</span>;
 h.array[<span class="number">1</span>] = <span class="number">8</span>;
 <span class="built_in">console</span>.log(h);
@@ -364,6 +349,7 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
 
 
 
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -381,20 +367,27 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 
-
-
-<script src="/js/mobile.js" type="text/javascript"></script>
-
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
 
 
 
 
 
-
-<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -415,7 +408,6 @@ MathJax.Hub.Queue(function() {
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
 
 
   </div>

@@ -3,33 +3,31 @@
 <head>
   <meta charset="utf-8">
   
-  <title>复习JavaScript十一之理解内存管理 | icepy</title>
+  <title>复习JavaScript十一之理解内存管理 | 行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="一般来说内存管理主要有这么几种方式，引用计数和标记，而JavaScript采用的就是标记管理的方式。Js的内存管理是自动的，但是并不是说执行完后立马销毁，而是有时间周期性，相隔一段时间执行一下垃圾回收，把没有引用的内存全部销毁。
 OC中采用的是引用计数来手动管理内存，这样的方式比较好，可以让开发者自己来管理。当然也有不好的地方，如果遗忘了释放，很可能引起应用的崩溃。
 总体来看在IE中因为COM组件">
 <meta property="og:type" content="article">
 <meta property="og:title" content="复习JavaScript十一之理解内存管理">
-<meta property="og:url" content="http://lcepy.github.io/2015/02/04/复习JavaScript十一之理解内存管理/">
-<meta property="og:site_name" content="icepy">
+<meta property="og:url" content="http://lcepy.github.io/2015/02/04/复习JavaScript十一之理解内存管理/index.html">
+<meta property="og:site_name" content="行者">
 <meta property="og:description" content="一般来说内存管理主要有这么几种方式，引用计数和标记，而JavaScript采用的就是标记管理的方式。Js的内存管理是自动的，但是并不是说执行完后立马销毁，而是有时间周期性，相隔一段时间执行一下垃圾回收，把没有引用的内存全部销毁。
 OC中采用的是引用计数来手动管理内存，这样的方式比较好，可以让开发者自己来管理。当然也有不好的地方，如果遗忘了释放，很可能引起应用的崩溃。
 总体来看在IE中因为COM组件">
+<meta property="og:updated_time" content="2015-07-04T15:16:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="复习JavaScript十一之理解内存管理">
 <meta name="twitter:description" content="一般来说内存管理主要有这么几种方式，引用计数和标记，而JavaScript采用的就是标记管理的方式。Js的内存管理是自动的，但是并不是说执行完后立马销毁，而是有时间周期性，相隔一段时间执行一下垃圾回收，把没有引用的内存全部销毁。
 OC中采用的是引用计数来手动管理内存，这样的方式比较好，可以让开发者自己来管理。当然也有不好的地方，如果遗忘了释放，很可能引起应用的崩溃。
 总体来看在IE中因为COM组件">
-
   
-    <link rel="alternative" href="/atom.xml" title="icepy" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
   <div id="container">
@@ -38,7 +36,9 @@ OC中采用的是引用计数来手动管理内存，这样的方式比较好，
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
+			
 			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
 		</a>
 
 		<hgroup>
@@ -46,7 +46,7 @@ OC中采用的是引用计数来手动管理内存，这样的方式比较好，
 		</hgroup>
 
 		
-		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 		
 
 		
@@ -59,11 +59,6 @@ OC中采用的是引用计数来手动管理内存，这样的方式比较好，
 						</div>
 						<div class="icon-wrap icon-ribbon hide" data-idx="1">
 							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
 						</div>
 						
 						
@@ -80,8 +75,6 @@ OC中采用的是引用计数来手动管理内存，这样的方式比较好，
 					<ul class="tips-inner">
 						<li>菜单</li>
 						<li>标签</li>
-						
-						<li>友情链接</li>
 						
 						
 						<li>关于我</li>
@@ -108,7 +101,7 @@ OC中采用的是引用计数来手动管理内存，这样的方式比较好，
 							
 								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 					        
-								<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 					        
 								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 					        
@@ -119,26 +112,18 @@ OC中采用的是引用计数来手动管理内存，这样的方式比较好，
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18.00px;">JavaScript</a><a href="/tags/django/" style="font-size: 14.00px;">django</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/nodejs/" style="font-size: 12.00px;">nodejs</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/生活/" style="font-size: 16.00px;">生活</a><a href="/tags/简历/" style="font-size: 10.00px;">简历</a><a href="/tags/经验之谈/" style="font-size: 12.00px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
 				
 				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://resume.github.io/?lcepy">icepyResume</a>
-			        
-			        </div>
-				</section>
-				
 
 				
 				
-				<section class="switch-part switch-part4">
+				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">携来百侣曾游,忆往昔峥嵘岁月稠。</div>
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
 				</section>
 				
 			</div>
@@ -161,7 +146,7 @@ OC中采用的是引用计数来手动管理内存，这样的方式比较好，
 			  <h1 class="header-author">icepy</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟。</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -178,7 +163,7 @@ OC中采用的是引用计数来手动管理内存，这样的方式比较好，
 					
 						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
 			        
-						<a class="weibo" target="_blank" href="http://weibo.com/2455876310" title="weibo">weibo</a>
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
 			        
 						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
 			        
@@ -191,7 +176,7 @@ OC中采用的是引用计数来手动管理内存，这样的方式比较好，
   
     <div class="article-meta">
       <a href="/2015/02/04/复习JavaScript十一之理解内存管理/" class="article-date">
-  	<time datetime="2015-02-04T10:53:09.000Z" itemprop="datePublished">2月 4 2015</time>
+  	<time datetime="2015-02-04T10:53:09.000Z" itemprop="datePublished">2015-02-04</time>
 </a>
     </div>
   
@@ -235,7 +220,7 @@ element.<span class="keyword">my</span> = <span class="keyword">my</span>;
 <p>那么，其他浏览器呢？还是标记清理的机制，比如一个函数的变量，在进入环境时标记上“进入环境”，执行完之后标记上“离开环境”，然后等待系统来释放。</p>
 <p>IE有一个手动释放的方法，window.CollectGarbage，调用它就立马释放已经标记离开环境的变量，不过很多文章都不建议这样做。</p>
 <p>那么一般都这样做，引用类型的释放</p>
-<pre><code><span class="keyword">var</span> my = {};
+<pre><code><span class="variable"><span class="keyword">var</span> my</span> = {};
 <span class="comment">//使用完毕之后</span>
 my = <span class="literal">null</span>;
 </code></pre><p>让my脱离执行环境，标记上已经离开环境，然后等待系统执行垃圾回收，释放内存。</p>
@@ -307,6 +292,7 @@ my = <span class="literal">null</span>;
 
 
 
+
 </div>
       <footer id="footer">
   <div class="outer">
@@ -324,20 +310,27 @@ my = <span class="literal">null</span>;
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 
-
-
-<script src="/js/mobile.js" type="text/javascript"></script>
-
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
 
 
 
 
 
-
-<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -358,7 +351,6 @@ MathJax.Hub.Queue(function() {
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
-
 
 
   </div>
