@@ -167,6 +167,204 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-复习JavaScript十之理解引用类型和匿名函数闭包" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/03/复习JavaScript十之理解引用类型和匿名函数闭包/" class="article-date">
+  	<time datetime="2015-02-03T11:02:01.000Z" itemprop="datePublished">2015-02-03</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/03/复习JavaScript十之理解引用类型和匿名函数闭包/">复习JavaScript十之理解引用类型和匿名函数闭包</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>引用类型虽然看起来和类很相似，但是它们却是不同的概念，引用类型的值，也就是对象是引用类型的一个实例。在Js中引用类型主要有Object，Array，Date，正则，Function等。</p>
+<p>Object之前已经复习过了，Array是用的非常频繁的一个引用类型。</p>
+<p><strong>Array</strong></p>
+<p>在Js中数组可以存储任意的数据，而且它的大小是可以动态调整的类似于OC中的NSMutableArray。创建数组可以使用构造函数的方式也可以使用字面量的形式，另外可以使用concat从一个数组中复制一个副本出来。数组本身提供了很多方法让开发者使用来操作数组。</p>
+<ul>
+<li>length 数组的长度</li>
+<li>toString  可以返回一个以，拼接的字符串，相当于是调用了下join(‘,’)</li>
+<li>join 可以用一个分割符来拼接成一个字符串</li>
+<li>push 添加一个数据到数组的末端</li>
+<li>pop 删除数组中的最后一项，有返回值</li>
+<li>shift 删除数组的第一项，有返回值</li>
+<li>unshift 添加一个数据到数组的首端</li>
+<li>reverse 倒序</li>
+<li>sort 可以传入一个排序的函数</li>
+<li>slice 可以基于当前数组返回一个新的数组，接收两个参数，返回项的起始位置和结束位置</li>
+<li>splice 可以传入N个参数，第一个参数表示要删除，插入或则替换的位置，第二个参数表示要删除的项数，第三个到第N个表示要插入或则替换的数据</li>
+</ul>
+<p><strong>Date</strong></p>
+<p>时间对象也是使用非常多的玩意，它是使用GMT时间来描述，而且时间对象是可以直接比对大小的。</p>
+<pre><code><span class="keyword">var</span> date1 = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2015</span>,<span class="number">1</span>,<span class="number">2</span>);
+<span class="keyword">var</span> date2 = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2015</span>,<span class="number">1</span>,<span class="number">10</span>);
+
+date1 &lt; date2  
+</code></pre><p>常用的方法</p>
+<ul>
+<li>getTime 获取时间对象的毫秒数</li>
+<li>setTime 设置时间对象的毫秒数，会改变日期</li>
+<li>getFullYear 获取时间对象的年（2015）</li>
+<li>getMonth 获取时间对象的月（需要加1）</li>
+<li>getDay 获取日期的星期几（0-6）星期天到星期六</li>
+<li>getDate 获取日期的天数</li>
+<li>getHours 获取当前日期的小时</li>
+<li>getMinutes 获取当前日期的分钟数</li>
+<li>getSeconds 获取当然日期的秒数</li>
+</ul>
+<p>上面看起来都是获取，当然也有设置，只是相应的get置换成set即可。</p>
+<p><strong>正则表达式</strong></p>
+<p>在Js里正则表达式是用RegExp类型来支持的，关于正则可以看看之前写的一篇文章，用python来描述的如何读懂正则。</p>
+<p>Js也支持三种模式，gim，表示全局，不区分大小写，多行。</p>
+<p>一般来说很少有人这么使用var xxx = new RegExp()，而是用字面量的方式，比如var xx = /[bc]/gi;像用的比较多的方法有exec用于捕获包含第一个匹配项的数组，没有则返回null。test，用于判断，如果匹配返回true，不匹配返回false。</p>
+<p><strong>Function</strong></p>
+<p>说起来Js的核心是什么？那就是函数了。对于函数主要是理解它的几个概念，它可以当值来传递，没有重栽。而且声明的时候，比如function a(){} var a = function(){} 执行时会有区别。函数内部的参数arguments包含了传入的所有参数，this，表示在这个函数内的作用域，以及prototype。</p>
+<p><strong>处理字符串</strong></p>
+<p>在Js中还有一种叫做包装类型的玩意，正因为此所以处理一些基本数据类型，比如字符串时，有很多方法可以使用。</p>
+<ul>
+<li>concat 可以将一个或者多个字符串拼接起来，返回一个新的字符串</li>
+<li>slice 接收两个参数，起始位置和结束位置，返回一个新的字符串</li>
+<li>substr和substring和slice一样，唯一的不同是substr第二个参数是返回字符串的个数</li>
+<li>indexOf 从头开始查询字符串，存在会返回它所在的位置，没有返回－1</li>
+<li>lastIndexOf 从最后开始查询字符串</li>
+<li>toUpperCase 转大写</li>
+<li>toLowerCase 转小写</li>
+<li>match 正则表达式使用跟exec一样</li>
+<li>search 正则表达式使用，查询到返回一个位置，没有返回－1</li>
+<li>replace 替换，第一个参数可以是正则表达式也可以是字符串，第二个参数是要替换的字符串</li>
+<li>localeCompare比较字符串，如果字符串相等返回0，如果字符串的字母排在参数字符串之前，返回负数，如果是之后，返回正数。</li>
+</ul>
+<h3 id="理解匿名函数和闭包">理解匿名函数和闭包</h3><p>匿名函数又叫拉姆达函数，主要是在把函数当值传递的时候用，或者是把函数当返回值，比如：</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">d</span><span class="params">(callback)</span></span>{
+    <span class="keyword">callback</span>();
+}
+d(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    alert(<span class="string">'123'</span>)
+});
+
+<span class="comment">//或者</span>
+
+<span class="function"><span class="keyword">function</span> <span class="title">b</span><span class="params">()</span></span>{
+    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        alert(<span class="string">'123'</span>);
+    }
+}
+<span class="keyword">var</span> g = b();
+g();
+</code></pre><p>其实第二种方式跟闭包的意义一样了，所谓的闭包书面的解释是可以访问另一个函数作用域内变量的函数，稍微改写一下可能会更明显。</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">b</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> name = <span class="string">'123'</span>;
+    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        alert(name);
+    }
+}
+<span class="keyword">var</span> g = b();
+g();
+</code></pre><p>从这里可以看出来return的函数可以访问到name，而外部却不行，这个返回值的函数就可以理解为闭包。理解闭包还可以看一个经典的求值的例子。</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">save_i</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> a = [];
+    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
+        a[i] = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+            <span class="keyword">return</span> i;
+        }
+    }
+    <span class="keyword">return</span> a;    
+}
+
+<span class="keyword">var</span> c = save_i();
+<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
+    alert(c[i]());
+}
+</code></pre><p>从这个例子上来看，我们想得到的结果是10次循环a[i]保存着一个闭包，然后alert出从0到10，但是结果很出人意料，全部是10，为什么？哪里理解的不对呢？a[i]明明是内部函数，然后让它访问另外一个函数作用域内的变量i。</p>
+<p>个人觉得可以这样去分析问题，在客户端执行Js时有一个全局执行环境，指向的是window对象。而所谓的对象也就是引用类型，实际上在后台执行环境中，它就是一个指针。</p>
+<p>回到Js当代码在执行的时候，会创建变量对象并且构建一个作用域链，而这个对象保存着当前函数可以访问的对象。</p>
+<pre><code>window
+    -<span class="ruby">&gt;save_i
+</span>        -<span class="ruby">&gt;this|argument
+</span>        -<span class="ruby">&gt;a
+</span>        -<span class="ruby">&gt;i
+</span>        -<span class="ruby">&gt;看不见的a[<span class="number">0</span>]-a[<span class="number">10</span>]
+</span>        -<span class="ruby">&gt;a[<span class="number">0</span>]function(){}
+</span>            -<span class="ruby">&gt;i
+</span>    -<span class="ruby">&gt;c</span>
+</code></pre><p>上述的i和a[0]里的i是同一个i，那么结果就是10。</p>
+<p>进一步处理</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">save_i</span>(<span class="params"></span>)</span>{
+    <span class="keyword">var</span> a = [];
+    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
+        a[i] = <span class="function"><span class="keyword">function</span>(<span class="params">k</span>)</span>{
+            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+                <span class="keyword">return</span> k;
+            };
+        }(i)
+    }
+    <span class="keyword">return</span> a;    
+}
+
+<span class="keyword">var</span> c = save_i();
+<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
+    <span class="built_in">console</span>.log(c[i]());
+}
+</code></pre><p>接着按上面的节奏来分析</p>
+<pre><code>window
+    -<span class="ruby">&gt;save_i
+</span>        -<span class="ruby">&gt;this|argument
+</span>        -<span class="ruby">&gt;a
+</span>        -<span class="ruby">&gt;i
+</span>        -<span class="ruby">&gt;看不见的a[<span class="number">0</span>]-a[<span class="number">10</span>]
+</span>        -<span class="ruby">&gt;a[<span class="number">0</span>]function(){}
+</span>            -<span class="ruby">&gt;k
+</span>            -<span class="ruby">&gt;function(){}
+</span>                -<span class="ruby">&gt;k
+</span>
+    -<span class="ruby">&gt;c</span>
+</code></pre><p>什么是传参？按值传递，相当于是在那个立即执行的函数中创建了一个新的地址和空间，虽然值是一样的，但是每一个k又是不同的，所以得到的结果正好满足了我们的预期。</p>
+<p>本来正常情况下save_i执行完毕后就要销毁，但是内部的闭包被包含在这个作用域内了，所以save_i没法销毁，从这里可以看的出来闭包会带来内存的问题，因为用完之后没法销毁，如果不注意的话。</p>
+<p>那么用完之后只能设置为null来解除引用，等着自动销毁把内存回收。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-复习JavaScript九之客户端存储方案" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1110,134 +1308,6 @@ Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="strin
       
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript二之跨域" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/23/复习JavaScript二之跨域/" class="article-date">
-  	<time datetime="2015-01-23T14:17:20.000Z" itemprop="datePublished">2015-01-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/23/复习JavaScript二之跨域/">复习JavaScript二之跨域</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>客户端Js出于安全的考虑，不允许跨域调用其他页面的对象，正是因为这样才给Ajax带来了很多不方便的地方。跨域最简单的理解就是因为Js同源策略的存在，比如a.com域名下的Js不能访问b.com下的Js对象。</p>
-<ul>
-<li>协议端口没法跨，客户端</li>
-<li>在跨域上，域仅仅是通过首部来识别，window.location.protocol +window.location.host</li>
-</ul>
-<h3 id="利用document-domain和iframe来设置">利用document.domain和iframe来设置</h3><p>对于主域相同而子域名不同的情况，可以通过document.domain来处理，比如www.163.com/index.html和wow.163.com/wower.html，在这两个文件中分别加入document.domain = “163.com”，然后在index.html页面中创建一个iframe引入wower.html，获取iframe的contentDocument，这样这两个js就可以交互了。</p>
-<p>index.html</p>
-<pre><code><span class="built_in">document</span>.domain = <span class="string">'163.com'</span>;
-<span class="keyword">var</span> iframe = <span class="built_in">document</span>.createElement(<span class="string">'iframe'</span>);
-iframe.src = <span class="string">'http://wow.163.com/wower.html'</span>;
-iframe.style.display = <span class="string">'none'</span>; 
-<span class="built_in">document</span>.body.appendChild(iframe);
-iframe.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
-    <span class="keyword">var</span> doc = iframe.contentDocument || iframe.contentWindow.document;
-    <span class="comment">//现在可以通过doc来操作wower.html中的js对象了</span>
-}
-</code></pre><p>wower.html</p>
-<pre><code><span class="built_in">document</span>.domain = <span class="string">'163.com'</span>;
-</code></pre><p>使用这样的方式来实现的跨域是有限制的</p>
-<ul>
-<li>主域名必须是同一个</li>
-<li>安全性引发的问题，比如第一个页面出现了安全问题，在后面的页面也会出现</li>
-<li>iframe引用过多的话，每一个iframe都必须设置document.domain，比较琐碎</li>
-</ul>
-<blockquote>
-<p>偶尔可以使用一下</p>
-</blockquote>
-<h3 id="利用window-name">利用window.name</h3><p>稍微有些绕，但是数据量比较大，也比较安全</p>
-<ul>
-<li>wow.163.com/app.html 应用所在的页面</li>
-<li>wow.163.com/empty.html 中间代理页面，搞个空的即可，但是必须在主域名下</li>
-<li>www.qq.com/data.html 需要交互的数据页面</li>
-</ul>
-<p>在data.html页面中</p>
-<pre><code>window.<span class="property">name</span> = <span class="number">123</span>;
-</code></pre><p>app.html页面中创建一个隐藏的iframe，它的scr指向data.html，在onload事件中，把当前iframe的contentWindow.loaction修改成empty.html，当再次onload时就可以通过contentWindow.name来获取到123了。</p>
-<blockquote>
-<p>偶尔使用</p>
-</blockquote>
-<h3 id="利用iframe和location-hash">利用iframe和location.hash</h3><p>利用这种方式，说实话（不建议），比较绕，而且数据量小，直接暴露在URL上。它的原理主要是这样的，假设wow.163.com/index.html页面，wow.163.com/empty.html（空的，什么内容都没有），需要交换数据的页面在www.qq.com/a.html上。</p>
-<p>在wow.163.com/index.html#（＃号就是我们要传递的数据），创建一个隐藏的iframe，hash值可以当参数传递给www.qq.com/a.html#()，在www.qq.com/a.html中可以获取到hash值，根据它进行处理，然后在www.qq.com/a.html页面中创建一个隐藏iframe，把处理的结果当hash值进行传递，给wow.163.com/empty.html#()这样，在同一个域名下，wow.163.com/empty.html中的js可以通过parent.parent.location.hash = self.location.hash来改变hash值，这样就达到了跨域的目的。</p>
-<blockquote>
-<p>不建议使用，坑爹的思路</p>
-</blockquote>
-<h3 id="JSONP">JSONP</h3><p>这种方式是目前开发时最常用的一种方式，利用动态创建script标签来实现跨域的目的，虽然浏览器有显示Js对象的访问，但是它没有限制Js文件的加载，任何域名下的Js文件都可以加载。</p>
-<p>对客户端而言，文件的加载其实就是发送一次GET请求，在服务端实现时，也就是处理这次的GET请求，并且响应，参数可以通过?来带走，俗称一波流。</p>
-<p>在客户端上对于script文件加载是否已经完毕的判断，IE是判断script标签的readystatechange属性，而其他浏览器是onload事件。</p>
-<blockquote>
-<p>突然感觉做移动端不考虑IE的兼容，果然是杠杠的，建议使用</p>
-</blockquote>
-<h3 id="HTML5_postMessage">HTML5 postMessage</h3><p>主要是利用window.postMessage来发送消息，监听window.message来获取消息，判断origin可以判断消息来源，data获取消息内容，soucre来引用发送方的window对象引用。</p>
-<p>www.b.com/b.html发送消息给www.a.com/a.html</p>
-<pre><code>window.<span class="function"><span class="title">postMessage</span><span class="params">(<span class="string">'hello'</span>,<span class="string">'www.a.com/a.html'</span>)</span></span>
-</code></pre><p>www.a.com/a.html获取消息</p>
-<pre><code><span class="built_in">window</span>.addEventLister(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>{
-    <span class="keyword">if</span>(event.origin === <span class="string">'http://b.com'</span>){
-        <span class="comment">//处理</span>
-    }
-})
-</code></pre><p>iframe的发送方式</p>
-<pre><code>contentWindow.<span class="function"><span class="title">postMessage</span><span class="params">(<span class="string">'data'</span>,<span class="string">'b.com'</span>)</span></span>
-</code></pre><blockquote>
-<p>话不多说，移动端这种跨域方式也很常用（建议推荐使用）</p>
-</blockquote>
-<h3 id="HTML5_跨域头_XMLHttpRequest2">HTML5 跨域头 XMLHttpRequest2</h3><p>如果是自己产品，又是做移动端可以使用，比上述任何方式都要方便，需要服务端支持响应时也要设置跨域头。</p>
-<p>如果服务器响应此头，浏览器会检查此头，它的值表示请求内容所允许的域名，也就是如果是*号，表示所有域都可以访问，如果这里是a.com，表示除了同源外，只允许来自a.com域的访问。</p>
-<pre><code><span class="keyword">Access</span>-Control-Allow-Origin：＊
-</code></pre><p>如果需要读取cookie则需要设置它</p>
-<pre><code>Access-Control-Allow-<span class="string">Credentials:</span><span class="literal">true</span>
-</code></pre><p>设置允许跨域的请求类型</p>
-<pre><code><span class="rule"><span class="attribute">Access-Control-Allow-Methods</span>:<span class="value">POST</span></span>
-</code></pre><blockquote>
-<p>兼容性问题，某些版本的浏览器需要在open之后，设置xhr.withCredentials ＝ true;话不多说，建议推荐使用</p>
-</blockquote>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
 	</div>
 
       

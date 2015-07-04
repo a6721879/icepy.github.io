@@ -167,6 +167,120 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-iOS的网络编程NSURL" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/04/22/iOS的网络编程NSURL/" class="article-date">
+  	<time datetime="2015-04-22T04:37:14.000Z" itemprop="datePublished">2015-04-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/22/iOS的网络编程NSURL/">iOS的网络编程NSURL</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>如果只是说iOS中的URL系统，它的东西还不算比较多。但是，如果想用好它，可能还需要具备一些其他方面的知识，特别是多任务编程，比如GCD，NSOperation，NSOperationQueue，NSURLSession等等，而且苹果公司在后期还推了一个叫NSURLComponents的东西，这也是需要去学习的。</p>
+<p>一个简单的URL是这样发送出去的：</p>
+<pre><code><span class="built_in">NSString</span> *path = <span class="string">@"http://lcepy.github.io"</span>;
+<span class="built_in">NSURL</span> *url = [<span class="built_in">NSURL</span> URLWithString:path];
+<span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:url];
+<span class="built_in">NSURLResponse</span> *response = <span class="literal">nil</span>;
+<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
+[<span class="built_in">NSURLConnection</span> sendSynchronousRequest:request returningResponse:&amp;response error:&amp;error];
+</code></pre><p>基本上如果要构造一个request需要先构造一个NSURL对象，然后通过NSURLConnection发送出去。NSURLRequest是一个不可变的对象，默认发送的是GET的请求，如果想要发送POST请求，可以用它可变的NSMutableURLRequest来支持POST请求，包括超时时间等等。</p>
+<p>关于NSURLConnection有三种方式可以发送请求，前面同步版本我们已经看过了，下面是异步和使用协议的方式：</p>
+<pre><code>[<span class="built_in">NSURLConnection</span> sendAsynchronousRequest:request queue:<span class="literal">nil</span> completionHandler:^(<span class="built_in">NSURLResponse</span> *response, <span class="built_in">NSData</span> *data, <span class="built_in">NSError</span> *connectionError) {
+
+}];
+</code></pre><p>协议：</p>
+<pre><code><span class="comment">//实现NSURLConnectionDataDelegate协议</span>
+
+<span class="built_in">NSURLConnection</span> *connection = [<span class="built_in">NSURLConnection</span> connectionWithRequest:request delegate:<span class="keyword">self</span>];
+[connection start];
+
+<span class="comment">//常用的需要实现下面四种方法</span>
+
+-(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didFailWithError:(<span class="built_in">NSError</span> *)error
+{
+    <span class="comment">//请求超时，错误的时候</span>
+}
+
+-(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveResponse:(<span class="built_in">NSURLResponse</span> *)response
+{
+    <span class="comment">//服务器第一次响应一个response的时候</span>
+}
+
+-(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveData:(<span class="built_in">NSData</span> *)data
+{
+    <span class="comment">//传输数据</span>
+}
+
+-(<span class="keyword">void</span>)connectionDidFinishLoading:(<span class="built_in">NSURLConnection</span> *)connection
+{
+    <span class="comment">//完成的时候</span>
+}
+</code></pre><p>对于某些任务，比如下载图片，文件等等大数据的时候，可以使用一个临时会话来启动一个请求，也就是构造一个NSURLSession。</p>
+<pre><code><span class="built_in">NSURLSessionConfiguration</span> *configuration = [<span class="built_in">NSURLSessionConfiguration</span> defaultSessionConfiguration];
+<span class="built_in">NSURLSession</span> *session = [<span class="built_in">NSURLSession</span> sessionWithConfiguration:configuration];
+<span class="built_in">NSURLSessionDataTask</span> *task = [session dataTaskWithRequest:request completionHandler:^(<span class="built_in">NSData</span> *data, <span class="built_in">NSURLResponse</span> *response, <span class="built_in">NSError</span> *error) {
+
+    <span class="comment">//请求的结果</span>
+}];
+[task resume];
+</code></pre><p>临时会话的好处是每一个都不是在主线程执行，写的代码量比较少，适合简单的任务。</p>
+<p><strong>参考资料</strong></p>
+<ul>
+<li><a href="http://nshipster.cn/nsurl/" target="_blank" rel="external">NSURL/NSURLComponents</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSURLRequest_Class/" target="_blank" rel="external">NSURLRequest</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSURL_Class/index.html" target="_blank" rel="external">NSURL</a></li>
+<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/Cocoa/Reference/Foundation/Classes/NSURLConnection_Class/index.html" target="_blank" rel="external">NSURLConnection</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/" target="_blank" rel="external">NSURLSession</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSURLResponse_Class/index.html" target="_blank" rel="external">NSURLResponse</a></li>
+<li><a href="http://objccn.io/issue-5-4/" target="_blank" rel="external">从 NSURLConnection 到 NSURLSession</a></li>
+<li><a href="http://ubluesky.com/archives/55" target="_blank" rel="external">NSURL详解</a></li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-NSString" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -977,120 +1091,6 @@ parseURL(url);
 <p>说到URL就不得不提一下编码和解码的函数，Js里提供了三组，其中最常用的一组是encodeURIComponent和decodeURIComponent。</p>
 <p>通过对三个函数的分析，我们可以知道：escape()除了 ASCII 字母、数字和特定的符号外，对传进来的字符串全部进行转义编码，因此如果想对URL编码，最好不要使用此方法。而encodeURI() 用于编码整个URI,因为URI中的合法字符都不会被编码转换。encodeURIComponent方法在编码单个URIComponent（指请求参数）应当是最常用的，它可以讲参数中的中文、特殊字符进行转义，而不会影响整个URL。</p>
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-JavaScript中的深拷贝与浅拷贝" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/04/JavaScript中的深拷贝与浅拷贝/" class="article-date">
-  	<time datetime="2015-03-04T12:56:49.000Z" itemprop="datePublished">2015-03-04</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/04/JavaScript中的深拷贝与浅拷贝/">JavaScript中的深拷贝与浅拷贝</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>关于拷贝的问题，主要分为深拷贝和浅拷贝，但是如果从空间分配上来说JavaScript的拷贝不应该算是深拷贝，比如：</p>
-<pre><code><span class="keyword">var</span> <span class="keyword">d</span> = {};
-<span class="keyword">for</span>(k <span class="keyword">in</span> a){
-    <span class="keyword">d</span>[k] = a[k];
-}
-<span class="keyword">return</span> <span class="keyword">d</span>;
-</code></pre><p>今天突然想到了这么一个问题，在C语言中，所谓的拷贝，就是分两种情况，一种是把指针地址拷贝给另外一个变量，虽然也开辟的了一个内存空间，在栈上也存在着一个地址，我对这个变量进行修改，同一个指针是会改变其值的，这种拷贝叫浅拷贝。另外一种情况，直接开辟一个新空间，把需要复制的值都复制在这个新的空间中，这种拷贝叫中深拷贝。</p>
-<p>如果看到上述的一段Js代码，很多人说它是浅拷贝，假设传入一个a对象，拷贝完成之后返回一个d，当我修改返回对象的值时并不能同时修改a对象，于是，在这里我有一个很大的疑问，在Js中到底什么是浅拷贝，什么是深拷贝的问题？</p>
-<p>这一点上感觉Js真的很奇葩，如果在开发iOS中，不可变对象copy一下，依然是不可变，所以是浅拷贝，拷贝了指针变量中存储的地址值。如果是可变对象copy一下，到不可变，空间变化了，包括不可变mutableCopy到不可变，空间依然变化了，所以是深拷贝。但是JavaScript中对于这一点要考虑一种情况，值类型，和引用类型，这个基础知识，我相信大家都非常清楚。数字，字符串等都是值类型，object，array等都是引用类型。</p>
-<pre><code><span class="variable"><span class="keyword">var</span> a</span> = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];
-<span class="variable"><span class="keyword">var</span> b</span> = a;
-
-b.push(<span class="number">4</span>);
-console.log(a); <span class="comment">//[1,2,3,4]</span>
-
-<span class="variable"><span class="keyword">var</span> numb</span> = <span class="number">123</span>;
-<span class="variable"><span class="keyword">var</span> _numb</span> = numb;
-_numb = <span class="number">567</span>;
-
-console.log(numb); <span class="comment">//123</span>
-</code></pre><p>从这个例子中可以看的出来，它们使用的都是＝符号，而数组a发生了变化，numb数字却没有发生变化。那么从这里，可以有一个总结，所谓了深拷贝，浅拷贝的问题，应该针对的是有多个嵌套发生的情况。不然假设是这样的情况，还能叫浅拷贝么？</p>
-<pre><code><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> =</span> {<span class="string">"de"</span>:<span class="number">123</span>};
-<span class="keyword">var</span> o = copy(<span class="class"><span class="keyword">object</span>);</span>
-
-o.de = <span class="number">456</span>;
-
-console.log(<span class="class"><span class="keyword">object</span>) <span class="title">//</span>{</span><span class="string">"de"</span>:<span class="number">123</span>}
-</code></pre><p>明显对象o中的de属性修改并没有影响到原始对象，一个对象中的属性是一个字符串，如果从内存空间的角度上来说，这里明显是开辟了新的空间，还能说是浅拷贝么？那么针对另外一种情况。</p>
-<pre><code><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> =</span> {
-    <span class="string">"de"</span>:{
-        <span class="string">"d"</span>:<span class="number">123</span>
-    }
-}
-
-<span class="keyword">var</span> o = deepCopy(<span class="class"><span class="keyword">object</span>);</span>
-o.de.d = <span class="string">"asd"</span>;
-</code></pre><p>如果一个对象中的第一层属性，不是值类型，只单层循环，这样来看的话确实是一个浅拷贝，因为在Js中引用类型用＝赋值，实际上是引用，这样说的通。所以，深拷贝，还需要做一些处理，把object，array等引用类型识别出来，深层递归到最后一层，一个一个的拷贝。</p>
-<pre><code><span class="keyword">var</span> deepCopy = <span class="function"><span class="keyword">function</span>(<span class="params">o</span>)</span>{
-    <span class="keyword">var</span> target = {};
-    <span class="keyword">if</span>(<span class="keyword">typeof</span> o !== <span class="string">'object'</span> &amp;&amp; !<span class="built_in">Array</span>.isArray(o)){
-        <span class="keyword">return</span> o;
-    }
-    <span class="keyword">for</span>(<span class="keyword">var</span> k <span class="keyword">in</span> o){
-        target[k] = deepCopy(o[k]);
-    }
-    <span class="keyword">return</span> target;
-}
-</code></pre><p>思路是如此，这个例子只考虑了两种情况，对象和数组，为了验证这样的思路，最后的结果与预期是一样的。</p>
-<pre><code><span class="reserved">var</span> _copy = {
-    <span class="string">'object'</span>:{
-        <span class="string">'name'</span>:<span class="string">'wen'</span>
-    },
-    <span class="string">'array'</span>:[<span class="number">1</span>,<span class="number">2</span>]
-
-}
-<span class="reserved">var</span> h = deepCopy(_copy);
-h.object.name = <span class="string">'lcepy'</span>;
-h.array[<span class="number">1</span>] = <span class="number">8</span>;
-<span class="built_in">console</span>.log(h);
-<span class="built_in">console</span>.log(_copy);
-</code></pre>
       
     </div>
     
