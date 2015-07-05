@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>CALayer基础与寄宿图 | 行者</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="说起来Core Animation是一个复合引擎，它的职责就是尽可能快的组合屏幕上不同的可视内容，这个内容是被分解成独立的图层，存储在一个叫图层树的体系中。如果我们想学习动画，那么一切都从它开始。
+CALayer与UIView的区别和UIView最大的不同是CALayer不能处理与用户交互的事件，CALayer并不清楚具体的响应链，即使它提供了一些方法来判断是否触摸在图层的范围内。
+CALayer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CALayer基础与寄宿图">
+<meta property="og:url" content="http://lcepy.github.io/2015/07/05/CALayer基础与寄宿图/index.html">
+<meta property="og:site_name" content="行者">
+<meta property="og:description" content="说起来Core Animation是一个复合引擎，它的职责就是尽可能快的组合屏幕上不同的可视内容，这个内容是被分解成独立的图层，存储在一个叫图层树的体系中。如果我们想学习动画，那么一切都从它开始。
+CALayer与UIView的区别和UIView最大的不同是CALayer不能处理与用户交互的事件，CALayer并不清楚具体的响应链，即使它提供了一些方法来判断是否触摸在图层的范围内。
+CALayer">
+<meta property="og:updated_time" content="2015-07-05T06:37:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CALayer基础与寄宿图">
+<meta name="twitter:description" content="说起来Core Animation是一个复合引擎，它的职责就是尽可能快的组合屏幕上不同的可视内容，这个内容是被分解成独立的图层，存储在一个叫图层树的体系中。如果我们想学习动画，那么一切都从它开始。
+CALayer与UIView的区别和UIView最大的不同是CALayer不能处理与用户交互的事件，CALayer并不清楚具体的响应链，即使它提供了一些方法来判断是否触摸在图层的范围内。
+CALayer">
+  
+    <link rel="alternative" href="/atom.xml" title="行者" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">icepy</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">icepy</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">icepy</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/lcepy" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-CALayer基础与寄宿图" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/07/05/CALayer基础与寄宿图/" class="article-date">
+  	<time datetime="2015-07-05T05:26:49.000Z" itemprop="datePublished">2015-07-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CALayer基础与寄宿图
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>说起来Core Animation是一个复合引擎，它的职责就是尽可能快的组合屏幕上不同的可视内容，这个内容是被分解成独立的图层，存储在一个叫图层树的体系中。如果我们想学习动画，那么一切都从它开始。</p>
+<h2 id="CALayer与UIView的区别">CALayer与UIView的区别</h2><p>和UIView最大的不同是CALayer不能处理与用户交互的事件，CALayer并不清楚具体的响应链，即使它提供了一些方法来判断是否触摸在图层的范围内。</p>
+<h2 id="CALayer">CALayer</h2><p>CALayer与UIView是一个平行的关系，每一个UIView都存在一个layer属性，视图的职责就是创建并管理这个图层，并且确保当子视图在层级关系中被添加或移除时，它们关联在图层在同样的对应的层级关系树中有同样的操作。（不要急，理论虽然有些绕，慢慢理解）</p>
+<pre><code><span class="tag">var</span> layer:CALayer = <span class="function"><span class="title">CALayer</span><span class="params">()</span></span>
+layer<span class="class">.frame</span> = <span class="function"><span class="title">CGRectMake</span><span class="params">(<span class="number">50</span>, <span class="number">50</span>, <span class="number">200</span>, <span class="number">200</span>)</span></span>
+layer<span class="class">.backgroundColor</span> = <span class="function"><span class="title">UIColor</span><span class="params">(red: <span class="number">0.400</span>, green: <span class="number">0.800</span>, blue: <span class="number">1.000</span>, alpha: <span class="number">1.000</span>)</span></span><span class="class">.CGColor</span>
+self<span class="class">.view</span><span class="class">.layer</span><span class="class">.addSublayer</span>(layer)
+</code></pre><p>添加一个图层到UIView中，然后运行看看</p>
+<p>其实在某种意义上来说，对于一些简单的需求，我们确实没有必要去处理CALayer，那是因为Apple已经通过UIView的高级API间接的使动画变得很简单，使用它何乐而不为呢。</p>
+<pre><code>UIView.animateWithDuration<span class="function"><span class="params">(<span class="number">1.2</span>, animations: { () -&gt; Void <span class="keyword">in</span>
+
+})</span></span>
+</code></pre><p>那么，我们使用CALayer到底能实现什么UIView不能实现的呢？</p>
+<ul>
+<li>阴影，圆角，带颜色的边框</li>
+<li>3D变换</li>
+<li>非矩形范围</li>
+<li>透明遮罩</li>
+<li>多级非线性动画</li>
+</ul>
+<h2 id="创建寄宿图">创建寄宿图</h2><p>所谓的寄宿图也就是在图层中包含的图，有了图片，我们可以展现更丰富的视觉效果。</p>
+<p>CALayer有一个属性叫contents，这个属性的类型是id类型，而我们要把图片创建在图层上，就需要使用这个属性，当然在Swift中它是一个AnyObject。</p>
+<pre><code><span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageNamed:<span class="string">@"mockingbird.png"</span>];
+<span class="keyword">self</span><span class="variable">.lodgeLayerView</span><span class="variable">.contents</span> = (__bridge <span class="keyword">id</span>) image<span class="variable">.CGImage</span>;
+
+var image:<span class="built_in">UIImage</span> = <span class="built_in">UIImage</span>(named: <span class="string">"mockingbird.png"</span>)!
+layer<span class="variable">.contents</span> = image<span class="variable">.CGImage</span>
+</code></pre><p>感觉看起来云豹还算显示正常，万一它有点胖，怎么办呢？如果我们使用UIImageView，那么有contentMode属性可以设置，想一想CALayer是不是也有同样的，遗憾的是，没有，但是它有contentsGravity。</p>
+<pre><code>layer<span class="class">.contentsGravity</span> = kCAGravityResizeAspectFill
+</code></pre><p>动动你的手指，每一个试一试，看看图片是怎么现实的。</p>
+<p>对于双倍屏幕，其实contentsScale属性目前来说已经使用的好少了，它定义了寄宿图的像素尺寸和视图大小的比例，默认情况下它是一个1.0的浮点数。</p>
+<p>在某些情况下，我们的云豹已经显示正常大小了，但是你可能发现它超出边界了，那么，亲你能用上maskToBounds属性了，设置为true，它就在边界内了。</p>
+<pre><code>layer.<span class="variable">masksToBounds =</span> <span class="constant">true</span>
+</code></pre><p>近些年来在用css做网站时，大家都非常流行使用图片精灵的方式去处理图片，为什么？因为它能优化性能。那么在iOS开发中一样可以，我们要用的就是contentsRect属性。</p>
+<p>这个坐标系统相对有些绕，因为它采用的是单位坐标，它的值只在0-1之间，用来描述相对位置。</p>
+<pre><code>layer<span class="class">.contentsRect</span> = <span class="function"><span class="title">CGRectMake</span><span class="params">(<span class="number">0.5</span>, <span class="number">0</span>, <span class="number">0.5</span>, <span class="number">0.5</span>)</span></span>
+</code></pre><p>如果我们想使寄宿图可以均匀的拉伸，那么contentsCenter属性是最佳选择，不过要记住一点，它不会主动去拉伸，除非是图层变了。</p>
+<pre><code>layer<span class="class">.contentsCenter</span> = <span class="function"><span class="title">CGRectMake</span><span class="params">(<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.5</span>, <span class="number">0.5</span>)</span></span>
+</code></pre><h2 id="自定义图层">自定义图层</h2><pre><code><span class="keyword">override</span> <span class="func"><span class="keyword">func</span> <span class="title">drawLayer</span><span class="params">(layer: CALayer!, inContext ctx: CGContext!)</span></span> {
+
+}
+</code></pre><p>Apple的建议是如果你没有这方面的需求，最好不要写一个空的drawLayer方法在你的代码中，因为一旦视图检测到被调用，那么就会分配一个图层。</p>
+<p>在这里，我们主要是利用Core Graphics去绘制一些寄宿图，然后添加到上下文中。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/07/04/记录第一次创业的挫折经历/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">记录第一次创业的挫折经历</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="CALayer基础与寄宿图" data-title="CALayer基础与寄宿图" data-url="http://lcepy.github.io/2015/07/05/CALayer基础与寄宿图/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 icepy
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

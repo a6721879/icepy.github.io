@@ -167,6 +167,75 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-复习JavaScript十一之理解内存管理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/04/复习JavaScript十一之理解内存管理/" class="article-date">
+  	<time datetime="2015-02-04T10:53:09.000Z" itemprop="datePublished">2015-02-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/04/复习JavaScript十一之理解内存管理/">复习JavaScript十一之理解内存管理</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一般来说内存管理主要有这么几种方式，引用计数和标记，而JavaScript采用的就是标记管理的方式。Js的内存管理是自动的，但是并不是说执行完后立马销毁，而是有时间周期性，相隔一段时间执行一下垃圾回收，把没有引用的内存全部销毁。</p>
+<p>OC中采用的是引用计数来手动管理内存，这样的方式比较好，可以让开发者自己来管理。当然也有不好的地方，如果遗忘了释放，很可能引起应用的崩溃。</p>
+<p>总体来看在IE中因为COM组件的原因，可能会发生循环引用的问题，这个问题在引用计数的内存管理都会遇见。所谓的循环引用是指在对象A中包含了一个指向B的指针，然后再对象B中包含一个指向A的指针，于是悲剧了。</p>
+<pre><code>var element = document.getElementById(<span class="string">'doc'</span>);
+var <span class="keyword">my</span> = {};
+<span class="keyword">my</span>.element = element;
+element.<span class="keyword">my</span> = <span class="keyword">my</span>;
+</code></pre><p>大家都引用，于是，可想而知。要避免这种问题，一定要在不使用的时候my.element = null，把它断开。</p>
+<p>那么，其他浏览器呢？还是标记清理的机制，比如一个函数的变量，在进入环境时标记上“进入环境”，执行完之后标记上“离开环境”，然后等待系统来释放。</p>
+<p>IE有一个手动释放的方法，window.CollectGarbage，调用它就立马释放已经标记离开环境的变量，不过很多文章都不建议这样做。</p>
+<p>那么一般都这样做，引用类型的释放</p>
+<pre><code><span class="variable"><span class="keyword">var</span> my</span> = {};
+<span class="comment">//使用完毕之后</span>
+my = <span class="literal">null</span>;
+</code></pre><p>让my脱离执行环境，标记上已经离开环境，然后等待系统执行垃圾回收，释放内存。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-复习JavaScript十之理解引用类型和匿名函数闭包" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1248,70 +1317,6 @@ Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="strin
         <p class="article-more-link">
           <a  href="/2015/01/24/复习JavaScript三之BOM/#more">more >></a>
         </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-如果宅-纪念" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/23/如果宅-纪念/" class="article-date">
-  	<time datetime="2015-01-23T15:37:26.000Z" itemprop="datePublished">2015-01-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/23/如果宅-纪念/">如果宅*纪念</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="http://websources.qiniudn.com/img/mywow.png" alt="青春独醉"></p>
-<p>魔兽世界练到100级之后，我竟然一点想玩的想法都没有了，不知道是对游戏不感兴趣了呢？还是自己老了。细数下来，八个角色，只有一个练到了100级，其他的再也不想登陆了。</p>
-<p>今天回到家里看见了四年前买的一本书《如果＊宅》，花了一天的时间把它读完了，我才知道我的魔兽世界跟他们一样，一去不可复返了。</p>
-<p>2006年的夏天在安江买电脑报里面送了一张体验卡，第一感觉是“这个游戏真牛逼”，比之前玩的传奇要“牛逼”几个档次，当时还是九城，超级大的一个板块，在介绍一个全新的世界。当然，进入游戏断断续续的玩了段时间，高考了。</p>
-<p>2008年重新注册了一个账号，在三区天空之墙安家落户了，玩的是法师。那时候YY刚刚流行起来，走在TBC的末期。没有牛逼的人，但是有个牛逼的公会，貌似我忘记发生了什么，2010年的夏天，我又AFKl了。好像是刷马桶刷了一年半，切蛋蛋切了两年多，哈哈，公会的战士，盗贼人手一把蛋刀，我的法师也有了凤凰。让我印象很深刻的是，半夜了，很多人一起在YY聊天，然后在泰卡罗森林的那个鸦人巢穴打生命，刷布，刷材料，那里是要有飞行坐骑才能到，而且还是刷虚空鳐声望的地方。</p>
-<p>说起来TBC是我玩的最久，也是最开心的一个版本，感觉每天都很有精力和激情去做每一件事情，比如刷虚空龙，刷乌鸦，刷材料，在拍卖行倒卖物资，代刷破碎，代刷祖尔法拉克，代刷STSM，现在想起来，我也是蛮拼的了。</p>
-<p>2013年熊猫人版本，我又重新建了个角色SS，玩到了90级。后续，就成了刷单机，各种随机团，随机副本，玩了玩很没味道，聊天的人都没有了。</p>
-<p>2014年德拉若版本练到了100级，这下更好，出了个要塞系统，彻底单机了。</p>
-<p>游戏一路在变，人也是一样，发现自己再也没法融入这个世界的圈子了，27岁。</p>
-<p>删除客户端，AFK。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
-	</div>
-
-      
-
       
       <div class="clearfix"></div>
     </div>

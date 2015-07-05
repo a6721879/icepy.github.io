@@ -167,6 +167,103 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-CALayer基础与寄宿图" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/07/05/CALayer基础与寄宿图/" class="article-date">
+  	<time datetime="2015-07-05T05:26:49.000Z" itemprop="datePublished">2015-07-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/07/05/CALayer基础与寄宿图/">CALayer基础与寄宿图</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>说起来Core Animation是一个复合引擎，它的职责就是尽可能快的组合屏幕上不同的可视内容，这个内容是被分解成独立的图层，存储在一个叫图层树的体系中。如果我们想学习动画，那么一切都从它开始。</p>
+<h2 id="CALayer与UIView的区别">CALayer与UIView的区别</h2><p>和UIView最大的不同是CALayer不能处理与用户交互的事件，CALayer并不清楚具体的响应链，即使它提供了一些方法来判断是否触摸在图层的范围内。</p>
+<h2 id="CALayer">CALayer</h2><p>CALayer与UIView是一个平行的关系，每一个UIView都存在一个layer属性，视图的职责就是创建并管理这个图层，并且确保当子视图在层级关系中被添加或移除时，它们关联在图层在同样的对应的层级关系树中有同样的操作。（不要急，理论虽然有些绕，慢慢理解）</p>
+<pre><code><span class="tag">var</span> layer:CALayer = <span class="function"><span class="title">CALayer</span><span class="params">()</span></span>
+layer<span class="class">.frame</span> = <span class="function"><span class="title">CGRectMake</span><span class="params">(<span class="number">50</span>, <span class="number">50</span>, <span class="number">200</span>, <span class="number">200</span>)</span></span>
+layer<span class="class">.backgroundColor</span> = <span class="function"><span class="title">UIColor</span><span class="params">(red: <span class="number">0.400</span>, green: <span class="number">0.800</span>, blue: <span class="number">1.000</span>, alpha: <span class="number">1.000</span>)</span></span><span class="class">.CGColor</span>
+self<span class="class">.view</span><span class="class">.layer</span><span class="class">.addSublayer</span>(layer)
+</code></pre><p>添加一个图层到UIView中，然后运行看看</p>
+<p>其实在某种意义上来说，对于一些简单的需求，我们确实没有必要去处理CALayer，那是因为Apple已经通过UIView的高级API间接的使动画变得很简单，使用它何乐而不为呢。</p>
+<pre><code>UIView.animateWithDuration<span class="function"><span class="params">(<span class="number">1.2</span>, animations: { () -&gt; Void <span class="keyword">in</span>
+
+})</span></span>
+</code></pre><p>那么，我们使用CALayer到底能实现什么UIView不能实现的呢？</p>
+<ul>
+<li>阴影，圆角，带颜色的边框</li>
+<li>3D变换</li>
+<li>非矩形范围</li>
+<li>透明遮罩</li>
+<li>多级非线性动画</li>
+</ul>
+<h2 id="创建寄宿图">创建寄宿图</h2><p>所谓的寄宿图也就是在图层中包含的图，有了图片，我们可以展现更丰富的视觉效果。</p>
+<p>CALayer有一个属性叫contents，这个属性的类型是id类型，而我们要把图片创建在图层上，就需要使用这个属性，当然在Swift中它是一个AnyObject。</p>
+<pre><code><span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageNamed:<span class="string">@"mockingbird.png"</span>];
+<span class="keyword">self</span><span class="variable">.lodgeLayerView</span><span class="variable">.contents</span> = (__bridge <span class="keyword">id</span>) image<span class="variable">.CGImage</span>;
+
+var image:<span class="built_in">UIImage</span> = <span class="built_in">UIImage</span>(named: <span class="string">"mockingbird.png"</span>)!
+layer<span class="variable">.contents</span> = image<span class="variable">.CGImage</span>
+</code></pre><p>感觉看起来云豹还算显示正常，万一它有点胖，怎么办呢？如果我们使用UIImageView，那么有contentMode属性可以设置，想一想CALayer是不是也有同样的，遗憾的是，没有，但是它有contentsGravity。</p>
+<pre><code>layer<span class="class">.contentsGravity</span> = kCAGravityResizeAspectFill
+</code></pre><p>动动你的手指，每一个试一试，看看图片是怎么现实的。</p>
+<p>对于双倍屏幕，其实contentsScale属性目前来说已经使用的好少了，它定义了寄宿图的像素尺寸和视图大小的比例，默认情况下它是一个1.0的浮点数。</p>
+<p>在某些情况下，我们的云豹已经显示正常大小了，但是你可能发现它超出边界了，那么，亲你能用上maskToBounds属性了，设置为true，它就在边界内了。</p>
+<pre><code>layer.<span class="variable">masksToBounds =</span> <span class="constant">true</span>
+</code></pre><p>近些年来在用css做网站时，大家都非常流行使用图片精灵的方式去处理图片，为什么？因为它能优化性能。那么在iOS开发中一样可以，我们要用的就是contentsRect属性。</p>
+<p>这个坐标系统相对有些绕，因为它采用的是单位坐标，它的值只在0-1之间，用来描述相对位置。</p>
+<pre><code>layer<span class="class">.contentsRect</span> = <span class="function"><span class="title">CGRectMake</span><span class="params">(<span class="number">0.5</span>, <span class="number">0</span>, <span class="number">0.5</span>, <span class="number">0.5</span>)</span></span>
+</code></pre><p>如果我们想使寄宿图可以均匀的拉伸，那么contentsCenter属性是最佳选择，不过要记住一点，它不会主动去拉伸，除非是图层变了。</p>
+<pre><code>layer<span class="class">.contentsCenter</span> = <span class="function"><span class="title">CGRectMake</span><span class="params">(<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.5</span>, <span class="number">0.5</span>)</span></span>
+</code></pre><h2 id="自定义图层">自定义图层</h2><pre><code><span class="keyword">override</span> <span class="func"><span class="keyword">func</span> <span class="title">drawLayer</span><span class="params">(layer: CALayer!, inContext ctx: CGContext!)</span></span> {
+
+}
+</code></pre><p>Apple的建议是如果你没有这方面的需求，最好不要写一个空的drawLayer方法在你的代码中，因为一旦视图检测到被调用，那么就会分配一个图层。</p>
+<p>在这里，我们主要是利用Core Graphics去绘制一些寄宿图，然后添加到上下文中。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-记录第一次创业的挫折经历" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1275,113 +1372,6 @@ SEL execu = <span class="keyword">@selector</span>(compare:);
 <span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">sortUsingComparator</span>:<span class="value">(NSComparator)cmptr <span class="function">NS_AVAILABLE</span>(<span class="number">10</span>_6, <span class="number">4</span>_0)</span></span>;
 <span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">sortWithOptions</span>:<span class="value">(NSSortOptions)opts usingComparator:(NSComparator)cmptr <span class="function">NS_AVAILABLE</span>(<span class="number">10</span>_6, <span class="number">4</span>_0)</span></span>;
 </code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-好用的WebKit-framework" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/05/01/好用的WebKit-framework/" class="article-date">
-  	<time datetime="2015-05-01T06:25:36.000Z" itemprop="datePublished">2015-05-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/01/好用的WebKit-framework/">好用的WebKit.framework</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>WebKit是iOS8推出的一个用于替代UIWebView的框架，解决了很多UIWebView的问题，比如释放内存，各种稀奇古怪的bug，而且还内置了手势的处理，一句话：好用。</p>
-<p>注意：<strong>2015年4月更新的苹果审核文档中明确标识，必须要用WebKit替换UIWebView，不然审核拒绝。</strong></p>
-<p>在使用WebKit框架的过程中，自己也遇到了一些问题，有些解决了，有些还未解决。</p>
-<ul>
-<li>WebKit目前还未能在storyboard中直接使用，需要用代码的方式创建，手动添加约束</li>
-<li>对于某些页面如果设置了overflow-x，这可能引起scrollView的contentSize的变化，进一步影响WKWebView的内置手势，swipe返回失效</li>
-<li>目前还未找到怎么处理NSURLCache的问题，也就是页面的缓存机制，看样子好像要自己实现</li>
-</ul>
-<p>如何创建一个WKWebView？首先要在link中引入WebKit.framework，然后使用代码的方式：</p>
-<pre><code>-(<span class="constant">WKWebView</span> *)<span class="constant">WKWebPageView</span>
-{
-    <span class="keyword">if</span> (!_WKWebPageView) {
-        _WKWebPageView = [[<span class="constant">WKWebView</span> alloc] <span class="symbol">initWithFrame:</span><span class="keyword">self</span>.view.bounds];
-        _WKWebPageView.navigationDelegate = <span class="keyword">self</span>;
-    }
-    <span class="keyword">return</span> _WKWebPageView;
-}
-</code></pre><p>WKWebView主要需要实现两个协议WKNavigationDelegate和WKUIDelegate，前一个用于一个页面的加载状态，包括第一次响应成功，加载中，加载完成，加载错误等，后面一个我个人感觉有点意思，主要用于改变UI界面，比如客户端JavaScript使用了一个alert，这个协议可以捕获到，然后使用原生的控件来替代。</p>
-<p>WebKit框架还提供了一个任务配置类WKWebViewConfiguration，跟NSURLSessionConfiguration的使用方式类似,可以重新初始化WKWebView的一些配置。</p>
-<p>WKNavigationDelegate协议，我主要使用了三个来处理我的应用，加载中，加载完成，加载错误的处理：</p>
-<pre><code><span class="tag">-</span>(void)<span class="tag">webView</span>:(WKWebView *)<span class="tag">webView</span> <span class="tag">didStartProvisionalNavigation</span>:(WKNavigation *)<span class="tag">navigation</span>
-{
-
-}
-
-<span class="tag">-</span>(void)<span class="tag">webView</span>:(WKWebView *)<span class="tag">webView</span> <span class="tag">didFinishNavigation</span>:(WKNavigation *)<span class="tag">navigation</span>
-{
-
-}
-
-<span class="tag">-</span>(void)<span class="tag">webView</span>:(WKWebView *)<span class="tag">webView</span> <span class="tag">didFailProvisionalNavigation</span>:(WKNavigation *)<span class="tag">navigation</span> <span class="tag">withError</span>:(NSError *)<span class="tag">error</span>
-{
-
-}
-</code></pre><p>另外一些属性我用KVO来监听：</p>
-<pre><code>[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"estimatedProgress"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
-[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"title"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
-[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"URL"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
-[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"canGoBack"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
-</code></pre><p>它们分别是，页面的加载进度，页面的标题，页面的URL，页面是否回退过</p>
-<p>WKWebView默认是没有开启内置手势的，可以通过allowsBackForwardNavigationGestures来设置</p>
-<p>与JavaScript的交互，我目前主要使用[self.WKWebPageView evaluateJavaScript:&lt;#(NSString <em>)#&gt; completionHandler:&lt;#^(id, NSError </em>)completionHandler#&gt;]来动态改变页面加载完成之后的css样式，还有WKUserScript <em>script = [[WKUserScript alloc] initWithSource:&lt;#(NSString </em>)#&gt; injectionTime:&lt;#(WKUserScriptInjectionTime)#&gt; forMainFrameOnly:&lt;#(BOOL)#&gt;]来创建脚本，它可以明确指定加载前后注入的方式。</p>
-<p><strong>注明：上述的两种创建脚本的方式都是单方向的</strong></p>
-<p>如果我们想互相调用，那么就要实现WKScriptMessageHandler协议了，具体的使用方式可以参考下面给出的的参考资料。</p>
-<p>参考资料：</p>
-<ul>
-<li><a href="http://nshipster.cn/wkwebkit/" target="_blank" rel="external">WKWebView-NSHipster</a></li>
-<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/WebKit/Reference/WKScriptMessageHandler_Ref/index.html" target="_blank" rel="external">WKScriptMessageHandler</a></li>
-<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/WebKit/Reference/WKWebView_Ref/index.html" target="_blank" rel="external">WKWebView</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKWebViewConfiguration_Ref/index.html" target="_blank" rel="external">WKWebViewConfiguration</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKUIDelegate_Ref/index.html" target="_blank" rel="external">WKUIDelegate</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKNavigationDelegate_Ref/index.html" target="_blank" rel="external">WKNavigationDelegate</a></li>
-</ul>
-
       
     </div>
     

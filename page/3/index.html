@@ -167,6 +167,92 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-JavaScript解析URL字符串" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/06/JavaScript解析URL字符串/" class="article-date">
+  	<time datetime="2015-03-06T06:38:32.000Z" itemprop="datePublished">2015-03-06</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/06/JavaScript解析URL字符串/">JavaScript解析URL字符串</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>说到解析URL思路应该有多种多样的，比如一点一点的分解，先indexOf(‘?’)判断是否有参数，完了之后split(‘?’)一下，后面的参数继续split(‘&amp;’)成一个数组然后循环再split(‘=’)组装成一个一个key和vaule的键值对对象。前面那一部分也可以继续分解，把端口，协议，路径等等分解出来。或者用正则表达式，一个一个的分解。除了上述的思路，其实还有一个更简单的办法，利用a标签。</p>
+<pre><code><span class="keyword">var</span> parseURL = function(url){
+    <span class="keyword">var</span> temp =  document.createElement('a');
+    temp.href = url;
+    <span class="keyword">var</span> <span class="literal">result</span> = {
+        <span class="string">"port"</span>:temp.port,
+        <span class="string">"protocol"</span>:temp.protocol.replace(':',''),
+        <span class="string">"hash"</span>:temp.hash.replace('<span class="comment">#',''),</span>
+        <span class="string">"host"</span>:temp.host,
+        <span class="string">"href"</span>:temp.href,
+        <span class="string">"hostname"</span>:temp.hostname,
+        <span class="string">"pathname"</span>:temp.pathname,
+        <span class="string">"search"</span>:temp.search,
+        <span class="string">"query"</span>:{}
+    }
+    <span class="keyword">var</span> seg = <span class="literal">result</span>.search.replace(/^\?/,'').split('&amp;'),
+        leng = seg.length,
+        i = <span class="number">0</span>,
+        target;
+    <span class="keyword">for</span>(;i&lt;leng;i++){
+        <span class="keyword">if</span>(!seg[i])<span class="keyword">continue</span>;
+        target = seg[i].split('=');
+        <span class="literal">result</span>.query[target[<span class="number">0</span>]] = target[<span class="number">1</span>];
+    }
+    temp = null;
+    <span class="keyword">return</span> <span class="literal">result</span>;
+}
+<span class="keyword">var</span> url = 'https://github.com:<span class="number">8989</span>?key=value&amp;hub=<span class="number">123</span>ASFDGGR<span class="comment">#github';</span>
+parseURL(url);
+</code></pre><p>最后使用完了，把对象的引用设置为null，等待内存回收。</p>
+<p>说到URL就不得不提一下编码和解码的函数，Js里提供了三组，其中最常用的一组是encodeURIComponent和decodeURIComponent。</p>
+<p>通过对三个函数的分析，我们可以知道：escape()除了 ASCII 字母、数字和特定的符号外，对传进来的字符串全部进行转义编码，因此如果想对URL编码，最好不要使用此方法。而encodeURI() 用于编码整个URI,因为URI中的合法字符都不会被编码转换。encodeURIComponent方法在编码单个URIComponent（指请求参数）应当是最常用的，它可以讲参数中的中文、特殊字符进行转义，而不会影响整个URL。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-JavaScript中的深拷贝与浅拷贝" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1164,75 +1250,6 @@ NSlog<span class="list">(<span class="keyword">@</span><span class="string">"%@"
       
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript十一之理解内存管理" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/04/复习JavaScript十一之理解内存管理/" class="article-date">
-  	<time datetime="2015-02-04T10:53:09.000Z" itemprop="datePublished">2015-02-04</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/04/复习JavaScript十一之理解内存管理/">复习JavaScript十一之理解内存管理</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一般来说内存管理主要有这么几种方式，引用计数和标记，而JavaScript采用的就是标记管理的方式。Js的内存管理是自动的，但是并不是说执行完后立马销毁，而是有时间周期性，相隔一段时间执行一下垃圾回收，把没有引用的内存全部销毁。</p>
-<p>OC中采用的是引用计数来手动管理内存，这样的方式比较好，可以让开发者自己来管理。当然也有不好的地方，如果遗忘了释放，很可能引起应用的崩溃。</p>
-<p>总体来看在IE中因为COM组件的原因，可能会发生循环引用的问题，这个问题在引用计数的内存管理都会遇见。所谓的循环引用是指在对象A中包含了一个指向B的指针，然后再对象B中包含一个指向A的指针，于是悲剧了。</p>
-<pre><code>var element = document.getElementById(<span class="string">'doc'</span>);
-var <span class="keyword">my</span> = {};
-<span class="keyword">my</span>.element = element;
-element.<span class="keyword">my</span> = <span class="keyword">my</span>;
-</code></pre><p>大家都引用，于是，可想而知。要避免这种问题，一定要在不使用的时候my.element = null，把它断开。</p>
-<p>那么，其他浏览器呢？还是标记清理的机制，比如一个函数的变量，在进入环境时标记上“进入环境”，执行完之后标记上“离开环境”，然后等待系统来释放。</p>
-<p>IE有一个手动释放的方法，window.CollectGarbage，调用它就立马释放已经标记离开环境的变量，不过很多文章都不建议这样做。</p>
-<p>那么一般都这样做，引用类型的释放</p>
-<pre><code><span class="variable"><span class="keyword">var</span> my</span> = {};
-<span class="comment">//使用完毕之后</span>
-my = <span class="literal">null</span>;
-</code></pre><p>让my脱离执行环境，标记上已经离开环境，然后等待系统执行垃圾回收，释放内存。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
 	</div>
 
       

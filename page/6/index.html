@@ -167,6 +167,85 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-django模型使用的一些心得" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/11/14/django模型使用的一些心得/" class="article-date">
+  	<time datetime="2014-11-14T12:30:31.000Z" itemprop="datePublished">2014-11-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/14/django模型使用的一些心得/">django模型使用的一些心得</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>近很一直在学习django，因为我需要使用它为自己的项目写一个前台页面和一个后台服务。它是一个关于咖啡的邮件订阅社区，既然有服务，自然需要数据库层的支持。这是一个很好的开始，学习django让我了解到python开发web应用真的非常快速，但是也有一个很明显的缺点。那就是国内，对django社区的支持度非常不好，这或许跟国内python的有关，不过也不要紧，学习就是这样，要啃难而上。</p>
+<p>说说在django中模型，对应的数据库层，也就是意味着django帮助我们完成了对数据库的访问，操作，通过它的模型类。</p>
+<blockquote>
+<p>django-admin.py startapp sendcloud</p>
+</blockquote>
+<p>通过上述的命令，我们可以完成一个app模块，这个模块中带有views.py models.py test.py，而models.py文件中，就是我们完成模型的一个最主要的文件。</p>
+<blockquote>
+<p>from django.db import models</p>
+</blockquote>
+<p>模型类，都需要继承自django.db.models类。通过它与manage.py来完成初始化等等动作。关于manage.py的命令，未来有时间，我会写写关于它的心得。</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">WeeklySyncList</span><span class="params">(models.Model)</span>:</span>
+    <span class="comment">#do something</span>
+    <span class="keyword">pass</span>
+</code></pre><p>一个模型类对于数据库层中的一个表，在我们定义好模型类之后，可以在命令行中输入：</p>
+<blockquote>
+<p>python manage.py sqlall sendcloud</p>
+</blockquote>
+<p>来完成对创建语法的查看以及错误信息的查看，准确没有错误之后，可以输入：</p>
+<blockquote>
+<p>python manage.py syncdb</p>
+</blockquote>
+<p>来初始数据库，django会帮助我们完成数据库层面的操作。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/">django</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2014/11/14/django模型使用的一些心得/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-携程邮轮开发部django分享" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
