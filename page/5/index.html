@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>农业,行者</title>
+  <title>农业-行者</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="iOS JavaScript Swift Objective-C 前端 HTML5">
 <meta property="og:type" content="website">
-<meta property="og:title" content="农业,行者">
+<meta property="og:title" content="农业-行者">
 <meta property="og:url" content="http://lcepy.github.io/page/5/index.html">
-<meta property="og:site_name" content="农业,行者">
+<meta property="og:site_name" content="农业-行者">
 <meta property="og:description" content="iOS JavaScript Swift Objective-C 前端 HTML5">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="农业,行者">
+<meta name="twitter:title" content="农业-行者">
 <meta name="twitter:description" content="iOS JavaScript Swift Objective-C 前端 HTML5">
   
-    <link rel="alternative" href="/atom.xml" title="农业,行者" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="农业-行者" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -166,87 +166,6 @@
 	</div>
 </nav>
       <div class="body-wrap">
-  
-    <article id="post-复习JavaScript三之BOM" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/24/复习JavaScript三之BOM/" class="article-date">
-  	<time datetime="2015-01-24T14:14:04.000Z" itemprop="datePublished">2015-01-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/24/复习JavaScript三之BOM/">复习JavaScript三之BOM</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>BOM提供了很多对象，它的核心是window，表示它是浏览器的一个实例，在ECMAScript中又是Global对象。它提供了很多访问浏览器的功能，这些功能与网页无关，所以缺少事实标准的BOM既有意思又有些坑。复习它，主要是复习几个比较有用的对象，其他可以了解一二。</p>
-<h3 id="location">location</h3><blockquote>
-<p>算起来它是我用的最多的一个对象</p>
-</blockquote>
-<p>它提供了当前窗口加载的页面有关的信息，也对URL进行了片段分解，既是window的属性，也是document的属性。</p>
-<ul>
-<li>hash 返回URL的散列（#号后面跟着的零个或多个值）</li>
-<li>host 返回服务器名称和端口号</li>
-<li>hostname 返回不带端口号的服务器名称</li>
-<li>href 返回当前加载页面的完整URL</li>
-<li>pathname 返回URL中的目录或文件名</li>
-<li>port 返回URL中指定的端口号</li>
-<li>protocol 返回页面使用的协议</li>
-<li>search 返回URL中的查询字符串，它以问好（?）开头</li>
-</ul>
-<p>上述的属性基本上都可以直接使用，search除外，它返回的是一个完整的查询字符串，没有办法访问其中的每个查询字符串参数，还需要额外的进行处理。</p>
-<p>一般来说根据它的特点，?开头&amp;拼接，key=value的形式来展现，最好是key和value都要decodeURIComponent一下。</p>
-<p>在location中除了上述的属性外，还有一些比较有用的方法和技巧，主要是用来控制页面跳转的问题。</p>
-<ul>
-<li>assign方法接收一个参数，表示立即打开一个新的页面并在历史纪录中生成一条记录，它的效果等同于window.location.href = ‘’或者location.href = ‘’</li>
-<li>修改location对象的属性比如href，hash，search等也可以来改变URL</li>
-<li>replace方法接收一个参数，既跳转到新的URL上，并且不会在历史纪录中增加一条新的纪录</li>
-<li>reload表示重新加载当前页面</li>
-</ul>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/01/24/复习JavaScript三之BOM/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
   
     <article id="post-如果宅-纪念" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -965,6 +884,73 @@ hexo <span class="keyword">server</span></span>
       
         <p class="article-more-link">
           <a  href="/2014/11/14/正则的一些理解/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-关于django中CSRF开启的问题" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/11/14/关于django中CSRF开启的问题/" class="article-date">
+  	<time datetime="2014-11-14T12:33:12.000Z" itemprop="datePublished">2014-11-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/14/关于django中CSRF开启的问题/">关于django中CSRF开启的问题</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="django_处理CSRF机制保护下的POST表单提交">django 处理CSRF机制保护下的POST表单提交</h2><p>昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后解决了。其实在解决这个问题之前，我们先要了解一下，CSRF到底是什么东东，为什么django提交一个POST表单这么困难呢。</p>
+<p><a href="http://baike.baidu.com/link?url=OnI0sPQAHpQHhtxWSXvQFhN3kJWI3CU_rP3Fo7MqnPY3rTdhUPpuca-3lzJ651LdMI7ouoLvdnnihhojFyKtva">CSRF 是什么</a></p>
+<p><a href="https://docs.djangoproject.com/en/1.5/ref/contrib/csrf/">django document CSRF</a></p>
+<p>原来CSRF是为了防止跨站请求伪造用的，当我明白了这个解释之后，我开始找寻django document上如何开启CSRF。</p>
+<p><strong>Add the middleware ‘django.middleware.csrf.CsrfViewMiddleware’ to your list of middleware classes, MIDDLEWARE_CLASSES. (It should come before any view middleware that assume that CSRF attacks have been dealt with.)</strong></p>
+<p>那我在想，如果我把django.middleware.csrf.CsrfViewMiddleware注释掉，是不是就可以不开启CSRF来提交POST表单，人们常说实践是检验真理的唯一标准，试验一下，原来是可以的。但是这并没有解决，我想解决的问题，于是我又把这个中间件，重新写在了MIDDLEWARE_CLASSES上。</p>
+<p>从官方的解释上来看，只要在MIDDLEWARE_CLASSES上加django.middleware.csrf.CsrfViewMiddleware就开启了CSRF机制。</p>
+<p>现在我需要在模板中加入一个tag ｛%csrf_token%｝，来存放一个隐藏的token input。</p>
+<p><strong>In the corresponding view functions, ensure that the ‘django.core.context_processors.csrf’ context processor is being used. Usually, this can be done in one of two ways:</strong></p>
+<p>从这里的解释来看，我还需要django.core.context_processors.csrf，于是我导入这个模块from django.core.context_processors import csrf，运行一下貌似，还不行，接着往下看。我发现django的解释，这里可以用两种方式来处理，最后响应的response，而且django还说了，POST表单提交不要跨链接。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/">django</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2014/11/14/关于django中CSRF开启的问题/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
