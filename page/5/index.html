@@ -167,6 +167,97 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-复习JavaScript四之Object" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/25/复习JavaScript四之Object/" class="article-date">
+  	<time datetime="2015-01-25T13:42:07.000Z" itemprop="datePublished">2015-01-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/25/复习JavaScript四之Object/">复习JavaScript四之Object</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>JavaScript的所有对象都衍生于Object对象，所有对象都继承了Object.prototype上的方法和属性，虽然它们可能会被覆盖，熟悉它对于编程能起到很大的作用，也能比较深刻的了解JavaScript这门语言。</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" rel="external">可参考的资料-Object</a></p>
+<p>创建一个对象可以使用new，也可以使用快速创建的方式：</p>
+<pre><code><span class="variable"><span class="keyword">var</span> _object</span> = {};
+</code></pre><p>_object对象中就可以使用Object.prototype中所有的方法和属性，虽然看起来它是空的。说到这里在编程中常常有一个非常有用的需求，如何判断一个对象是空对象。</p>
+<p>这是zepto中的判断一个对象是否是空对象，常常使用：</p>
+<pre><code>$.isEmptyObject = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>{
+    <span class="keyword">var</span> name
+    <span class="keyword">for</span> (name <span class="keyword">in</span> obj) <span class="keyword">return</span> <span class="literal">false</span>
+    <span class="keyword">return</span> <span class="literal">true</span>
+  }
+</code></pre><p>也顺便看了下jQuery原理是一模一样的：</p>
+<pre><code>isEmptyObject: <span class="function"><span class="keyword">function</span><span class="params">( obj )</span> </span>{
+    <span class="keyword">var</span> name;
+    <span class="keyword">for</span> ( name <span class="keyword">in</span> obj ) {
+        <span class="keyword">return</span> <span class="literal">false</span>;
+    }
+    <span class="keyword">return</span> <span class="literal">true</span>;
+}
+</code></pre><p>使用in操作符来实现，它不会遍历到父原型链。</p>
+<p>constructor返回一个指向创建了该对象的函数引用，这个东西主要是可以用来识别（类）到底是指向哪里的。</p>
+<p>defineProperty直接在一个对象上定义一个新属性，非常适合用于动态构建，传入三个参数［动态添加对象的目标对象，需要定义或被修改的属性名，需要定义的对象］，在第三个参数中可以有些属性来表示是否继承（<strong>proto</strong>），要不要定义get，set方法，enumerable是否可枚举。</p>
+<p>defineProperties跟上述defineProperty一样，但是它可以添加多个。</p>
+<p>getOwnPropertyNames返回一个由指定对象的所有属性组成的数组</p>
+<p>keys返回一个数组包括对象所有的属性（可枚举）</p>
+<blockquote>
+<p>keys是经常会用到的一个属性，它只能包可枚举的，如果想获取一个对象的所有属性包括不枚举的，那么使用getOwnPropertyNames。</p>
+</blockquote>
+<p>hasOwnProperty用于判断某个对象是否包含有自身的属性，这个方法常常用于检测对象中的属性是否存在，它只检测自身，对于继承过来的都是false，这一点是非常重要的理解。</p>
+<p>isPrototypeOf 用于检测一个对象是否在另一个对象的原型链上，比如有两个对象是互相交互的，常常会使用它来进行检测。</p>
+<p>propertyIsEnumerable这个方法也比较重要，返回一个布尔值，检测一个对象的自身属性是否可以枚举</p>
+<blockquote>
+<p>可枚举的理解，也就是对象的属性可枚举，它的属性值不可以修改，但是在Js中它有自己的定义，引擎内部看不见的该属性的[[Enumerable]]特性为true，那么就是可枚举的。基本上把一个普通对象可以看做是一个枚举类型，比如var color = {‘red’:1}，red是可以修改的，但是red是可枚举的，但是如果是继承过来的属性，propertyIsEnumerable是返回false的，它还有一个特点，就是自身。</p>
+</blockquote>
+<p>如果要定义不可枚举的属性，那就要使用defineProperty方法了，目前不能用对象直接量或者构造函数定义出来。</p>
+<pre><code>var obj = {<span class="string">name:</span> <span class="string">'jack'</span>, <span class="string">age:</span><span class="number">23</span>}
+Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="string">value :</span> <span class="string">'123'</span>, <span class="string">enumerable :</span> <span class="literal">false</span> });
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-复习JavaScript三之BOM" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -901,70 +992,6 @@ hexo <span class="keyword">server</span></span>
       
         <p class="article-more-link">
           <a  href="/2014/11/22/用Hexo写博客/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-正则的一些理解" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/正则的一些理解/" class="article-date">
-  	<time datetime="2014-11-14T13:50:22.000Z" itemprop="datePublished">2014-11-14</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/正则的一些理解/">正则的一些理解</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>今天写到这里，是想总结一下，自己重新学习正则表达式之后，对它的一个全新的认识。我想描述一个中心思想，学习任何东西，编程，音乐，基础是非常important的，就好像吉他里基础不在于认识六线谱而是在于节拍。</p>
-<h2 id="从人类的角度来阅读正则">从人类的角度来阅读正则</h2><p>在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。python中也有很多高效处理字符串的方式，比如步距，比如正则，嘿嘿。</p>
-<p>import re</p>
-<p>g = re.search(‘\d+(.\d*)?’,’0.2556223.556655’)</p>
-<p>g.group(0)</p>
-<p>我们来看一个搜索浮点数的正则，我们从右往左看，把这一个正则表达式分割成三分，\d+，(.\d<em>)，?。我们知道?描述的是出现零次或一次，在这里阅读的时候，是描述(.\d</em>)这一个组会出现零次或一次。我们再看这个组中的描述.用来描述.，\d用来描述0-9的数字，而*描述的是出现零次或多次，我们组合起来看，这个组就是来描述.后面的数字会出现零次或多次。\d依然是用来描述0-9的数字，+用来描述出现一次或多次。</p>
-<p>到这里，我们把这三个部分，从右往左看，组合起来，用人类阅读的角度去描述它：小数点后面出现的数字是多次的，而这一个部分只能出现一次或零次，并且在小数点之前可以出现一次或多次的数字。<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2014/11/14/正则的一些理解/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

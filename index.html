@@ -167,6 +167,62 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-policy" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/07/09/policy/" class="article-date">
+  	<time datetime="2015-07-09T07:50:31.000Z" itemprop="datePublished">2015-07-09</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/07/09/policy/">隐私政策</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>申明 \n\n《猿已阅》不会存留你的（用户）任何信息，包括Email，若你需要订阅《码农周刊》，可以在［订阅《码农周刊》快捷通道］中输入你的Email进行订阅。若你（用户）确认订阅，一切事宜与此应用作者无关，请详细阅读《码农周刊》的隐私政策以及服务条款。</p>
+<p>可以访问 <a href="http://weekly.manong.io/" target="_blank" rel="external">《码农周刊》</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-CALayer几何" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1147,164 +1203,6 @@ animationsGroup.animations = @<span class="comment">[right,top]</span>;
 <ul>
 <li><a href="http://objccn.io/issue-12/" target="_blank" rel="external">#12动画</a></li>
 <li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/CoreAnimation_framework/index.html#//apple_ref/doc/uid/TP40004513" target="_blank" rel="external">Core Animation Reference Collection</a></li>
-</ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-CoreData的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/05/05/CoreData的使用/" class="article-date">
-  	<time datetime="2015-05-05T02:31:04.000Z" itemprop="datePublished">2015-05-05</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/05/CoreData的使用/">CoreData的使用</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>CoreData是Cocoa中处理数据，绑定数据的一个框架，如果不靠谱数据的平台一致性（iOS，Android），完全可以使用它替代SQLite。虽然，iOS也有一个C实现的SQLite库，但是语法层面比较琐碎，而且使用的是C函数。如果要使用，大家可以选择使用一个开源的库来替代<a href="https://github.com/ccgus/fmdb" target="_blank" rel="external">Obje-C版</a>和<a href="https://github.com/FahimF/SQLiteDB" target="_blank" rel="external">Swift版</a></p>
-<p>从代码层面上来看，要创建一个CoreData实例，需要四个步骤</p>
-<ul>
-<li>创建数据库文件的物理地址</li>
-<li>创建模型托管对象</li>
-<li>创建持久化存储调度器</li>
-<li>创建上下文</li>
-</ul>
-<p>正常情况下，上述四个步骤，我们只使用一次，建议惰性加载它</p>
-<pre><code>-(<span class="built_in">NSManagedObjectContext</span> *)context
-{
-    <span class="keyword">if</span> (!_context) {
-        <span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
-        <span class="comment">//创建db url</span>
-        <span class="built_in">NSString</span> *dbPath = [<span class="keyword">self</span><span class="variable">.baseDoc</span> stringByAppendingPathComponent:<span class="string">@"manong.db"</span>];
-        <span class="built_in">NSURL</span> *dbUrl = [<span class="built_in">NSURL</span> fileURLWithPath:dbPath];
-        <span class="comment">//创建模型托管对象</span>
-        <span class="built_in">NSManagedObjectModel</span> *model = [<span class="built_in">NSManagedObjectModel</span> mergedModelFromBundles:<span class="literal">nil</span>];
-        <span class="comment">//创建持久化存储调度器</span>
-        <span class="built_in">NSPersistentStoreCoordinator</span> *store = [[<span class="built_in">NSPersistentStoreCoordinator</span> alloc] initWithManagedObjectModel:model];
-        [store addPersistentStoreWithType:<span class="built_in">NSSQLiteStoreType</span> configuration:<span class="literal">nil</span> URL:dbUrl options:<span class="literal">nil</span> error:&amp;error];
-        <span class="comment">//创建上下文</span>
-        _context = [[<span class="built_in">NSManagedObjectContext</span> alloc] init];
-        [_context setPersistentStoreCoordinator:store];
-    }
-    <span class="keyword">return</span> _context;
-}
-</code></pre><p>下面给出一张关系图</p>
-<p><img src="http://websources.qiniudn.com/iOS/CoreData类关系图.png" alt="CoreData类关系图"></p>
-<p>从上述的图中，其实可以看到一些有关系的模块</p>
-<ul>
-<li>Managed Object Model 用于描述数据模型，这里包括实体，属性，请求等</li>
-<li>Managed Object Context 参与对数据对象进行各项操作的上下文</li>
-<li>Managed Object 数据对象（用户使用的对象与上下文有关联）</li>
-<li>Persistent Store 相当于数据库文件的管理器，处理底层对数据库文件的读取与写入</li>
-</ul>
-<p><strong>基本上创建一个Managed Object文件不需要自己去手动创建，而且建议Xcode帮助我们创建的model文件不要修改</strong></p>
-<p>如果非要自己创建的话，那么继承NSManagedObject类吧</p>
-<pre><code><span class="preprocessor">#import <span class="title">&lt;Foundation/Foundation.h&gt;</span></span>
-<span class="preprocessor">#import <span class="title">&lt;CoreData/CoreData.h&gt;</span></span>
-
-<span class="class"><span class="keyword">@interface</span> <span class="title">ManongTag</span> : <span class="title">NSManagedObject</span></span>
-
-<span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, retain) <span class="built_in">NSNumber</span> * contentCount;
-<span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, retain) <span class="built_in">NSString</span> * tagKey;
-<span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, retain) <span class="built_in">NSString</span> * tagName;
-
-<span class="keyword">@end</span>
-</code></pre><h1 id="下面给出一张实际的操作图，如何使用CoreData。">下面给出一张实际的操作图，如何使用CoreData。</h1><p><img src="http://websources.qiniudn.com/iOS/CoreData操作图形化.jpg" alt="CoreData操作图形化"> </p>
-<ul>
-<li>首先add Entity添加一个实体</li>
-<li>然后在Attributes中添加相应的属性，在Type中选择相应的数据类型</li>
-<li>Pelationships可以对实体进行关联，比如ManongTitle实体中关联了一个ManongContent实体</li>
-<li>&lt;橘黄色箭头&gt;可以设置多关联，在使用的时候它会是一个NSSet集合</li>
-<li>Style可以查看设计图</li>
-</ul>
-<p>如果想新增一条数据，需要三个步骤才能实现，第一先创建一个实体描述，第二创建一个ManagedObject对象，第三给上下文的save方法发送消息。</p>
-<pre><code><span class="built_in">NSEntityDescription</span> *mnTag = [<span class="built_in">NSEntityDescription</span> entityForName:<span class="string">@"ManongTag"</span> inManagedObjectContext:<span class="keyword">self</span><span class="variable">.context</span>];
-ManongTag *manongTag = [[ManongTag alloc] initWithEntity:mnTag insertIntoManagedObjectContext:<span class="keyword">self</span><span class="variable">.context</span>];
-manongTag<span class="variable">.tagKey</span> = tagKey;
-manongTag<span class="variable">.tagName</span> = tagNmae;
-<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
-<span class="built_in">BOOL</span> success;
-[<span class="keyword">self</span><span class="variable">.context</span> save:&amp;error];
-success = error ? <span class="literal">NO</span> : <span class="literal">YES</span>;
-</code></pre><p>如果想在实体中查询数据，一般情况下两个步骤，如果是条件查询最少三个步骤，第一创建一个查询请求，第二创建一个谓词对象，第三给上下文的executeFetchRequest方法发送消息。</p>
-<pre><code><span class="comment">//查询所有的数据</span>
-<span class="built_in">NSFetchRequest</span> *request = [[<span class="built_in">NSFetchRequest</span> alloc] initWithEntityName:<span class="string">@"ManongDigest"</span>];
-<span class="built_in">NSArray</span> *arr = [<span class="keyword">self</span><span class="variable">.context</span> executeFetchRequest:request error:&amp;error];
-
-<span class="comment">//条件查询</span>
-<span class="built_in">NSFetchRequest</span> *request = [[<span class="built_in">NSFetchRequest</span> alloc] initWithEntityName:@“ManongDigest”];
-<span class="built_in">NSPredicate</span> *dicate = [<span class="built_in">NSPredicate</span> predicateWithFormat:<span class="string">@"%K BEGINSWITH[c] %@"</span>,<span class="string">@"tagName"</span>,<span class="string">@"a"</span>];
-<span class="built_in">NSArray</span> *arr = [<span class="keyword">self</span><span class="variable">.context</span> executeFetchRequest:request error:&amp;error];
-</code></pre><p>如果想更新某一条数据，正常情况下三个步骤，第一创建一个查询请求，第二修改MangedObject对象的属性，第三给上下文的save方法发送消息。</p>
-<pre><code><span class="built_in">NSFetchRequest</span> *request = [[<span class="built_in">NSFetchRequest</span> alloc] initWithEntityName:<span class="string">@"ManongDigest"</span>];
-<span class="built_in">NSArray</span> *arr = [<span class="keyword">self</span><span class="variable">.context</span> executeFetchRequest:request error:&amp;error];
-<span class="keyword">for</span>(ManongDigest *digest <span class="keyword">in</span> arr)
-{
-    digest<span class="variable">.tagName</span> = <span class="string">@"lcepy"</span>;
-}
-<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
-[<span class="keyword">self</span><span class="variable">.context</span> save:&amp;error];
-<span class="keyword">if</span> (error) {
-    <span class="keyword">return</span> <span class="literal">NO</span>;
-}<span class="keyword">else</span>{
-    <span class="keyword">return</span> <span class="literal">YES</span>;
-}
-</code></pre><p>如果想删除某一条数据</p>
-<pre><code><span class="built_in">NSFetchRequest</span> *request = [[<span class="built_in">NSFetchRequest</span> alloc] initWithEntityName:<span class="string">@"ManongDigest"</span>];
-<span class="built_in">NSArray</span> *arr = [<span class="keyword">self</span><span class="variable">.context</span> executeFetchRequest:request error:&amp;error];
-<span class="keyword">if</span>(arr<span class="variable">.count</span>){
-    ManongDigest *digest = (ManongDigest *)arr[<span class="number">0</span>];
-    [<span class="keyword">self</span><span class="variable">.context</span> deleteObject:digest];
-}
-</code></pre><p>上述四种操作方式是最常用的，当然CoreData 的API肯定不止这四种，但是使用的逻辑思维基本上是，查询－处理－使用上下文或者创建实体－处理－使用上下文。</p>
-<p>这个框架算比较复杂的一个，学习起来曲线也比较大，需要耐心。</p>
-<p>参考资料</p>
-<ul>
-<li><a href="http://www.objc.io/issue-4/" target="_blank" rel="external">objc-CoreData</a></li>
-<li><a href="http://objccn.io/issue-4-2/" target="_blank" rel="external">一个完整的 Core Data 应用</a></li>
-<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/CoreData_ObjC/index.html" target="_blank" rel="external">Core Data API</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSPredicate_Class/" target="_blank" rel="external">NSPredicate API</a></li>
 </ul>
 
       
