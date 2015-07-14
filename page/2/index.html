@@ -167,6 +167,109 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-iOS动画基础" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/05/10/iOS动画基础/" class="article-date">
+  	<time datetime="2015-05-09T17:02:06.000Z" itemprop="datePublished">2015-05-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/10/iOS动画基础/">iOS动画基础</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>貌似在哪个领域里，动画的实现都赋予了软件非常生动的交互，所以我们必须要掌握并学好它。在学习动画之前，首推<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004514" target="_blank" rel="external">Core Animation Programming Guide</a>核心动画编程指南，去了解一下官方的术语，定义，以及指导，这很有帮助。</p>
+<p>顾名思义，动画也就是让我们的view可以动起来，所谓的view实际上都会继承于UIView，而每一个UIView都有一个CALayer对象，它们两个是分开的，分别用于不同的地方。可以看见的是，UIView用于显示，CALayer用于绘制。（注明：CALayer属于QuartzCore框架）</p>
+<p>UIView自身（注明：UIView属于UIKit框架）会有描述位置的信息，比如frame，transform。在使用一些比较简单的动画时，我们应该首选考虑的是使用UIView提供的一些方法，去改变frame，transform等属性。</p>
+<pre><code><span class="collection">[UIView animateWithDuration:1.6 animations:<span class="comment">^{
+
+}</span>]</span><span class="comment">;</span>
+</code></pre><p>对于高度复杂一些的动画，就需要我们对Core Animation整个的熟悉和了解了。这里，我建议先阅读一下<a href="http://objccn.io/issue-12-1/" target="_blank" rel="external">动画理解</a>，把一些概念性的东西了解清楚。比如Core Animation维护的层次结构，什么叫模型层树(model layer tree)，什么叫表现层树(presentation layer tree)，而且你务必要理解，当把动画添加到一个layer的时候，是不直接修改其属性的。</p>
+<p>在清楚这些概念性的问题后，你可以去学习一些动画类了，比如CABasicAnimation，CATransform3D，CAKeyframeAnimation,CAAnimationGroup,CAAnimation，另外你务必要记住一点，CAAnimation是这些动画类的鼻祖(它是一个抽象类，不能直接使用)，而且要搞清楚CALayer。</p>
+<p>举例一些简单的例子</p>
+<p><strong>使用CABasicAnimation</strong></p>
+<pre><code>CABasicAnimation *<span class="variable">animation =</span> [CABasicAnimation animation];
+animation.<span class="variable">keyPath =</span> @<span class="string">"position.x"</span>;
+animation.<span class="variable">duration =</span> <span class="number">1</span>;
+animation.<span class="variable">fromValue =</span> @<span class="number">50</span>;
+animation.<span class="variable">toValue =</span> @<span class="number">250</span>;
+[view.layer addAnimation:animation forKey:@<span class="string">"left"</span>];
+</code></pre><p>为了验证动画究竟修改了那个地方的值，我打印了一下view的frame，NSLog(@”%@”,NSStringFromCGRect(view.frame))，这里可以看的出来，view的frame值没有发生改变，而且在模拟器中，动画结束了，view又回到了原来的位置。说明啊，动画的执行和view的渲染是分开的，如果你还不理解，请继续阅读《核心动画编程指南》或者简单的《动画理解》。</p>
+<p>如果我们不想动画结束后view回到原来的位置，可以使用</p>
+<pre><code>animation.fillMode = kCAFillModeForwards<span class="comment">;</span>
+animation.removedOnCompletion = NO<span class="comment">;</span>
+</code></pre><p><strong>使用CAKeyframeAnimation</strong></p>
+<pre><code>CAKeyframeAnimation *animation = [CAKeyframeAnimation animation]<span class="comment">;</span>
+animation.keyPath = @<span class="string">"position.x"</span><span class="comment">;</span>
+animation.values = @[<span class="localvars">@0</span>,<span class="localvars">@10</span>,@-<span class="number">10</span>,<span class="localvars">@10</span>,<span class="localvars">@0</span>]<span class="comment">;</span>
+animation.keyTimes = @[ <span class="localvars">@0</span>, @(<span class="number">1</span> / <span class="number">6.0</span>), @(<span class="number">3</span> / <span class="number">6.0</span>), @(<span class="number">5</span> / <span class="number">6.0</span>), <span class="localvars">@1</span> ]<span class="comment">;</span>
+animation.duration = <span class="number">0.4</span><span class="comment">;</span>
+animation.additive = YES<span class="comment">;</span>
+[view.layer addAnimation:animation forKey:@<span class="string">"shake"</span>]<span class="comment">;</span>
+</code></pre><p><strong>使用CAAnimationGroup</strong></p>
+<pre><code>CABasicAnimation *right = <span class="comment">[CABasicAnimation animation]</span>;
+right.keyPath = @<span class="string">"position.x"</span>;
+right.duration = 1;
+right.toValue = @250;
+right.timingFunction = <span class="comment">[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]</span>;
+
+CABasicAnimation *top = <span class="comment">[CABasicAnimation animation]</span>;
+top.keyPath = @"position.y";
+top.duration = 1;
+top.toValue = @10;
+right.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+
+CAAnimationGroup *animationsGroup = <span class="comment">[CAAnimationGroup animation]</span>;
+animationsGroup.animations = @<span class="comment">[right,top]</span>;
+<span class="comment">[view.layer addAnimation:animationsGroup forKey:@"group"]</span>;
+</code></pre><p>阅读资料：</p>
+<ul>
+<li><a href="http://objccn.io/issue-12/" target="_blank" rel="external">#12动画</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/CoreAnimation_framework/index.html#//apple_ref/doc/uid/TP40004513" target="_blank" rel="external">Core Animation Reference Collection</a></li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-CoreData的使用" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1217,86 +1320,6 @@ requ.bind(<span class="string">'click'</span>,<span class="function"><span class
       
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-2015年面试之囧途" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/13/2015年面试之囧途/" class="article-date">
-  	<time datetime="2015-03-13T11:07:52.000Z" itemprop="datePublished">2015-03-13</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/13/2015年面试之囧途/">2015年面试之囧途</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>至去年从携程离职之后，就开启了一次新的面试囧途，面试这东西，主要可以了解自己所处的水平，写写它是想告诉自己一些事情，有事，人应该要了解和想清楚自己到底需要什么，到底适合什么样的工作，而不是为了生活，为了好的公司，为了高的薪水去妥协，在与兴趣之间平衡的坍塌，会造成很严重的后果，诱惑，是每一个人都会遇到的，如何面对这些诱惑，而明确自己所想，才是最重要的。</p>
-<p>2015年面试了大概有七家公司，为什么会出现这样的状况，是我今天想要反思的主要目的。在去面试极客学院时，包括电话几轮的沟通，双方都非常满意，给出了17K的offer。其实这，是一个很心动的数字，毕竟比上一份work多出了3K。有时候，选择，往往很意外。</p>
-<p>我是一个非常直接的人，我很忍受不了忽悠和欺骗。明明在面试时，就已经沟通过，我能做什么，以及我根本不考虑做什么，为什么入职之后往往的工作就要偏离呢？这个问题，其实我一直很思考不明白，最后的结局是我只能离职走人，浪费了时间，精力，当然还有金钱。</p>
-<p>下面要写的事情，都非常琐碎，两周的时间内发生的事情。在过年之前，我来到北京，寻找机会，老乡给我推荐了聚美优品，面试时的一些沟通，包括自己的情况，想法，以及能做的事情，都很明白的说了。从1月4号面试到了1月14号，经历了四轮，然后就没有消息了。</p>
-<p>大家都明白没有消息意味着什么，抱着挂了的心态，1月20号回到湖南。在和淳敏沟通了之后，我答应了在27号之前，去上海他那边工作。过完年后买了高铁票，去了上海，可是下午北京聚美优品又通知我，审批过了，如果我来北京，立马就发聚美的offer。其实，这里我就犯了一个很严重的错误，<strong>没有能抵制住诱惑</strong>。当天，我纠结郁闷了很久，淳敏也和我说了很多，包括聚美的工作气氛，研发团队，以及未来可以学习的东西到底有多少。也许当时我被这样的惊喜冲昏了头脑，一发热，连夜买了去北京的火车票，当我坐上火车时，我又接到了通知，还需要在继续面试。</p>
-<p>当时在心里，真是一万只草泥马奔腾而过，这不是逗我玩么？如果，能让时光倒流，告诉我是来北京面试的话，我想大家应该都可以知道，自己会选择什么。用一句现在的话说，会来的是<strong>傻逼</strong>，于是我傻逼了。可是，时间没法回滚，发生了就要自己面对这些。其实当时的心里状态是很后悔的，后悔没听淳敏的话，后悔跑来北京。如果这边的工作黄了，接下来怎么办。自己没有任何想法，那只能继续面试，继续找工作了。</p>
-<p>3月2日上午去了JD，我只能说我的简历写的很清楚。如果你需要正规军，就不应该来找我。JD的男HR真的是屌的一逼。下午去了一家创业公司，我大呼伤不起，各种奇葩要求。比如你能不能做服务，对不起，我不能。那你能不能写移动客户端，对不起，我不能。我简历写的是，移动前端好吧？未必，汉字这么难理解？那一天，我对后面的面试安排，已经不抱任何想去的态度了，但是朋友推荐的，还是去了。</p>
-<p>3月3日下午的时候接到了聚美HR的电话，通知我她们人事搞错对象了，把别人的结果拿去审批了，而我是不需要面试了，在跟我确定了一下薪水之后，语重的告诉我，不过还是需要审批。如果老板审批不通过，她也没有办法，只能和我说声对不起。当时，我心里只是呵呵的，反正是有了不信任感。</p>
-<p>3月4日去联想研究院面试，结果很理想，包括聊了很多关于移动H5的一些开发心得，中午面试的大哥还请我吃了一顿午饭，反正是心情很愉悦，唯一可惜的是联想研究院的HC计划需要等待到3月底，当时面试大哥的领导就询问我，是否愿意等待，告诉我如果公司的HC一开，优先联系我，只要我愿意。</p>
-<p>吃过午饭的时候接到了聚美HR的电话，告诉我审批通过了，让我耐性等待offer。下午时聚美的offer发到了我的邮箱里，通知我3月10号入职。但是我没注意查收邮箱，其实，这也很狗血，我在想着，唉，工作哪里不是做，只要自己踏踏实实，本本份份的做好工作，管他呢。</p>
-<p>3月5日去每日优鲜面试，本来经历了2号奇葩的面试之后，后面的一些网投的面试邀请，我都不打算去了。那天，接到个超美小姑娘的电话，而且还是个性感HR负责人，啧啧，来吧来吧，过来聊一聊。抱着想调戏调戏HR妹纸的心态，下午4点半搭地铁去望京那边，最后愣没找到地方。我在想，反正也就是聊会天，心中不快跟陌生人吐一吐，也许能减轻心理的压抑感。去了之后，跟技术，跟其他人聊的还挺愉快。反正HR的美色，没有让我失望，我在感谢老天，终于遇上了一家正常的公司。</p>
-<p>第二天上午又跑去了每日优鲜，跟她们的CEO大哥聊聊，挺对味的。只是我还答应了朋友要去面试，所以没有急着答应他。当天下午还去百度面试了，上来做了三个题目，解析URL，实现深浅拷贝，对数字字符串进行以每四个一组的分隔。只是后面问到的一些问题，比如盒子模型，我知道它是由高宽内边距外边距线组成的，可是它在浏览器中的渲染顺序，我是真心不知道，这些问题有些变态了。后来，我朋友帮我去问，他告诉我百度对毕业证有要求，必须要统招，虽然面试了一个下午，但是没有然后了。于是，我能想到是什么。</p>
-<p>最后我还是没有能抵制住”好公司”的诱惑，选择了去聚美优品，本来我朋友说，你别去聚美，你看看你面试的那个经历，太不靠谱了，让人感觉就像是把你吊着，他们一直在找人，只不过没找到合适的，最后才选择你。至于，是不是这样，我不清楚，但是从面试到发offer，确实让我有不信任的感受。</p>
-<p>说起来，人嘛，都有头脑发热的时候，也很难抵制的了诱惑。没有办法，选择去了，那只能继续往前走，不然还能怎么办？入职聚美之后，第二天Leader告诉我还需要签署一份补充的协议，虽然我去签了，但是我发现一同来的那几个人都没签补充协议，就我一个人签了，为什么？这是有甄别的对待么？如果试用期的一些考核，不通过，立马开掉，那就呵呵了。我朋友说，我真蠢，这种开人协议也签，我也只能呵呵了。而我的试用期两项任务，都是切图，写CSS和静态页面。</p>
-<p>确实，在我提交离职申请的时候，Leader跟我说，我是第一个签了这种补充协议的人。本来工作，就应当是有一个安心的氛围，我是没法安心。这对我来说有风险的，任何一个平常的人，都会这么想。如果一切都是看表现，安排一个没有切过图，没写过CSS的人去做这些事情，这可以看出他的表现吗？我想不能。而且，最重要的是，在和Leader沟通毕业证的时候，他要我自己去和HR协商，这让我更加的产生了危机感。如果6月不能顺利转正，是否意味着我还要接着找工作，然后又是三个月的试用期，到那个时候就已经10月，11月了，这一年又废了。这样的情况，如何能让人安心工作，我想，任何一个人都不能。</p>
-<p>今天我办了离职手续，跟聚美负责技术的总监，Leader最后沟通了一下。也许在你们看来，这是一个很不负责的表现。如果换位思考一下，从面试到发offer，入职到第一个签到这种补充协议，如何能让感觉到是被信任的，是能安心工作的。其实很反感Leader最后说的一句话，有些威胁的味道，至于他想表述的本意是不是这样，我不清楚，但是让我感觉到威胁的味道是实在的。他说：<strong>互联网圈子这么小，基本上每个公司的技术人员我都认识。你能来聚美，我找携程的同事打听过你的事情，正因为你比较实在，所以才招你来。就你这样的，如果有人问起来，你觉得我该怎么说？只怕会影响你今后的发展。</strong></p>
-<p>在坐地铁回来的路上，我自己又想了很多。一开始，从上海跑来北京，就是一个错误的选择。我没有听淳敏的建议，一腔热血的往前冲，后来我发现我冲到坑里了。这样的原因是什么？</p>
-<ul>
-<li>没有了解好自己真正的需求，擅长什么，对什么有兴趣</li>
-<li>没有想好自己可以真正发展的城市，北京上海来回跑，什么意义都没有</li>
-<li>内心不够强大，不能抵挡诱惑，比如有名的公司，较高的薪水</li>
-<li>没有坚定自己发展的方向，PC移动都有前端，我没选择好方向</li>
-<li>没有想好自己是否可以独自上路</li>
-<li>没有选择好正确的公司</li>
-</ul>
-<p>以后我该怎么办？经历了这些之后，我才明白了一个道理，在做一项决定的时候，一定要考虑清楚了自己是否合适，这是不是我想要的。挫折，每个人都要面对，唯一不同的是，我如何从挫折中吸取教训，总结教训，未来能正确的行在路上。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
 	</div>
 
       
