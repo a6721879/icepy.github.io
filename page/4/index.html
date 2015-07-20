@@ -167,11 +167,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-理解UITableView" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-好用的WebKit-framework" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/02/06/理解UITableView/" class="article-date">
-  	<time datetime="2015-02-06T13:06:07.000Z" itemprop="datePublished">2015-02-06</time>
+      <a href="/2015/05/01/好用的WebKit-framework/" class="article-date">
+  	<time datetime="2015-05-01T06:25:36.000Z" itemprop="datePublished">2015-05-01</time>
 </a>
     </div>
   
@@ -184,7 +184,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/06/理解UITableView/">理解UITableView</a>
+      <a class="article-title" href="/2015/05/01/好用的WebKit-framework/">好用的WebKit.framework</a>
     </h1>
   
 
@@ -193,57 +193,59 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>UITableView是在iOS开发中使用非常频繁的一个控件，比如QQ的消息人列表，淘宝的商品，微信等等都会使用到它，对于它的理解有一个前提，那就是要理解iOS MVC的设计思路。</p>
-<p>创建一个UITableView可以使用代码的方式，也可以使用xib或者storyboard。</p>
-<pre><code>UITableView *tableView = <span class="comment">[<span class="comment">[UITableView alloc]</span> initWithFrame:<span class="comment">[<span class="comment">[UIScreen mainScreen]</span> applicationFrame]</span>]</span>;
-</code></pre><p>在MVC的设计思想中控制器控制着要从模型中拿数据，然后把数据装载给视图。在UITableView中模型主要是实现在UITableViewDataSource数据源中，也就是UITableView有几行，分组么，然后每一行装载什么？数据源的目的就是想问开发者这些问题。</p>
-<pre><code><span class="tag">-</span>(NSInteger)<span class="tag">numberOfSectionsInTableView</span>:(UITableView *)<span class="tag">tableView</span>
+        <p>WebKit是iOS8推出的一个用于替代UIWebView的框架，解决了很多UIWebView的问题，比如释放内存，各种稀奇古怪的bug，而且还内置了手势的处理，一句话：好用。</p>
+<p>注意：<strong>2015年4月更新的苹果审核文档中明确标识，必须要用WebKit替换UIWebView，不然审核拒绝。</strong></p>
+<p>在使用WebKit框架的过程中，自己也遇到了一些问题，有些解决了，有些还未解决。</p>
+<ul>
+<li>WebKit目前还未能在storyboard中直接使用，需要用代码的方式创建，手动添加约束</li>
+<li>对于某些页面如果设置了overflow-x，这可能引起scrollView的contentSize的变化，进一步影响WKWebView的内置手势，swipe返回失效</li>
+<li>目前还未找到怎么处理NSURLCache的问题，也就是页面的缓存机制，看样子好像要自己实现</li>
+</ul>
+<p>如何创建一个WKWebView？首先要在link中引入WebKit.framework，然后使用代码的方式：</p>
+<pre><code>-(<span class="constant">WKWebView</span> *)<span class="constant">WKWebPageView</span>
+{
+    <span class="keyword">if</span> (!_WKWebPageView) {
+        _WKWebPageView = [[<span class="constant">WKWebView</span> alloc] <span class="symbol">initWithFrame:</span><span class="keyword">self</span>.view.bounds];
+        _WKWebPageView.navigationDelegate = <span class="keyword">self</span>;
+    }
+    <span class="keyword">return</span> _WKWebPageView;
+}
+</code></pre><p>WKWebView主要需要实现两个协议WKNavigationDelegate和WKUIDelegate，前一个用于一个页面的加载状态，包括第一次响应成功，加载中，加载完成，加载错误等，后面一个我个人感觉有点意思，主要用于改变UI界面，比如客户端JavaScript使用了一个alert，这个协议可以捕获到，然后使用原生的控件来替代。</p>
+<p>WebKit框架还提供了一个任务配置类WKWebViewConfiguration，跟NSURLSessionConfiguration的使用方式类似,可以重新初始化WKWebView的一些配置。</p>
+<p>WKNavigationDelegate协议，我主要使用了三个来处理我的应用，加载中，加载完成，加载错误的处理：</p>
+<pre><code><span class="tag">-</span>(void)<span class="tag">webView</span>:(WKWebView *)<span class="tag">webView</span> <span class="tag">didStartProvisionalNavigation</span>:(WKNavigation *)<span class="tag">navigation</span>
 {
 
 }
-</code></pre><p>这个方法如果存在有分组，系统就会询问，有几个分组？如果不是分组的，可以不实现这个方法，系统默认是1。</p>
-<p>有了分组之后，然后系统会询问会有几行？</p>
-<pre><code><span class="tag">-</span>(NSInteger)<span class="tag">tableView</span>:(UITableView *)<span class="tag">tableView</span> <span class="tag">numberOfRowsInSection</span>:(NSInteger)<span class="tag">section</span>
+
+<span class="tag">-</span>(void)<span class="tag">webView</span>:(WKWebView *)<span class="tag">webView</span> <span class="tag">didFinishNavigation</span>:(WKNavigation *)<span class="tag">navigation</span>
 {
 
 }
-</code></pre><p>section跟分组有关</p>
-<p>最后系统询问，每一行实现什么？</p>
-<pre><code><span class="tag">-</span>(UITableViewCell *)<span class="tag">tableView</span>:(UITableView *)<span class="tag">tableView</span> <span class="tag">cellForRowAtIndexPath</span>:(NSIndexPath *)<span class="tag">indexPath</span>
+
+<span class="tag">-</span>(void)<span class="tag">webView</span>:(WKWebView *)<span class="tag">webView</span> <span class="tag">didFailProvisionalNavigation</span>:(WKNavigation *)<span class="tag">navigation</span> <span class="tag">withError</span>:(NSError *)<span class="tag">error</span>
 {
 
 }
-</code></pre><p>这个方法的实现可以说是核心的核心，在UITableView中每一行是要求实现一个cell，可以想象每一个cell相当于就是一个容器，这个容器里面装载着很多其他UI对象，当然cell也可以自定义。</p>
-<p>考虑到性能，其实每一个cell可以从缓存中读取</p>
-<pre><code>UITableViewCell *cell = [tableView <span class="string">dequeueReusableCellWithIdentifier:</span>@<span class="string">"cell"</span>];
-<span class="keyword">if</span> (!cell) {
-    cell = [[UITableViewCell alloc] <span class="string">initWithStyle:</span>UITableViewStylePlain <span class="string">reuseIdentifier:</span>@<span class="string">"cell"</span>];
-}
-
-<span class="comment">//do</span>
-</code></pre><p>indexPath是一个类，看看头文件就可以明白，它这个里面装载着row，section等，这些数值非常有意义，在从模型里获取数据的时候。数据源还有一些其他的方法可以实现，比如编辑模式，这个东西一般用于删除每一条消息，从右向左滑动的时候。</p>
-<pre><code><span class="tag">-</span>(void)<span class="tag">tableView</span>:(UITableView *)<span class="tag">tableView</span> <span class="tag">commitEditingStyle</span>:(UITableViewCellEditingStyle)<span class="tag">editingStyle</span> <span class="tag">forRowAtIndexPath</span>:(NSIndexPath *)<span class="tag">indexPath</span>
-{
-
-}
-</code></pre><p>排序</p>
-<pre><code><span class="tag">-</span>(void)<span class="tag">tableView</span>:(UITableView *)<span class="tag">tableView</span> <span class="tag">moveRowAtIndexPath</span>:(NSIndexPath *)<span class="tag">sourceIndexPath</span> <span class="tag">toIndexPath</span>:(NSIndexPath *)<span class="tag">destinationIndexPath</span>
-{
-
-}
-</code></pre><p>有了数据源，当然也会存在一些代理，这些代理就是一些动作，比如实现了某些代理方法之后，系统会询问，你点了？一个手指按下不动了？等等，然后再doing什么，就是写在这些代理的方法中，主要是实现UITableViewDelegate。</p>
-<p>常用的比如按下的时候，放开的时候：</p>
-<p>点击了每一行时做的动作</p>
-<pre><code><span class="tag">-</span>(void)<span class="tag">tableView</span>:(UITableView *)<span class="tag">tableView</span> <span class="tag">didSelectRowAtIndexPath</span>:(NSIndexPath *)<span class="tag">indexPath</span>
-{
-
-}
-</code></pre><p>放开每一行时做的动作</p>
-<pre><code><span class="tag">-</span>(void)<span class="tag">tableView</span>:(UITableView *)<span class="tag">tableView</span> <span class="tag">didDeselectRowAtIndexPath</span>:(NSIndexPath *)<span class="tag">indexPath</span>
-{
-
-}
-</code></pre><p>协议中有很多在某些情况下会非常有用，细节就要慢慢在学习中积累了。</p>
+</code></pre><p>另外一些属性我用KVO来监听：</p>
+<pre><code>[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"estimatedProgress"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
+[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"title"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
+[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"URL"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
+[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"canGoBack"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
+</code></pre><p>它们分别是，页面的加载进度，页面的标题，页面的URL，页面是否回退过</p>
+<p>WKWebView默认是没有开启内置手势的，可以通过allowsBackForwardNavigationGestures来设置</p>
+<p>与JavaScript的交互，我目前主要使用[self.WKWebPageView evaluateJavaScript:&lt;#(NSString <em>)#&gt; completionHandler:&lt;#^(id, NSError </em>)completionHandler#&gt;]来动态改变页面加载完成之后的css样式，还有WKUserScript <em>script = [[WKUserScript alloc] initWithSource:&lt;#(NSString </em>)#&gt; injectionTime:&lt;#(WKUserScriptInjectionTime)#&gt; forMainFrameOnly:&lt;#(BOOL)#&gt;]来创建脚本，它可以明确指定加载前后注入的方式。</p>
+<p><strong>注明：上述的两种创建脚本的方式都是单方向的</strong></p>
+<p>如果我们想互相调用，那么就要实现WKScriptMessageHandler协议了，具体的使用方式可以参考下面给出的的参考资料。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="http://nshipster.cn/wkwebkit/" target="_blank" rel="external">WKWebView-NSHipster</a></li>
+<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/WebKit/Reference/WKScriptMessageHandler_Ref/index.html" target="_blank" rel="external">WKScriptMessageHandler</a></li>
+<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/WebKit/Reference/WKWebView_Ref/index.html" target="_blank" rel="external">WKWebView</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKWebViewConfiguration_Ref/index.html" target="_blank" rel="external">WKWebViewConfiguration</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKUIDelegate_Ref/index.html" target="_blank" rel="external">WKUIDelegate</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKNavigationDelegate_Ref/index.html" target="_blank" rel="external">WKNavigationDelegate</a></li>
+</ul>
 
       
     </div>
@@ -272,11 +274,11 @@
 
 
   
-    <article id="post-复习JavaScript十二之理解作用域" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-iOS的网络编程NSURL" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/02/05/复习JavaScript十二之理解作用域/" class="article-date">
-  	<time datetime="2015-02-05T10:17:09.000Z" itemprop="datePublished">2015-02-05</time>
+      <a href="/2015/04/22/iOS的网络编程NSURL/" class="article-date">
+  	<time datetime="2015-04-22T04:37:14.000Z" itemprop="datePublished">2015-04-22</time>
 </a>
     </div>
   
@@ -289,7 +291,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/05/复习JavaScript十二之理解作用域/">复习JavaScript十二之理解作用域</a>
+      <a class="article-title" href="/2015/04/22/iOS的网络编程NSURL/">iOS的网络编程NSURL</a>
     </h1>
   
 
@@ -298,118 +300,66 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>理解作用域链是Js编程中一个必须要具备的，作用域决定了变量和函数有权力访问哪些数据。在Web浏览器中，全局执行环境是window对象，这也意味着所有的全局变量或者方法都是window对象的属性或方法。当个函数在被调用的时候都会创建自己的执行环境，而这个函数中所写的代码就开始进入这个函数的执行环境，于是由变量对象构建起了一个作用域链。</p>
-<pre><code><span class="keyword">var</span> wow = <span class="string">'魔兽世界'</span>;
-<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> _wow = <span class="string">'123'</span>;
-}
-</code></pre><p>在这个例子中全局环境中包含了两个对象（全局环境的变量对象不算），window.wow和window.message，而这个message函数中又包含了两个对象，它自己的变量对象（其中定义了arguments对象）和全局环境的变量对象。当这个函数开始执行时，message自己的变量对象中定义了_wow，而它的全局环境的变量对象有wow，假设在message中alert一下wow，实际上是message中包含的全局环境的变量对象.wow，于是可以访问。</p>
-<pre><code><span class="keyword">var</span> wow = <span class="string">'123'</span>;
-<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> wow = <span class="string">'456'</span>;
-}
-</code></pre><p>如果执行message函数alert一下wow，它的作用域是这样开始搜索的，先搜索message自己的变量对象中是否存在wow，如果有就访问并且立马停止搜索，如果没有则继续往上访问它，有wow，则访问并且立马停止搜索，以此类推一直搜索到全局环境上的变量对象，如果这里都没，恭喜你，这里要抛错了。</p>
-<pre><code><span class="keyword">var</span> c = <span class="string">'123'</span>;
-<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> g = <span class="string">'123'</span>;
-    <span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        <span class="keyword">var</span> d = <span class="string">'123'</span>;
-    }
-}
-</code></pre><p>在这个例子中包含有三个执行环境，全局环境，message的环境，a的环境。从这里可以看出message自身包含两个对象，自己的变量对象和全局环境中的变量对象，而函数a则包含了三个，自身的变量对象，message的变量对象和全局变量对象。</p>
-<p>当开始执行这函数时，在函数a中可以访问到变量g，那是因为函数a包含了message的变量对象，于是在自身没有开始搜索上一级的变量对象时发现了，于是可以访问。那么访问c的原理也是如此，当自身和上一级的message的变量对象都没有，但是全局变量对象中存在，于是访问成功。</p>
-<p>了解这个作用域，对于Js编程是至关重要的，不然可能会出现，明明想要的预期结果是123，但是变成了456，为什么？那就是因为一级一级的搜索，可能会存在覆盖，或者搜索到别的地方就立即停止搜索了。</p>
+        <p>如果只是说iOS中的URL系统，它的东西还不算比较多。但是，如果想用好它，可能还需要具备一些其他方面的知识，特别是多任务编程，比如GCD，NSOperation，NSOperationQueue，NSURLSession等等，而且苹果公司在后期还推了一个叫NSURLComponents的东西，这也是需要去学习的。</p>
+<p>一个简单的URL是这样发送出去的：</p>
+<pre><code><span class="built_in">NSString</span> *path = <span class="string">@"http://lcepy.github.io"</span>;
+<span class="built_in">NSURL</span> *url = [<span class="built_in">NSURL</span> URLWithString:path];
+<span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:url];
+<span class="built_in">NSURLResponse</span> *response = <span class="literal">nil</span>;
+<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
+[<span class="built_in">NSURLConnection</span> sendSynchronousRequest:request returningResponse:&amp;response error:&amp;error];
+</code></pre><p>基本上如果要构造一个request需要先构造一个NSURL对象，然后通过NSURLConnection发送出去。NSURLRequest是一个不可变的对象，默认发送的是GET的请求，如果想要发送POST请求，可以用它可变的NSMutableURLRequest来支持POST请求，包括超时时间等等。</p>
+<p>关于NSURLConnection有三种方式可以发送请求，前面同步版本我们已经看过了，下面是异步和使用协议的方式：</p>
+<pre><code>[<span class="built_in">NSURLConnection</span> sendAsynchronousRequest:request queue:<span class="literal">nil</span> completionHandler:^(<span class="built_in">NSURLResponse</span> *response, <span class="built_in">NSData</span> *data, <span class="built_in">NSError</span> *connectionError) {
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
+}];
+</code></pre><p>协议：</p>
+<pre><code><span class="comment">//实现NSURLConnectionDataDelegate协议</span>
 
-      
+<span class="built_in">NSURLConnection</span> *connection = [<span class="built_in">NSURLConnection</span> connectionWithRequest:request delegate:<span class="keyword">self</span>];
+[connection start];
 
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
+<span class="comment">//常用的需要实现下面四种方法</span>
 
-
-
-
-
-
-
-  
-    <article id="post-iOS的copy语法" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/05/iOS的copy语法/" class="article-date">
-  	<time datetime="2015-02-05T10:01:43.000Z" itemprop="datePublished">2015-02-05</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/05/iOS的copy语法/">iOS的copy语法</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这是一个关于深拷贝和浅拷贝的问题，OC设计这个语法的目的就是创建一个副本，修改副本的时候不会改变原来的对象。</p>
-<blockquote>
-<p>对于这两个问题可以这么理解，浅拷贝也就是把指针赋值，大家用的都是地址。而深拷贝，则是创建了一个新的空间，虽然内容可能是一样的，但是大家使用的空间，地址都是不同的。</p>
-</blockquote>
-<p>在OC中可以使用copy或者mutableCopy语法来实现深拷贝和浅拷贝，要求实现NSCopying或者NSMutableCopying协议。</p>
-<p>copy和mutableCopy是有区别的，区别在于NSString和NSMutableString的区别，如果使用NSString调用copy创建出来的新对象那就是NSString，如果是使用NSString的mutableCopy创建出来的新对象那就是NSMutableString。前者是不可变的，后者是可变的，它的空间不是固定的。</p>
-<pre><code><span class="name">NSString</span> *<span class="atom">string</span> = [[<span class="name">NSString</span> <span class="atom">alloc</span>] <span class="atom">initWithFormat</span>:@<span class="string">"123"</span>,<span class="number">10</span>];
-
-<span class="name">NSMutableString</span> *<span class="atom">str</span> = [<span class="atom">string</span> <span class="atom">mutableCopy</span>];
-
-[<span class="atom">string</span> <span class="atom">release</span>];
-[<span class="atom">str</span> <span class="atom">release</span>];
-</code></pre><p>遵守上面所说的创建一个副本，修改副本的时候不会改变原来的对象，其实这里可以看内存地址就可以看出来，它们是不同的。</p>
-<pre><code><span class="list">[<span class="keyword">str</span> appendString:@<span class="string">"123"</span>]<span class="comment">;</span>
-
-NSlog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,string)</span><span class="comment">;</span>
-NSlog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,str)</span><span class="comment">;</span></span>
-</code></pre><p>从打印的结果可以很明显的看的出来，从内存的角度上来看，因为是新对象，所以它的引用计数是加1的，所以copy或者mutableCopy都需要release。</p>
-<p>如果使用copy语法，因为有一个机制不可变的元素，所以OC就直接把原来的对象返回，并且引用计数加1，于是这就是浅拷贝了，而mutableCopy就是深拷贝了。</p>
-<p>如果在OC中反过来又是什么样的情况呢？比如使用NSMutableString调用它的copy方法，会产生什么样的情况呢？</p>
-<pre><code><span class="built_in">NSMutableString</span> *string = [[<span class="built_in">NSMutableString</span> alloc]stringWithFormat:<span class="string">@"123"</span>,<span class="number">10</span>];
-<span class="built_in">NSString</span> *str = [string <span class="keyword">copy</span>];
-</code></pre><p>如果从可变成不可变使用的copy却是一个深拷贝，产生一个新的对象，它的引用计数为1。如果可变的使用mutableCopy产生一个对象，它也是深拷贝，产生一个新对象，引用计数为1，所以都需要release。</p>
-<blockquote>
-<p>总结一下，只有一种情况是浅拷贝，不可变对象调用它的copy方法为浅拷贝，再原对象上计数加1.而其他的不管是调用copy还是mutableCopy都是深拷贝，产生一个新的对象，计数为1。</p>
-</blockquote>
-<h3 id="如何自定义的类提供copy或者mutableCopy">如何自定义的类提供copy或者mutableCopy</h3><p>如果要自己实现自定义对象的copy或者mutableCopy语法，首先要实现NSCopying或者NSMutableCopying协议，它们的原理都是一样的，按NSCopying来讲解一个例子。</p>
-<pre><code>-(<span class="property">id</span>)copyWithZone:(NSZone *)zone
+-(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didFailWithError:(<span class="built_in">NSError</span> *)error
 {
-    Pser *<span class="keyword">copy</span> = [[[self <span class="type">class</span>] allocWithZone:zone] init];
-    <span class="keyword">copy</span>.<span class="property">name</span> = _name;
-<span class="command">    return</span> <span class="keyword">copy</span>;
+    <span class="comment">//请求超时，错误的时候</span>
 }
-</code></pre><p>主要是实现copyWithZone方法，系统会为copy分配一个空间，以存储创建出来的副本。它不要求在copyWithZone内部进行内存管理，因为外部还需要使用。一般来说，使用copy还需要注意一些问题，也就是父子的问题。假设父类有实现copyWithZone方法，一般来说在子类中需要覆盖一下，然后调用它的父类的copyWithZone。而且在需要使用self class来实例对象，谁使用self就是谁，这样才能说子类调用之后，接收的还是子类，而不是父类。</p>
-<pre><code>[<span class="keyword">super</span> <span class="string">copyWithZone:</span>zone];
-</code></pre><p>然后再进一步的操作。</p>
-<p>NSMutableCopying的操作步骤是一模一样的，注意的问题也是如同。</p>
+
+-(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveResponse:(<span class="built_in">NSURLResponse</span> *)response
+{
+    <span class="comment">//服务器第一次响应一个response的时候</span>
+}
+
+-(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveData:(<span class="built_in">NSData</span> *)data
+{
+    <span class="comment">//传输数据</span>
+}
+
+-(<span class="keyword">void</span>)connectionDidFinishLoading:(<span class="built_in">NSURLConnection</span> *)connection
+{
+    <span class="comment">//完成的时候</span>
+}
+</code></pre><p>对于某些任务，比如下载图片，文件等等大数据的时候，可以使用一个临时会话来启动一个请求，也就是构造一个NSURLSession。</p>
+<pre><code><span class="built_in">NSURLSessionConfiguration</span> *configuration = [<span class="built_in">NSURLSessionConfiguration</span> defaultSessionConfiguration];
+<span class="built_in">NSURLSession</span> *session = [<span class="built_in">NSURLSession</span> sessionWithConfiguration:configuration];
+<span class="built_in">NSURLSessionDataTask</span> *task = [session dataTaskWithRequest:request completionHandler:^(<span class="built_in">NSData</span> *data, <span class="built_in">NSURLResponse</span> *response, <span class="built_in">NSError</span> *error) {
+
+    <span class="comment">//请求的结果</span>
+}];
+[task resume];
+</code></pre><p>临时会话的好处是每一个都不是在主线程执行，写的代码量比较少，适合简单的任务。</p>
+<p><strong>参考资料</strong></p>
+<ul>
+<li><a href="http://nshipster.cn/nsurl/" target="_blank" rel="external">NSURL/NSURLComponents</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSURLRequest_Class/" target="_blank" rel="external">NSURLRequest</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSURL_Class/index.html" target="_blank" rel="external">NSURL</a></li>
+<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/Cocoa/Reference/Foundation/Classes/NSURLConnection_Class/index.html" target="_blank" rel="external">NSURLConnection</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/" target="_blank" rel="external">NSURLSession</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSURLResponse_Class/index.html" target="_blank" rel="external">NSURLResponse</a></li>
+<li><a href="http://objccn.io/issue-5-4/" target="_blank" rel="external">从 NSURLConnection 到 NSURLSession</a></li>
+<li><a href="http://ubluesky.com/archives/55" target="_blank" rel="external">NSURL详解</a></li>
+</ul>
 
       
     </div>
@@ -438,11 +388,11 @@ NSlog<span class="list">(<span class="keyword">@</span><span class="string">"%@"
 
 
   
-    <article id="post-iOS的内存管理" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-NSString" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/02/04/iOS的内存管理/" class="article-date">
-  	<time datetime="2015-02-04T15:00:33.000Z" itemprop="datePublished">2015-02-04</time>
+      <a href="/2015/04/18/NSString/" class="article-date">
+  	<time datetime="2015-04-18T15:05:37.000Z" itemprop="datePublished">2015-04-18</time>
 </a>
     </div>
   
@@ -455,7 +405,7 @@ NSlog<span class="list">(<span class="keyword">@</span><span class="string">"%@"
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/04/iOS的内存管理/">iOS的内存管理</a>
+      <a class="article-title" href="/2015/04/18/NSString/">NSString</a>
     </h1>
   
 
@@ -464,111 +414,87 @@ NSlog<span class="list">(<span class="keyword">@</span><span class="string">"%@"
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在iOS开发中使用的是引用计数的方式来管理内存，也就是跟踪记录每个值被引用的次数。当声明一个变量来接收一个指针对象，引用次数就＋1，如果指针对象被添加到数组，字典，或者被其他指针对象所使用又＋1.如果使用完毕之后对它进行－1，一直到0，系统会立马释放这段内存。</p>
-<blockquote>
-<p>如果开启了ARC机制，编译器会帮助我们在代码中添加上内存管理的代码，而且在Xcode中比如retain这些都是不可以使用的</p>
-</blockquote>
-<p>在OC中可以使用retainCount来查看指针对象的引用次数。</p>
-<pre><code><span class="name">Wower</span> *<span class="atom">wower</span> = [[<span class="name">Wower</span> <span class="atom">alloc</span>] <span class="atom">initWithName</span>:@<span class="string">"lcepy"</span> <span class="atom">andT</span>:@<span class="string">"魔兽世界"</span>];
-<span class="name">NSLog</span>(@<span class="string">"%zi"</span>,[<span class="atom">wower</span> <span class="atom">retainCount</span>]);
-</code></pre><p>一般来说如果在代码中使用了alloc，copy，retain，引用计数都是加一，而release则是引用计数减一，又比如把指针对象添加到数组，字典，内部的引用计数也会加一，但是这个的话，系统是会来管理的。又比如一些静态方法，也会由系统来管理，内部是会加一的。还有一种叫做自动释放池的玩意，autorelease，它的功能是整个执行过程结束，系统来管理释放的工作。</p>
-<p>一般来说基本类型的数据也就是C语言的如int这样的，直接赋值即可不用管理，在iOS中主要是对OC指针对象进行内存管理。在使用@property的时候，根据参数retain，copy，编译器会帮助我们生成getter，setter方法，而且还会帮助我们进行一下内存管理，比如：</p>
-<pre><code>-<span class="params">(void)</span>setterFound:<span class="params">(Found *)</span>found
-{
-    <span class="keyword">if</span> <span class="params">(_found != found)</span> {
-        [_found release];
-        _found = found;
-        [_found retain];
-    }
-}
-</code></pre><p>有一点要注意的是如果是retain，copy一般来说接收的都是OC对象，基本类型可以用assign。</p>
-<p>实例：</p>
-<pre><code><span class="comment">//.h文件</span>
-<span class="class"><span class="keyword">@interface</span> <span class="title">Found</span> : <span class="title">NSObject</span></span>
+        <p>NSString是我学习的第一个类，它是iOS中专门处理字符串的一个类，包括有从文件读取，从网络读取，标准C的转换，格式化，大小写转换，查询，写入文件等，当然它也有一个对应的Mutable。</p>
+<p><strong>优化指南：尽早开启ARC，以下都是ARC版</strong></p>
+<p>要使用NSString有三种方式，第一种语法糖方式，第二种alloc方式，第三种使用类方法方式。</p>
+<pre><code><span class="built_in">NSString</span> *str = <span class="string">@""</span>;
+<span class="built_in">NSString</span> *str1 = [[<span class="built_in">NSString</span> alloc] initWithFormat:<span class="string">@"%@"</span>,<span class="string">@"hello"</span>];
+<span class="built_in">NSString</span> *str2 = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@"</span>,<span class="string">@"hello"</span>];
+</code></pre><p>开发中用语法糖或者类方法的方式比较多</p>
+<h3 id="NSString常用">NSString常用</h3><p>查询前缀，后缀</p>
+<pre><code>NSString *<span class="keyword">str</span> = @<span class="string">"http://lcepy.github.io"</span>;
+BOOL isF = [<span class="keyword">str</span> hasPrefix:@<span class="string">"http"</span>];
+BOOL isL = [<span class="keyword">str</span> hasSuffix:@<span class="string">"io"</span>];
+</code></pre><p>创建格式化字符串</p>
+<pre><code><span class="built_in">NSString</span> *formatter = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"http://%@"</span>,<span class="string">@"lcepy.github.io"</span>];
+<span class="built_in">NSString</span> *formatter1 = [[<span class="built_in">NSString</span> alloc] initWithFormat:<span class="string">@"http://%@"</span>,<span class="string">@"lcepy.github.io"</span>];
+</code></pre><p>从网络读取以及响应，当然很少有人会这么干PS :会block主线程</p>
+<pre><code><span class="built_in">NSURL</span> *urlS = [<span class="built_in">NSURL</span> URLWithString:<span class="string">@"http://lcepy.github.io"</span>];
+<span class="built_in">NSString</span> *urlStr = [<span class="built_in">NSString</span> stringWithContentsOfURL:urlS encoding:<span class="built_in">NSUTF8StringEncoding</span> error:<span class="literal">nil</span>];
+<span class="built_in">NSString</span> *urlStr1 = [[<span class="built_in">NSString</span> alloc] initWithContentsOfURL:urlS encoding:<span class="built_in">NSUTF8StringEncoding</span> error:<span class="literal">nil</span>];
+[urlStr writeToURL:urlS atomically:<span class="literal">YES</span> encoding:<span class="built_in">NSUTF8StringEncoding</span> error:<span class="literal">nil</span>];
+</code></pre><p>从本地文件中读取以及写入</p>
+<pre><code><span class="built_in">NSString</span> *path = [[<span class="built_in">NSBundle</span> mainBundle] pathForResource:<span class="string">@"lcepy"</span> ofType:<span class="string">@"html"</span>];
+<span class="built_in">NSString</span> *fileStr = [<span class="built_in">NSString</span> stringWithContentsOfFile:path encoding:<span class="built_in">NSUTF8StringEncoding</span> error:<span class="literal">nil</span>];
+<span class="built_in">NSString</span> *fileStr1 = [[<span class="built_in">NSString</span> alloc] initWithContentsOfFile:path encoding:<span class="built_in">NSUTF8StringEncoding</span> error:<span class="literal">nil</span>];
+[fileStr writeToFile:str atomically:<span class="literal">YES</span> encoding:<span class="built_in">NSUTF8StringEncoding</span> error:<span class="literal">nil</span>];
+</code></pre><p>字符串的比较，因为OC是C语言的超集，所以字符串有两种比较方式，指针一样，还有指针一样内容一样的比较，而==一般都不建议使用，它比较的是引用，NSString有它的比较方法。</p>
+<pre><code>isEqualToString
 
-<span class="keyword">@end</span>
-
-
-<span class="class"><span class="keyword">@interface</span> <span class="title">Wower</span> : <span class="title">NSObject</span></span>
-{
-    Found *_found;
-}
-
-<span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *name;
-<span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *game;
-
--(<span class="keyword">id</span>)initWithName:(<span class="built_in">NSString</span> *)name andT:(<span class="built_in">NSString</span> *)game;
--(<span class="keyword">void</span>)setterFound:(Found *)found;
-
-<span class="keyword">@end</span>
-<span class="comment">//.m文件</span>
-<span class="class"><span class="keyword">@implementation</span> <span class="title">Wower</span></span>
-
--(<span class="keyword">id</span>)initWithName:(<span class="built_in">NSString</span> *)name andT:(<span class="built_in">NSString</span> *)game
-{
-    <span class="keyword">self</span> = [<span class="keyword">super</span> init];
-    <span class="keyword">if</span> (<span class="keyword">self</span>) {
-        _name = name;
-        _game = game;
-    }
-    <span class="keyword">return</span> <span class="keyword">self</span>;
-}
+<span class="type">NSString</span> *astring01 = @<span class="string">"This is a String!"</span>;
+<span class="type">NSString</span> *astring02 = @<span class="string">"This is a String!"</span>;
+<span class="type">BOOL</span> <span class="literal">result</span> = [astring01 compare:astring02] == <span class="type">NSOrderedSame</span>;    //<span class="type">NSOrderedSame</span>判断两者内容是否相同
+<span class="type">NSLog</span>(@<span class="string">"result:%d"</span>,<span class="literal">result</span>);
+<span class="type">BOOL</span> result1 = [astring01 compare:astring02] == <span class="type">NSOrderedAscending</span>;    //<span class="type">NSOrderedAscending</span>判断两对象值的大小(按字母顺序进行比较，astring02大于astring01为真)
+<span class="type">NSLog</span>(@<span class="string">"result:%d"</span>,result1);
+<span class="type">BOOL</span> result2 = [astring01 compare:astring02] == <span class="type">NSOrderedDescending</span>;    //<span class="type">NSOrderedDescending</span>判断两对象值的大小(按字母顺序进行比较，astring02小于astring01为真)
+<span class="type">NSLog</span>(@<span class="string">"result:%d"</span>,result2);
+</code></pre><p>大小写以及首字母大写</p>
+<pre><code><span class="built_in">NSString</span> *io = <span class="string">@"hello"</span>;
+<span class="built_in">NSString</span> *IO = <span class="string">@"HELLO"</span>;
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,[io uppercaseString]);
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,[IO lowercaseString]);
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,[io capitalizedString]);
+</code></pre><p>查询截取PS—&gt;<strong>我觉得NSString使用最频繁的一处，查询截取是在开发中无法避免的事项，它非常有用</strong>其实，在使用查询这一系列的方式时，它和NSRange有紧密相连的关系。NSRange是一个结构体，用来描述起始位置，以及计数。</p>
+<pre><code><span class="built_in">NSString</span> *str = <span class="string">@"http://lcepy.github.io"</span>;
+<span class="built_in">NSRange</span> httpRange =  [str rangeOfString:<span class="string">@"http"</span>]; <span class="comment">//返回一个range结构体</span>
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,<span class="built_in">NSStringFromRange</span>(httpRange));
 
 
--(<span class="keyword">void</span>)dealloc
-{
+<span class="built_in">NSRange</span> ioRange = [str rangeOfString:<span class="string">@"io"</span>];
+<span class="built_in">NSString</span> *subs = [str substringWithRange:<span class="built_in">NSMakeRange</span>(ioRange<span class="variable">.location</span>, ioRange<span class="variable">.length</span>-<span class="number">1</span>)]; <span class="comment">//从指定位置开始截取字符串</span>
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,subs);
 
-    <span class="built_in">NSLog</span>(<span class="string">@"Found的引用计数%zi"</span>,[_found retainCount]);
-    [_found release];
-    <span class="built_in">NSLog</span>(<span class="string">@"Found的引用计数%zi"</span>,[_found retainCount]);
-    [<span class="keyword">super</span> dealloc];
+<span class="comment">//从字符串开头一直截取到指定位置</span>
+<span class="built_in">NSString</span> *indexStr = [str substringToIndex:<span class="number">4</span>];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,indexStr);
 
-}
-
--(<span class="keyword">void</span>)showMessage
-{
-
-    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,_name);
-    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,_game);
-}
-
--(<span class="keyword">void</span>)setterFound:(Found *)found
-{
-    <span class="keyword">if</span> (_found != found) {
-        [_found release];
-        _found = found;
-        [_found retain];
-    }
-}
-<span class="keyword">@end</span>
-
-<span class="class"><span class="keyword">@implementation</span> <span class="title">Found</span></span>
-
--(<span class="keyword">void</span>)dealloc
-{
-    [<span class="keyword">super</span> dealloc];
-    <span class="built_in">NSLog</span>(<span class="string">@"释放"</span>);
-}
-
-<span class="keyword">@end</span>
-
-<span class="comment">//main文件</span>
-
-<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {
-    <span class="keyword">@autoreleasepool</span> {
-        Wower *wower = [[Wower alloc] initWithName:<span class="string">@"lcepy"</span> andT:<span class="string">@"魔兽世界"</span>];
-        <span class="built_in">NSLog</span>(<span class="string">@"%zi"</span>,[wower retainCount]);
-        Found *f = [[Found alloc] init];
-        [wower setterFound:f];
-        [wower release];
-        [f release];
-    }
-    <span class="keyword">return</span> <span class="number">0</span>;
-}
-</code></pre><p>dealloc是OC对象释放之后，系统会自动调用，这里一般都是来释放一些其他对象。在Wower类的dealloc中只释放了_found，而copy的那个却没有释放，那是因为@””快速创建的，一般来说这些都不需要自己来管理而是系统。</p>
-<blockquote>
-<p>关于OC的内存管理，其实有一个原则，就是谁创建谁释放，谁使用谁释放。在之前，创建了wower,f对象，于是它们要在外部释放，而我使用了setFound方法来把f对象设置到成员变量中，于是这里就成了wower对象的_found成员变量在使用，于是它有责任在dealloc的时候来把f对象的引用计数减1。</p>
-</blockquote>
+<span class="comment">//从指定位置开始截取到最后的字符串（包括）</span>
+<span class="built_in">NSString</span> *lastStr = [str substringFromIndex:<span class="number">4</span>];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,lastStr);
+</code></pre><p>扩展路径以及获取扩展文件名</p>
+<pre><code><span class="built_in">NSString</span> *doc = <span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>)[<span class="number">0</span>];
+<span class="built_in">NSString</span> *filePath = [doc stringByAppendingPathComponent:<span class="string">@"PhotoCache"</span>];
+<span class="built_in">NSString</span> *file = <span class="string">@"~/lcepy.io"</span>;
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,[file pathExtension]);
+</code></pre><h3 id="NSMutableString常用">NSMutableString常用</h3><p>注意PS—&gt;<strong>NSString可以使用的方法，Mutable版全部具备，Mutable版的方法，NSString不一定有</strong></p>
+<p>在字符串最后插入或者格式化插入字符串</p>
+<pre><code>NSMutableString *str1 = [NSMutableString <span class="string">stringWithString:</span>@<span class="string">"http://lcepy.github.io"</span>];
+[str1 <span class="string">appendString:</span>@<span class="string">"#login"</span>];
+[str1 <span class="string">appendFormat:</span>@<span class="string">"%@"</span>,@<span class="string">"#login"</span>];
+NSLog(@<span class="string">"%@"</span>,str1);
+</code></pre><p>在指定的位置插入字符串</p>
+<pre><code><span class="list">[<span class="keyword">str1</span> insertString:@<span class="string">"?id=fjdkfjkgfgi384jkg"</span> atIndex:str1.length]<span class="comment">;</span>
+NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,str1)</span><span class="comment">;</span></span>
+</code></pre><p>在指定的范围内替换</p>
+<pre><code>NSRange login = [str1 <span class="string">rangeOfString:</span>@<span class="string">"#login"</span>];
+[str1 <span class="string">replaceCharactersInRange:</span>login <span class="string">withString:</span>@<span class="string">"#logou"</span>];
+NSLog(@<span class="string">"%@"</span>,str1);
+</code></pre><p>延伸阅读：</p>
+<ul>
+<li><a href="http://blog.devtang.com/blog/2012/02/14/nsstring-java-like-wrapper/" target="_blank" rel="external">给NSString添加java风格：（感觉有点意思）</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSString_Class/index.html" target="_blank" rel="external">NSString</a></li>
+</ul>
 
       
     </div>
@@ -597,11 +523,11 @@ NSlog<span class="list">(<span class="keyword">@</span><span class="string">"%@"
 
 
   
-    <article id="post-复习JavaScript十一之理解内存管理" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-NSURLProtocol" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/02/04/复习JavaScript十一之理解内存管理/" class="article-date">
-  	<time datetime="2015-02-04T10:53:09.000Z" itemprop="datePublished">2015-02-04</time>
+      <a href="/2015/04/13/NSURLProtocol/" class="article-date">
+  	<time datetime="2015-04-13T03:38:06.000Z" itemprop="datePublished">2015-04-13</time>
 </a>
     </div>
   
@@ -614,7 +540,7 @@ NSlog<span class="list">(<span class="keyword">@</span><span class="string">"%@"
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/04/复习JavaScript十一之理解内存管理/">复习JavaScript十一之理解内存管理</a>
+      <a class="article-title" href="/2015/04/13/NSURLProtocol/">NSURLProtocol</a>
     </h1>
   
 
@@ -623,21 +549,34 @@ NSlog<span class="list">(<span class="keyword">@</span><span class="string">"%@"
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>一般来说内存管理主要有这么几种方式，引用计数和标记，而JavaScript采用的就是标记管理的方式。Js的内存管理是自动的，但是并不是说执行完后立马销毁，而是有时间周期性，相隔一段时间执行一下垃圾回收，把没有引用的内存全部销毁。</p>
-<p>OC中采用的是引用计数来手动管理内存，这样的方式比较好，可以让开发者自己来管理。当然也有不好的地方，如果遗忘了释放，很可能引起应用的崩溃。</p>
-<p>总体来看在IE中因为COM组件的原因，可能会发生循环引用的问题，这个问题在引用计数的内存管理都会遇见。所谓的循环引用是指在对象A中包含了一个指向B的指针，然后再对象B中包含一个指向A的指针，于是悲剧了。</p>
-<pre><code>var element = document.getElementById(<span class="string">'doc'</span>);
-var <span class="keyword">my</span> = {};
-<span class="keyword">my</span>.element = element;
-element.<span class="keyword">my</span> = <span class="keyword">my</span>;
-</code></pre><p>大家都引用，于是，可想而知。要避免这种问题，一定要在不使用的时候my.element = null，把它断开。</p>
-<p>那么，其他浏览器呢？还是标记清理的机制，比如一个函数的变量，在进入环境时标记上“进入环境”，执行完之后标记上“离开环境”，然后等待系统来释放。</p>
-<p>IE有一个手动释放的方法，window.CollectGarbage，调用它就立马释放已经标记离开环境的变量，不过很多文章都不建议这样做。</p>
-<p>那么一般都这样做，引用类型的释放</p>
-<pre><code><span class="variable"><span class="keyword">var</span> my</span> = {};
-<span class="comment">//使用完毕之后</span>
-my = <span class="literal">null</span>;
-</code></pre><p>让my脱离执行环境，标记上已经离开环境，然后等待系统执行垃圾回收，释放内存。</p>
+        <p>阅读资料：</p>
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtocol_Class/index.html" target="_blank" rel="external">Apple Foundation NSURLProtocol</a></li>
+<li><a href="http://nshipster.cn/nsurlprotocol/" target="_blank" rel="external">http://nshipster.cn/nsurlprotocol/</a></li>
+</ul>
+<p>正如NSHipster在上篇文章所写的一样，iOS离不开网络，那么这就需要网络编程。cocoa提供了一系列的API来操作网络，比如NSURL，NSURLRequest，NSURLSession等等，以及处理网络的GCD，NSOperation多任务处理。</p>
+<p>那么NSURLProtocol，它有什么用呢？官方给它的解释是，可以重新定义已经加载的URL的行为或者定义一个新的URL。换句话来说，就是这个类可以监管应用的网络活动，只要是通过URL来进行的。</p>
+<p>NSURLProtocol是一个抽象类，也就是说它需要一个子类继承它才可以正常工作，关于怎么使用可以阅读NSHipster的文章，把子类注册到NSURLProtocol中。</p>
+<pre><code>+ (<span class="tag">void</span>)<span class="rule"><span class="attribute">consolelog</span>:<span class="value">(UITextView *)debugText
+{
+    debug = debugText</span></span>;
+    <span class="attr_selector">[NSURLProtocol registerClass:self]</span>;
+}
+</code></pre><h3 id="案例需求，监管应用的URL加载系统，并且支持web_client_console_log">案例需求，监管应用的URL加载系统，并且支持web client console log</h3><p>案例可以在Github中查看<a href="https://github.com/lcepy/MFLog" target="_blank" rel="external">MFLog</a></p>
+<pre><code>+ <span class="comment">(BOOL)</span>registerClass:<span class="comment">(Class)</span>protocolClass
+</code></pre><p>把子类注册到NSURLProtocol中</p>
+<pre><code>+ (<span class="keyword">void</span>)unregisterClass:(<span class="keyword">Class</span>)protocolClass
+</code></pre><p>把子类从NSURLProtocol中移除</p>
+<p>NSURLProtocol提供了一系列的方法来操作一个URL Data，先看其一，一个静态方法。</p>
+<pre><code>+ (<span class="built_in">BOOL</span>)canInitWithRequest:(<span class="built_in">NSURLRequest</span> *)request
+</code></pre><p>canInitWithRequest <strong>注意，这些是覆盖父类NSURLProtocol的静态方法</strong>是系统询问，是否处理该请求URL，如果返回NO，不处理。如果返回YES，子类进一步控制。</p>
+<pre><code>+ <span class="list">(<span class="keyword">NSURLRequest</span> <span class="variable">*)canonicalRequestForRequest:(NSURLRequest *</span>)</span>request
+</code></pre><p>返回请求的原始request</p>
+<pre><code>- <span class="list">(<span class="keyword">void</span>)</span>startLoading
+</code></pre><p>加载此次请求，可以通过self.request获取当前URL的request对象</p>
+<pre><code>- <span class="list">(<span class="keyword">void</span>)</span>stopLoading
+</code></pre><p>此次请求完成时，可以在这个方法中处理</p>
+<p>每一个NSURLProtocol都有一个client属性，这个属性是NSURLProtocolClient。另外，还可以实现NSConnectionDataDelegate协议，把NSURLProtocol与NSURLConnection链接起来，这样就可以在statLoading调用之后，系统将回调NSConnectionDataDelegate中定义的各种方法，这个在自定义时非常有用。</p>
 
       
     </div>
@@ -646,7 +585,7 @@ my = <span class="literal">null</span>;
       
       
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
 	</div>
 
       
@@ -666,11 +605,11 @@ my = <span class="literal">null</span>;
 
 
   
-    <article id="post-复习JavaScript十之理解引用类型和匿名函数闭包" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-纪录开发第一个iOS客户端遇见的坑" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/02/03/复习JavaScript十之理解引用类型和匿名函数闭包/" class="article-date">
-  	<time datetime="2015-02-03T11:02:01.000Z" itemprop="datePublished">2015-02-03</time>
+      <a href="/2015/03/28/纪录开发第一个iOS客户端遇见的坑/" class="article-date">
+  	<time datetime="2015-03-28T06:51:34.000Z" itemprop="datePublished">2015-03-28</time>
 </a>
     </div>
   
@@ -683,7 +622,7 @@ my = <span class="literal">null</span>;
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/03/复习JavaScript十之理解引用类型和匿名函数闭包/">复习JavaScript十之理解引用类型和匿名函数闭包</a>
+      <a class="article-title" href="/2015/03/28/纪录开发第一个iOS客户端遇见的坑/">纪录开发第一个iOS客户端遇见的坑</a>
     </h1>
   
 
@@ -692,467 +631,100 @@ my = <span class="literal">null</span>;
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>引用类型虽然看起来和类很相似，但是它们却是不同的概念，引用类型的值，也就是对象是引用类型的一个实例。在Js中引用类型主要有Object，Array，Date，正则，Function等。</p>
-<p>Object之前已经复习过了，Array是用的非常频繁的一个引用类型。</p>
-<p><strong>Array</strong></p>
-<p>在Js中数组可以存储任意的数据，而且它的大小是可以动态调整的类似于OC中的NSMutableArray。创建数组可以使用构造函数的方式也可以使用字面量的形式，另外可以使用concat从一个数组中复制一个副本出来。数组本身提供了很多方法让开发者使用来操作数组。</p>
+        <p>来到新公司做的第一个产品就是iOS客户端，我负责的是基于LeanCloud SDK开发的售后服务IM系统，也就是一个聊天的模块。第一次比较纯粹的在工作中，写Objective-c，遇到了一些坑，解决之后才发现原来是这么回事，而且还复习了它的基础语法知识。</p>
+<p><strong>block的问题</strong></p>
+<p>引用资料：</p>
 <ul>
-<li>length 数组的长度</li>
-<li>toString  可以返回一个以，拼接的字符串，相当于是调用了下join(‘,’)</li>
-<li>join 可以用一个分割符来拼接成一个字符串</li>
-<li>push 添加一个数据到数组的末端</li>
-<li>pop 删除数组中的最后一项，有返回值</li>
-<li>shift 删除数组的第一项，有返回值</li>
-<li>unshift 添加一个数据到数组的首端</li>
-<li>reverse 倒序</li>
-<li>sort 可以传入一个排序的函数</li>
-<li>slice 可以基于当前数组返回一个新的数组，接收两个参数，返回项的起始位置和结束位置</li>
-<li>splice 可以传入N个参数，第一个参数表示要删除，插入或则替换的位置，第二个参数表示要删除的项数，第三个到第N个表示要插入或则替换的数据</li>
+<li><a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/" target="_blank" rel="external">谈Objective-C Block的实现</a></li>
+<li><a href="http://www.cnbluebox.com/?p=255" target="_blank" rel="external">Block防止循环引用</a></li>
 </ul>
-<p><strong>Date</strong></p>
-<p>时间对象也是使用非常多的玩意，它是使用GMT时间来描述，而且时间对象是可以直接比对大小的。</p>
-<pre><code><span class="keyword">var</span> date1 = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2015</span>,<span class="number">1</span>,<span class="number">2</span>);
-<span class="keyword">var</span> date2 = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2015</span>,<span class="number">1</span>,<span class="number">10</span>);
+<p>本来我想使用Block来解决通信的问题，后来我发现语法以及对Block的理解有些忘记了。基础不扎实，带来了严重的后果。Block使用^来声明，用;来结束一个完整的Block，缺一不可。</p>
+<pre><code><span class="keyword">void</span> (^ blockde)(<span class="built_in">NSString</span> *,<span class="built_in">NSString</span> *) = ^(<span class="built_in">NSString</span> *test1,<span class="built_in">NSString</span> *test2){
+    <span class="built_in">NSString</span> *log = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@,%@"</span>,test1,test2];
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,log);
+};
+</code></pre><p>Block的语法有些难度，特别是灵活运用的时候，但是记住一点，先声明返回值，然后两个括号用来描述这个Block的签名，以及参数类型，如果是OC对象，需要写上指针符号。如果没有签名，可以什么也不写。<strong>有一个情况例外，利用typedef定义的block必须写上签名</strong></p>
+<p>我想在动态方法中提供一个Block来处理一些事情，定义它有两种写法。</p>
+<p>第一种写法是利用typedef定义一个别名，描述还是第一项声明返回值参数，第二项别名签名，第三项传入的参数类型。</p>
+<pre><code><span class="keyword">typedef</span> <span class="built_in">NSString</span> *(^handlerBlock)(<span class="built_in">NSDictionary</span> * dic,<span class="built_in">NSArray</span> * arr);
 
-date1 &lt; date2  
-</code></pre><p>常用的方法</p>
+-(<span class="keyword">void</span>)sendMessageText:(handlerBlock)block
+{
+    block();
+}
+</code></pre><p>第二种写法是直接写在动态方法中，方法的参数形式一般都是()名字，所以block的声明就要写在一个圆括号中，这种写法可以省略block的签名。</p>
+<pre><code>-<span class="params">(void)</span>setSource:<span class="params">(NSString *)</span> source andBlock:<span class="params">(void<span class="params">(^)</span><span class="params">(NSString *treme)</span>)</span> block
+{
+    block<span class="params">()</span>;
+}
+</code></pre><p>因为公司的项目都是ARC的，所以copy就省略了，其他方面主要是需要避免循环引用的问题，比如使用__weak关键字给self对象。</p>
+<p><strong>导入第三方库的问题</strong></p>
+<p>这个IM模块是基于第三方SDK实现的，所以需要导入第三方库，在这里也踩了下坑。LeanCloud依赖了其他五个框架，需要手动的添加到Link Binary With Libraries中，必须得承认学艺不精的后果是这个编译的错，琢磨了很久，而且还需要把openssl的include的路径添加到Head中。</p>
+<p>关于Xcode的使用，一定要把cocoaChina的那个Xcode系列阅读完。</p>
+<p><strong>开发者证书的问题</strong></p>
+<p>根据以往的经验想真机调试，那就必须的添加开发者证书，于是按照老旧的流程，去<a href="https://developer.apple.com/account/ios/certificate/certificateList.action" target="_blank" rel="external">https://developer.apple.com/account/ios/certificate/certificateList.action</a> 下载证书，然后添加设备UID，接着添加Profile一路Next。</p>
+<p>现在这些步骤真的不需要了，在Xcode中登录自己的Apple ID，然后在项目的Team选项中选择正确的签名，Xcode自动下载，自动匹配设备UID，一切自动化，当然首先要把设备连接好。</p>
+<p>它不是坑，而是因为自己不知道，在安装证书时发现了现在有这么方便的流程。    </p>
+<p><strong>访问相册或者摄像头返回给web端</strong>    </p>
+<p>引用资料：</p>
 <ul>
-<li>getTime 获取时间对象的毫秒数</li>
-<li>setTime 设置时间对象的毫秒数，会改变日期</li>
-<li>getFullYear 获取时间对象的年（2015）</li>
-<li>getMonth 获取时间对象的月（需要加1）</li>
-<li>getDay 获取日期的星期几（0-6）星期天到星期六</li>
-<li>getDate 获取日期的天数</li>
-<li>getHours 获取当前日期的小时</li>
-<li>getMinutes 获取当前日期的分钟数</li>
-<li>getSeconds 获取当然日期的秒数</li>
+<li><a href="http://blog.devtang.com/blog/2012/02/22/use-gcd/" target="_blank" rel="external">GCD</a></li>
 </ul>
-<p>上面看起来都是获取，当然也有设置，只是相应的get置换成set即可。</p>
-<p><strong>正则表达式</strong></p>
-<p>在Js里正则表达式是用RegExp类型来支持的，关于正则可以看看之前写的一篇文章，用python来描述的如何读懂正则。</p>
-<p>Js也支持三种模式，gim，表示全局，不区分大小写，多行。</p>
-<p>一般来说很少有人这么使用var xxx = new RegExp()，而是用字面量的方式，比如var xx = /[bc]/gi;像用的比较多的方法有exec用于捕获包含第一个匹配项的数组，没有则返回null。test，用于判断，如果匹配返回true，不匹配返回false。</p>
-<p><strong>Function</strong></p>
-<p>说起来Js的核心是什么？那就是函数了。对于函数主要是理解它的几个概念，它可以当值来传递，没有重栽。而且声明的时候，比如function a(){} var a = function(){} 执行时会有区别。函数内部的参数arguments包含了传入的所有参数，this，表示在这个函数内的作用域，以及prototype。</p>
-<p><strong>处理字符串</strong></p>
-<p>在Js中还有一种叫做包装类型的玩意，正因为此所以处理一些基本数据类型，比如字符串时，有很多方法可以使用。</p>
+<p>在拿到图片image对象后，怎么处理，是一个非常头疼的问题。LeanCloud的AVIMImageMessage类需要的是一个filePath而不是UIImage或者NSData对象，iOS应用是没有权限访问应用沙盒之外的东西的。首先想到的解决办法是把这个UIImage写入到应用内的Documents目录下的Photos目录，然后把这个地址发送给AVIMImageMessage对象。考虑到文件IO操作，还会对应用界面卡顿，所以把这个任务委托给了GCD去调度。</p>
+<p>在使用dispatch_async之前，还需要处理一个问题，那就是UI展示的问题。大坑在这里，我们的UI是web的。所以对于图片，调用UIImageJPEGRepresentation去压缩体积，然后再转成base64，把这个base64发送给客户端。</p>
+<p>为什么说这里是坑呢？因为它是一个IM系统，操作会非常的频繁，最关键的是展示是在web中，它的交互流程很坑。</p>
+<p><strong>文件处理</strong></p>
 <ul>
-<li>concat 可以将一个或者多个字符串拼接起来，返回一个新的字符串</li>
-<li>slice 接收两个参数，起始位置和结束位置，返回一个新的字符串</li>
-<li>substr和substring和slice一样，唯一的不同是substr第二个参数是返回字符串的个数</li>
-<li>indexOf 从头开始查询字符串，存在会返回它所在的位置，没有返回－1</li>
-<li>lastIndexOf 从最后开始查询字符串</li>
-<li>toUpperCase 转大写</li>
-<li>toLowerCase 转小写</li>
-<li>match 正则表达式使用跟exec一样</li>
-<li>search 正则表达式使用，查询到返回一个位置，没有返回－1</li>
-<li>replace 替换，第一个参数可以是正则表达式也可以是字符串，第二个参数是要替换的字符串</li>
-<li>localeCompare比较字符串，如果字符串相等返回0，如果字符串的字母排在参数字符串之前，返回负数，如果是之后，返回正数。</li>
+<li><a href="http://nshipster.cn/nsfilemanager/" target="_blank" rel="external">NSFileManager</a></li>
 </ul>
-<h3 id="理解匿名函数和闭包">理解匿名函数和闭包</h3><p>匿名函数又叫拉姆达函数，主要是在把函数当值传递的时候用，或者是把函数当返回值，比如：</p>
-<pre><code><span class="function"><span class="keyword">function</span> <span class="title">d</span><span class="params">(callback)</span></span>{
-    <span class="keyword">callback</span>();
+<p>针对每一个用户都应该在应用沙盒内有它对应的一个缓存文件，它必须写入在Documents目录下，当人在获取之前，可以先判断一下，文件是否存在。</p>
+<p><strong>使用ionic添加插件时的巨坑</strong></p>
+<p>在升级了ionic为1.3.18之后，它的plugin编译时需要手动添加，据说这个版本他们去掉了自动添加的模块，于是写在配置文件中的插件，需要在platform add ios后，再ionic plugin add im手动添加到编译环境中，每一个都需要重复上述的动作，最后ionic build ios。</p>
+<p>希望下一个版本，ionic能把这个补上吧。</p>
+<p><strong>debug模式|重构IM|Date处理</strong></p>
+<p>debug workflow 如果选择了汇编debug，进入的是直接查看内存地址的debug模式，这种模式某些情况下有用。本来使用web来写IM我们发现它的性能实在是不能忍受，于是用OC把它重构了。</p>
+<p>使用NSDate来处理时间的时候，还需要NSDateFormatter来格式化，而且拿到的毫秒还需要除以1000，因为OC只处理秒单位。</p>
+<p><strong>代码布局聊天界面的cell</strong></p>
+<p>利用CGFloat mainScreenWidth = [UIScreen mainScreen].bounds.size.width来获取屏幕的宽度，然后计算自定义的cell，统计出来一个高度，在-(CGFloat)tableView:(UITableView <em>)tableView heightForRowAtIndexPath:(NSIndexPath </em>)indexPath 返回给TableView。</p>
+<pre><code>-(<span class="built_in">CGFloat</span>)tableView:(<span class="built_in">UITableView</span> *)tableView heightForRowAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath
+{
+    MissIMFrame *missIMFrame = [<span class="keyword">self</span><span class="variable">.modelManager</span><span class="variable">.dataSource</span> objectAtIndex:indexPath<span class="variable">.row</span>];
+    <span class="keyword">return</span> missIMFrame<span class="variable">.cellHeight</span>;
 }
-d(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-    alert(<span class="string">'123'</span>)
-});
+</code></pre><p><strong>解析历史纪录</strong></p>
+<p>第三方的leanCloud拉取的历史纪录全部是字符串，还要进一步的处理，转成JSON，这个地方主要是使用了NSJSONSerialization来处理，判断解析的错误，如果错误了，说明它是一个真正的文本，如果是正确的，那么说明它是一个可以转化为字典的字符串，然后再进一步处理。</p>
+<p><strong>滚动上拉加载历史纪录</strong></p>
+<p>实现scrollView的三个协议</p>
+<pre><code>-(<span class="keyword">void</span>)scrollViewWillBeginDragging:(<span class="built_in">UIScrollView</span> *)scrollView
+{
+    <span class="comment">//手指触摸屏幕，准备滚动的那一刻</span>
+    <span class="built_in">NSLog</span>(<span class="string">@"手指滑动开始－－－－－的那一瞬间"</span>);
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,<span class="built_in">NSStringFromCGPoint</span>(scrollView<span class="variable">.contentOffset</span>));
+}
 
-<span class="comment">//或者</span>
+-(<span class="keyword">void</span>)scrollViewWillEndDragging:(<span class="built_in">UIScrollView</span> *)scrollView withVelocity:(<span class="built_in">CGPoint</span>)velocity targetContentOffset:(<span class="keyword">inout</span> <span class="built_in">CGPoint</span> *)targetContentOffset
+{
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,<span class="built_in">NSStringFromCGPoint</span>(scrollView<span class="variable">.contentOffset</span>));
+}
 
-<span class="function"><span class="keyword">function</span> <span class="title">b</span><span class="params">()</span></span>{
-    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        alert(<span class="string">'123'</span>);
-    }
-}
-<span class="keyword">var</span> g = b();
-g();
-</code></pre><p>其实第二种方式跟闭包的意义一样了，所谓的闭包书面的解释是可以访问另一个函数作用域内变量的函数，稍微改写一下可能会更明显。</p>
-<pre><code><span class="function"><span class="keyword">function</span> <span class="title">b</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> name = <span class="string">'123'</span>;
-    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        alert(name);
-    }
-}
-<span class="keyword">var</span> g = b();
-g();
-</code></pre><p>从这里可以看出来return的函数可以访问到name，而外部却不行，这个返回值的函数就可以理解为闭包。理解闭包还可以看一个经典的求值的例子。</p>
-<pre><code><span class="function"><span class="keyword">function</span> <span class="title">save_i</span><span class="params">()</span></span>{
-    <span class="keyword">var</span> a = [];
-    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
-        a[i] = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-            <span class="keyword">return</span> i;
+-(<span class="keyword">void</span>)scrollViewDidEndDragging:(<span class="built_in">UIScrollView</span> *)scrollView willDecelerate:(<span class="built_in">BOOL</span>)decelerate
+{
+    <span class="comment">//手指离开屏幕，放下的那一刻</span>
+    <span class="built_in">NSLog</span>(<span class="string">@"刷动到顶部，放下的时候"</span>);
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,<span class="built_in">NSStringFromCGPoint</span>(scrollView<span class="variable">.contentOffset</span>));
+    <span class="keyword">if</span> (scrollView<span class="variable">.contentOffset</span><span class="variable">.y</span> &lt; <span class="number">0</span> &amp;&amp; <span class="keyword">self</span><span class="variable">.historyTimeId</span> &gt; <span class="number">0</span>) {
+        <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.isScroll</span>) {
+            <span class="keyword">self</span><span class="variable">.application</span><span class="variable">.networkActivityIndicatorVisible</span> = <span class="literal">YES</span>;
+            [<span class="keyword">self</span><span class="variable">.mainUI</span><span class="variable">.MissIMActivity</span> startAnimating];
+            <span class="keyword">self</span><span class="variable">.isScroll</span> = <span class="literal">NO</span>;
+            [<span class="keyword">self</span> fetchHistoryMessage:<span class="keyword">self</span><span class="variable">.conversationId</span> timeId:<span class="keyword">self</span><span class="variable">.historyTimeId</span>];
         }
     }
-    <span class="keyword">return</span> a;    
 }
-
-<span class="keyword">var</span> c = save_i();
-<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
-    alert(c[i]());
-}
-</code></pre><p>从这个例子上来看，我们想得到的结果是10次循环a[i]保存着一个闭包，然后alert出从0到10，但是结果很出人意料，全部是10，为什么？哪里理解的不对呢？a[i]明明是内部函数，然后让它访问另外一个函数作用域内的变量i。</p>
-<p>个人觉得可以这样去分析问题，在客户端执行Js时有一个全局执行环境，指向的是window对象。而所谓的对象也就是引用类型，实际上在后台执行环境中，它就是一个指针。</p>
-<p>回到Js当代码在执行的时候，会创建变量对象并且构建一个作用域链，而这个对象保存着当前函数可以访问的对象。</p>
-<pre><code>window
-    -<span class="ruby">&gt;save_i
-</span>        -<span class="ruby">&gt;this|argument
-</span>        -<span class="ruby">&gt;a
-</span>        -<span class="ruby">&gt;i
-</span>        -<span class="ruby">&gt;看不见的a[<span class="number">0</span>]-a[<span class="number">10</span>]
-</span>        -<span class="ruby">&gt;a[<span class="number">0</span>]function(){}
-</span>            -<span class="ruby">&gt;i
-</span>    -<span class="ruby">&gt;c</span>
-</code></pre><p>上述的i和a[0]里的i是同一个i，那么结果就是10。</p>
-<p>进一步处理</p>
-<pre><code><span class="function"><span class="keyword">function</span> <span class="title">save_i</span>(<span class="params"></span>)</span>{
-    <span class="keyword">var</span> a = [];
-    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
-        a[i] = <span class="function"><span class="keyword">function</span>(<span class="params">k</span>)</span>{
-            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
-                <span class="keyword">return</span> k;
-            };
-        }(i)
-    }
-    <span class="keyword">return</span> a;    
-}
-
-<span class="keyword">var</span> c = save_i();
-<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++){
-    <span class="built_in">console</span>.log(c[i]());
-}
-</code></pre><p>接着按上面的节奏来分析</p>
-<pre><code>window
-    -<span class="ruby">&gt;save_i
-</span>        -<span class="ruby">&gt;this|argument
-</span>        -<span class="ruby">&gt;a
-</span>        -<span class="ruby">&gt;i
-</span>        -<span class="ruby">&gt;看不见的a[<span class="number">0</span>]-a[<span class="number">10</span>]
-</span>        -<span class="ruby">&gt;a[<span class="number">0</span>]function(){}
-</span>            -<span class="ruby">&gt;k
-</span>            -<span class="ruby">&gt;function(){}
-</span>                -<span class="ruby">&gt;k
-</span>
-    -<span class="ruby">&gt;c</span>
-</code></pre><p>什么是传参？按值传递，相当于是在那个立即执行的函数中创建了一个新的地址和空间，虽然值是一样的，但是每一个k又是不同的，所以得到的结果正好满足了我们的预期。</p>
-<p>本来正常情况下save_i执行完毕后就要销毁，但是内部的闭包被包含在这个作用域内了，所以save_i没法销毁，从这里可以看的出来闭包会带来内存的问题，因为用完之后没法销毁，如果不注意的话。</p>
-<p>那么用完之后只能设置为null来解除引用，等着自动销毁把内存回收。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript九之客户端存储方案" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/03/复习JavaScript九之客户端存储方案/" class="article-date">
-  	<time datetime="2015-02-03T09:43:48.000Z" itemprop="datePublished">2015-02-03</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/03/复习JavaScript九之客户端存储方案/">复习JavaScript九之客户端存储方案</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>随着Web应用越来越复杂，总是有很多需求需要在客户端存储一些特定的信息，用来描述访问者或者跟访问者相关的信息。于是，就有了这些客户端存储的方案，供开发者选择以及使用。</p>
-<h3 id="cookie">cookie</h3><p>说起来cookie的出现是非常早的，用于在客户端存储会话信息，它要求服务器对任意的HTTP请求发送Set-Cookie HTTP头作为响应的一部分，例如：</p>
-<pre><code><span class="status">HTTP/1.1 <span class="number">200</span> OK</span>
-<span class="attribute">Content-Type</span>: <span class="string">text/html</span>
-<span class="attribute">Set-Cookie</span>: <span class="string">name=value</span>
-</code></pre><p>cookie虽然好用，但是它在客户端上有很多限制，而去获取也不是很容易。最重要的是关于请求的性能，cookie是对任意HTTP设置，所以也会发送给服务器，这些额外信息有时候不是必需的。</p>
-<ul>
-<li>cookie是跟特定的域有关系的，也就意味着存储在cookie中的信息只能让特定的域来访问</li>
-<li>cookie的条数是有限制的，大体上来说各浏览器不会超过50个，除了safair chrome</li>
-<li>cookie在客户端只有一个方法可以用document.cookie</li>
-<li>cookie的大小在客户端上也有限制，大体不会超过1MB</li>
-<li>如果在客户端设置了cookie，是没法删除的，只能在同一个cookie上设置name=空字符串或者设置失效时间</li>
-<li>如果设置了secure，cookie只能在SSL链接才能传输</li>
-</ul>
-<p>cookie在浏览器上的保存是由几个方面组成的，理解这个对于使用Js操作cookie是一个必备条件，它由名称也就是每一项的key，每一项的值value，域名的限制，路径对于哪一个页面起作用，时间，以及安全标识secure。</p>
-<p>在客户端主要是使用document.cookie来进行操作，获取和设置都是这一个。而去获取是一个全的字符串，还需要进一步的处理才能得到值。如果是设置，也是需要设置一个全的字符串。对于这个，最好都要encodeURIComponent一下，获取的时候decodeURIComponent一下。</p>
-<pre><code><span class="keyword">var</span> setCookie = <span class="function"><span class="keyword">function</span>(<span class="params">name,value,expires,path,domain,secure</span>)</span>{
-    <span class="keyword">var</span> cookieText = <span class="built_in">encodeURIComponent</span>(name)+<span class="string">'='</span>+<span class="built_in">encodeURIComponent</span>(value);
-
-    <span class="comment">//各项的拼接</span>
-    <span class="built_in">document</span>.cookie = cookieText;
-}
-</code></pre><p>聪明的开发者为了绕开浏览器上对于条数的限制，研究出了一个方式，把真实的值设置在子cookie上。</p>
-<pre><code><span class="keyword">name</span>=<span class="keyword">name</span>=<span class="keyword">value</span>
-</code></pre><h3 id="IE上的客户端存储userData">IE上的客户端存储userData</h3><p>在IE中引入了一个userData的方案来存储客户端数据，允许每个文档最多128KB，每个域1MB的数据量。想使用它首选在那个元素上应用一个css。</p>
-<pre><code>&lt;div style=<span class="string">"behavior:url(<span class="subst">#<span class="keyword">default</span></span><span class="subst">#userData</span>)"</span>&gt;&lt;/div&gt;
-</code></pre><p>使用的时候跟设置dom属性一样，唯一有一个不同的地方是最后要调用save方法，告诉它存储在哪个数据仓库上。</p>
-<pre><code><span class="reserved">var</span> dataStore = <span class="built_in">document</span>.getElementById(<span class="string">'dataStore'</span>);
-dataStore.setAttribute(<span class="string">'name'</span>,<span class="string">'lcepy'</span>);
-dataStore.save(<span class="string">'MyNameInfo'</span>);
-</code></pre><p>获取</p>
-<pre><code>dataStore.<span class="built_in">load</span>(<span class="string">'MyNameInfo'</span>);
-dataStore.getAttribute(<span class="string">'name'</span>);
-</code></pre><h3 id="HTML5的客户端存储方案">HTML5的客户端存储方案</h3><blockquote>
-<p>支持度以及使用比较广泛的是Web Storage API，当然客户端还有本地数据IndexDB等等，这些也是可以存储客户端数据，但是它们支持的很少。在做移动端开发时，localStorage的使用是非常频繁的，还要注意一点是个别比如safair浏览器有隐私模式，本地缓存是不起作用的，无法读取，所以要做一些额外的处理。</p>
-</blockquote>
-<p>主要的是两个sessionStorage和localStorage两套API来应用，它们是有区别的，前者只在浏览器运行时存在，也可以跨页面，前提是页面不能关闭。后者是永久存在的，如果用户不删除，那么它永远不会删除。它们的使用方式都是一样的，包括API。至于分配的空间，要看各浏览器的态度的，一般情况下是5MB，还有一点它是跟域走的。</p>
-<pre><code><span class="keyword">interface</span> <span class="title">Storage</span>{
-    <span class="keyword">readonly</span> attribute unsigned <span class="keyword">long</span> legth;
-    <span class="function">getter DOMString <span class="title">key</span>(<span class="params"></span>)</span>;
-    <span class="function">getter any <span class="title">getItem</span>(<span class="params"></span>)</span>;
-    <span class="function">setter creator <span class="keyword">void</span> <span class="title">setItem</span>(<span class="params"></span>)</span>;
-    <span class="function">deleter <span class="keyword">void</span> <span class="title">removeItem</span>(<span class="params"></span>)</span>;
-    <span class="function">viod <span class="title">clear</span>(<span class="params"></span>)</span>;
-}
-</code></pre><ul>
-<li>length 描述Storage对象中存储的key=value数量</li>
-<li>key 方法允许获取一个指定位置的键</li>
-<li>getItem方法根据指定的key返回一个value</li>
-<li>setItem方法将数据value存入指定的位置key</li>
-<li>removeItem根据指定的key来删除数据</li>
-<li>clear 删除全部的数据</li>
-</ul>
-<p>使用：</p>
-<pre><code><span class="built_in">local</span>Storage.setItem(<span class="string">'name'</span>,<span class="string">'lcepy'</span>);
-<span class="built_in">local</span>Storage.getItem(<span class="string">'name'</span>);
-<span class="built_in">local</span>Storage.key(<span class="number">0</span>);
-<span class="built_in">local</span>Storage.length;
-<span class="built_in">local</span>Storage.removeItem(<span class="string">'name'</span>);
-<span class="built_in">local</span>Storage.clear();
-</code></pre><p>另外API中还有一套事件用于本地存储发生改变时的通知</p>
-<pre><code><span class="built_in">window</span>.addEventLister(<span class="string">'storage'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{},<span class="literal">true</span>);
-</code></pre><p>event对象中包含有</p>
-<ul>
-<li>key 存储了被更新或者删除的键</li>
-<li>oldValue 包含了更新之前的数据</li>
-<li>url Storage事件发生的源</li>
-<li>newValue 包含了更新之后的数据</li>
-<li>storageArea 包含一个引用，指向发生改变之前的localStorage或者sessionStorage</li>
-</ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript八之操作XML" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/02/复习JavaScript八之操作XML/" class="article-date">
-  	<time datetime="2015-02-02T09:50:14.000Z" itemprop="datePublished">2015-02-02</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/02/复习JavaScript八之操作XML/">复习JavaScript八之操作XML</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在以前XML是存储和传输数据的事实标准（客户端没有出现JSON之前），那个时候浏览器还不支持解析XML，于是很多开发者需要自己写一个XML解析器。原理，就是把XML也转化成DOM文档，然后通过DOM API来获取。</p>
-<p>而现在，在客户端（浏览器）编程中几乎很少会使用到XML，数据的交换都应用在JSON上了，了解这个有一个好处，就是在做服务端编程，比如SAOP协议时就会用到，还有桌面的客户端，或者是移动客户端上，比如iOS，它把一些数据，比如NSArray写入到本地，实际上就是一个XML文本，当然在代码层面上，是看不出来有解析的，如果读取这个文件，是直接转成NSArray对象的。</p>
-<blockquote>
-<p>IE有它自己的实现对XML的支持，下面说的两个类型，在IE中都不支持</p>
-</blockquote>
-<p>将XML字符串序列化成DOM文档，主要是使用DOMparser类来实现，其他的用法跟获取DOM节点一样。</p>
-<pre><code>var <span class="keyword">parser</span> = <span class="keyword">new</span> <span class="type">DOMparser</span><span class="literal">()</span>;
-var xmlDomObject = <span class="keyword">parser</span>.parserFromString(<span class="char">'&lt;root&gt;&lt;child/&gt;&lt;/root&gt;'</span>,<span class="symbol">'text</span>/xml');
-
-xmlDomObject.getElementsByTagName(<span class="symbol">'child'</span>);
-</code></pre><p>将DOM文档反序列化成XML字符串，主要是使用XMLSerializer类型，使用上述的xmlDomObject对象。</p>
-<pre><code><span class="variable"><span class="keyword">var</span> serializer</span> = new XMLSerializer();
-<span class="variable"><span class="keyword">var</span> xml</span> = serializer.serializeToString(xmlDomObject);
-</code></pre><p>如果XML解析有错误都会返回一个parsererror标签，获取的时候就可以判断是否有这个标签来决定解析是否有错误。</p>
-<p>据说DOM3版本的XML操作只有一个浏览器实现了，所以当资料了解就好。</p>
-<h3 id="IE版本">IE版本</h3><blockquote>
-<p>IE版本的XML解析主要是使用它的ActiveXObject类型来实现</p>
-</blockquote>
-<p>在IE中想要解析XML就必须先创建一个空的DOM文档，然后通过这个文档来获取。</p>
-<pre><code>var xmldom = createDocument();
-xmldom.loadXML(<span class="comment">'<span class="xmlDocTag">&lt;root&gt;</span><span class="xmlDocTag">&lt;child/&gt;</span><span class="xmlDocTag">&lt;/root&gt;</span>');</span>
-
-xmldom.getElementsByTagName(<span class="comment">'child');</span>
-</code></pre><p>如果解析有错误，可以检查parseError对象。</p>
-<pre><code><span class="keyword">if</span><span class="comment">(xmldom.parseError !== 0)</span>{
-    <span class="comment">//do </span>
-}
-</code></pre><p>在IE中进行序列化非常的方便，因为它都内置在了DOM文档中，每一个DOM节点都有一个xml属性，它就保存着XML字符串。</p>
-<pre><code><span class="tag">xmldom</span><span class="class">.xml</span>
-</code></pre><p>最后IE还提供了一个可以加载远程XML文件的方法load，它就接收一个参数，远程XML的URL地址。当然，也可以使用async属性来设置同步还是异步，默认是异步（true）。</p>
-<pre><code><span class="variable"><span class="keyword">var</span> xmldom</span> = createDocument();
-xmldom.async = <span class="literal">false</span>;
-xmldom.load('http:<span class="comment">//<span class="doctag"><span class="keyword">xxx</span>.</span>sss.xml');</span>
-</code></pre><p>如果是异步还要监听一下onreadystatechange事件，判断readystate状态，这个跟Ajax的使用是一样的。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-UINavigationController的理解" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/01/UINavigationController的理解/" class="article-date">
-  	<time datetime="2015-02-01T11:23:41.000Z" itemprop="datePublished">2015-02-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/01/UINavigationController的理解/">UINavigationController的理解</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在做iOS开发的时候，<strong>UINavigationController</strong>可以说使用跟那个UITableView一样非常的常见。在学习这个之前，需要了解一下在iOS开发中的层级关系。</p>
-<p>我把它想象成一本书，虽然这么描述非常的不精准，但是却很像。每一个UIViewController就像书页，最外面的一个是封页，当然它就是我们的启动UI界面了，而目录就相当于是UINavigationController，通过它可以精准的翻到每一页。在iOS应用中，这样的层级关系就像书页一页。</p>
-<blockquote>
-<p>实际上这里可能描述的有些错误，但是我只能这么想象了，当我翻到某一页时，这一页（UIViewController）就是在顶端的，而其他页（UIViewController）是在下面的。当然，对于导航控制，它想要控制每一页（对于书来说是人在控制）就必需在每一个视图控制器的根部。</p>
-</blockquote>
-<p>UINavigationController是一个栈结构，所谓的栈结构也就是一个顺序（先进后出的顺序），因为当前的书页我们要看见，它永远都必须在第一的位置，我们才能看见，也就决定了它是我们人看完之后才能出去的顺序。</p>
-<p>如何创建一个UINavigationController？</p>
-<pre><code> ViewController *view = <span class="comment">[<span class="comment">[ViewController alloc]</span> init]</span>;
-UINavigationController *navigation = <span class="comment">[<span class="comment">[UINavigationController alloc]</span>
-initWithRootViewController:view]</span>;
-self.window.rootViewController = navigation;
-</code></pre><p>这里会要求加入一个根视图控制器，也就是初始化时我们看见的那一页。</p>
-<p>从官方的.h文件中可以看的出来用来进行导航的就四个方法，协议的不算。</p>
-<pre><code>- (<span class="keyword">void</span>)pushViewController:(<span class="built_in">UIViewController</span> *)viewController animated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Uses a horizontal slide transition. Has no effect if the view controller is already in the stack.</span>
-
-- (<span class="built_in">UIViewController</span> *)popViewControllerAnimated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Returns the popped controller.</span>
-- (<span class="built_in">NSArray</span> *)popToViewController:(<span class="built_in">UIViewController</span> *)viewController animated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Pops view controllers until the one specified is on top. Returns the popped controllers.</span>
-- (<span class="built_in">NSArray</span> *)popToRootViewControllerAnimated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Pops until there's only a single view controller left on the stack. Returns the popped controllers.</span>
-</code></pre><p>分别是添加到视图控制器入栈，移出最后一个视图控制器，移出到跟视图控制器上，移出到任意位置上的视图控制器。</p>
-<p>除了上述的方法外，还有几个属性需要掌握，在写到这个之前，还需要理解导航控制上的一些概念问题。对于管理多个内容视图的push和pop，导航控制器自身提供了视图切换的动画效果。一般来说一个app中的内容区域就相当于视图控制器，而这个框就是导航控制器，当然这个框又是在另一个框上的，比如window。假设一下，当我们切换了内容后，有些app是上部的一个工具条不会变中间的内容变，也有可能中间和上部都会变。从这里，其实可以看的出来，导航控制存在着这些toolBar，也控制着视图控制器，但是这些toolBar的真正控制权是在每一个视图控制器上的。</p>
-<p>总结起来</p>
-<blockquote>
-<p>一个navigationController对应一个navigationBar，一个navigationController包含多个UIViewController，每个UIViewController对应一个UINavigationItem，UINavigationItem控制着多个UIBarButtonItem，一个UINavigationController控制一个UIToolBar，UIToolBar中的UIBarButtonItem由当前视图控制器管理，而不是导航控制器来控制。需要注意的是，一个UINavigationItem不是由navigationbar或者是导航控制器来控制，而是由当前视图控制器来控制。</p>
-</blockquote>
-<p>对于生成一个系统自带的UIBarButtonItem，从代码上就可以看的出来它不是self.navigationController在控制，当然有系统的一般来说肯定有自定义的。</p>
-<pre><code><span class="built_in">UIBarButtonItem</span> *leftbutton = [[<span class="built_in">UIBarButtonItem</span> alloc] initWithBarButtonSystemItem:<span class="built_in">UIBarButtonSystemItemBookmarks</span> target:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(leftEvent)];
-<span class="keyword">self</span><span class="variable">.navigationItem</span><span class="variable">.leftBarButtonItem</span> = leftbutton;
-
-<span class="built_in">UIButton</span> *button1 = [<span class="built_in">UIButton</span> buttonWithType:<span class="built_in">UIButtonTypeRoundedRect</span>];
-[button1 setTitle:<span class="string">@"view"</span> forState:<span class="built_in">UIControlStateNormal</span>];
-[button1 setTitleColor:[<span class="built_in">UIColor</span> blackColor] forState:<span class="built_in">UIControlStateNormal</span>];
-[button1 setFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">40</span>, <span class="number">40</span>)];
-[button1 addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(customviews:) forControlEvents:<span class="built_in">UIControlEventTouchUpInside</span>];
-<span class="built_in">UIBarButtonItem</span> *right = [[<span class="built_in">UIBarButtonItem</span> alloc] initWithCustomView:button1];
-
-<span class="keyword">self</span><span class="variable">.navigationItem</span><span class="variable">.rightBarButtonItem</span> = right;
-</code></pre><p>自定义一个button放到navigationItem的右边的bar中</p>
-<pre><code>UIButton *button = [UIButton <span class="string">buttonWithType:</span>UIButtonTypeRoundedRect];
-[button <span class="string">setTitle:</span>@<span class="string">"Push"</span> <span class="string">forState:</span>UIControlStateNormal];
-[button <span class="string">setTitleColor:</span>[UIColor blackColor] <span class="string">forState:</span>UIControlStateNormal];
-[button <span class="string">setFrame:</span>CGRectMake(<span class="number">90</span>, <span class="number">100</span>, <span class="number">140</span>, <span class="number">40</span>)];
-[button <span class="string">addTarget:</span>self <span class="string">action:</span><span class="annotation">@selector</span>(<span class="string">pushview:</span>) <span class="string">forControlEvents:</span>UIControlEventTouchUpInside];
-[self.view <span class="string">addSubview:</span>button];
-
--(<span class="typename">void</span>)<span class="string">pushview:</span>(UIButton *)sender
-{
-    SecondViewController *secoundVC = [[SecondViewController alloc] init];
-    [self.navigationController <span class="string">pushViewController:</span>secoundVC <span class="string">animated:</span>YES];
-}
-</code></pre><p>然后创建一个按钮，导航到第二个视图控制器上。</p>
-<p><a href="https://github.com/lcepy/LearnObjective-C/tree/master/NavigationControllerDemo" target="_blank" rel="external">源代码查看</a></p>
+</code></pre><p><strong>UIApplication</strong></p>
+<p>在info.plist文件中设置Application dose not run is background 设置为YES，就可以在应用退出的时候进行存盘了</p>
+<p><strong>Category添加自定义属性</strong></p>
+<p>分类只能在运行时，利用它的机制，动态的添加属性，使用@dynamic关键字，和两个函数objc_setAssociatedObject，objc_getAssociatedObject。</p>
 
       
     </div>
@@ -1162,146 +734,6 @@ self.window.rootViewController = navigation;
       
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript七之DOM" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/28/复习JavaScript七之DOM/" class="article-date">
-  	<time datetime="2015-01-28T11:51:01.000Z" itemprop="datePublished">2015-01-28</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/28/复习JavaScript七之DOM/">复习JavaScript七之DOM</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。</p>
-<p><strong>理解层级结构与关系</strong></p>
-<p>在浏览器中比如HTML页面是由很多有层次结构的标签组成的，而为这些标签提供查询，添加，删除等等方法主要就是DOM在提供支持。</p>
-<p>（页面又称为文档）文档中所有的节点之间都存在这样或那样的关系，比如下面一个经典的HTML：</p>
-<pre><code><span class="tag">&lt;html&gt;</span>
-    <span class="tag">&lt;head&gt;</span><span class="tag">&lt;/head&gt;</span>
-    <span class="tag">&lt;body&gt;</span><span class="tag">&lt;/body&gt;</span>
-<span class="tag">&lt;/html&gt;</span>
-</code></pre><p>一个标签又可以称为一个元素，head和body那就是兄弟关系，它们都来自一个父系html，又可以说html的子元素是head和body，可能这样描述还不太明显，这样就用原生Js操作DOM来的方式来看看层级结构。</p>
-<pre><code><span class="reserved">var</span> html = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'html'</span>)[<span class="number">0</span>];
-</code></pre><p>先通过getElementsByTagName获取html根元素的节点，每一个元素都有一个childNodes集合和一个parentNode分别代表子节点集合和父节点，<strong>如果不存在，则都是null，如果是集合不存在，则是一个[]</strong>。</p>
-<blockquote>
-<p>html的childNodes //[head,body] html的parentNode // document</p>
-</blockquote>
-<p>每一个元素也都有一个firstChild和lastChild来分别代表第一个子元素和最后一个子元素</p>
-<p>每一个元素也都有一个nextSibling和previousSibling分别代表前面一个元素和后面一个元素，以当前自己为参照物。</p>
-<p>从这样可以看出来，它就像族谱一样对元素的关系进行了定义，通过理解这些层级关系，利用DOM提供的API可以很顺利的进行操作。</p>
-<h3 id="操作DOM">操作DOM</h3><p><strong>常见的获取方式</strong></p>
-<ul>
-<li>document.getElementById （通过ID来获取到节点）</li>
-<li>document.getElementsByTagName （通过节点标签来获取）</li>
-<li>document.querySelector  </li>
-<li>document.querySelectorAll</li>
-</ul>
-<p>后面两个属于HTML5提供的新API，在移动端会用的比较多，前者是获取单个，后者获取集合。</p>
-<p><strong>常见添加，删除</strong></p>
-<ul>
-<li>appendChild</li>
-<li>insterBefore</li>
-<li>replaceChild</li>
-<li>removeChild</li>
-</ul>
-<p>appendChild主要是向childNodes集合的末尾添加一条元素，insterBefore可以用来插入特定位置，两个参数，要插入的节点和作为参照的节点，更新成功后插入的节点会在参照节点之前，也就是参照节点的previousSibling。replaceChild和insterBefore有些类似，两个参数，要插入的节点和参照节点，更新成功后，要插入的节点会替换参照节点，removeChild就比较好理解了，删除一个节点，这四个方法都有返回值。</p>
-<p><strong>常见元素属性</strong></p>
-<p>一般来说，如果var doc = document.getElementById(‘doc’);doc.id = ‘xx’;这样的方式也是可以更新或者获取到元素的属性的，不过不推荐这么使用，要获取元素的属性，DOM API也提供了三个方法来使用。</p>
-<ul>
-<li>getAttribute</li>
-<li>setAttribute</li>
-<li>removeAttribute</li>
-</ul>
-<p>getAttribute可以获取元素的属性，setAttribute可以对元素的属性进行设置，如果属性名不存在，则创建该属性。removeAttribute则是完全删除此属性。</p>
-<p>还有一个属性attributes，主要是获取元素属性集合，这个不是很常用，主要是在遍历元素属性时会使用到，它是一个集合。</p>
-<p><strong>常见创建元素或文本</strong></p>
-<p>一般情况下创建元素都会使用字符串的形式，innerHTML进去。不过，某些情况下，会用到createElement来创建一个元素，如果用到它，那么创建的文本也必须使用createTextNode了。</p>
-<p>对于文本节点，注释节点等开发真的很少用，可以当一个子类大概了解即可。</p>
-<blockquote>
-<p>关于模式的讨论，主要可以用document.compatMode来判断，如果是CSS1Compat就是标准模式，移动端不会出现这样的情况，IE上可能有别的模式，模式主要是影响到CSS布局上，Js影响非常少。</p>
-<p>在移动端上滚动是一个比较要处理的问题，一般来说会使用scrollIntoView，scrollIntoViewIfNeeded，scrollByLines，scrollByPages，这四个方法safari chrome都有实现，意味着在iOS和安卓平台都是良好的。</p>
-</blockquote>
-<ul>
-<li>scrollByPages 将元素的内容滚动到指定的页面高度，具体的高度是由元素的高度来决定的。</li>
-<li>scrollByLines 将元素的内容滚动到知道的行数高度，参数可正可负。</li>
-<li>scrollIntoViewIfNeeded，当元素在视窗（viewport）不可见，会滚动容器元素或者浏览器窗口让其可见。如果是可见的，这个方法不起任何作用。如果参数为true，可能是垂直居中的可见。</li>
-<li>scrollIntoView 滚动容器元素或者浏览器窗口，让元素可见。</li>
-</ul>
-<p><strong>一些小技巧</strong></p>
-<p>每一个元素都存在一个contains方法，用来检测传入的节点是不是当前节点的子节点，火狐对于的方法名叫compareDocumentPosition。</p>
-<p>如果要获取一个文本节点可以使用innerText（纯文本）来获取字符串，如果要获取所有的包括标签的字符串可以使用innerHTML。它们还有一种outer系列对应的方法，主要的区别是前者（outerText）会替换节点，后者(outerHTML)会修改调用它的元素，一般基本没人使用。它们可以获取，也可以通过赋值来设置新的节点。</p>
-<h3 id="DOM2和DOM3">DOM2和DOM3</h3><p>对于这两级在DOM中基本上IE没啥支持，或者说支持的非常少，像style对象，CSS的一些对象外。</p>
-<p>这里最大的变化是增加了对XML命名空间的支持，元素样式的访问，节点的遍历以及range。当然目前来看，节点的遍历，range，XML命名空间在开发中使用的非常少，可以当资料来阅读，了解有这么回事，用到的时候再查询。而元素样式的访问，这个在开发中普遍使用的较多，因为在没法使用css3动画的浏览器中，可以通过改变样式来到达动画的目的。</p>
-<pre><code>var <span class="annotation">doc</span> = document.getElementById(<span class="string">'doc'</span>);
-<span class="annotation">doc</span>.style.width = <span class="string">'100px'</span>;
-</code></pre><p>对于iframe的访问这里增加了一个contentDocument对象来进行引用，还有节点的比较，isSameNode和isEqualNode，这两个的区别在于，前者是否引用的同一个节点对象，后者是指两个节点是否是相同的类型。不过，它们使用的也不多，了解就好。</p>
-<p><strong>元素的大小</strong></p>
-<p>这个部分需要理解，因为关乎到元素在浏览器上的位置显示，跟动画有关系，四个属性。</p>
-<ul>
-<li>offsetWidth 元素在水平方向占用的空间大小</li>
-<li>offsetHeight 元素在垂直方向占用的空间大小</li>
-<li>offsetLeft 元素的左外边框到内边框的距离</li>
-<li>offsetTop 元素的上外边框到内边框的距离</li>
-</ul>
-<p><strong>滚动大小</strong></p>
-<p>这个在视察滚动或者处理滚动条的时候用的上，也是四个属性</p>
-<ul>
-<li>scrollHeight 在没有滚动的情况下，元素的总高度</li>
-<li>scrollWidth 在没有滚动的情况下，元素的总宽度</li>
-<li>scrollLeft 被隐藏在内容区域左侧的像素度</li>
-<li>scrollTop 被隐藏在内容区域上侧的像素度</li>
-</ul>
-<blockquote>
-<p>下面这些IE全部不支持，range支持一种叫做文本范围的东西</p>
-</blockquote>
-<p><strong>元素遍历</strong></p>
-<p>关于遍历其实有两个方法可用createNodeIterator和createTreeWalker，不过这些在开发中几乎不会使用到，谁没事去遍历节点完呢。</p>
-<p><strong>关于range</strong></p>
-<p>这个也是非常少会使用到，除非是做那种编辑器应用或者在线编辑器等等，不过使用它可以更精准的控制的DOM，主要是使用createRange方法。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
 	</div>
 
       
@@ -1323,7 +755,7 @@ self.window.rootViewController = navigation;
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
     </nav>
   
 </div>

@@ -167,11 +167,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-使用cocoapods来管理第三方库" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-JavaScript解析URL字符串" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2014/12/31/使用cocoapods来管理第三方库/" class="article-date">
-  	<time datetime="2014-12-31T05:52:58.000Z" itemprop="datePublished">2014-12-31</time>
+      <a href="/2015/03/06/JavaScript解析URL字符串/" class="article-date">
+  	<time datetime="2015-03-06T06:38:32.000Z" itemprop="datePublished">2015-03-06</time>
 </a>
     </div>
   
@@ -184,7 +184,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2014/12/31/使用cocoapods来管理第三方库/">使用cocoapods来管理第三方库</a>
+      <a class="article-title" href="/2015/03/06/JavaScript解析URL字符串/">JavaScript解析URL字符串</a>
     </h1>
   
 
@@ -193,23 +193,240 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li><a href="http://cocoapods.org/" target="_blank" rel="external">http://cocoapods.org/</a></li>
-<li><a href="http://code4app.com/article/cocoapods-install-usage" target="_blank" rel="external">CocoaPods安装和使用教程</a></li>
-<li><a href="http://blog.jobbole.com/72107/" target="_blank" rel="external">在 Swift 中使用 CocoaPods</a></li>
-<li><a href="http://blog.devtang.com/blog/2014/05/25/use-cocoapod-to-manage-ios-lib-dependency/" target="_blank" rel="external">用CocoaPods做iOS程序的依赖管理</a></li>
-<li><a href="https://github.com/CocoaPods/CocoaPods" target="_blank" rel="external">https://github.com/CocoaPods/CocoaPods</a></li>
-</ul>
-<p><strong>关于配置，可以参考贴出来的上述的文章，唐巧的博客也写的比较详细</strong></p>
-<p>在需要cocoapods来做管理的项目中建立Podfile文件，先通过pod search 来搜索所需要的库是否支持cocoapods，然后pod:(库名)，pod install来安装。</p>
-<h2 id="坑处收集（针对xcode_6-1_实际项目出现的问题）">坑处收集（针对xcode 6.1 实际项目出现的问题）</h2><ul>
-<li>安装时可以把ruby的镜像替换成淘宝的，第一次pod setup时稍微有些慢，需要耐心等待。</li>
-<li>安装库时，如果出现链接阶段的错误，首先要查找一下link search paths 路径的问题，还有libpods.a文件是否添加到了library中。</li>
-<li>安装库时，（最好能开代理就开代理，有时github网络会导致编译或者链接阶段出现莫名其妙的问题）因为文件没有下载全。</li>
-<li>安装之前，最好是先command + shift + k clean一下编译的缓存，安装之后如果出现问题，也可以先clean一下，再编译尝试。</li>
-<li>安装之前，最好先把项目关闭了，pod install 后，会在项目的根目录，生成一个新的xcworkspace文件，以后打开项目使用它，如果还用老的，打开又会出现莫名其妙的问题。</li>
-<li>如果上述都没法解决问题，全部删除，重新来过。</li>
-</ul>
+        <p>说到解析URL思路应该有多种多样的，比如一点一点的分解，先indexOf(‘?’)判断是否有参数，完了之后split(‘?’)一下，后面的参数继续split(‘&amp;’)成一个数组然后循环再split(‘=’)组装成一个一个key和vaule的键值对对象。前面那一部分也可以继续分解，把端口，协议，路径等等分解出来。或者用正则表达式，一个一个的分解。除了上述的思路，其实还有一个更简单的办法，利用a标签。</p>
+<pre><code><span class="keyword">var</span> parseURL = function(url){
+    <span class="keyword">var</span> temp =  document.createElement('a');
+    temp.href = url;
+    <span class="keyword">var</span> <span class="literal">result</span> = {
+        <span class="string">"port"</span>:temp.port,
+        <span class="string">"protocol"</span>:temp.protocol.replace(':',''),
+        <span class="string">"hash"</span>:temp.hash.replace('<span class="comment">#',''),</span>
+        <span class="string">"host"</span>:temp.host,
+        <span class="string">"href"</span>:temp.href,
+        <span class="string">"hostname"</span>:temp.hostname,
+        <span class="string">"pathname"</span>:temp.pathname,
+        <span class="string">"search"</span>:temp.search,
+        <span class="string">"query"</span>:{}
+    }
+    <span class="keyword">var</span> seg = <span class="literal">result</span>.search.replace(/^\?/,'').split('&amp;'),
+        leng = seg.length,
+        i = <span class="number">0</span>,
+        target;
+    <span class="keyword">for</span>(;i&lt;leng;i++){
+        <span class="keyword">if</span>(!seg[i])<span class="keyword">continue</span>;
+        target = seg[i].split('=');
+        <span class="literal">result</span>.query[target[<span class="number">0</span>]] = target[<span class="number">1</span>];
+    }
+    temp = null;
+    <span class="keyword">return</span> <span class="literal">result</span>;
+}
+<span class="keyword">var</span> url = 'https://github.com:<span class="number">8989</span>?key=value&amp;hub=<span class="number">123</span>ASFDGGR<span class="comment">#github';</span>
+parseURL(url);
+</code></pre><p>最后使用完了，把对象的引用设置为null，等待内存回收。</p>
+<p>说到URL就不得不提一下编码和解码的函数，Js里提供了三组，其中最常用的一组是encodeURIComponent和decodeURIComponent。</p>
+<p>通过对三个函数的分析，我们可以知道：escape()除了 ASCII 字母、数字和特定的符号外，对传进来的字符串全部进行转义编码，因此如果想对URL编码，最好不要使用此方法。而encodeURI() 用于编码整个URI,因为URI中的合法字符都不会被编码转换。encodeURIComponent方法在编码单个URIComponent（指请求参数）应当是最常用的，它可以讲参数中的中文、特殊字符进行转义，而不会影响整个URL。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-JavaScript中的深拷贝与浅拷贝" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/04/JavaScript中的深拷贝与浅拷贝/" class="article-date">
+  	<time datetime="2015-03-04T12:56:49.000Z" itemprop="datePublished">2015-03-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/04/JavaScript中的深拷贝与浅拷贝/">JavaScript中的深拷贝与浅拷贝</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>关于拷贝的问题，主要分为深拷贝和浅拷贝，但是如果从空间分配上来说JavaScript的拷贝不应该算是深拷贝，比如：</p>
+<pre><code><span class="keyword">var</span> <span class="keyword">d</span> = {};
+<span class="keyword">for</span>(k <span class="keyword">in</span> a){
+    <span class="keyword">d</span>[k] = a[k];
+}
+<span class="keyword">return</span> <span class="keyword">d</span>;
+</code></pre><p>今天突然想到了这么一个问题，在C语言中，所谓的拷贝，就是分两种情况，一种是把指针地址拷贝给另外一个变量，虽然也开辟的了一个内存空间，在栈上也存在着一个地址，我对这个变量进行修改，同一个指针是会改变其值的，这种拷贝叫浅拷贝。另外一种情况，直接开辟一个新空间，把需要复制的值都复制在这个新的空间中，这种拷贝叫中深拷贝。</p>
+<p>如果看到上述的一段Js代码，很多人说它是浅拷贝，假设传入一个a对象，拷贝完成之后返回一个d，当我修改返回对象的值时并不能同时修改a对象，于是，在这里我有一个很大的疑问，在Js中到底什么是浅拷贝，什么是深拷贝的问题？</p>
+<p>这一点上感觉Js真的很奇葩，如果在开发iOS中，不可变对象copy一下，依然是不可变，所以是浅拷贝，拷贝了指针变量中存储的地址值。如果是可变对象copy一下，到不可变，空间变化了，包括不可变mutableCopy到不可变，空间依然变化了，所以是深拷贝。但是JavaScript中对于这一点要考虑一种情况，值类型，和引用类型，这个基础知识，我相信大家都非常清楚。数字，字符串等都是值类型，object，array等都是引用类型。</p>
+<pre><code><span class="variable"><span class="keyword">var</span> a</span> = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];
+<span class="variable"><span class="keyword">var</span> b</span> = a;
+
+b.push(<span class="number">4</span>);
+console.log(a); <span class="comment">//[1,2,3,4]</span>
+
+<span class="variable"><span class="keyword">var</span> numb</span> = <span class="number">123</span>;
+<span class="variable"><span class="keyword">var</span> _numb</span> = numb;
+_numb = <span class="number">567</span>;
+
+console.log(numb); <span class="comment">//123</span>
+</code></pre><p>从这个例子中可以看的出来，它们使用的都是＝符号，而数组a发生了变化，numb数字却没有发生变化。那么从这里，可以有一个总结，所谓了深拷贝，浅拷贝的问题，应该针对的是有多个嵌套发生的情况。不然假设是这样的情况，还能叫浅拷贝么？</p>
+<pre><code><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> =</span> {<span class="string">"de"</span>:<span class="number">123</span>};
+<span class="keyword">var</span> o = copy(<span class="class"><span class="keyword">object</span>);</span>
+
+o.de = <span class="number">456</span>;
+
+console.log(<span class="class"><span class="keyword">object</span>) <span class="title">//</span>{</span><span class="string">"de"</span>:<span class="number">123</span>}
+</code></pre><p>明显对象o中的de属性修改并没有影响到原始对象，一个对象中的属性是一个字符串，如果从内存空间的角度上来说，这里明显是开辟了新的空间，还能说是浅拷贝么？那么针对另外一种情况。</p>
+<pre><code><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> =</span> {
+    <span class="string">"de"</span>:{
+        <span class="string">"d"</span>:<span class="number">123</span>
+    }
+}
+
+<span class="keyword">var</span> o = deepCopy(<span class="class"><span class="keyword">object</span>);</span>
+o.de.d = <span class="string">"asd"</span>;
+</code></pre><p>如果一个对象中的第一层属性，不是值类型，只单层循环，这样来看的话确实是一个浅拷贝，因为在Js中引用类型用＝赋值，实际上是引用，这样说的通。所以，深拷贝，还需要做一些处理，把object，array等引用类型识别出来，深层递归到最后一层，一个一个的拷贝。</p>
+<pre><code><span class="keyword">var</span> deepCopy = <span class="function"><span class="keyword">function</span>(<span class="params">o</span>)</span>{
+    <span class="keyword">var</span> target = {};
+    <span class="keyword">if</span>(<span class="keyword">typeof</span> o !== <span class="string">'object'</span> &amp;&amp; !<span class="built_in">Array</span>.isArray(o)){
+        <span class="keyword">return</span> o;
+    }
+    <span class="keyword">for</span>(<span class="keyword">var</span> k <span class="keyword">in</span> o){
+        target[k] = deepCopy(o[k]);
+    }
+    <span class="keyword">return</span> target;
+}
+</code></pre><p>思路是如此，这个例子只考虑了两种情况，对象和数组，为了验证这样的思路，最后的结果与预期是一样的。</p>
+<pre><code><span class="reserved">var</span> _copy = {
+    <span class="string">'object'</span>:{
+        <span class="string">'name'</span>:<span class="string">'wen'</span>
+    },
+    <span class="string">'array'</span>:[<span class="number">1</span>,<span class="number">2</span>]
+
+}
+<span class="reserved">var</span> h = deepCopy(_copy);
+h.object.name = <span class="string">'lcepy'</span>;
+h.array[<span class="number">1</span>] = <span class="number">8</span>;
+<span class="built_in">console</span>.log(h);
+<span class="built_in">console</span>.log(_copy);
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-有趣味的iOS动画实现" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/03/有趣味的iOS动画实现/" class="article-date">
+  	<time datetime="2015-03-03T01:40:21.000Z" itemprop="datePublished">2015-03-03</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/03/有趣味的iOS动画实现/">有趣味的iOS动画实现</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，甚至apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。</p>
+<p>想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，也就是几个属性。</p>
+<pre><code><span class="tag">dropview</span><span class="class">.frame</span>;
+<span class="tag">dropview</span><span class="class">.center</span>;
+<span class="tag">dropview</span><span class="class">.bounds</span>;
+<span class="tag">dropview</span><span class="class">.transform</span>
+</code></pre><p>动画，是顾名思义的，在平面或者多维度的移动，frame中记录了当前视图相对于父视图左上角顶点的左边，而center则是中心原点，transform则代表了比如旋转等等矩阵的改变属性。</p>
+<p>最简单的动画，就是操作这些属性，改变其值，使用的是UIView的类方法，比如：</p>
+<pre><code><span class="collection">[UIView animateWithDuration:1.0 animations:<span class="comment">^{
+
+}</span> completion:^<span class="list">(<span class="keyword">BOOL</span> finished)</span> <span class="collection">{
+
+}</span>]</span>
+</code></pre><p>其实我最近研究了一下UIDynamicAnimator，它提供了一个模拟真实物理世界的动画与交互系统，比如可以定义一些行为，重力行为，碰撞行为等等。</p>
+<pre><code>-(<span class="built_in">UIDynamicAnimator</span> *)animator
+{
+    <span class="keyword">if</span> (!_animator) {
+        _animator = [[<span class="built_in">UIDynamicAnimator</span> alloc] initWithReferenceView:<span class="keyword">self</span><span class="variable">.gameview</span>];
+    }
+    <span class="keyword">return</span> _animator;
+}
+</code></pre><p>UIDynamicAnimator需要一个通用的视图，而动画则是在这个视图上发生，所以init的时候添加了一个通用视图上去。然后可以去实现其他的物理类，比如重力，把它add到UIDynamicAnimator中。</p>
+<pre><code>-(<span class="built_in">UIGravityBehavior</span> *)gravit
+{
+    <span class="keyword">if</span> (!_gravit) {
+        _gravit = [[<span class="built_in">UIGravityBehavior</span> alloc] init];
+        _gravit<span class="variable">.magnitude</span> = <span class="number">0.9</span>;
+        [<span class="keyword">self</span><span class="variable">.animator</span> addBehavior:_gravit];
+    }
+    <span class="keyword">return</span> _gravit;
+}
+</code></pre><p>最后一步是要把需要被实现物理动画的视图，添加到重力系统中去。</p>
+<pre><code><span class="title">[self.gravit addItem:dropview]</span><span class="comment">;</span>
+</code></pre><p>从技术实现的角度上来说，iOS平台实现这些动画，包括绘制，物理交互，都非常的简单，主要是要注意一些细节的处理，比如当前动画停止之后处理什么，在动画执行过程中，可能会出现一些情况，然后处理，或者是几个动画的连接延迟等等。</p>
 
       
     </div>
@@ -238,11 +455,11 @@
 
 
   
-    <article id="post-用Hexo写博客" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-myresume" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2014/11/22/用Hexo写博客/" class="article-date">
-  	<time datetime="2014-11-21T16:12:00.000Z" itemprop="datePublished">2014-11-22</time>
+      <a href="/2015/03/01/myresume/" class="article-date">
+  	<time datetime="2015-03-01T15:35:20.000Z" itemprop="datePublished">2015-03-01</time>
 </a>
     </div>
   
@@ -255,7 +472,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/22/用Hexo写博客/">用Hexo写博客</a>
+      <a class="article-title" href="/2015/03/01/myresume/">向文文的简历</a>
     </h1>
   
 
@@ -264,23 +481,39 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在看下面内容之前，请先确认是否已经安装nodejs，若无则先安装。</p>
-<p>访问<a href="http://hexo.io/">Hexo</a>，查看例子：</p>
-<pre><code>npm <span class="operator"><span class="keyword">install</span> hexo -g
-hexo init blog
-cd blog
-npm <span class="keyword">install</span>
-hexo <span class="keyword">server</span></span>
-</code></pre><p>hexo主要有如下几个命令来操作：</p>
-<blockquote>
-<p>hexo init  初始化一个hexo项目</p>
-<p>hexo server 监听4000端口启动一个服务器，可以预览，端口可以在_config.yml文件中修改</p>
-<p>hexo generate 输出静态文件，在public目录下</p>
-<p>hexo new 生成一个md文件，这个文件就是我们要写的博客文件了</p>
-<p>hexo clean 清除public目录以及缓存，其实这个缓存就是db.json文件</p>
-<p>hexo deploy 如果在_conig.yml文件中配置了这项，它会帮助我们发布到网络</p>
-</blockquote>
-<p>一般大项的配置都是在顶层的_config.yml配置文件中配置，比如博客作者名，标题，时间格式，资源文件目录，静态资源文件目录，插件等等。而具体的博客配置，比如菜单之类的都在themes具体的主题_config.yml文件中配置。</p>
+        <h2 id="个人信息：">个人信息：</h2><p>向文文 xiangwenwe@foxmail.com / (+86) 18574532867 / </p>
+<p>技术博客 <a href="http://lcepy.github.io/">http://lcepy.github.io/</a></p>
+<p>Github <a href="https://github.com/lcepy" target="_blank" rel="external">https://github.com/lcepy</a></p>
+<p>中南林业科技大学/大专</p>
+<p>Skill set：JavaScript iOS/Mac OS X Objective-C Swift Hybrid App NodeJs</p>
+<h2 id="工作经验：">工作经验：</h2><p><em>生态农业  创业</em></p>
+<p>筹备时间：2014年－2015年</p>
+<p>目前状态：7月4日解散</p>
+<p>解散原因：投资人撤资，合伙人中途变卦</p>
+<p><em>每日优鲜  iOS开发工程&amp;JavaScript开发工程师</em></p>
+<p>任职时间：2015年3月20日－2015年6月23日</p>
+<p>工作职责：朋友公司帮忙，负责Hybrid App的开发以及iOS的开发工作</p>
+<p>App下载，可以在各大app市场下载，apple需要在appstore中下载</p>
+<p>公司网站：<a href="http://www.missfresh.cn/" target="_blank" rel="external">http://www.missfresh.cn/</a></p>
+<p><em>上海携程旅行网   软件开发工程师</em></p>
+<p>任职时间：2014年2月12日-12月31日</p>
+<p>工作职责：负责H5，Hybrid App的开发工作</p>
+<p>App下载，可以在各大app市场下载，apple需要在appstore中下载</p>
+<p>项目网站：<a href="http://m.ctrip.com/webapp/cruise/index.html#index" target="_blank" rel="external">http://m.ctrip.com/webapp/cruise/index.html#index</a></p>
+<p><em>远光软件股份有限公司    SMB软件部任职开发工程师</em></p>
+<p>任职时间：2012年5月-2013年8月</p>
+<p>工作职责：在部门中所担负的角色，主要在基于web的企业级应用开发与平台框架，并培训部门内部开发人员的前端开发技术，并提供解决方案供部门领导参考。</p>
+<p>公司网站：<a href="http://www.ygsoft.com/Home/" target="_blank" rel="external">http://www.ygsoft.com/Home/</a></p>
+<p><em>湖南华声在线有限公司    UI组任职前端工程师</em></p>
+<p>任职时间：2011年8月-2012年4月</p>
+<p>工作职责：负责教育产品，社交空间的前端开发，培训组内的前端技术，并提供教育系列产品的前端解决方案，并负责一定的服务端开发工作，主要是基于php技术。</p>
+<p>公司网站：<a href="http://www.voc.com.cn/" target="_blank" rel="external">http://www.voc.com.cn/</a> </p>
+<h2 id="详细项目经历">详细项目经历</h2><p><a href="http://lcepy.github.io/2014/11/14/%E6%88%91%E7%9A%84%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/">我的项目经历-详细版</a></p>
+<h2 id="经历表述：">经历表述：</h2><p>在软件工程领域已经工作四年之久，对于编程的思考，解决问题的思路都已形成了自己比较独特的思维，语言只是解决问题的一个工具，最关键的还是在于人，如何去规划问题，思考问题，并解决问题。</p>
+<p>我比较擅长JavaScript，iOS/Mac OS X平台的开发，近几年比较流行的Nodejs，HTML5 API CSS3也有一些了解.三年多的工作经验集中在客户端技术，包括SPA MVC客户端，Hybrid app客户端，移动浏览器H5应用，有过一年左右的python网络编程，对请求，一些服务端，客户端框架，比如zepto underscore ionic django，应用在客户端，服务端上的MVC开发模式，HTML5 API都非常的了解和掌握。</p>
+<p>目前个人独立开发iOS应用已经有一年多的时间，上线的App有<a href="https://github.com/lcepy/manong-reading" target="_blank" rel="external">《猿已阅》</a></p>
+<h2 id="致谢">致谢</h2><p>感谢您抽出宝贵的时间，阅读完我的简历，谢谢～</p>
+
       
     </div>
     
@@ -288,15 +521,11 @@ hexo <span class="keyword">server</span></span>
       
       
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nodejs/">nodejs</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/简历/">简历</a></li></ul>
 	</div>
 
       
 
-      
-        <p class="article-more-link">
-          <a  href="/2014/11/22/用Hexo写博客/#more">more >></a>
-        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -312,11 +541,11 @@ hexo <span class="keyword">server</span></span>
 
 
   
-    <article id="post-正则的一些理解" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-UIViewController的生命周期" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2014/11/14/正则的一些理解/" class="article-date">
-  	<time datetime="2014-11-14T13:50:22.000Z" itemprop="datePublished">2014-11-14</time>
+      <a href="/2015/02/16/UIViewController的生命周期/" class="article-date">
+  	<time datetime="2015-02-16T13:54:06.000Z" itemprop="datePublished">2015-02-16</time>
 </a>
     </div>
   
@@ -329,7 +558,7 @@ hexo <span class="keyword">server</span></span>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/正则的一些理解/">正则的一些理解</a>
+      <a class="article-title" href="/2015/02/16/UIViewController的生命周期/">UIViewController的生命周期</a>
     </h1>
   
 
@@ -338,13 +567,22 @@ hexo <span class="keyword">server</span></span>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>今天写到这里，是想总结一下，自己重新学习正则表达式之后，对它的一个全新的认识。我想描述一个中心思想，学习任何东西，编程，音乐，基础是非常important的，就好像吉他里基础不在于认识六线谱而是在于节拍。</p>
-<h2 id="从人类的角度来阅读正则">从人类的角度来阅读正则</h2><p>在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。python中也有很多高效处理字符串的方式，比如步距，比如正则，嘿嘿。</p>
-<p>import re</p>
-<p>g = re.search(‘\d+(.\d*)?’,’0.2556223.556655’)</p>
-<p>g.group(0)</p>
-<p>我们来看一个搜索浮点数的正则，我们从右往左看，把这一个正则表达式分割成三分，\d+，(.\d<em>)，?。我们知道?描述的是出现零次或一次，在这里阅读的时候，是描述(.\d</em>)这一个组会出现零次或一次。我们再看这个组中的描述.用来描述.，\d用来描述0-9的数字，而*描述的是出现零次或多次，我们组合起来看，这个组就是来描述.后面的数字会出现零次或多次。\d依然是用来描述0-9的数字，+用来描述出现一次或多次。</p>
-<p>到这里，我们把这三个部分，从右往左看，组合起来，用人类阅读的角度去描述它：小数点后面出现的数字是多次的，而这一个部分只能出现一次或零次，并且在小数点之前可以出现一次或多次的数字。<br>
+        <p>关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理。</p>
+<p><strong>呈现视图的顺序</strong></p>
+<p>它内部的顺序是这样的，先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或storyborad，如果这个也没有则走loadView方法，loadView方法系统调用，也可以重载它。当我们重载它时，可以[super loadView] 父类帮助我们创建一个空的view，如果不调用父类，那么就要自己创建一个UIView，并且self.view = UIView。</p>
+<p>如果在调用loadView时不调用父类，也不创建，如果使用self.view的getter method并且view等于nil，会发生自我循环调用。一般情况下，不要在初始化时做view相当的动作。在viewDiload中调用一些网络访问的动作，可以在初始化方法中做一些关于模型数据的准备工作。</p>
+<p>如果覆盖了loadView，则必须创建UIViewController的view属性。如果没有覆盖该方法，UIViewController会默认调用initWithNibName方法来初始化并加载view。</p>
+<p><strong>生命周期</strong></p>
+<p>一般来说我们需要知道应用程序什么时候在屏幕上，什么时候从屏幕上消失，这个就是生命周期了。初始化的方法可以在viewDidLoad，这个方法在生命周期中只会调用一次，当然不要忘记了调用它的父类的viewDidLoad方法，[super viewDidLoad]。在调用这个方法时，实际上视图并没有在屏幕上确定下来，于是一般来说，如果视图的几何操作，不要放在这个方法中执行。</p>
+<p>viewWillAppear，这个方法会被多次调用，一般来说一次性的初始化不要放在这个方法中实现，但是如果是基于模型的动态初始化，可以放置在这个方法中实现。这个方法会在视图即将要在屏幕上呈现之前调用。</p>
+<p>当视图从屏幕上消失时，也会得到通知，viewWillDisappear方法。这个方法是在视图将要从屏幕消失之前调用。</p>
+<p>viewDidAppear视图已经呈现在屏幕上调用 viewDidDisappear视图已经从屏幕上消失调用。</p>
+<p>viewWillLayoutSubviews  viewDidLayoutSubviews 这两个方法可以在，比如从竖屏到横屏，系统会自动元素的位置，第一个方法是在移动之前调用，第二个方法是在移动完成之后调用，需要设置Autorotation属性。</p>
+<p>didReceiveMemoryWarning 当内存不足时，系统会调用这个方法，发送警告。 </p>
+<h2 id="顺序">顺序</h2><p>viewDidLoad -&gt; viewWillAppear -&gt; viewDidAppear -&gt; viewWillDisappear -&gt; viewDidDisappear</p>
+<p>关于layout的顺序</p>
+<p>viewWillLayoutSubviews -&gt; viewDidLayoutSubviews</p>
+
       
     </div>
     
@@ -352,494 +590,11 @@ hexo <span class="keyword">server</span></span>
       
       
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
 	</div>
 
       
 
-      
-        <p class="article-more-link">
-          <a  href="/2014/11/14/正则的一些理解/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-关于django中CSRF开启的问题" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/关于django中CSRF开启的问题/" class="article-date">
-  	<time datetime="2014-11-14T12:33:12.000Z" itemprop="datePublished">2014-11-14</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/关于django中CSRF开启的问题/">关于django中CSRF开启的问题</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="django_处理CSRF机制保护下的POST表单提交">django 处理CSRF机制保护下的POST表单提交</h2><p>昨天晚上使用django做一个POST表单提交的功能，发现出现了一个CSRF verification failed. Request aborted错误。于是，在网上找了很久，也没有什么好的办法可以解决它。我发现，大部分人的博客都不靠谱，Ctrl+C Ctrl+V的复制，坑了我不少时间，于是我去了django的官网，查询CSRF的问题，最后解决了。其实在解决这个问题之前，我们先要了解一下，CSRF到底是什么东东，为什么django提交一个POST表单这么困难呢。</p>
-<p><a href="http://baike.baidu.com/link?url=OnI0sPQAHpQHhtxWSXvQFhN3kJWI3CU_rP3Fo7MqnPY3rTdhUPpuca-3lzJ651LdMI7ouoLvdnnihhojFyKtva">CSRF 是什么</a></p>
-<p><a href="https://docs.djangoproject.com/en/1.5/ref/contrib/csrf/">django document CSRF</a></p>
-<p>原来CSRF是为了防止跨站请求伪造用的，当我明白了这个解释之后，我开始找寻django document上如何开启CSRF。</p>
-<p><strong>Add the middleware ‘django.middleware.csrf.CsrfViewMiddleware’ to your list of middleware classes, MIDDLEWARE_CLASSES. (It should come before any view middleware that assume that CSRF attacks have been dealt with.)</strong></p>
-<p>那我在想，如果我把django.middleware.csrf.CsrfViewMiddleware注释掉，是不是就可以不开启CSRF来提交POST表单，人们常说实践是检验真理的唯一标准，试验一下，原来是可以的。但是这并没有解决，我想解决的问题，于是我又把这个中间件，重新写在了MIDDLEWARE_CLASSES上。</p>
-<p>从官方的解释上来看，只要在MIDDLEWARE_CLASSES上加django.middleware.csrf.CsrfViewMiddleware就开启了CSRF机制。</p>
-<p>现在我需要在模板中加入一个tag ｛%csrf_token%｝，来存放一个隐藏的token input。</p>
-<p><strong>In the corresponding view functions, ensure that the ‘django.core.context_processors.csrf’ context processor is being used. Usually, this can be done in one of two ways:</strong></p>
-<p>从这里的解释来看，我还需要django.core.context_processors.csrf，于是我导入这个模块from django.core.context_processors import csrf，运行一下貌似，还不行，接着往下看。我发现django的解释，这里可以用两种方式来处理，最后响应的response，而且django还说了，POST表单提交不要跨链接。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/">django</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2014/11/14/关于django中CSRF开启的问题/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-django模型使用的一些心得" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/django模型使用的一些心得/" class="article-date">
-  	<time datetime="2014-11-14T12:30:31.000Z" itemprop="datePublished">2014-11-14</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/django模型使用的一些心得/">django模型使用的一些心得</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>近很一直在学习django，因为我需要使用它为自己的项目写一个前台页面和一个后台服务。它是一个关于咖啡的邮件订阅社区，既然有服务，自然需要数据库层的支持。这是一个很好的开始，学习django让我了解到python开发web应用真的非常快速，但是也有一个很明显的缺点。那就是国内，对django社区的支持度非常不好，这或许跟国内python的有关，不过也不要紧，学习就是这样，要啃难而上。</p>
-<p>说说在django中模型，对应的数据库层，也就是意味着django帮助我们完成了对数据库的访问，操作，通过它的模型类。</p>
-<blockquote>
-<p>django-admin.py startapp sendcloud</p>
-</blockquote>
-<p>通过上述的命令，我们可以完成一个app模块，这个模块中带有views.py models.py test.py，而models.py文件中，就是我们完成模型的一个最主要的文件。</p>
-<blockquote>
-<p>from django.db import models</p>
-</blockquote>
-<p>模型类，都需要继承自django.db.models类。通过它与manage.py来完成初始化等等动作。关于manage.py的命令，未来有时间，我会写写关于它的心得。</p>
-<pre><code><span class="class"><span class="keyword">class</span> <span class="title">WeeklySyncList</span><span class="params">(models.Model)</span>:</span>
-    <span class="comment">#do something</span>
-    <span class="keyword">pass</span>
-</code></pre><p>一个模型类对于数据库层中的一个表，在我们定义好模型类之后，可以在命令行中输入：</p>
-<blockquote>
-<p>python manage.py sqlall sendcloud</p>
-</blockquote>
-<p>来完成对创建语法的查看以及错误信息的查看，准确没有错误之后，可以输入：</p>
-<blockquote>
-<p>python manage.py syncdb</p>
-</blockquote>
-<p>来初始数据库，django会帮助我们完成数据库层面的操作。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/">django</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2014/11/14/django模型使用的一些心得/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-携程邮轮开发部django分享" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/携程邮轮开发部django分享/" class="article-date">
-  	<time datetime="2014-11-14T12:20:19.000Z" itemprop="datePublished">2014-11-14</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/携程邮轮开发部django分享/">携程邮轮开发部django分享</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>使用django快速开发一个web网站</p>
-<p>分享内容（拟）</p>
-<ol>
-<li>介绍django的历史</li>
-<li>安装以及配置django项目</li>
-<li>介绍django对请求的回应机制</li>
-<li>讲解django URL的配置</li>
-<li>讲解django模型的使用</li>
-<li>讲解django view template 的使用</li>
-<li>通过一个例子讲解如何快速的实现一个简单的网站（注册，登录，验证用户状态）</li>
-<li>分享学习Python django的资料，以及说说一些django的web工具</li>
-</ol>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/">django</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2014/11/14/携程邮轮开发部django分享/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-django静态资源配置的问题" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/django静态资源配置的问题/" class="article-date">
-  	<time datetime="2014-11-14T12:16:20.000Z" itemprop="datePublished">2014-11-14</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/django静态资源配置的问题/">django静态资源配置的问题</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在初始化一个django项目时，我还遇见了一个比较头疼的问题，静态资源的配置，硬编码问题。其实，按照正常的部署来说，静态资源，比如（.css .js img）等，应该另启动一个服务器，去做静态资源的处理，这样是非常常见的，和语言无关，脱离了动态开发内容，特别的适合做内容分发。但是，考虑到前期，我想能在django中集合这样的资源类型，于是，碰到了比较纠结的问题。另外，在django初始化的项目中，竟然还不能在注释中打中文，是不是很疼，没关系，往下看，能解决这样的问题。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/">django</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2014/11/14/django静态资源配置的问题/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-我的项目经历" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/我的项目经历/" class="article-date">
-  	<time datetime="2014-11-14T12:09:19.000Z" itemprop="datePublished">2014-11-14</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/我的项目经历/">我的项目经历</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><em>开源项目，可以在 github 查看，主要分为两类项目，一类为给公司开发的开源工具，用来前端的编程效率，一类为自己的学习项目，比如桌面端的MVC一套解决方案，移动组件库，以及个人项目。</em></p>
-<p><em>擅长领域，主要为JavaScript，为iOS/Mac OS X平台编写应用程序，关系型数据库为mysql mongodb 工作中以JavaScript Objective-C为主。</em></p>
-<h2 id="个人项目展示">个人项目展示</h2><p><a href="https://github.com/lcepy/manong-reading">manong-reading</a></p>
-<p><a href="https://github.com/lcepy/loseYourself">loseYourself</a></p>
-<p><a href="https://github.com/lcepy/STNetWork">STNetwork</a></p>
-<p><a href="https://github.com/lcepy/Mockingbird">Mockingbird</a></p>
-<p><a href="https://github.com/lcepy/MFLog">MFLog</a></p>
-<p><a href="https://github.com/lcepy/MissIMUI">MissIMUI</a></p>
-<p><a href="https://github.com/lcepy/glob-proxy">HTTP Proxy</a></p>
-<p><a href="https://github.com/lcepy/kalimdor">kalimdor MVC</a></p>
-<p><a href="https://github.com/lcepy/Find">Find zepto UI</a></p>
-<p><a href="https://github.com/lcepy/nagrand">nagrand onload</a></p>
-<p><a href="https://github.com/lcepy/douban-shell-app">douban-shell</a></p>
-<p><a href="https://github.com/lcepy/downloadZIP">webapp 打包工具</a></p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2014/11/14/我的项目经历/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-在实际工作中node开发的一些见解与调试" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/在实际工作中node开发的一些见解与调试/" class="article-date">
-  	<time datetime="2014-11-14T12:04:45.000Z" itemprop="datePublished">2014-11-14</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/在实际工作中node开发的一些见解与调试/">在实际工作中node开发的一些见解与调试</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>真实情况是这样的</strong> </p>
-<ol>
-<li>开发，前端与后端物理性的隔离，前端通过restful接口请求相应的数据，并在客户端渲染。</li>
-<li>前端的渲染依赖于后端响应的数据，后端开发的进度永远比前端慢。</li>
-<li>需要通过本地模拟数据，约定契约总是会纠结很久。</li>
-<li>联调时，需要改多处代码。</li>
-</ol>
-<p><strong>治标不治本的解决方案</strong></p>
-<p>为了解决工作中的上述问题，于是就想到了网络代理与客户端mock的功能，并且能很好的识别出错误，以及分发请求，<a href="https://github.com/lcepy/glob-proxy">glob-proxy</a>。通过一对键值对来描述需要响应的请求，通过GET参数来适配读取本地，还是分发到网络，并对响应的请求response进行内存缓存与物理缓存。本地构建的元数据，可以使用mock来生成。</p>
-<p>但是上述的解决方案，并没有解决工作中出现的问题。反而加重了开发的成本，问题3，依然没有很好的解决，而问题4解决了一半，联调时依然需要更改多处，不然提交到测试的代码，还是键值对中映射的地址，虽然我的本机可以访问，但是测试人员却访问不了。</p>
-<p>上遇到上述问题的时候，我一直在想，是不是需要另外启用一个服务器来做代理的代理。我实现了上述需要解决的几个问题，比如分解model.js中测试地址，将这个测试地址，生成为一个配置文件，提供给代理服务器2，代理服务器1依然是之前的配置文件。在webapp发起请求时，代理服务器1截取请求，提交给代理服务器2，代理服务器2获取完毕后，发送给远程。</p>
-<p>这个问题好像，滚雪球一样，越滚越大。后来，我的同事找到了一个比较好的方案，我编写的一半socket proxy基本上可以废弃了。我们使用了fiddler来做代理服务器1.</p>
-<p>这里的逻辑是这样的，在启动glob-proxy时，我提供了两个API出来，一是：抓取配置文件中的model.js，根据测试URL生成fiddler需要的xml配置文件，并将这个xml导入到fiddler中。如果是local=1，glob-proxy将扫描本地文件，来做响应。如果local为false，请求将通过glob-proxy发送到fiddler中，fiddler去请求远程，来响应node服务器，node服务器再响应给webapp。</p>
-<p>好在上述，难的地方已经处理好了，现在要理清的还是这个请求代理的逻辑顺序。但是这样的绕，是不是有些比较蛋疼呢。<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nodejs/">nodejs</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2014/11/14/在实际工作中node开发的一些见解与调试/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-对于中小项目我该如何组织我的代码" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/对于中小项目我该如何组织我的代码/" class="article-date">
-  	<time datetime="2014-11-14T11:19:11.000Z" itemprop="datePublished">2014-11-14</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/对于中小项目我该如何组织我的代码/">对于中小项目我该如何组织我的代码</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>从三个角度来分析</p>
-<ol>
-<li>我需要什么（need）</li>
-<li>我为什么需要这些（why this）</li>
-<li>我能做些什么（what can）</li>
-</ol>
-<p>在这里讨论的一个命题是为了一个不大不小的项目来组织一套可以应用的移动开发流程，能否达到预期的目标，能否使用于中小公司，以及业务不是企业级复杂的逻辑。对于现在越来越工程化的前端体系，组织好它，我可能需要很多额外的工具，来辅助我效率的开发。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/经验之谈/">经验之谈</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2014/11/14/对于中小项目我该如何组织我的代码/#more">more >></a>
-        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -857,7 +612,7 @@ hexo <span class="keyword">server</span></span>
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
     </nav>
   
 </div>

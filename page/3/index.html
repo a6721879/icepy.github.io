@@ -167,11 +167,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-Native与H5交互的原理" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-使用Worker实现一个多线程数据缓存模块" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/03/14/Native与H5交互的原理/" class="article-date">
-  	<time datetime="2015-03-14T04:14:50.000Z" itemprop="datePublished">2015-03-14</time>
+      <a href="/2015/05/20/使用Worker实现一个多线程数据缓存模块/" class="article-date">
+  	<time datetime="2015-05-20T08:24:18.000Z" itemprop="datePublished">2015-05-20</time>
 </a>
     </div>
   
@@ -184,7 +184,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/14/Native与H5交互的原理/">Native与H5交互的原理</a>
+      <a class="article-title" href="/2015/05/20/使用Worker实现一个多线程数据缓存模块/">使用Worker实现一个多线程数据缓存模块</a>
     </h1>
   
 
@@ -193,365 +193,211 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在做混合应用时，H5与Native通信的重要性，我想每一个H5开发者都非常的清楚。通过它，我们可以很好的借用Native API的优势来实现自己想做的事情，业界有一个非常成熟的框架让大家选择，它就是PhoneGap。混合开发，并不是意味着什么App都可以做，它也有局限性。在写交互原理之前，我想先写写自己的体会。</p>
+        <p>Worker是一个可以在后台运行的任务，并提供了一个JavaScript接口让我们来使用它。Worker能够被轻松的创建，还能向它的创建者发送消息。 你只要调用 Worker() 构造函数，指定一个需要运行在 worker 线程内的脚本，就能够很容易的创建一个 worker。</p>
+<p>Worker这个API的使用非常的简单</p>
 <ul>
-<li>混合开发使用的语言是JavaScript由于系统分配的资源始终有限，在UIWebView这个容器中运行，效率跟原生的差距是非常明显的</li>
-<li>应用需要解决首次加载白屏的问题，因为资源加载的速度始终有些慢</li>
-<li>这玩意调试起来很痛苦，不像在web端有chrome的开发者工具，iOS有Xcode</li>
-<li>iOS和android交互始终不一样，但是混合应用提供了一个统一的UI，目前不清楚用户是否能习惯交互</li>
-<li>关于通信JavaScript到Native是一个异步的过程，而Native到JavaScript是一个同步的过程</li>
+<li>postMessage()  向worker内部发送消息</li>
+<li>terminate() 立即停止当前的worker</li>
+<li>onmessage 一个消息事件，worker内部向前台发送消息 </li>
+<li>onerror 一个错误事件，运行环境出错时，worker内部向前台发送消息</li>
 </ul>
-<p>那么使用混合应用在什么场景下比较有优势呢？</p>
+<p>属性</p>
 <ul>
-<li>内容驱动型的应用</li>
-<li>经常需要调整UI的应用</li>
-<li>经常需要调整业务的应用</li>
-<li>交互不复杂并且不需要大量计算的应用</li>
+<li>message 一个可读的错误消息</li>
+<li>filename 错误所在的文件名</li>
+<li>lineno 错误所在的文本行号 </li>
 </ul>
-<p>总结起来，比如携程的App，因为都是内容驱动，比如购买门票，旅游之类的，又比如淘宝的App，大量商品类的展示，以及一些如图书，查询，工具类的应用，混合开发在这些场景下，有很明显的优势。</p>
-<p>言归正传，因为iOS并没有提供原生的调用API，所以当JavaScript跟Native进行通信时，就需要利用一些技巧了。UIWebView这个容器，除了可以加载请求之外，也可以加载本地资源，如果当一个页面发起请求时，是要经过UIWebView的，于是有人会想，我能知道这个URL么？不错，UIWebView可以拦截这个request，并且知道它的全部。那么UIWebView可以通知页面不，这个依然可以。利用这些原理技巧，于是两端通信的问题就解决了。</p>
-<p>在UIWebView中实现UIWebViewDelegate协议，就可以拦截到页面端发送的request。</p>
-<pre><code>-(<span class="built_in">BOOL</span>)webView:(<span class="built_in">UIWebView</span> *)webView shouldStartLoadWithRequest:(<span class="built_in">NSURLRequest</span> *)request navigationType:(<span class="built_in">UIWebViewNavigationType</span>)navigationType
-{
-    <span class="built_in">NSURL</span> *url = [request URL];
-    <span class="keyword">if</span> ([[url scheme] isEqualToString:<span class="string">@"test"</span>]) {
-        [_webView stringByEvaluatingJavaScriptFromString:<span class="string">@"window.iOSPhoneName = 'iam lcepy'"</span>];
-        <span class="keyword">return</span> <span class="literal">NO</span>;
+<p>JavaScript Client Code</p>
+<pre><code><span class="keyword">var</span> workerQueue = [];
+<span class="keyword">var</span> cacheSystem = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+    <span class="keyword">var</span> isWork         = !!Worker;
+    <span class="keyword">var</span> dataSource     = {};
+    <span class="keyword">var</span> contains     = [];
+    <span class="keyword">var</span> lock        = <span class="literal">false</span>;
+    <span class="keyword">var</span> count         = <span class="number">0</span>;
+    <span class="keyword">var</span> getDash     = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+        <span class="keyword">var</span> dash         = localStorage.getItem(<span class="string">'scanUseDashDataSource'</span>);
+        <span class="keyword">var</span> dashData     = dash ? <span class="built_in">JSON</span>.parse(dash).data : contains;
+        <span class="keyword">return</span> dashData; 
     }
-    <span class="keyword">return</span> <span class="literal">YES</span>;
-}
-</code></pre><p>返回YES表示执行浏览器的默认执行，返回NO表示不执行浏览器的默认执行</p>
-<p>而从Native到JavaScript可以利用上stringByEvaluatingJavaScriptFromString方法，执行Js字符串，它就能在UIWebView中执行这一段Js代码。在客户端，我们知道全局的对象是window，如果在客户端需要获取结果，可以把Native执行的结果放到window上。</p>
-<p>那么Js这一端如何实现呢？不错，利用的就是隐藏的iframe。</p>
-<pre><code><span class="keyword">var</span> requ = $(<span class="string">'#requestToNative'</span>);
-requ.bind(<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
-    <span class="keyword">var</span> iframe = <span class="built_in">document</span>.createElement(<span class="string">'iframe'</span>);
-    iframe.style.display = <span class="string">'none'</span>;
-    iframe.src = <span class="string">'test://iOS/userInfo'</span>;
-    <span class="keyword">var</span> requs = requ[<span class="number">0</span>];
-    requs.appendChild(iframe);
-    iframe = <span class="literal">null</span>;
-    alert(<span class="built_in">window</span>.iOSPhoneName);
-});
-</code></pre><p>发送这个request让Native进行拦截，协议名可以随便取，当然这个名字要取的有意义。</p>
-<p><a href="https://github.com/lcepy/geekObjective-C/tree/master/WebViewNativeToJavaScript" target="_blank" rel="external">例子查看</a></p>
+    <span class="keyword">return</span>    {
+        allObject:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+            <span class="keyword">var</span> d = localStorage.getItem(<span class="string">'scanUseModalDataSource'</span>);
+            <span class="keyword">return</span> d ? d = <span class="built_in">JSON</span>.parse(d).data : <span class="literal">null</span>;
+        },
+        objectForKey:<span class="function"><span class="keyword">function</span>(<span class="params">key</span>)</span>{
+            <span class="keyword">return</span> <span class="keyword">this</span>.allObject()[key];
+        },
+        allKeys:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+            <span class="keyword">var</span> o = <span class="keyword">this</span>.allObject();
+            <span class="keyword">return</span> o ? <span class="built_in">Object</span>.keys(o) : contains;
+        },
+        allValues:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+            <span class="keyword">var</span> o = <span class="keyword">this</span>.allObject();
+            <span class="keyword">if</span>(!o){
+                <span class="keyword">return</span> contains;
+            }
+            <span class="keyword">var</span> c = [];
+            <span class="keyword">for</span>(<span class="keyword">var</span> k <span class="keyword">in</span> o){
+                c.push(o[k].data);
+            }
+            <span class="keyword">return</span> c;
+        },
+        allDash:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+            <span class="keyword">return</span> getDash();
+        },
+        setObject:<span class="function"><span class="keyword">function</span>(<span class="params">value</span>)</span>{
+            <span class="keyword">var</span> s             = <span class="keyword">this</span>;
+            <span class="keyword">var</span> metadata     = <span class="keyword">this</span>.allObject() || {};
+            metadata[value] = {<span class="string">"data"</span>:<span class="literal">null</span>,<span class="string">"work"</span>:<span class="literal">false</span>,<span class="string">"error"</span>:<span class="literal">false</span>};
+            <span class="keyword">var</span> dashData     = <span class="keyword">this</span>.allDash();    
+            <span class="comment">//如果有网络，提交给后台线程去处理网络请求</span>
+            <span class="built_in">window</span>.networkState = <span class="number">1</span>;
+            <span class="keyword">if</span>(isWork &amp;&amp; <span class="built_in">window</span>.networkState &gt; <span class="number">0</span>){
+                <span class="keyword">var</span> worker = <span class="keyword">new</span> Worker(<span class="string">'fetchThread.js'</span>);
+                worker.addEventListener(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">evt</span>)</span>{
+                    <span class="built_in">console</span>.log(evt);
+                    <span class="keyword">var</span> obj = s.allObject();
+                    <span class="keyword">var</span> sp     = evt.data.split(<span class="string">'@icepy-&gt;'</span>);
+                    <span class="keyword">var</span> tag = sp[<span class="number">0</span>];
+                    <span class="keyword">var</span> dat = sp[<span class="number">1</span>];
+                    <span class="keyword">var</span> o   = obj[tag];
+                    <span class="keyword">var</span> r   = <span class="built_in">JSON</span>.parse(dat);
+                    <span class="keyword">if</span>(o){
+                        <span class="comment">//把后台得到的数据添加到data中</span>
+                        o.data     = r;
+                        <span class="comment">//标记work已经完成</span>
+                        o.work  = <span class="literal">true</span>;
+                        <span class="comment">//标记执行线程锁</span>
+                        lock     = <span class="literal">false</span>;
+                        <span class="keyword">if</span>(r.error){
+                            o.error = <span class="literal">true</span>;
+                        }
+                        localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:obj}));
+                        workerQueue[count][<span class="number">2</span>] = <span class="literal">true</span>;
+                        count++;
+                        <span class="keyword">var</span> work = workerQueue[count];
+                        <span class="keyword">if</span>(work){
+                            <span class="keyword">if</span>(work[<span class="number">2</span>]){
+                                <span class="keyword">var</span> i = count++;
+                                <span class="keyword">var</span> f = <span class="literal">true</span>;
+                                <span class="keyword">do</span>{
+                                    <span class="keyword">var</span> _work = workerQueue[i];
+                                    <span class="keyword">if</span>(!_work[<span class="number">2</span>]){
+                                        _work[<span class="number">1</span>].postMessage(_work[<span class="number">0</span>]);
+                                        f = <span class="literal">false</span>;
+                                        count = i;
+                                        <span class="keyword">break</span>;
+                                    }
+                                    i++;
+                                }<span class="keyword">while</span>(f);
+                            }<span class="keyword">else</span>{
+                                work[<span class="number">1</span>].postMessage(work[<span class="number">0</span>]);
+                            }
+                        }<span class="keyword">else</span>{
+                            workerQueue.length = <span class="number">0</span>;
+                            count = <span class="number">0</span>;
+                        }
+                    }
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-2015年面试之囧途" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/13/2015年面试之囧途/" class="article-date">
-  	<time datetime="2015-03-13T11:07:52.000Z" itemprop="datePublished">2015-03-13</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/13/2015年面试之囧途/">2015年面试之囧途</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>至去年从携程离职之后，就开启了一次新的面试囧途，面试这东西，主要可以了解自己所处的水平，写写它是想告诉自己一些事情，有事，人应该要了解和想清楚自己到底需要什么，到底适合什么样的工作，而不是为了生活，为了好的公司，为了高的薪水去妥协，在与兴趣之间平衡的坍塌，会造成很严重的后果，诱惑，是每一个人都会遇到的，如何面对这些诱惑，而明确自己所想，才是最重要的。</p>
-<p>2015年面试了大概有七家公司，为什么会出现这样的状况，是我今天想要反思的主要目的。在去面试极客学院时，包括电话几轮的沟通，双方都非常满意，给出了17K的offer。其实这，是一个很心动的数字，毕竟比上一份work多出了3K。有时候，选择，往往很意外。</p>
-<p>我是一个非常直接的人，我很忍受不了忽悠和欺骗。明明在面试时，就已经沟通过，我能做什么，以及我根本不考虑做什么，为什么入职之后往往的工作就要偏离呢？这个问题，其实我一直很思考不明白，最后的结局是我只能离职走人，浪费了时间，精力，当然还有金钱。</p>
-<p>下面要写的事情，都非常琐碎，两周的时间内发生的事情。在过年之前，我来到北京，寻找机会，老乡给我推荐了聚美优品，面试时的一些沟通，包括自己的情况，想法，以及能做的事情，都很明白的说了。从1月4号面试到了1月14号，经历了四轮，然后就没有消息了。</p>
-<p>大家都明白没有消息意味着什么，抱着挂了的心态，1月20号回到湖南。在和淳敏沟通了之后，我答应了在27号之前，去上海他那边工作。过完年后买了高铁票，去了上海，可是下午北京聚美优品又通知我，审批过了，如果我来北京，立马就发聚美的offer。其实，这里我就犯了一个很严重的错误，<strong>没有能抵制住诱惑</strong>。当天，我纠结郁闷了很久，淳敏也和我说了很多，包括聚美的工作气氛，研发团队，以及未来可以学习的东西到底有多少。也许当时我被这样的惊喜冲昏了头脑，一发热，连夜买了去北京的火车票，当我坐上火车时，我又接到了通知，还需要在继续面试。</p>
-<p>当时在心里，真是一万只草泥马奔腾而过，这不是逗我玩么？如果，能让时光倒流，告诉我是来北京面试的话，我想大家应该都可以知道，自己会选择什么。用一句现在的话说，会来的是<strong>傻逼</strong>，于是我傻逼了。可是，时间没法回滚，发生了就要自己面对这些。其实当时的心里状态是很后悔的，后悔没听淳敏的话，后悔跑来北京。如果这边的工作黄了，接下来怎么办。自己没有任何想法，那只能继续面试，继续找工作了。</p>
-<p>3月2日上午去了JD，我只能说我的简历写的很清楚。如果你需要正规军，就不应该来找我。JD的男HR真的是屌的一逼。下午去了一家创业公司，我大呼伤不起，各种奇葩要求。比如你能不能做服务，对不起，我不能。那你能不能写移动客户端，对不起，我不能。我简历写的是，移动前端好吧？未必，汉字这么难理解？那一天，我对后面的面试安排，已经不抱任何想去的态度了，但是朋友推荐的，还是去了。</p>
-<p>3月3日下午的时候接到了聚美HR的电话，通知我她们人事搞错对象了，把别人的结果拿去审批了，而我是不需要面试了，在跟我确定了一下薪水之后，语重的告诉我，不过还是需要审批。如果老板审批不通过，她也没有办法，只能和我说声对不起。当时，我心里只是呵呵的，反正是有了不信任感。</p>
-<p>3月4日去联想研究院面试，结果很理想，包括聊了很多关于移动H5的一些开发心得，中午面试的大哥还请我吃了一顿午饭，反正是心情很愉悦，唯一可惜的是联想研究院的HC计划需要等待到3月底，当时面试大哥的领导就询问我，是否愿意等待，告诉我如果公司的HC一开，优先联系我，只要我愿意。</p>
-<p>吃过午饭的时候接到了聚美HR的电话，告诉我审批通过了，让我耐性等待offer。下午时聚美的offer发到了我的邮箱里，通知我3月10号入职。但是我没注意查收邮箱，其实，这也很狗血，我在想着，唉，工作哪里不是做，只要自己踏踏实实，本本份份的做好工作，管他呢。</p>
-<p>3月5日去每日优鲜面试，本来经历了2号奇葩的面试之后，后面的一些网投的面试邀请，我都不打算去了。那天，接到个超美小姑娘的电话，而且还是个性感HR负责人，啧啧，来吧来吧，过来聊一聊。抱着想调戏调戏HR妹纸的心态，下午4点半搭地铁去望京那边，最后愣没找到地方。我在想，反正也就是聊会天，心中不快跟陌生人吐一吐，也许能减轻心理的压抑感。去了之后，跟技术，跟其他人聊的还挺愉快。反正HR的美色，没有让我失望，我在感谢老天，终于遇上了一家正常的公司。</p>
-<p>第二天上午又跑去了每日优鲜，跟她们的CEO大哥聊聊，挺对味的。只是我还答应了朋友要去面试，所以没有急着答应他。当天下午还去百度面试了，上来做了三个题目，解析URL，实现深浅拷贝，对数字字符串进行以每四个一组的分隔。只是后面问到的一些问题，比如盒子模型，我知道它是由高宽内边距外边距线组成的，可是它在浏览器中的渲染顺序，我是真心不知道，这些问题有些变态了。后来，我朋友帮我去问，他告诉我百度对毕业证有要求，必须要统招，虽然面试了一个下午，但是没有然后了。于是，我能想到是什么。</p>
-<p>最后我还是没有能抵制住”好公司”的诱惑，选择了去聚美优品，本来我朋友说，你别去聚美，你看看你面试的那个经历，太不靠谱了，让人感觉就像是把你吊着，他们一直在找人，只不过没找到合适的，最后才选择你。至于，是不是这样，我不清楚，但是从面试到发offer，确实让我有不信任的感受。</p>
-<p>说起来，人嘛，都有头脑发热的时候，也很难抵制的了诱惑。没有办法，选择去了，那只能继续往前走，不然还能怎么办？入职聚美之后，第二天Leader告诉我还需要签署一份补充的协议，虽然我去签了，但是我发现一同来的那几个人都没签补充协议，就我一个人签了，为什么？这是有甄别的对待么？如果试用期的一些考核，不通过，立马开掉，那就呵呵了。我朋友说，我真蠢，这种开人协议也签，我也只能呵呵了。而我的试用期两项任务，都是切图，写CSS和静态页面。</p>
-<p>确实，在我提交离职申请的时候，Leader跟我说，我是第一个签了这种补充协议的人。本来工作，就应当是有一个安心的氛围，我是没法安心。这对我来说有风险的，任何一个平常的人，都会这么想。如果一切都是看表现，安排一个没有切过图，没写过CSS的人去做这些事情，这可以看出他的表现吗？我想不能。而且，最重要的是，在和Leader沟通毕业证的时候，他要我自己去和HR协商，这让我更加的产生了危机感。如果6月不能顺利转正，是否意味着我还要接着找工作，然后又是三个月的试用期，到那个时候就已经10月，11月了，这一年又废了。这样的情况，如何能让人安心工作，我想，任何一个人都不能。</p>
-<p>今天我办了离职手续，跟聚美负责技术的总监，Leader最后沟通了一下。也许在你们看来，这是一个很不负责的表现。如果换位思考一下，从面试到发offer，入职到第一个签到这种补充协议，如何能让感觉到是被信任的，是能安心工作的。其实很反感Leader最后说的一句话，有些威胁的味道，至于他想表述的本意是不是这样，我不清楚，但是让我感觉到威胁的味道是实在的。他说：<strong>互联网圈子这么小，基本上每个公司的技术人员我都认识。你能来聚美，我找携程的同事打听过你的事情，正因为你比较实在，所以才招你来。就你这样的，如果有人问起来，你觉得我该怎么说？只怕会影响你今后的发展。</strong></p>
-<p>在坐地铁回来的路上，我自己又想了很多。一开始，从上海跑来北京，就是一个错误的选择。我没有听淳敏的建议，一腔热血的往前冲，后来我发现我冲到坑里了。这样的原因是什么？</p>
-<ul>
-<li>没有了解好自己真正的需求，擅长什么，对什么有兴趣</li>
-<li>没有想好自己可以真正发展的城市，北京上海来回跑，什么意义都没有</li>
-<li>内心不够强大，不能抵挡诱惑，比如有名的公司，较高的薪水</li>
-<li>没有坚定自己发展的方向，PC移动都有前端，我没选择好方向</li>
-<li>没有想好自己是否可以独自上路</li>
-<li>没有选择好正确的公司</li>
-</ul>
-<p>以后我该怎么办？经历了这些之后，我才明白了一个道理，在做一项决定的时候，一定要考虑清楚了自己是否合适，这是不是我想要的。挫折，每个人都要面对，唯一不同的是，我如何从挫折中吸取教训，总结教训，未来能正确的行在路上。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-iOS多线程GCD的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/07/iOS多线程GCD的使用/" class="article-date">
-  	<time datetime="2015-03-07T09:07:36.000Z" itemprop="datePublished">2015-03-07</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/07/iOS多线程GCD的使用/">iOS多线程GCD的使用</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在做iOS开发的时候线程的使用场景还是蛮多的，比如网络请求，比如大的数据处理等等。因为iOS只有一个主线程，而且这个主线程是让UIKit来使用的，如果我们不想让UI界面因为某些操作而出现卡顿，那么就必须把一些需要时间等待的操作，分配给其他的线程去处理，并且保证主线程不让UIKit之外的程序来使用。</p>
-<p>在UIKit中某些对象是可以在其他线程中正常工作的，比如UIImage，UIColor等。但是UIKit的大部分只能在主线程中正常工作的，明白这一点非常的重要。</p>
-<p>iOS中实现多任务编程，主要使用三种方式，1、NSThread 2、NSOperation 3、GCD；个人感觉GCD比较好使用，它主要是与block来配合使用的。比如在网络活动时，我想在<a href="http://wow.163.com" target="_blank" rel="external">http://wow.163.com</a>下载一张图片显示在UIImageView，但是下载的过程，如果不使用其他线程来下载图片数据，UI界面就会出现卡顿的感觉，用户体验非常不好。</p>
-<p>GCD主要可以使用的函数有几个：</p>
-<ul>
-<li>dispatch_queue_create(“name”,NULL) </li>
-<li>dispatch_async(dispatch_queue_t queue,^{})</li>
-<li>dispatch_get_main_queue</li>
-<li>dispatch_sync</li>
-<li>dispatch_get_global_queue</li>
-</ul>
-<p>dispatch_get_main_queue顾名思义，运行在主线程的Main queue，可以通过dispatch_get_main_queue获取。</p>
-<p>dispatch_async用于异步操作</p>
-<p>dispatch_sync用于同步操作</p>
-<p>dispatch_queue_create一般用来创建串行queue，而且只可能创建一个线程，顺序执行</p>
-<p>dispatch_get_global_queue 添加到主queue的可能会并行执行，也就意味着创建了多个线程</p>
-<p>回到例子上来说，如果我有两个界面，从其中一个界面点击一个按钮到另外一个界面中显示一张图片，而这个图片需要在网络上下载。如果这里不使用多线程，在视觉上得到的反馈，就有可能在第一个界面中出现卡顿，因为网络下载把主线程阻塞了。</p>
-<p>例子：</p>
-<pre><code><span class="comment">//创建一个请求</span>
-<span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:<span class="keyword">self</span><span class="variable">.imageURL</span>];
-<span class="built_in">NSURLSessionConfiguration</span> *configuration = [<span class="built_in">NSURLSessionConfiguration</span> ephemeralSessionConfiguration];
-<span class="built_in">NSURLSession</span> *session = [<span class="built_in">NSURLSession</span> sessionWithConfiguration:configuration];
-<span class="built_in">NSURLSessionDownloadTask</span> *task = [session downloadTaskWithRequest:request completionHandler:^(<span class="built_in">NSURL</span> *location, <span class="built_in">NSURLResponse</span> *response, <span class="built_in">NSError</span> *error) {
-    <span class="keyword">if</span> (!error) {
-        <span class="keyword">if</span> ([request<span class="variable">.URL</span> isEqual:<span class="keyword">self</span><span class="variable">.imageURL</span>]) {
-            <span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageWithData:[<span class="built_in">NSData</span> dataWithContentsOfURL:location]];
-            <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^{
-                <span class="keyword">self</span><span class="variable">.image</span> = image;
-            });
-        }
+                });
+                worker.addEventListener(<span class="string">'error'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">evt</span>)</span>{
+                    <span class="built_in">console</span>.log(<span class="string">'错误信息处理'</span>);
+                });
+                <span class="comment">//把线程加入队列</span>
+                workerQueue.push([value,worker,<span class="literal">false</span>]);
+                <span class="keyword">if</span>(!lock){
+                    lock = <span class="literal">true</span>;
+                    worker.postMessage(value);
+                }
+            }
+            <span class="keyword">if</span>(!(dashData.indexOf(value) &gt; -<span class="number">1</span>)){
+                dashData.push(value);
+            }
+            localStorage.setItem(<span class="string">'scanUseDashDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:dashData}));
+            localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
+        },
+        setValue:<span class="function"><span class="keyword">function</span>(<span class="params">key,value</span>)</span>{
+            <span class="keyword">var</span> metadata = <span class="keyword">this</span>.allObject();
+            metadata[key].data = value.concat();
+            metadata[key].work = <span class="literal">true</span>;
+            localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
+        },
+        removeObjectForKey:<span class="function"><span class="keyword">function</span>(<span class="params">key</span>)</span>{
+            <span class="keyword">var</span> metadata     = <span class="keyword">this</span>.allObject();
+            <span class="keyword">var</span> dash         = <span class="keyword">this</span>.allDash();
+            dash.splice(dash.indexOf(key),<span class="number">1</span>);
+            <span class="keyword">this</span>.pop(key);
+            <span class="keyword">delete</span> metadata[key];
+            localStorage.setItem(<span class="string">'scanUseDashDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:dash}));
+            localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
+        },
+        repeat:<span class="function"><span class="keyword">function</span>(<span class="params">v</span>)</span>{
+            <span class="keyword">var</span> d = <span class="keyword">this</span>.allKeys();
+                i = <span class="number">0</span>;
+            <span class="keyword">if</span>(!d.length){
+                <span class="keyword">return</span> <span class="literal">false</span>;
+            }<span class="keyword">else</span>{
+                <span class="keyword">var</span> lock = <span class="literal">false</span>;
+                <span class="keyword">if</span>(d.indexOf(v) &gt; -<span class="number">1</span>){
+                    lock = <span class="literal">true</span>;
+                }
+                <span class="keyword">return</span> lock;
+            }
+        },
+        pop:<span class="function"><span class="keyword">function</span>(<span class="params">key,d</span>)</span>{
+            <span class="keyword">if</span>(!d){
+                d = <span class="keyword">this</span>.allObject();
+            }
+            <span class="keyword">if</span>(isWork){
+                <span class="keyword">var</span> i = <span class="number">0</span>;
+                <span class="keyword">var</span> e = workerQueue.length;
+                <span class="keyword">if</span>(e &gt; <span class="number">0</span>){
+                    <span class="keyword">for</span>(;i&lt;e;i++){
+                        <span class="keyword">var</span> work = workerQueue[i];
+                        <span class="keyword">if</span>(work &amp;&amp; work[<span class="number">0</span>] === key){
+                            work[<span class="number">2</span>] = <span class="literal">true</span>;
+                            work[<span class="number">1</span>].terminate();
+                            <span class="keyword">break</span>;
+                        }
+                    }
+                }
+            }
+        },
+        isWork:isWork
     }
-}];
-[task resume];    
-</code></pre><p>在这个例子中主要是利用了NSURLSession临时会话，NSURLSessionDownloadTask任务，NSURLSessionConfiguration配置与dispatch_async相结合的方式来处理的多线程。</p>
+}();
+</code></pre><p>JavaScript Thread Code</p>
+<pre><code>addEventListener<span class="list">(<span class="quoted">'message</span>',function<span class="list">(<span class="keyword">evt</span>)</span>{
+    var parameter     = evt.data<span class="comment">;</span>
+    var xhr         = new XMLHttpRequest<span class="list">()</span><span class="comment">;</span>
+    var headers        = {}<span class="comment">;</span>
+    xhr.onreadystatechange = function<span class="list">(<span class="keyword">e</span>)</span>{
+           if<span class="list">(<span class="keyword">xhr</span>.readyState === <span class="number">4</span>)</span>{
+               clearInterval<span class="list">(<span class="keyword">abortTimeout</span>)</span><span class="comment">;</span>
+               if<span class="list">(<span class="list">(<span class="keyword">xhr</span>.status &gt;= <span class="number">200</span> <span class="keyword">&amp;&amp;</span> xhr.status &lt; <span class="number">300</span>)</span> || xhr.status == <span class="number">304</span>)</span>{
+                   postMessage<span class="list">(<span class="keyword">parameter+</span>'@icepy-&gt;<span class="quoted">'+xhr</span>.responseText)</span><span class="comment">;</span>
+                   close<span class="list">()</span><span class="comment">;</span>
+               }
+           }
+       }
+    xhr.open<span class="list">(<span class="quoted">'POST</span>',<span class="quoted">'http</span><span class="keyword">://127</span>.<span class="number">0.0</span>.<span class="number">1</span>:<span class="number">8001</span>/',true)</span><span class="comment">;</span>
+       xhr.send<span class="list">(<span class="keyword">parameter</span>)</span><span class="comment">;</span>
+       var abortTimeout = setInterval<span class="list">(<span class="keyword">function</span><span class="list">()</span>{
+           xhr.abort<span class="list">()</span><span class="comment">;</span>
+           postMessage<span class="list">(<span class="keyword">parameter+</span>'@icepy-&gt;<span class="quoted">'+</span>'{<span class="string">"error"</span>:<span class="string">"timeout"</span>}')</span><span class="comment">;</span>
+           close<span class="list">()</span><span class="comment">;</span>
+       },<span class="number">1000</span><span class="variable">*13);
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-iOS自动布局的理解" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/07/iOS自动布局的理解/" class="article-date">
-  	<time datetime="2015-03-07T03:47:44.000Z" itemprop="datePublished">2015-03-07</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/07/iOS自动布局的理解/">iOS自动布局的理解</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一般情况下iOS的自动布局可以在Xcode中利用图形化的工具来操作完成，当然也可以使用代码的方式来完成，这些工作主要是对视图定义一些规则和约束，在容器变化的时候，视图可以遵守这些约束。</p>
-<p>实现约束的三种方式：</p>
+       xhr.onerror = function(e){
+           postMessage(parameter+'@icepy-&gt;'+'{"error":"notnetwork"}');
+           close();
+       }     
+});</span></span></span>
+</code></pre><p>阅读资料</p>
 <ul>
-<li>比如拖动一个Label在storyboard中，会出现蓝色的辅助线，放定好位置时，在下方的小按钮中点击Reset to Suggested Constraints，系统会帮助我们选择最佳的自动布局方式</li>
-<li>拖动一个Label到storyboard中，依然是点击下方小按钮，有add，手动添加。</li>
-<li>拖动一个Label到storyboard中按住control键，拖动到想放的位置上，这里有一个前提，是有一个参照视图，放开的时候会弹出一个小框来让你选择约束</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Worker" target="_blank" rel="external">https://developer.mozilla.org/zh-CN/docs/Web/API/Worker</a></li>
 </ul>
-<p>比如要查看效果，可以右边的属性栏中选择Orientation中的Landscape，就变成了横屏。如果想删除约束，可以在左侧的文档大纲中进行删除，假设一个视图没有约束，也可以在文档大纲中来add约束。</p>
-<p>如果想要查看一个约束，可以在Show the size inspector中查看constraints。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-JavaScript解析URL字符串" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/06/JavaScript解析URL字符串/" class="article-date">
-  	<time datetime="2015-03-06T06:38:32.000Z" itemprop="datePublished">2015-03-06</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/06/JavaScript解析URL字符串/">JavaScript解析URL字符串</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>说到解析URL思路应该有多种多样的，比如一点一点的分解，先indexOf(‘?’)判断是否有参数，完了之后split(‘?’)一下，后面的参数继续split(‘&amp;’)成一个数组然后循环再split(‘=’)组装成一个一个key和vaule的键值对对象。前面那一部分也可以继续分解，把端口，协议，路径等等分解出来。或者用正则表达式，一个一个的分解。除了上述的思路，其实还有一个更简单的办法，利用a标签。</p>
-<pre><code><span class="keyword">var</span> parseURL = function(url){
-    <span class="keyword">var</span> temp =  document.createElement('a');
-    temp.href = url;
-    <span class="keyword">var</span> <span class="literal">result</span> = {
-        <span class="string">"port"</span>:temp.port,
-        <span class="string">"protocol"</span>:temp.protocol.replace(':',''),
-        <span class="string">"hash"</span>:temp.hash.replace('<span class="comment">#',''),</span>
-        <span class="string">"host"</span>:temp.host,
-        <span class="string">"href"</span>:temp.href,
-        <span class="string">"hostname"</span>:temp.hostname,
-        <span class="string">"pathname"</span>:temp.pathname,
-        <span class="string">"search"</span>:temp.search,
-        <span class="string">"query"</span>:{}
-    }
-    <span class="keyword">var</span> seg = <span class="literal">result</span>.search.replace(/^\?/,'').split('&amp;'),
-        leng = seg.length,
-        i = <span class="number">0</span>,
-        target;
-    <span class="keyword">for</span>(;i&lt;leng;i++){
-        <span class="keyword">if</span>(!seg[i])<span class="keyword">continue</span>;
-        target = seg[i].split('=');
-        <span class="literal">result</span>.query[target[<span class="number">0</span>]] = target[<span class="number">1</span>];
-    }
-    temp = null;
-    <span class="keyword">return</span> <span class="literal">result</span>;
-}
-<span class="keyword">var</span> url = 'https://github.com:<span class="number">8989</span>?key=value&amp;hub=<span class="number">123</span>ASFDGGR<span class="comment">#github';</span>
-parseURL(url);
-</code></pre><p>最后使用完了，把对象的引用设置为null，等待内存回收。</p>
-<p>说到URL就不得不提一下编码和解码的函数，Js里提供了三组，其中最常用的一组是encodeURIComponent和decodeURIComponent。</p>
-<p>通过对三个函数的分析，我们可以知道：escape()除了 ASCII 字母、数字和特定的符号外，对传进来的字符串全部进行转义编码，因此如果想对URL编码，最好不要使用此方法。而encodeURI() 用于编码整个URI,因为URI中的合法字符都不会被编码转换。encodeURIComponent方法在编码单个URIComponent（指请求参数）应当是最常用的，它可以讲参数中的中文、特殊字符进行转义，而不会影响整个URL。</p>
 
       
     </div>
@@ -580,11 +426,11 @@ parseURL(url);
 
 
   
-    <article id="post-JavaScript中的深拷贝与浅拷贝" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-NSDictionary" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/03/04/JavaScript中的深拷贝与浅拷贝/" class="article-date">
-  	<time datetime="2015-03-04T12:56:49.000Z" itemprop="datePublished">2015-03-04</time>
+      <a href="/2015/05/16/NSDictionary/" class="article-date">
+  	<time datetime="2015-05-16T11:20:01.000Z" itemprop="datePublished">2015-05-16</time>
 </a>
     </div>
   
@@ -597,7 +443,7 @@ parseURL(url);
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/04/JavaScript中的深拷贝与浅拷贝/">JavaScript中的深拷贝与浅拷贝</a>
+      <a class="article-title" href="/2015/05/16/NSDictionary/">NSDictionary</a>
     </h1>
   
 
@@ -606,66 +452,48 @@ parseURL(url);
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>关于拷贝的问题，主要分为深拷贝和浅拷贝，但是如果从空间分配上来说JavaScript的拷贝不应该算是深拷贝，比如：</p>
-<pre><code><span class="keyword">var</span> <span class="keyword">d</span> = {};
-<span class="keyword">for</span>(k <span class="keyword">in</span> a){
-    <span class="keyword">d</span>[k] = a[k];
-}
-<span class="keyword">return</span> <span class="keyword">d</span>;
-</code></pre><p>今天突然想到了这么一个问题，在C语言中，所谓的拷贝，就是分两种情况，一种是把指针地址拷贝给另外一个变量，虽然也开辟的了一个内存空间，在栈上也存在着一个地址，我对这个变量进行修改，同一个指针是会改变其值的，这种拷贝叫浅拷贝。另外一种情况，直接开辟一个新空间，把需要复制的值都复制在这个新的空间中，这种拷贝叫中深拷贝。</p>
-<p>如果看到上述的一段Js代码，很多人说它是浅拷贝，假设传入一个a对象，拷贝完成之后返回一个d，当我修改返回对象的值时并不能同时修改a对象，于是，在这里我有一个很大的疑问，在Js中到底什么是浅拷贝，什么是深拷贝的问题？</p>
-<p>这一点上感觉Js真的很奇葩，如果在开发iOS中，不可变对象copy一下，依然是不可变，所以是浅拷贝，拷贝了指针变量中存储的地址值。如果是可变对象copy一下，到不可变，空间变化了，包括不可变mutableCopy到不可变，空间依然变化了，所以是深拷贝。但是JavaScript中对于这一点要考虑一种情况，值类型，和引用类型，这个基础知识，我相信大家都非常清楚。数字，字符串等都是值类型，object，array等都是引用类型。</p>
-<pre><code><span class="variable"><span class="keyword">var</span> a</span> = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];
-<span class="variable"><span class="keyword">var</span> b</span> = a;
-
-b.push(<span class="number">4</span>);
-console.log(a); <span class="comment">//[1,2,3,4]</span>
-
-<span class="variable"><span class="keyword">var</span> numb</span> = <span class="number">123</span>;
-<span class="variable"><span class="keyword">var</span> _numb</span> = numb;
-_numb = <span class="number">567</span>;
-
-console.log(numb); <span class="comment">//123</span>
-</code></pre><p>从这个例子中可以看的出来，它们使用的都是＝符号，而数组a发生了变化，numb数字却没有发生变化。那么从这里，可以有一个总结，所谓了深拷贝，浅拷贝的问题，应该针对的是有多个嵌套发生的情况。不然假设是这样的情况，还能叫浅拷贝么？</p>
-<pre><code><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> =</span> {<span class="string">"de"</span>:<span class="number">123</span>};
-<span class="keyword">var</span> o = copy(<span class="class"><span class="keyword">object</span>);</span>
-
-o.de = <span class="number">456</span>;
-
-console.log(<span class="class"><span class="keyword">object</span>) <span class="title">//</span>{</span><span class="string">"de"</span>:<span class="number">123</span>}
-</code></pre><p>明显对象o中的de属性修改并没有影响到原始对象，一个对象中的属性是一个字符串，如果从内存空间的角度上来说，这里明显是开辟了新的空间，还能说是浅拷贝么？那么针对另外一种情况。</p>
-<pre><code><span class="keyword">var</span> <span class="class"><span class="keyword">object</span> =</span> {
-    <span class="string">"de"</span>:{
-        <span class="string">"d"</span>:<span class="number">123</span>
-    }
-}
-
-<span class="keyword">var</span> o = deepCopy(<span class="class"><span class="keyword">object</span>);</span>
-o.de.d = <span class="string">"asd"</span>;
-</code></pre><p>如果一个对象中的第一层属性，不是值类型，只单层循环，这样来看的话确实是一个浅拷贝，因为在Js中引用类型用＝赋值，实际上是引用，这样说的通。所以，深拷贝，还需要做一些处理，把object，array等引用类型识别出来，深层递归到最后一层，一个一个的拷贝。</p>
-<pre><code><span class="keyword">var</span> deepCopy = <span class="function"><span class="keyword">function</span>(<span class="params">o</span>)</span>{
-    <span class="keyword">var</span> target = {};
-    <span class="keyword">if</span>(<span class="keyword">typeof</span> o !== <span class="string">'object'</span> &amp;&amp; !<span class="built_in">Array</span>.isArray(o)){
-        <span class="keyword">return</span> o;
-    }
-    <span class="keyword">for</span>(<span class="keyword">var</span> k <span class="keyword">in</span> o){
-        target[k] = deepCopy(o[k]);
-    }
-    <span class="keyword">return</span> target;
-}
-</code></pre><p>思路是如此，这个例子只考虑了两种情况，对象和数组，为了验证这样的思路，最后的结果与预期是一样的。</p>
-<pre><code><span class="reserved">var</span> _copy = {
-    <span class="string">'object'</span>:{
-        <span class="string">'name'</span>:<span class="string">'wen'</span>
-    },
-    <span class="string">'array'</span>:[<span class="number">1</span>,<span class="number">2</span>]
-
-}
-<span class="reserved">var</span> h = deepCopy(_copy);
-h.object.name = <span class="string">'lcepy'</span>;
-h.array[<span class="number">1</span>] = <span class="number">8</span>;
-<span class="built_in">console</span>.log(h);
-<span class="built_in">console</span>.log(_copy);
+        <p>使用字典，能很好的组织数据，OC中的字典有三种方式</p>
+<pre><code><span class="comment">//创建字典</span>
+<span class="built_in">NSDictionary</span> *dic = [[<span class="built_in">NSDictionary</span> alloc] initWithObjectsAndKeys:<span class="string">@"value"</span>,<span class="string">@"key"</span>,<span class="string">@"github"</span>,<span class="string">@"build"</span>, <span class="literal">nil</span>];
+<span class="built_in">NSDictionary</span> *dic1 = @{<span class="string">@"key1"</span>:<span class="string">@"value1"</span>};
+<span class="built_in">NSDictionary</span> *dic2 = [<span class="built_in">NSDictionary</span> dictionaryWithObjectsAndKeys:<span class="string">@"value2"</span>,<span class="string">@"key2"</span>, <span class="literal">nil</span>];
+</code></pre><p>包含多少个键值对</p>
+<pre><code><span class="comment">//包含多少个键值对</span>
+<span class="function">NSLog</span>(<span class="at_rule">@<span class="string">"%zd"</span>,dic.count);</span>
+</code></pre><p>通过已知的key名来获取值</p>
+<pre><code><span class="comment">//已知key来获取值</span>
+NSString *<span class="keyword">value</span> = [dic objectForKey:@<span class="string">"key"</span>];
+NSLog(@<span class="string">"%@"</span>,<span class="keyword">value</span>);
+</code></pre><p>获取所有的key和获取所有的值</p>
+<pre><code><span class="comment">//获取所有的key名或者值，返回一个不可变数组</span>
+<span class="built_in">NSArray</span> *keys = [dic allKeys];
+<span class="built_in">NSArray</span> *values = [dic allValues];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,keys);
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,values);
+</code></pre><p>通过一个数组key获取值</p>
+<pre><code>NSArray *vals = [dic <span class="string">objectsForKeys:</span>@[@<span class="string">"key"</span>] <span class="string">notFoundMarker:</span>@<span class="string">"not"</span>];
+NSLog(@<span class="string">"%@"</span>,vals);
+</code></pre><p>遍历</p>
+<pre><code><span class="list">[<span class="keyword">dic</span> enumerateKeysAndObjectsUsingBlock:^<span class="list">(<span class="keyword">id</span> key, id obj, BOOL *stop)</span> {
+    NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,key)</span><span class="comment">;</span>
+    NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,obj)</span><span class="comment">;</span>
+}]<span class="comment">;</span></span>
+</code></pre><p>排序</p>
+<pre><code><span class="built_in">NSArray</span> *kesArray =  [dic keysSortedByValueUsingComparator:^<span class="built_in">NSComparisonResult</span>(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) {
+    <span class="built_in">NSString</span> *ke1 = obj1;
+    <span class="built_in">NSString</span> *ke2 = obj2;
+    <span class="keyword">return</span> [ke1 compare:ke2];
+}];
+</code></pre><p>过滤</p>
+<pre><code><span class="collection">[dic keysOfEntriesPassingTest:&lt;#<span class="comment">^BOOL</span><span class="list">(<span class="keyword">id</span> key, id obj, BOOL *stop)</span>predicate#&gt;]</span><span class="comment">;</span>
+</code></pre><p>Mutable版的字典，多了增删的方法</p>
+<pre><code><span class="built_in">NSMutableDictionary</span> *dicmutable = [<span class="built_in">NSMutableDictionary</span> dictionaryWithDictionary:dic];
+</code></pre><p>添加</p>
+<pre><code><span class="list">[<span class="keyword">dicmutable</span> setObject:@<span class="string">"icepy"</span> forKey:@<span class="string">"io"</span>]<span class="comment">;</span>
+NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,dicmutable)</span><span class="comment">;</span></span>
+</code></pre><p>删除</p>
+<pre><code><span class="list">[<span class="keyword">dicmutable</span> removeObjectForKey:@<span class="string">"build"</span>]<span class="comment">;</span>
+NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,dicmutable)</span><span class="comment">;</span></span>
 </code></pre>
       
     </div>
@@ -674,7 +502,7 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
       
       
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
 	</div>
 
       
@@ -694,11 +522,11 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
 
 
   
-    <article id="post-有趣味的iOS动画实现" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-iOS动画基础" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/03/03/有趣味的iOS动画实现/" class="article-date">
-  	<time datetime="2015-03-03T01:40:21.000Z" itemprop="datePublished">2015-03-03</time>
+      <a href="/2015/05/10/iOS动画基础/" class="article-date">
+  	<time datetime="2015-05-09T17:02:06.000Z" itemprop="datePublished">2015-05-10</time>
 </a>
     </div>
   
@@ -711,7 +539,7 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/03/有趣味的iOS动画实现/">有趣味的iOS动画实现</a>
+      <a class="article-title" href="/2015/05/10/iOS动画基础/">iOS动画基础</a>
     </h1>
   
 
@@ -720,40 +548,55 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在做iOS应用时，真的为它提供的动画框架感到折服，理解简单，而且可以有多种选择，既可以从底层开始描绘动画，也可以使用高级API，甚至apple还提供了模拟物理世界的动画与交互系统，强大牛逼的一塌糊涂。</p>
-<p>想要学习这些动画，需要具备一个点，理解iOS中的坐标系统，也就是几个属性。</p>
-<pre><code><span class="tag">dropview</span><span class="class">.frame</span>;
-<span class="tag">dropview</span><span class="class">.center</span>;
-<span class="tag">dropview</span><span class="class">.bounds</span>;
-<span class="tag">dropview</span><span class="class">.transform</span>
-</code></pre><p>动画，是顾名思义的，在平面或者多维度的移动，frame中记录了当前视图相对于父视图左上角顶点的左边，而center则是中心原点，transform则代表了比如旋转等等矩阵的改变属性。</p>
-<p>最简单的动画，就是操作这些属性，改变其值，使用的是UIView的类方法，比如：</p>
-<pre><code><span class="collection">[UIView animateWithDuration:1.0 animations:<span class="comment">^{
+        <p>貌似在哪个领域里，动画的实现都赋予了软件非常生动的交互，所以我们必须要掌握并学好它。在学习动画之前，首推<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004514" target="_blank" rel="external">Core Animation Programming Guide</a>核心动画编程指南，去了解一下官方的术语，定义，以及指导，这很有帮助。</p>
+<p>顾名思义，动画也就是让我们的view可以动起来，所谓的view实际上都会继承于UIView，而每一个UIView都有一个CALayer对象，它们两个是分开的，分别用于不同的地方。可以看见的是，UIView用于显示，CALayer用于绘制。（注明：CALayer属于QuartzCore框架）</p>
+<p>UIView自身（注明：UIView属于UIKit框架）会有描述位置的信息，比如frame，transform。在使用一些比较简单的动画时，我们应该首选考虑的是使用UIView提供的一些方法，去改变frame，transform等属性。</p>
+<pre><code><span class="collection">[UIView animateWithDuration:1.6 animations:<span class="comment">^{
 
-}</span> completion:^<span class="list">(<span class="keyword">BOOL</span> finished)</span> <span class="collection">{
+}</span>]</span><span class="comment">;</span>
+</code></pre><p>对于高度复杂一些的动画，就需要我们对Core Animation整个的熟悉和了解了。这里，我建议先阅读一下<a href="http://objccn.io/issue-12-1/" target="_blank" rel="external">动画理解</a>，把一些概念性的东西了解清楚。比如Core Animation维护的层次结构，什么叫模型层树(model layer tree)，什么叫表现层树(presentation layer tree)，而且你务必要理解，当把动画添加到一个layer的时候，是不直接修改其属性的。</p>
+<p>在清楚这些概念性的问题后，你可以去学习一些动画类了，比如CABasicAnimation，CATransform3D，CAKeyframeAnimation,CAAnimationGroup,CAAnimation，另外你务必要记住一点，CAAnimation是这些动画类的鼻祖(它是一个抽象类，不能直接使用)，而且要搞清楚CALayer。</p>
+<p>举例一些简单的例子</p>
+<p><strong>使用CABasicAnimation</strong></p>
+<pre><code>CABasicAnimation *<span class="variable">animation =</span> [CABasicAnimation animation];
+animation.<span class="variable">keyPath =</span> @<span class="string">"position.x"</span>;
+animation.<span class="variable">duration =</span> <span class="number">1</span>;
+animation.<span class="variable">fromValue =</span> @<span class="number">50</span>;
+animation.<span class="variable">toValue =</span> @<span class="number">250</span>;
+[view.layer addAnimation:animation forKey:@<span class="string">"left"</span>];
+</code></pre><p>为了验证动画究竟修改了那个地方的值，我打印了一下view的frame，NSLog(@”%@”,NSStringFromCGRect(view.frame))，这里可以看的出来，view的frame值没有发生改变，而且在模拟器中，动画结束了，view又回到了原来的位置。说明啊，动画的执行和view的渲染是分开的，如果你还不理解，请继续阅读《核心动画编程指南》或者简单的《动画理解》。</p>
+<p>如果我们不想动画结束后view回到原来的位置，可以使用</p>
+<pre><code>animation.fillMode = kCAFillModeForwards<span class="comment">;</span>
+animation.removedOnCompletion = NO<span class="comment">;</span>
+</code></pre><p><strong>使用CAKeyframeAnimation</strong></p>
+<pre><code>CAKeyframeAnimation *animation = [CAKeyframeAnimation animation]<span class="comment">;</span>
+animation.keyPath = @<span class="string">"position.x"</span><span class="comment">;</span>
+animation.values = @[<span class="localvars">@0</span>,<span class="localvars">@10</span>,@-<span class="number">10</span>,<span class="localvars">@10</span>,<span class="localvars">@0</span>]<span class="comment">;</span>
+animation.keyTimes = @[ <span class="localvars">@0</span>, @(<span class="number">1</span> / <span class="number">6.0</span>), @(<span class="number">3</span> / <span class="number">6.0</span>), @(<span class="number">5</span> / <span class="number">6.0</span>), <span class="localvars">@1</span> ]<span class="comment">;</span>
+animation.duration = <span class="number">0.4</span><span class="comment">;</span>
+animation.additive = YES<span class="comment">;</span>
+[view.layer addAnimation:animation forKey:@<span class="string">"shake"</span>]<span class="comment">;</span>
+</code></pre><p><strong>使用CAAnimationGroup</strong></p>
+<pre><code>CABasicAnimation *right = <span class="comment">[CABasicAnimation animation]</span>;
+right.keyPath = @<span class="string">"position.x"</span>;
+right.duration = 1;
+right.toValue = @250;
+right.timingFunction = <span class="comment">[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]</span>;
 
-}</span>]</span>
-</code></pre><p>其实我最近研究了一下UIDynamicAnimator，它提供了一个模拟真实物理世界的动画与交互系统，比如可以定义一些行为，重力行为，碰撞行为等等。</p>
-<pre><code>-(<span class="built_in">UIDynamicAnimator</span> *)animator
-{
-    <span class="keyword">if</span> (!_animator) {
-        _animator = [[<span class="built_in">UIDynamicAnimator</span> alloc] initWithReferenceView:<span class="keyword">self</span><span class="variable">.gameview</span>];
-    }
-    <span class="keyword">return</span> _animator;
-}
-</code></pre><p>UIDynamicAnimator需要一个通用的视图，而动画则是在这个视图上发生，所以init的时候添加了一个通用视图上去。然后可以去实现其他的物理类，比如重力，把它add到UIDynamicAnimator中。</p>
-<pre><code>-(<span class="built_in">UIGravityBehavior</span> *)gravit
-{
-    <span class="keyword">if</span> (!_gravit) {
-        _gravit = [[<span class="built_in">UIGravityBehavior</span> alloc] init];
-        _gravit<span class="variable">.magnitude</span> = <span class="number">0.9</span>;
-        [<span class="keyword">self</span><span class="variable">.animator</span> addBehavior:_gravit];
-    }
-    <span class="keyword">return</span> _gravit;
-}
-</code></pre><p>最后一步是要把需要被实现物理动画的视图，添加到重力系统中去。</p>
-<pre><code><span class="title">[self.gravit addItem:dropview]</span><span class="comment">;</span>
-</code></pre><p>从技术实现的角度上来说，iOS平台实现这些动画，包括绘制，物理交互，都非常的简单，主要是要注意一些细节的处理，比如当前动画停止之后处理什么，在动画执行过程中，可能会出现一些情况，然后处理，或者是几个动画的连接延迟等等。</p>
+CABasicAnimation *top = <span class="comment">[CABasicAnimation animation]</span>;
+top.keyPath = @"position.y";
+top.duration = 1;
+top.toValue = @10;
+right.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+
+CAAnimationGroup *animationsGroup = <span class="comment">[CAAnimationGroup animation]</span>;
+animationsGroup.animations = @<span class="comment">[right,top]</span>;
+<span class="comment">[view.layer addAnimation:animationsGroup forKey:@"group"]</span>;
+</code></pre><p>阅读资料：</p>
+<ul>
+<li><a href="http://objccn.io/issue-12/" target="_blank" rel="external">#12动画</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/CoreAnimation_framework/index.html#//apple_ref/doc/uid/TP40004513" target="_blank" rel="external">Core Animation Reference Collection</a></li>
+</ul>
 
       
     </div>
@@ -782,11 +625,11 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
 
 
   
-    <article id="post-myresume" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-CoreData的使用" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/03/01/myresume/" class="article-date">
-  	<time datetime="2015-03-01T15:35:20.000Z" itemprop="datePublished">2015-03-01</time>
+      <a href="/2015/05/05/CoreData的使用/" class="article-date">
+  	<time datetime="2015-05-05T02:31:04.000Z" itemprop="datePublished">2015-05-05</time>
 </a>
     </div>
   
@@ -799,7 +642,7 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/01/myresume/">向文文的简历</a>
+      <a class="article-title" href="/2015/05/05/CoreData的使用/">CoreData的使用</a>
     </h1>
   
 
@@ -808,107 +651,110 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="个人信息：">个人信息：</h2><p>向文文 xiangwenwe@foxmail.com / (+86) 18574532867 / </p>
-<p>技术博客 <a href="http://lcepy.github.io/">http://lcepy.github.io/</a></p>
-<p>Github <a href="https://github.com/lcepy" target="_blank" rel="external">https://github.com/lcepy</a></p>
-<p>中南林业科技大学/大专</p>
-<p>Skill set：JavaScript iOS/Mac OS X Objective-C Swift Hybrid App NodeJs</p>
-<h2 id="工作经验：">工作经验：</h2><p><em>生态农业  创业</em></p>
-<p>筹备时间：2014年－2015年</p>
-<p>目前状态：7月4日解散</p>
-<p>解散原因：投资人撤资，合伙人中途变卦</p>
-<p><em>每日优鲜  iOS开发工程&amp;JavaScript开发工程师</em></p>
-<p>任职时间：2015年3月20日－2015年6月23日</p>
-<p>工作职责：朋友公司帮忙，负责Hybrid App的开发以及iOS的开发工作</p>
-<p>App下载，可以在各大app市场下载，apple需要在appstore中下载</p>
-<p>公司网站：<a href="http://www.missfresh.cn/" target="_blank" rel="external">http://www.missfresh.cn/</a></p>
-<p><em>上海携程旅行网   软件开发工程师</em></p>
-<p>任职时间：2014年2月12日-12月31日</p>
-<p>工作职责：负责H5，Hybrid App的开发工作</p>
-<p>App下载，可以在各大app市场下载，apple需要在appstore中下载</p>
-<p>项目网站：<a href="http://m.ctrip.com/webapp/cruise/index.html#index" target="_blank" rel="external">http://m.ctrip.com/webapp/cruise/index.html#index</a></p>
-<p><em>远光软件股份有限公司    SMB软件部任职开发工程师</em></p>
-<p>任职时间：2012年5月-2013年8月</p>
-<p>工作职责：在部门中所担负的角色，主要在基于web的企业级应用开发与平台框架，并培训部门内部开发人员的前端开发技术，并提供解决方案供部门领导参考。</p>
-<p>公司网站：<a href="http://www.ygsoft.com/Home/" target="_blank" rel="external">http://www.ygsoft.com/Home/</a></p>
-<p><em>湖南华声在线有限公司    UI组任职前端工程师</em></p>
-<p>任职时间：2011年8月-2012年4月</p>
-<p>工作职责：负责教育产品，社交空间的前端开发，培训组内的前端技术，并提供教育系列产品的前端解决方案，并负责一定的服务端开发工作，主要是基于php技术。</p>
-<p>公司网站：<a href="http://www.voc.com.cn/" target="_blank" rel="external">http://www.voc.com.cn/</a> </p>
-<h2 id="详细项目经历">详细项目经历</h2><p><a href="http://lcepy.github.io/2014/11/14/%E6%88%91%E7%9A%84%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86/">我的项目经历-详细版</a></p>
-<h2 id="经历表述：">经历表述：</h2><p>在软件工程领域已经工作四年之久，对于编程的思考，解决问题的思路都已形成了自己比较独特的思维，语言只是解决问题的一个工具，最关键的还是在于人，如何去规划问题，思考问题，并解决问题。</p>
-<p>我比较擅长JavaScript，iOS/Mac OS X平台的开发，近几年比较流行的Nodejs，HTML5 API CSS3也有一些了解.三年多的工作经验集中在客户端技术，包括SPA MVC客户端，Hybrid app客户端，移动浏览器H5应用，有过一年左右的python网络编程，对请求，一些服务端，客户端框架，比如zepto underscore ionic django，应用在客户端，服务端上的MVC开发模式，HTML5 API都非常的了解和掌握。</p>
-<p>目前个人独立开发iOS应用已经有一年多的时间，上线的App有<a href="https://github.com/lcepy/manong-reading" target="_blank" rel="external">《猿已阅》</a></p>
-<h2 id="致谢">致谢</h2><p>感谢您抽出宝贵的时间，阅读完我的简历，谢谢～</p>
+        <p>CoreData是Cocoa中处理数据，绑定数据的一个框架，如果不靠谱数据的平台一致性（iOS，Android），完全可以使用它替代SQLite。虽然，iOS也有一个C实现的SQLite库，但是语法层面比较琐碎，而且使用的是C函数。如果要使用，大家可以选择使用一个开源的库来替代<a href="https://github.com/ccgus/fmdb" target="_blank" rel="external">Obje-C版</a>和<a href="https://github.com/FahimF/SQLiteDB" target="_blank" rel="external">Swift版</a></p>
+<p>从代码层面上来看，要创建一个CoreData实例，需要四个步骤</p>
+<ul>
+<li>创建数据库文件的物理地址</li>
+<li>创建模型托管对象</li>
+<li>创建持久化存储调度器</li>
+<li>创建上下文</li>
+</ul>
+<p>正常情况下，上述四个步骤，我们只使用一次，建议惰性加载它</p>
+<pre><code>-(<span class="built_in">NSManagedObjectContext</span> *)context
+{
+    <span class="keyword">if</span> (!_context) {
+        <span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
+        <span class="comment">//创建db url</span>
+        <span class="built_in">NSString</span> *dbPath = [<span class="keyword">self</span><span class="variable">.baseDoc</span> stringByAppendingPathComponent:<span class="string">@"manong.db"</span>];
+        <span class="built_in">NSURL</span> *dbUrl = [<span class="built_in">NSURL</span> fileURLWithPath:dbPath];
+        <span class="comment">//创建模型托管对象</span>
+        <span class="built_in">NSManagedObjectModel</span> *model = [<span class="built_in">NSManagedObjectModel</span> mergedModelFromBundles:<span class="literal">nil</span>];
+        <span class="comment">//创建持久化存储调度器</span>
+        <span class="built_in">NSPersistentStoreCoordinator</span> *store = [[<span class="built_in">NSPersistentStoreCoordinator</span> alloc] initWithManagedObjectModel:model];
+        [store addPersistentStoreWithType:<span class="built_in">NSSQLiteStoreType</span> configuration:<span class="literal">nil</span> URL:dbUrl options:<span class="literal">nil</span> error:&amp;error];
+        <span class="comment">//创建上下文</span>
+        _context = [[<span class="built_in">NSManagedObjectContext</span> alloc] init];
+        [_context setPersistentStoreCoordinator:store];
+    }
+    <span class="keyword">return</span> _context;
+}
+</code></pre><p>下面给出一张关系图</p>
+<p><img src="http://websources.qiniudn.com/iOS/CoreData类关系图.png" alt="CoreData类关系图"></p>
+<p>从上述的图中，其实可以看到一些有关系的模块</p>
+<ul>
+<li>Managed Object Model 用于描述数据模型，这里包括实体，属性，请求等</li>
+<li>Managed Object Context 参与对数据对象进行各项操作的上下文</li>
+<li>Managed Object 数据对象（用户使用的对象与上下文有关联）</li>
+<li>Persistent Store 相当于数据库文件的管理器，处理底层对数据库文件的读取与写入</li>
+</ul>
+<p><strong>基本上创建一个Managed Object文件不需要自己去手动创建，而且建议Xcode帮助我们创建的model文件不要修改</strong></p>
+<p>如果非要自己创建的话，那么继承NSManagedObject类吧</p>
+<pre><code><span class="preprocessor">#import <span class="title">&lt;Foundation/Foundation.h&gt;</span></span>
+<span class="preprocessor">#import <span class="title">&lt;CoreData/CoreData.h&gt;</span></span>
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/简历/">简历</a></li></ul>
-	</div>
+<span class="class"><span class="keyword">@interface</span> <span class="title">ManongTag</span> : <span class="title">NSManagedObject</span></span>
 
-      
+<span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, retain) <span class="built_in">NSNumber</span> * contentCount;
+<span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, retain) <span class="built_in">NSString</span> * tagKey;
+<span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, retain) <span class="built_in">NSString</span> * tagName;
 
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
+<span class="keyword">@end</span>
+</code></pre><h1 id="下面给出一张实际的操作图，如何使用CoreData。">下面给出一张实际的操作图，如何使用CoreData。</h1><p><img src="http://websources.qiniudn.com/iOS/CoreData操作图形化.jpg" alt="CoreData操作图形化"> </p>
+<ul>
+<li>首先add Entity添加一个实体</li>
+<li>然后在Attributes中添加相应的属性，在Type中选择相应的数据类型</li>
+<li>Pelationships可以对实体进行关联，比如ManongTitle实体中关联了一个ManongContent实体</li>
+<li>&lt;橘黄色箭头&gt;可以设置多关联，在使用的时候它会是一个NSSet集合</li>
+<li>Style可以查看设计图</li>
+</ul>
+<p>如果想新增一条数据，需要三个步骤才能实现，第一先创建一个实体描述，第二创建一个ManagedObject对象，第三给上下文的save方法发送消息。</p>
+<pre><code><span class="built_in">NSEntityDescription</span> *mnTag = [<span class="built_in">NSEntityDescription</span> entityForName:<span class="string">@"ManongTag"</span> inManagedObjectContext:<span class="keyword">self</span><span class="variable">.context</span>];
+ManongTag *manongTag = [[ManongTag alloc] initWithEntity:mnTag insertIntoManagedObjectContext:<span class="keyword">self</span><span class="variable">.context</span>];
+manongTag<span class="variable">.tagKey</span> = tagKey;
+manongTag<span class="variable">.tagName</span> = tagNmae;
+<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
+<span class="built_in">BOOL</span> success;
+[<span class="keyword">self</span><span class="variable">.context</span> save:&amp;error];
+success = error ? <span class="literal">NO</span> : <span class="literal">YES</span>;
+</code></pre><p>如果想在实体中查询数据，一般情况下两个步骤，如果是条件查询最少三个步骤，第一创建一个查询请求，第二创建一个谓词对象，第三给上下文的executeFetchRequest方法发送消息。</p>
+<pre><code><span class="comment">//查询所有的数据</span>
+<span class="built_in">NSFetchRequest</span> *request = [[<span class="built_in">NSFetchRequest</span> alloc] initWithEntityName:<span class="string">@"ManongDigest"</span>];
+<span class="built_in">NSArray</span> *arr = [<span class="keyword">self</span><span class="variable">.context</span> executeFetchRequest:request error:&amp;error];
 
-
-
-
-
-
-
-  
-    <article id="post-UIViewController的生命周期" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/16/UIViewController的生命周期/" class="article-date">
-  	<time datetime="2015-02-16T13:54:06.000Z" itemprop="datePublished">2015-02-16</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/16/UIViewController的生命周期/">UIViewController的生命周期</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理。</p>
-<p><strong>呈现视图的顺序</strong></p>
-<p>它内部的顺序是这样的，先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或storyborad，如果这个也没有则走loadView方法，loadView方法系统调用，也可以重载它。当我们重载它时，可以[super loadView] 父类帮助我们创建一个空的view，如果不调用父类，那么就要自己创建一个UIView，并且self.view = UIView。</p>
-<p>如果在调用loadView时不调用父类，也不创建，如果使用self.view的getter method并且view等于nil，会发生自我循环调用。一般情况下，不要在初始化时做view相当的动作。在viewDiload中调用一些网络访问的动作，可以在初始化方法中做一些关于模型数据的准备工作。</p>
-<p>如果覆盖了loadView，则必须创建UIViewController的view属性。如果没有覆盖该方法，UIViewController会默认调用initWithNibName方法来初始化并加载view。</p>
-<p><strong>生命周期</strong></p>
-<p>一般来说我们需要知道应用程序什么时候在屏幕上，什么时候从屏幕上消失，这个就是生命周期了。初始化的方法可以在viewDidLoad，这个方法在生命周期中只会调用一次，当然不要忘记了调用它的父类的viewDidLoad方法，[super viewDidLoad]。在调用这个方法时，实际上视图并没有在屏幕上确定下来，于是一般来说，如果视图的几何操作，不要放在这个方法中执行。</p>
-<p>viewWillAppear，这个方法会被多次调用，一般来说一次性的初始化不要放在这个方法中实现，但是如果是基于模型的动态初始化，可以放置在这个方法中实现。这个方法会在视图即将要在屏幕上呈现之前调用。</p>
-<p>当视图从屏幕上消失时，也会得到通知，viewWillDisappear方法。这个方法是在视图将要从屏幕消失之前调用。</p>
-<p>viewDidAppear视图已经呈现在屏幕上调用 viewDidDisappear视图已经从屏幕上消失调用。</p>
-<p>viewWillLayoutSubviews  viewDidLayoutSubviews 这两个方法可以在，比如从竖屏到横屏，系统会自动元素的位置，第一个方法是在移动之前调用，第二个方法是在移动完成之后调用，需要设置Autorotation属性。</p>
-<p>didReceiveMemoryWarning 当内存不足时，系统会调用这个方法，发送警告。 </p>
-<h2 id="顺序">顺序</h2><p>viewDidLoad -&gt; viewWillAppear -&gt; viewDidAppear -&gt; viewWillDisappear -&gt; viewDidDisappear</p>
-<p>关于layout的顺序</p>
-<p>viewWillLayoutSubviews -&gt; viewDidLayoutSubviews</p>
+<span class="comment">//条件查询</span>
+<span class="built_in">NSFetchRequest</span> *request = [[<span class="built_in">NSFetchRequest</span> alloc] initWithEntityName:@“ManongDigest”];
+<span class="built_in">NSPredicate</span> *dicate = [<span class="built_in">NSPredicate</span> predicateWithFormat:<span class="string">@"%K BEGINSWITH[c] %@"</span>,<span class="string">@"tagName"</span>,<span class="string">@"a"</span>];
+<span class="built_in">NSArray</span> *arr = [<span class="keyword">self</span><span class="variable">.context</span> executeFetchRequest:request error:&amp;error];
+</code></pre><p>如果想更新某一条数据，正常情况下三个步骤，第一创建一个查询请求，第二修改MangedObject对象的属性，第三给上下文的save方法发送消息。</p>
+<pre><code><span class="built_in">NSFetchRequest</span> *request = [[<span class="built_in">NSFetchRequest</span> alloc] initWithEntityName:<span class="string">@"ManongDigest"</span>];
+<span class="built_in">NSArray</span> *arr = [<span class="keyword">self</span><span class="variable">.context</span> executeFetchRequest:request error:&amp;error];
+<span class="keyword">for</span>(ManongDigest *digest <span class="keyword">in</span> arr)
+{
+    digest<span class="variable">.tagName</span> = <span class="string">@"lcepy"</span>;
+}
+<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
+[<span class="keyword">self</span><span class="variable">.context</span> save:&amp;error];
+<span class="keyword">if</span> (error) {
+    <span class="keyword">return</span> <span class="literal">NO</span>;
+}<span class="keyword">else</span>{
+    <span class="keyword">return</span> <span class="literal">YES</span>;
+}
+</code></pre><p>如果想删除某一条数据</p>
+<pre><code><span class="built_in">NSFetchRequest</span> *request = [[<span class="built_in">NSFetchRequest</span> alloc] initWithEntityName:<span class="string">@"ManongDigest"</span>];
+<span class="built_in">NSArray</span> *arr = [<span class="keyword">self</span><span class="variable">.context</span> executeFetchRequest:request error:&amp;error];
+<span class="keyword">if</span>(arr<span class="variable">.count</span>){
+    ManongDigest *digest = (ManongDigest *)arr[<span class="number">0</span>];
+    [<span class="keyword">self</span><span class="variable">.context</span> deleteObject:digest];
+}
+</code></pre><p>上述四种操作方式是最常用的，当然CoreData 的API肯定不止这四种，但是使用的逻辑思维基本上是，查询－处理－使用上下文或者创建实体－处理－使用上下文。</p>
+<p>这个框架算比较复杂的一个，学习起来曲线也比较大，需要耐心。</p>
+<p>参考资料</p>
+<ul>
+<li><a href="http://www.objc.io/issue-4/" target="_blank" rel="external">objc-CoreData</a></li>
+<li><a href="http://objccn.io/issue-4-2/" target="_blank" rel="external">一个完整的 Core Data 应用</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/CoreData_ObjC/index.html" target="_blank" rel="external">Core Data API</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSPredicate_Class/" target="_blank" rel="external">NSPredicate API</a></li>
+</ul>
 
       
     </div>
@@ -937,11 +783,11 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
 
 
   
-    <article id="post-阅读部分zepto源代码" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-NSArray" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/02/15/阅读部分zepto源代码/" class="article-date">
-  	<time datetime="2015-02-15T06:11:30.000Z" itemprop="datePublished">2015-02-15</time>
+      <a href="/2015/05/03/NSArray/" class="article-date">
+  	<time datetime="2015-05-03T07:42:06.000Z" itemprop="datePublished">2015-05-03</time>
 </a>
     </div>
   
@@ -954,7 +800,7 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/15/阅读部分zepto源代码/">阅读部分zepto源代码</a>
+      <a class="article-title" href="/2015/05/03/NSArray/">NSArray</a>
     </h1>
   
 
@@ -963,182 +809,123 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>zepto初始化时，是$符号来获取元素对象，如果是空则会返回一个数组，从源代码上面来看，是这样的：</p>
-<pre><code>$ = <span class="function"><span class="keyword">function</span><span class="params">(selector, context)</span></span>{
-    <span class="keyword">return</span> zepto.init(selector, context)
-  }
-</code></pre><p>可以传入两个参数，一个selector，一个context，在这个函数内部会调用zepto.init方法。</p>
-<pre><code>zepto.init = <span class="function"><span class="keyword">function</span><span class="params">(selector, context)</span> {</span>
-var dom
-<span class="comment">// If nothing given, return an empty Zepto collection</span>
-<span class="keyword">if</span> <span class="params">(!selector)</span> return zepto.Z<span class="params">()</span>
-<span class="comment">// Optimize for string selectors</span>
-<span class="keyword">else</span> <span class="keyword">if</span> <span class="params">(typeof selector == 'string')</span> {
-  selector = selector.trim<span class="params">()</span>
-  <span class="comment">// If it's a html fragment, create nodes from it</span>
-  <span class="comment">// <span class="doctag">Note</span>: In both Chrome 21 and Firefox 15, DOM error 12</span>
-  <span class="comment">// is thrown if the fragment doesn't begin with &lt;</span>
-  <span class="keyword">if</span> <span class="params">(selector[<span class="number">0</span>] == '&lt;' &amp;&amp; fragmentRE.test<span class="params">(selector)</span>)</span>
-    dom = zepto.fragment<span class="params">(selector, RegExp.$<span class="number">1</span>, context)</span>, selector = null
-  <span class="comment">// If there's a context, create a collection on that context first, and select</span>
-  <span class="comment">// nodes from there</span>
-  <span class="keyword">else</span> <span class="keyword">if</span> <span class="params">(context !== <span class="literal">undef</span>ined)</span> return $<span class="params">(context)</span>.find<span class="params">(selector)</span>
-  <span class="comment">// If it's a CSS selector, use it to select nodes.</span>
-  <span class="keyword">else</span> dom = zepto.qsa<span class="params">(document, selector)</span>
-}
-<span class="comment">// If a function is given, call it when the DOM is ready</span>
-<span class="keyword">else</span> <span class="keyword">if</span> <span class="params">(isFunction<span class="params">(selector)</span>)</span> return $<span class="params">(document)</span>.ready<span class="params">(selector)</span>
-<span class="comment">// If a Zepto collection is given, just return it</span>
-<span class="keyword">else</span> <span class="keyword">if</span> <span class="params">(zepto.isZ<span class="params">(selector)</span>)</span> return selector
-<span class="keyword">else</span> {
-  <span class="comment">// normalize array if an array of nodes is given</span>
-  <span class="keyword">if</span> <span class="params">(isArray<span class="params">(selector)</span>)</span> dom = compact<span class="params">(selector)</span>
-  <span class="comment">// Wrap DOM nodes.```</span>
-  <span class="keyword">else</span> <span class="keyword">if</span> <span class="params">(isObject<span class="params">(selector)</span>)</span>
-    dom = [selector], selector = null
-  <span class="comment">// If it's a html fragment, create nodes from it</span>
-  <span class="keyword">else</span> <span class="keyword">if</span> <span class="params">(fragmentRE.test<span class="params">(selector)</span>)</span>
-    dom = zepto.fragment<span class="params">(selector.trim<span class="params">()</span>, RegExp.$<span class="number">1</span>, context)</span>, selector = null
-  <span class="comment">// If there's a context, create a collection on that context first, and select</span>
-  <span class="comment">// nodes from there</span>
-  <span class="keyword">else</span> <span class="keyword">if</span> <span class="params">(context !== <span class="literal">undef</span>ined)</span> return $<span class="params">(context)</span>.find<span class="params">(selector)</span>
-  <span class="comment">// And last but no least, if it's a CSS selector, use it to select nodes.</span>
-  <span class="keyword">else</span> dom = zepto.qsa<span class="params">(document, selector)</span>
-}
-<span class="comment">// create a new Zepto collection from the nodes found</span>
-return zepto.Z<span class="params">(dom, selector)</span>
+        <p>基础扎实才能使编程更加的得心应手，今天要写一些学习NSArray以及NSMutableArray的东西。</p>
+<p>创建一个数组其实跟创建NSString一样OC也提供了三种方式，语法糖，实例化，类方法。</p>
+<pre><code><span class="comment">//创建语法糖</span>
+<span class="built_in">NSArray</span> *arry = @[<span class="string">@"1"</span>,<span class="string">@"2"</span>,<span class="string">@"3"</span>,<span class="string">@"4"</span>];
+<span class="comment">//手动实例创建</span>
+<span class="built_in">NSArray</span> *arry1 = [[<span class="built_in">NSArray</span> alloc] initWithObjects:<span class="string">@"1"</span>,<span class="string">@"2"</span>, <span class="literal">nil</span>];
+<span class="comment">//类方法创建</span>
+<span class="built_in">NSArray</span> *arry2 = [<span class="built_in">NSArray</span> arrayWithObjects:<span class="string">@"1"</span>,<span class="string">@"2"</span>, <span class="literal">nil</span>];
+</code></pre><p>查找一个元素在数组中是否存在</p>
+<pre><code><span class="comment">//查找元素是否存在，在数组中</span>
+BOOL isTrue = [arry <span class="string">containsObject:</span>@<span class="string">"1"</span>];
+</code></pre><p>获取数组的长度</p>
+<pre><code><span class="comment">//数组的长度</span>
+NSUInteger <span class="keyword">count</span> = arry.<span class="keyword">count</span>;
+NSLog(@<span class="string">"%zd"</span>,<span class="keyword">count</span>);
+</code></pre><p>获取第一个元素和获取最后一个元素</p>
+<pre><code><span class="comment">//获取第一个元素</span>
+<span class="keyword">id</span> first = arry<span class="variable">.firstObject</span>;
+<span class="comment">//获取最后一个元素</span>
+<span class="keyword">id</span> last = arry<span class="variable">.lastObject</span>;
+</code></pre><p>查找元素在数组中的位置，还可以指定一个range来确定查找的范围</p>
+<pre><code><span class="comment">//查找元素在数组中的位置</span>
+<span class="built_in">NSInteger</span> index = [arry indexOfObject:<span class="string">@"1"</span>];
+<span class="built_in">NSLog</span>(<span class="string">@"%zd"</span>,index);
 
-  }
-
-zepto.Z = <span class="function"><span class="keyword">function</span><span class="params">(dom, selector)</span> {</span>
-    dom = dom || []
-    dom.__proto__ = $.fn
-    dom.selector = selector || ''
-    return dom
-  }
-</code></pre><p>如果什么都不传入，它在init内部会调用Z，并且返回一个空的数组，这个数组的原型会指向$.fn，$.fn是一个字面量的对象，全部是zepto的一些其他方法。</p>
-<p>如果context有值，它会指定一个上下文，也就是范围$(context).find(selector)，如果context没有值，则会对selector的值进行检索，如果selector是一个标签字符串，则调用zepto.fragment方法来获取dom对象。如果selector不是标签字符串，则调用zepto.qsa方法，得到DOM对象，在qsa方法中会检查#，.也就是id和class，如果id有返回的是从getElementById中获取的dom对象，如果是class则调用数组的slice方法call一下比如querySelectorAll等，在获取dom对象时，就已经进行了装载，最后调用zepto.Z方法，返回这个数组。</p>
-<pre><code>zepto.qsa = <span class="function"><span class="keyword">function</span><span class="params">(element, selector)</span>{</span>
-var found,
-    maybeID = selector[<span class="number">0</span>] == '<span class="built_in">#</span>',
-    maybeClass = <span class="built_in">!</span>maybeID &amp;&amp; selector[<span class="number">0</span>] == '.',
-    nameOnly = maybeID || maybeClass ? selector.slice<span class="params">(<span class="number">1</span>)</span> : selector, <span class="comment">// Ensure that a 1 char tag name still gets checked</span>
-    isSimple = simpleSelectorRE.test<span class="params">(nameOnly)</span>
-return <span class="params">(isDocument<span class="params">(element)</span> &amp;&amp; isSimple &amp;&amp; maybeID)</span> ?
-  <span class="params">( <span class="params">(found = element.getElementById<span class="params">(nameOnly)</span>)</span> ? [found] : [] )</span> :
-  <span class="params">(element.nodeType !== <span class="number">1</span> &amp;&amp; element.nodeType !== <span class="number">9</span>)</span> ? [] :
-  slice.call<span class="params">(
-    isSimple &amp;&amp; !maybeID ?
-      maybeClass ? element.getElementsByClassName<span class="params">(nameOnly)</span> : // If it's simple, it could be a class
-      element.getElementsByTagName<span class="params">(selector)</span> : // Or a tag
-      element.querySelectorAll<span class="params">(selector)</span> // Or it's not simple, and we need to query all
-  )</span>
-  }
-
-  zepto.fragment = <span class="function"><span class="keyword">function</span><span class="params">(html, name, properties)</span> {</span>
-var dom, nodes, container
-
-<span class="comment">// A special case optimization for a single tag</span>
-<span class="keyword">if</span> <span class="params">(singleTagRE.test<span class="params">(html)</span>)</span> dom = $<span class="params">(document.createElement<span class="params">(RegExp.$<span class="number">1</span>)</span>)</span>
-
-<span class="keyword">if</span> <span class="params">(!dom)</span> {
-  <span class="keyword">if</span> <span class="params">(html.replace)</span> html = html.replace<span class="params">(tagExpanderRE, <span class="string">"&lt;$1&gt;&lt;/$2&gt;"</span>)</span>
-  <span class="keyword">if</span> <span class="params">(name === <span class="literal">undef</span>ined)</span> name = fragmentRE.test<span class="params">(html)</span> &amp;&amp; RegExp.$<span class="number">1</span>
-  <span class="keyword">if</span> <span class="params">(!<span class="params">(name in containers)</span>)</span> name = '<span class="built_in">*</span>'
-
-  container = containers[name]
-  container.innerHTML = '' + html
-  dom = $.each<span class="params">(slice.call<span class="params">(container.childNodes)</span>, function<span class="params">()</span>{
-    container.removeChild<span class="params">(this)</span>
-  })</span>
+<span class="comment">//查找元素的位置，可以指定一个range</span>
+<span class="built_in">NSRange</span> arrRange = <span class="built_in">NSMakeRange</span>(<span class="number">1</span>, <span class="number">2</span>);
+<span class="built_in">NSInteger</span> rangeIndex = [arry indexOfObject:<span class="string">@"3"</span> inRange:arrRange];
+<span class="built_in">NSLog</span>(<span class="string">@"%zd"</span>,rangeIndex);
+</code></pre><p>指定一个下标来获取元素</p>
+<pre><code><span class="comment">//指定一个下标获取元素</span>
+<span class="keyword">id</span> element = [arry objectAtIndex:<span class="number">1</span>];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,element);
+</code></pre><p>添加一个元素<strong>注意 NSArray是不可变的，所以添加的元素不是旧数组，而是创建了一个包含旧数组的新数组</strong>，还可以添加一个数组</p>
+<pre><code><span class="comment">//添加一个元素，返回一个新的数组</span>
+NSArray *lcepy = [arry <span class="string">arrayByAddingObject:</span>@<span class="string">"lcepy"</span>];
+<span class="comment">//添加一个数组，返回一个新的数组</span>
+NSArray *newLcepy = [arry <span class="string">arrayByAddingObjectsFromArray:</span>@[@<span class="string">"lcepy"</span>,@<span class="string">"github.io"</span>]];
+</code></pre><p>格式化一个数组</p>
+<pre><code><span class="comment">//通过一个分隔字符串来组建一个拼接字符串</span>
+<span class="built_in">NSString</span> *ress =  [newLcepy componentsJoinedByString:<span class="string">@"."</span>];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,ress);
+</code></pre><p>除了for循环，for in循环外的其它几种常用的遍历方式</p>
+<pre><code><span class="comment">//NSEnumerator是一个抽象类，可以使用它的nextObject来遍历元素，通常和while一起使用</span>
+<span class="built_in">NSEnumerator</span> *enumer =  [newLcepy objectEnumerator];
+<span class="built_in">BOOL</span> isEnumer = <span class="literal">YES</span>;
+<span class="keyword">while</span> (isEnumer) {
+    <span class="keyword">id</span> enumerValue = [enumer nextObject];
+    <span class="keyword">if</span> (!enumerValue) {
+        isEnumer = <span class="literal">NO</span>;
+    }
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,enumerValue);
 }
 
-<span class="keyword">if</span> <span class="params">(isPlainObject<span class="params">(properties)</span>)</span> {
-  nodes = $<span class="params">(dom)</span>
-  $.each<span class="params">(properties, function<span class="params">(key, value)</span> {
-    if <span class="params">(methodAttributes.indexOf<span class="params">(key)</span> &gt; -<span class="number">1</span>)</span> nodes[key]<span class="params">(value)</span>
-    else nodes.attr<span class="params">(key, value)</span>
-  })</span>
-}
+[arrays enumerateObjectsUsingBlock:^(<span class="keyword">id</span> obj, <span class="built_in">NSUInteger</span> idx, <span class="built_in">BOOL</span> *stop) {
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,obj);
+    <span class="keyword">if</span> (idx &gt; <span class="number">3</span>) {
+        *stop = <span class="literal">YES</span>;
+    }
+}];
+</code></pre><p>假设如果数组中的元素都想向某个方法发送消息，那么可以这么使用，这样的方式，比如在想移除所有子视图这样的场景中非常好用</p>
+<pre><code><span class="comment">//假设有一个数组中的元素都想向某个方法发送消息，那么可以使用makeObjectsPerformSelector类定义了</span>
+[newLcepy <span class="string">makeObjectsPerformSelector:</span><span class="annotation">@selector</span>(length)];
+</code></pre><p>给数组排序的几种方式</p>
+<pre><code><span class="comment">//排序</span>
+<span class="built_in">NSArray</span> *arrays = @[@<span class="number">1</span>,@<span class="number">2</span>,@<span class="number">0</span>,@<span class="number">8</span>,@<span class="number">3</span>,@<span class="number">9</span>,@<span class="number">5</span>];
 
-return dom
-  }
-</code></pre><p>其实这个数组，就是我们使用到的真正的东西了，在Z方法内部，主要就是两个动作，把dom的原型指向$.fn，把dom的selector属性指向selector，这样就可以使用到zepto中的其他可以使用的方法了。</p>
-<p>而平时的开发中对于类型的判断是使用的很多的东西，我们可能需要对数据的类型进行检查，以满足预期的结果，而zepto中也提供了一揽子的解决方案，用于类型的判断，函数，字符串，对象，数组等。</p>
-<pre><code>$.<span class="keyword">each</span>(<span class="string">"Boolean Number String Function Array Date RegExp Object Error"</span>.split(<span class="string">" "</span>),    <span class="function"><span class="keyword">function</span><span class="params">(i, name)</span> </span>{
-class2type[ <span class="string">"[object "</span> + name + <span class="string">"]"</span> ] = name.toLowerCase()
-  })
-</code></pre><p>其实从这里就可以看的出来zepto使用的是什么方式来检索数据类型，借用的就是Object对象的toString方法把全类型字符串打印出来，然后再根据这些字符串来分别处理。在zepto的源代码中，它没有这么写，Object.prototype.toString.call(obj)，而是直接toString.call(obj)，这是因为这个toString是一个内置对象，作用域我想我们都明白，在客户端它是如何搜索的。</p>
-<p>在得到了全类型的字符串后，可以去class2type的map中取出值来进行比对，来返回正确的类型。</p>
-<pre><code><span class="function"><span class="keyword">function</span> <span class="title">isObject</span>(<span class="params">obj</span>)     </span>{ <span class="keyword">return</span> type(obj) == <span class="string">"object"</span> }
-<span class="function"><span class="keyword">function</span> <span class="title">isFunction</span>(<span class="params">value</span>) </span>{ <span class="keyword">return</span> type(value) == <span class="string">"function"</span> }
-<span class="function"><span class="keyword">function</span> <span class="title">type</span>(<span class="params">obj</span>) </span>{
-<span class="keyword">return</span> obj == <span class="literal">null</span> ? <span class="built_in">String</span>(obj) :
-  class2type[toString.call(obj)] || <span class="string">"object"</span>
-  }
-</code></pre><p>数组zepto使用的最新的API，Array提供的isArray方法。</p>
-<pre><code>isArray = <span class="built_in">Array</span>.isArray ||
-  <span class="function"><span class="keyword">function</span>(<span class="params">object</span>)</span>{ <span class="keyword">return</span> object <span class="keyword">instanceof</span> <span class="built_in">Array</span> }
-</code></pre><p>zepto还提供了检测document，window等。</p>
-<pre><code><span class="function"><span class="keyword">function</span> <span class="title">isWindow</span>(<span class="params">obj</span>)     </span>{ <span class="keyword">return</span> obj != <span class="literal">null</span> &amp;&amp; obj == obj.window }
-  <span class="function"><span class="keyword">function</span> <span class="title">isDocument</span>(<span class="params">obj</span>)   </span>{ <span class="keyword">return</span> obj != <span class="literal">null</span> &amp;&amp; obj.nodeType == obj.DOCUMENT_NODE }
-  <span class="function"><span class="keyword">function</span> <span class="title">isPlainObject</span>(<span class="params">obj</span>) </span>{
- <span class="comment">//getPrototypeOf 返回一个对象的原型 ，这里是不是跟Object.prototype相等</span>
- <span class="keyword">return</span> isObject(obj) &amp;&amp; !isWindow(obj) &amp;&amp; <span class="built_in">Object</span>.getPrototypeOf(obj) == <span class="built_in">Object</span>.prototype
-}
-</code></pre><p>each顾名思义是用来遍历的</p>
-<pre><code>$.each = <span class="function"><span class="keyword">function</span><span class="params">(elements, callback)</span>{</span>
-var i, key
-<span class="keyword">if</span> <span class="params">(likeArray<span class="params">(elements)</span>)</span> {
-  <span class="keyword">for</span> <span class="params">(i = <span class="number">0</span>; i &lt; elements.length; i++)</span>
-    <span class="comment">//函数的默认返回值是undefined ，那么什么情况下会成 false  ?</span>
-    <span class="keyword">if</span> <span class="params">(callback.call<span class="params">(elements[i], i, elements[i])</span> === <span class="literal">false</span>)</span> return elements
-} <span class="keyword">else</span> {
-  <span class="keyword">for</span> <span class="params">(key in elements)</span>
-    <span class="keyword">if</span> <span class="params">(callback.call<span class="params">(elements[key], key, elements[key])</span> === <span class="literal">false</span>)</span> return elements
-}
+<span class="comment">//正</span>
+<span class="built_in">NSArray</span> *minMax = [arrays sortedArrayUsingComparator:^<span class="built_in">NSComparisonResult</span>(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) {
+    <span class="keyword">return</span> obj1 &gt; obj2;
+}];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,minMax);
+<span class="comment">//倒</span>
+<span class="built_in">NSArray</span> *maxMin = [arrays sortedArrayUsingComparator:^<span class="built_in">NSComparisonResult</span>(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) {
+    <span class="keyword">return</span> obj1 &lt; obj2;
+}];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,maxMin);
 
-return elements
-  } 
-</code></pre><p>唯一有个问题，看看有其他朋友知晓不，什么情况下callback.call会等于false？按道理来说，如果检查typeof callback === ‘function’，这样的情况，我认为可以理解。毕竟函数的默认返回值就是undefined，但是它也不是“强类型”相等的，所以我不明白它的意义何在？</p>
-<p>在学习map函数之前，先学习几个比较有用的方法，比如判断一个对象是否是空对象，给字符串两边去空白等。判断空对象，主要是利用了in语法，它可以遍历对象的属性，如果是空对象for循环会直接跳过。</p>
-<pre><code>$.isEmptyObject = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>{
-    <span class="keyword">var</span> name
-    <span class="keyword">for</span> (name <span class="keyword">in</span> obj) <span class="keyword">return</span> <span class="literal">false</span>
-    <span class="keyword">return</span> <span class="literal">true</span>
-  }
-</code></pre><p>判断一个元素是否在数组中，借用了在最上面申明的一个空数组的indexOf。</p>
-<pre><code>$.inArray = <span class="function"><span class="keyword">function</span><span class="params">(elem, array, i)</span></span>{
-    <span class="keyword">return</span> emptyArray.indexOf.<span class="keyword">call</span>(array, elem, i)
-  }
-</code></pre><p>给字符串左右两边去空白，这个是借用了String包装对象的trim方法。</p>
-<pre><code>$.<span class="built_in">trim</span> = function(<span class="built_in">str</span>) {
-    <span class="keyword">return</span> <span class="built_in">str</span> == <span class="keyword">null</span> ? <span class="string">""</span> : <span class="keyword">String</span>.prototype.<span class="built_in">trim</span>.call(<span class="built_in">str</span>)
-  }
-</code></pre><p>map函数是一个很有意思很有用的函数，它可以帮助开发者进行映射到每一个元素上，新版的数组也提供了map方法，考虑到某些浏览器没有实现这个，所以zepto帮助我们实现了它。</p>
-<pre><code>$.map = <span class="function"><span class="keyword">function</span>(<span class="title">elements</span>, <span class="title">callback</span>){</span>
-var <span class="built_in">value</span>, values = [], i, key
-<span class="keyword">if</span> (likeArray(elements))
-  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; elements.<span class="built_in">length</span>; i++) {
-    <span class="built_in">value</span> = callback(elements[i], i)
-    <span class="keyword">if</span> (<span class="built_in">value</span> != <span class="constant">null</span>) values.push(<span class="built_in">value</span>)
-  }
-<span class="keyword">else</span>
-      <span class="keyword">for</span> (key <span class="operator">in</span> elements) {
-        <span class="built_in">value</span> = callback(elements[key], key)
-        <span class="keyword">if</span> (<span class="built_in">value</span> != <span class="constant">null</span>) values.push(<span class="built_in">value</span>)
-      }
-    <span class="constant">return</span> flatten(values)
-  }
-</code></pre><p>likeArray是判断了下length属性是不是number，如果是，遍历，然后装载到values数组中，如果是对象就用for in，最后的flatten是借用一下concat，copy一个副本出来返回。</p>
-<p>read函数，是在开发中非常有用的函数，主要是用来当DOM文档准备好之后，再加载或直接某些Js片段。就是怕，某些情况下，比如Js片段已经写好了，这里面要获取某个DOM节点，实际上这里会是null，然后执行其他操作就抛错误了，因为在浏览器中，这个节点还不存在。</p>
-<pre><code><span class="comment">//读取readyState状态</span>
-  <span class="keyword">if</span> (readyRE.test(<span class="built_in">document</span>.readyState) &amp;&amp; <span class="built_in">document</span>.body) callback($)
-<span class="comment">//监听DOMContentLoaded事件</span>
-  <span class="keyword">else</span> <span class="built_in">document</span>.addEventListener(<span class="string">'DOMContentLoaded'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{ callback($) }, <span class="literal">false</span>)
-  <span class="keyword">return</span>  <span class="keyword">this</span>
-</code></pre><p>zepto因为是移动端的开发，所以它监听的是DOMContentLoaded事件，这个事件是一个原生方法，新版API中提供了这个，而对IE10兼容，则是判断document的readyState属性，保证它是complete|loaded|interactive，这也意味着已经准备好了，并且还要判断body是否存在，才执行callback函数。</p>
+<span class="comment">//    [arrays sortedArrayWithOptions:&lt;#(NSSortOptions)#&gt; usingComparator:&lt;#^NSComparisonResult(id obj1, id obj2)cmptr#&gt;]</span>
 
+<span class="comment">//    [arrays sortedArrayUsingFunction:&lt;#(NSInteger (*)(__strong id, __strong id, void *))#&gt; context:&lt;#(void *)#&gt;]</span>
+
+SEL execu = <span class="keyword">@selector</span>(compare:);
+<span class="built_in">NSArray</span> *newArr = [arrays sortedArrayUsingSelector:execu];
+<span class="built_in">NSLog</span>(<span class="string">@"s%@"</span>,newArr);
+</code></pre><p>数组还可以进行筛选，NSPredicate这个类在使用Core Data时会经常用到</p>
+<pre><code><span class="collection">[arrays filteredArrayUsingPredicate:&lt;#<span class="list">(<span class="keyword">NSPredicate</span> *)</span>#&gt;]</span>
+</code></pre><h3 id="NSMutableArray">NSMutableArray</h3><p>创建NSMutableArray只有两种方式，alloc和类方法，这是一个可变的数组，可以增删改滴，也可以排序，NSArray存在的方法，NSMutableArray全部具备，只是它多了可以添加，删除，修改，替换的方法，这里不一一写例子了，可以自己实际操作一下。</p>
+<pre><code><span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">addObject</span>:<span class="value">(id)anObject</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">insertObject</span>:<span class="value">(id)anObject atIndex:(NSUInteger)index</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="tag">removeLastObject</span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectAtIndex</span>:<span class="value">(NSUInteger)index</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">replaceObjectAtIndex</span>:<span class="value">(NSUInteger)index withObject:(id)anObject</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">addObjectsFromArray</span>:<span class="value">(NSArray *)otherArray</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">exchangeObjectAtIndex</span>:<span class="value">(NSUInteger)idx1 withObjectAtIndex:(NSUInteger)idx2</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="tag">removeAllObjects</span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObject</span>:<span class="value">(id)anObject inRange:(NSRange)range</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObject</span>:<span class="value">(id)anObject</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectIdenticalTo</span>:<span class="value">(id)anObject inRange:(NSRange)range</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectIdenticalTo</span>:<span class="value">(id)anObject</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectsFromIndices</span>:<span class="value">(NSUInteger *)indices numIndices:(NSUInteger)cnt <span class="function">NS_DEPRECATED</span>(<span class="number">10</span>_0, <span class="number">10</span>_6, <span class="number">2</span>_0, <span class="number">4</span>_0)</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectsInArray</span>:<span class="value">(NSArray *)otherArray</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectsInRange</span>:<span class="value">(NSRange)range</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">replaceObjectsInRange</span>:<span class="value">(NSRange)range withObjectsFromArray:(NSArray *)otherArray range:(NSRange)otherRange</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">replaceObjectsInRange</span>:<span class="value">(NSRange)range withObjectsFromArray:(NSArray *)otherArray</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">setArray</span>:<span class="value">(NSArray *)otherArray</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">sortUsingFunction</span>:<span class="value">(NSInteger (*)(id, id, void *))compare context:(void *)context</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">sortUsingSelector</span>:<span class="value">(SEL)comparator</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">insertObjects</span>:<span class="value">(NSArray *)objects atIndexes:(NSIndexSet *)indexes</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectsAtIndexes</span>:<span class="value">(NSIndexSet *)indexes</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">replaceObjectsAtIndexes</span>:<span class="value">(NSIndexSet *)indexes withObjects:(NSArray *)objects</span></span>;
+
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">setObject</span>:<span class="value">(id)obj atIndexedSubscript:(NSUInteger)idx <span class="function">NS_AVAILABLE</span>(<span class="number">10</span>_8, <span class="number">6</span>_0)</span></span>;
+
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">sortUsingComparator</span>:<span class="value">(NSComparator)cmptr <span class="function">NS_AVAILABLE</span>(<span class="number">10</span>_6, <span class="number">4</span>_0)</span></span>;
+<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">sortWithOptions</span>:<span class="value">(NSSortOptions)opts usingComparator:(NSComparator)cmptr <span class="function">NS_AVAILABLE</span>(<span class="number">10</span>_6, <span class="number">4</span>_0)</span></span>;
+</code></pre>
       
     </div>
     
@@ -1146,7 +933,7 @@ var <span class="built_in">value</span>, values = [], i, key
       
       
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
 	</div>
 
       
@@ -1168,7 +955,7 @@ var <span class="built_in">value</span>, values = [], i, key
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
     </nav>
   
 </div>

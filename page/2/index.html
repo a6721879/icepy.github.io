@@ -167,11 +167,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-NSDictionary" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-CALayer基础与寄宿图" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/05/16/NSDictionary/" class="article-date">
-  	<time datetime="2015-05-16T11:20:01.000Z" itemprop="datePublished">2015-05-16</time>
+      <a href="/2015/07/05/CALayer基础与寄宿图/" class="article-date">
+  	<time datetime="2015-07-05T05:26:49.000Z" itemprop="datePublished">2015-07-05</time>
 </a>
     </div>
   
@@ -184,7 +184,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/16/NSDictionary/">NSDictionary</a>
+      <a class="article-title" href="/2015/07/05/CALayer基础与寄宿图/">CALayer基础与寄宿图</a>
     </h1>
   
 
@@ -193,151 +193,49 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>使用字典，能很好的组织数据，OC中的字典有三种方式</p>
-<pre><code><span class="comment">//创建字典</span>
-<span class="built_in">NSDictionary</span> *dic = [[<span class="built_in">NSDictionary</span> alloc] initWithObjectsAndKeys:<span class="string">@"value"</span>,<span class="string">@"key"</span>,<span class="string">@"github"</span>,<span class="string">@"build"</span>, <span class="literal">nil</span>];
-<span class="built_in">NSDictionary</span> *dic1 = @{<span class="string">@"key1"</span>:<span class="string">@"value1"</span>};
-<span class="built_in">NSDictionary</span> *dic2 = [<span class="built_in">NSDictionary</span> dictionaryWithObjectsAndKeys:<span class="string">@"value2"</span>,<span class="string">@"key2"</span>, <span class="literal">nil</span>];
-</code></pre><p>包含多少个键值对</p>
-<pre><code><span class="comment">//包含多少个键值对</span>
-<span class="function">NSLog</span>(<span class="at_rule">@<span class="string">"%zd"</span>,dic.count);</span>
-</code></pre><p>通过已知的key名来获取值</p>
-<pre><code><span class="comment">//已知key来获取值</span>
-NSString *<span class="keyword">value</span> = [dic objectForKey:@<span class="string">"key"</span>];
-NSLog(@<span class="string">"%@"</span>,<span class="keyword">value</span>);
-</code></pre><p>获取所有的key和获取所有的值</p>
-<pre><code><span class="comment">//获取所有的key名或者值，返回一个不可变数组</span>
-<span class="built_in">NSArray</span> *keys = [dic allKeys];
-<span class="built_in">NSArray</span> *values = [dic allValues];
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,keys);
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,values);
-</code></pre><p>通过一个数组key获取值</p>
-<pre><code>NSArray *vals = [dic <span class="string">objectsForKeys:</span>@[@<span class="string">"key"</span>] <span class="string">notFoundMarker:</span>@<span class="string">"not"</span>];
-NSLog(@<span class="string">"%@"</span>,vals);
-</code></pre><p>遍历</p>
-<pre><code><span class="list">[<span class="keyword">dic</span> enumerateKeysAndObjectsUsingBlock:^<span class="list">(<span class="keyword">id</span> key, id obj, BOOL *stop)</span> {
-    NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,key)</span><span class="comment">;</span>
-    NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,obj)</span><span class="comment">;</span>
-}]<span class="comment">;</span></span>
-</code></pre><p>排序</p>
-<pre><code><span class="built_in">NSArray</span> *kesArray =  [dic keysSortedByValueUsingComparator:^<span class="built_in">NSComparisonResult</span>(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) {
-    <span class="built_in">NSString</span> *ke1 = obj1;
-    <span class="built_in">NSString</span> *ke2 = obj2;
-    <span class="keyword">return</span> [ke1 compare:ke2];
-}];
-</code></pre><p>过滤</p>
-<pre><code><span class="collection">[dic keysOfEntriesPassingTest:&lt;#<span class="comment">^BOOL</span><span class="list">(<span class="keyword">id</span> key, id obj, BOOL *stop)</span>predicate#&gt;]</span><span class="comment">;</span>
-</code></pre><p>Mutable版的字典，多了增删的方法</p>
-<pre><code><span class="built_in">NSMutableDictionary</span> *dicmutable = [<span class="built_in">NSMutableDictionary</span> dictionaryWithDictionary:dic];
-</code></pre><p>添加</p>
-<pre><code><span class="list">[<span class="keyword">dicmutable</span> setObject:@<span class="string">"icepy"</span> forKey:@<span class="string">"io"</span>]<span class="comment">;</span>
-NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,dicmutable)</span><span class="comment">;</span></span>
-</code></pre><p>删除</p>
-<pre><code><span class="list">[<span class="keyword">dicmutable</span> removeObjectForKey:@<span class="string">"build"</span>]<span class="comment">;</span>
-NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,dicmutable)</span><span class="comment">;</span></span>
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
+        <p>说起来Core Animation是一个复合引擎，它的职责就是尽可能快的组合屏幕上不同的可视内容，这个内容是被分解成独立的图层，存储在一个叫图层树的体系中。如果我们想学习动画，那么一切都从它开始。</p>
+<h2 id="CALayer与UIView的区别">CALayer与UIView的区别</h2><p>和UIView最大的不同是CALayer不能处理与用户交互的事件，CALayer并不清楚具体的响应链，即使它提供了一些方法来判断是否触摸在图层的范围内。</p>
+<h2 id="CALayer">CALayer</h2><p>CALayer与UIView是一个平行的关系，每一个UIView都存在一个layer属性，视图的职责就是创建并管理这个图层，并且确保当子视图在层级关系中被添加或移除时，它们关联在图层在同样的对应的层级关系树中有同样的操作。（不要急，理论虽然有些绕，慢慢理解）</p>
+<pre><code><span class="tag">var</span> layer:CALayer = <span class="function"><span class="title">CALayer</span><span class="params">()</span></span>
+layer<span class="class">.frame</span> = <span class="function"><span class="title">CGRectMake</span><span class="params">(<span class="number">50</span>, <span class="number">50</span>, <span class="number">200</span>, <span class="number">200</span>)</span></span>
+layer<span class="class">.backgroundColor</span> = <span class="function"><span class="title">UIColor</span><span class="params">(red: <span class="number">0.400</span>, green: <span class="number">0.800</span>, blue: <span class="number">1.000</span>, alpha: <span class="number">1.000</span>)</span></span><span class="class">.CGColor</span>
+self<span class="class">.view</span><span class="class">.layer</span><span class="class">.addSublayer</span>(layer)
+</code></pre><p>添加一个图层到UIView中，然后运行看看</p>
+<p>其实在某种意义上来说，对于一些简单的需求，我们确实没有必要去处理CALayer，那是因为Apple已经通过UIView的高级API间接的使动画变得很简单，使用它何乐而不为呢。</p>
+<pre><code>UIView.animateWithDuration<span class="function"><span class="params">(<span class="number">1.2</span>, animations: { () -&gt; Void <span class="keyword">in</span>
 
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-iOS动画基础" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/05/10/iOS动画基础/" class="article-date">
-  	<time datetime="2015-05-09T17:02:06.000Z" itemprop="datePublished">2015-05-10</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/10/iOS动画基础/">iOS动画基础</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>貌似在哪个领域里，动画的实现都赋予了软件非常生动的交互，所以我们必须要掌握并学好它。在学习动画之前，首推<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004514" target="_blank" rel="external">Core Animation Programming Guide</a>核心动画编程指南，去了解一下官方的术语，定义，以及指导，这很有帮助。</p>
-<p>顾名思义，动画也就是让我们的view可以动起来，所谓的view实际上都会继承于UIView，而每一个UIView都有一个CALayer对象，它们两个是分开的，分别用于不同的地方。可以看见的是，UIView用于显示，CALayer用于绘制。（注明：CALayer属于QuartzCore框架）</p>
-<p>UIView自身（注明：UIView属于UIKit框架）会有描述位置的信息，比如frame，transform。在使用一些比较简单的动画时，我们应该首选考虑的是使用UIView提供的一些方法，去改变frame，transform等属性。</p>
-<pre><code><span class="collection">[UIView animateWithDuration:1.6 animations:<span class="comment">^{
-
-}</span>]</span><span class="comment">;</span>
-</code></pre><p>对于高度复杂一些的动画，就需要我们对Core Animation整个的熟悉和了解了。这里，我建议先阅读一下<a href="http://objccn.io/issue-12-1/" target="_blank" rel="external">动画理解</a>，把一些概念性的东西了解清楚。比如Core Animation维护的层次结构，什么叫模型层树(model layer tree)，什么叫表现层树(presentation layer tree)，而且你务必要理解，当把动画添加到一个layer的时候，是不直接修改其属性的。</p>
-<p>在清楚这些概念性的问题后，你可以去学习一些动画类了，比如CABasicAnimation，CATransform3D，CAKeyframeAnimation,CAAnimationGroup,CAAnimation，另外你务必要记住一点，CAAnimation是这些动画类的鼻祖(它是一个抽象类，不能直接使用)，而且要搞清楚CALayer。</p>
-<p>举例一些简单的例子</p>
-<p><strong>使用CABasicAnimation</strong></p>
-<pre><code>CABasicAnimation *<span class="variable">animation =</span> [CABasicAnimation animation];
-animation.<span class="variable">keyPath =</span> @<span class="string">"position.x"</span>;
-animation.<span class="variable">duration =</span> <span class="number">1</span>;
-animation.<span class="variable">fromValue =</span> @<span class="number">50</span>;
-animation.<span class="variable">toValue =</span> @<span class="number">250</span>;
-[view.layer addAnimation:animation forKey:@<span class="string">"left"</span>];
-</code></pre><p>为了验证动画究竟修改了那个地方的值，我打印了一下view的frame，NSLog(@”%@”,NSStringFromCGRect(view.frame))，这里可以看的出来，view的frame值没有发生改变，而且在模拟器中，动画结束了，view又回到了原来的位置。说明啊，动画的执行和view的渲染是分开的，如果你还不理解，请继续阅读《核心动画编程指南》或者简单的《动画理解》。</p>
-<p>如果我们不想动画结束后view回到原来的位置，可以使用</p>
-<pre><code>animation.fillMode = kCAFillModeForwards<span class="comment">;</span>
-animation.removedOnCompletion = NO<span class="comment">;</span>
-</code></pre><p><strong>使用CAKeyframeAnimation</strong></p>
-<pre><code>CAKeyframeAnimation *animation = [CAKeyframeAnimation animation]<span class="comment">;</span>
-animation.keyPath = @<span class="string">"position.x"</span><span class="comment">;</span>
-animation.values = @[<span class="localvars">@0</span>,<span class="localvars">@10</span>,@-<span class="number">10</span>,<span class="localvars">@10</span>,<span class="localvars">@0</span>]<span class="comment">;</span>
-animation.keyTimes = @[ <span class="localvars">@0</span>, @(<span class="number">1</span> / <span class="number">6.0</span>), @(<span class="number">3</span> / <span class="number">6.0</span>), @(<span class="number">5</span> / <span class="number">6.0</span>), <span class="localvars">@1</span> ]<span class="comment">;</span>
-animation.duration = <span class="number">0.4</span><span class="comment">;</span>
-animation.additive = YES<span class="comment">;</span>
-[view.layer addAnimation:animation forKey:@<span class="string">"shake"</span>]<span class="comment">;</span>
-</code></pre><p><strong>使用CAAnimationGroup</strong></p>
-<pre><code>CABasicAnimation *right = <span class="comment">[CABasicAnimation animation]</span>;
-right.keyPath = @<span class="string">"position.x"</span>;
-right.duration = 1;
-right.toValue = @250;
-right.timingFunction = <span class="comment">[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]</span>;
-
-CABasicAnimation *top = <span class="comment">[CABasicAnimation animation]</span>;
-top.keyPath = @"position.y";
-top.duration = 1;
-top.toValue = @10;
-right.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-
-CAAnimationGroup *animationsGroup = <span class="comment">[CAAnimationGroup animation]</span>;
-animationsGroup.animations = @<span class="comment">[right,top]</span>;
-<span class="comment">[view.layer addAnimation:animationsGroup forKey:@"group"]</span>;
-</code></pre><p>阅读资料：</p>
+})</span></span>
+</code></pre><p>那么，我们使用CALayer到底能实现什么UIView不能实现的呢？</p>
 <ul>
-<li><a href="http://objccn.io/issue-12/" target="_blank" rel="external">#12动画</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/CoreAnimation_framework/index.html#//apple_ref/doc/uid/TP40004513" target="_blank" rel="external">Core Animation Reference Collection</a></li>
+<li>阴影，圆角，带颜色的边框</li>
+<li>3D变换</li>
+<li>非矩形范围</li>
+<li>透明遮罩</li>
+<li>多级非线性动画</li>
 </ul>
+<h2 id="创建寄宿图">创建寄宿图</h2><p>所谓的寄宿图也就是在图层中包含的图，有了图片，我们可以展现更丰富的视觉效果。</p>
+<p>CALayer有一个属性叫contents，这个属性的类型是id类型，而我们要把图片创建在图层上，就需要使用这个属性，当然在Swift中它是一个AnyObject。</p>
+<pre><code><span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageNamed:<span class="string">@"mockingbird.png"</span>];
+<span class="keyword">self</span><span class="variable">.lodgeLayerView</span><span class="variable">.contents</span> = (__bridge <span class="keyword">id</span>) image<span class="variable">.CGImage</span>;
+
+var image:<span class="built_in">UIImage</span> = <span class="built_in">UIImage</span>(named: <span class="string">"mockingbird.png"</span>)!
+layer<span class="variable">.contents</span> = image<span class="variable">.CGImage</span>
+</code></pre><p>感觉看起来云豹还算显示正常，万一它有点胖，怎么办呢？如果我们使用UIImageView，那么有contentMode属性可以设置，想一想CALayer是不是也有同样的，遗憾的是，没有，但是它有contentsGravity。</p>
+<pre><code>layer<span class="class">.contentsGravity</span> = kCAGravityResizeAspectFill
+</code></pre><p>动动你的手指，每一个试一试，看看图片是怎么现实的。</p>
+<p>对于双倍屏幕，其实contentsScale属性目前来说已经使用的好少了，它定义了寄宿图的像素尺寸和视图大小的比例，默认情况下它是一个1.0的浮点数。</p>
+<p>在某些情况下，我们的云豹已经显示正常大小了，但是你可能发现它超出边界了，那么，亲你能用上maskToBounds属性了，设置为true，它就在边界内了。</p>
+<pre><code>layer.<span class="variable">masksToBounds =</span> <span class="constant">true</span>
+</code></pre><p>近些年来在用css做网站时，大家都非常流行使用图片精灵的方式去处理图片，为什么？因为它能优化性能。那么在iOS开发中一样可以，我们要用的就是contentsRect属性。</p>
+<p>这个坐标系统相对有些绕，因为它采用的是单位坐标，它的值只在0-1之间，用来描述相对位置。</p>
+<pre><code>layer<span class="class">.contentsRect</span> = <span class="function"><span class="title">CGRectMake</span><span class="params">(<span class="number">0.5</span>, <span class="number">0</span>, <span class="number">0.5</span>, <span class="number">0.5</span>)</span></span>
+</code></pre><p>如果我们想使寄宿图可以均匀的拉伸，那么contentsCenter属性是最佳选择，不过要记住一点，它不会主动去拉伸，除非是图层变了。</p>
+<pre><code>layer<span class="class">.contentsCenter</span> = <span class="function"><span class="title">CGRectMake</span><span class="params">(<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.5</span>, <span class="number">0.5</span>)</span></span>
+</code></pre><h2 id="自定义图层">自定义图层</h2><pre><code><span class="keyword">override</span> <span class="func"><span class="keyword">func</span> <span class="title">drawLayer</span><span class="params">(layer: CALayer!, inContext ctx: CGContext!)</span></span> {
+
+}
+</code></pre><p>Apple的建议是如果你没有这方面的需求，最好不要写一个空的drawLayer方法在你的代码中，因为一旦视图检测到被调用，那么就会分配一个图层。</p>
+<p>在这里，我们主要是利用Core Graphics去绘制一些寄宿图，然后添加到上下文中。</p>
 
       
     </div>
@@ -366,11 +264,11 @@ animationsGroup.animations = @<span class="comment">[right,top]</span>;
 
 
   
-    <article id="post-CoreData的使用" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-记录第一次创业的挫折经历" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/05/05/CoreData的使用/" class="article-date">
-  	<time datetime="2015-05-05T02:31:04.000Z" itemprop="datePublished">2015-05-05</time>
+      <a href="/2015/07/04/记录第一次创业的挫折经历/" class="article-date">
+  	<time datetime="2015-07-04T15:51:45.000Z" itemprop="datePublished">2015-07-04</time>
 </a>
     </div>
   
@@ -383,7 +281,7 @@ animationsGroup.animations = @<span class="comment">[right,top]</span>;
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/05/CoreData的使用/">CoreData的使用</a>
+      <a class="article-title" href="/2015/07/04/记录第一次创业的挫折经历/">记录第一次创业的挫折经历</a>
     </h1>
   
 
@@ -392,925 +290,41 @@ animationsGroup.animations = @<span class="comment">[right,top]</span>;
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>CoreData是Cocoa中处理数据，绑定数据的一个框架，如果不靠谱数据的平台一致性（iOS，Android），完全可以使用它替代SQLite。虽然，iOS也有一个C实现的SQLite库，但是语法层面比较琐碎，而且使用的是C函数。如果要使用，大家可以选择使用一个开源的库来替代<a href="https://github.com/ccgus/fmdb" target="_blank" rel="external">Obje-C版</a>和<a href="https://github.com/FahimF/SQLiteDB" target="_blank" rel="external">Swift版</a></p>
-<p>从代码层面上来看，要创建一个CoreData实例，需要四个步骤</p>
+        <p>回想今晚，坐在铁轨上喝着啤酒，脑袋里就想着我哥哥给我说的一句话：意料之中，创业你还太嫩了。呵呵，我以为会这样，我以为会怎样，谁又想到是这样呢？</p>
 <ul>
-<li>创建数据库文件的物理地址</li>
-<li>创建模型托管对象</li>
-<li>创建持久化存储调度器</li>
-<li>创建上下文</li>
+<li>一个人去实地考察，山里面，下暴雨</li>
+<li>一个人去跑工商局，问情况</li>
+<li>一个人跟乡政府的书记吃饭喝酒，掏了800多</li>
+<li>一个人写创业计划书给投资人</li>
+<li>一个人写To List 一个月内的</li>
+<li>一个人买了农业大学大一到大四的教科书</li>
+<li>一个人在做市场调查</li>
+<li>一个人在做预算报表</li>
+<li>一个人在接待投资人，陪同去实地考察</li>
+<li>一个人在写微信端和官网</li>
+<li>一个人在做无土栽培和共生系统的实验</li>
 </ul>
-<p>正常情况下，上述四个步骤，我们只使用一次，建议惰性加载它</p>
-<pre><code>-(<span class="built_in">NSManagedObjectContext</span> *)context
-{
-    <span class="keyword">if</span> (!_context) {
-        <span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
-        <span class="comment">//创建db url</span>
-        <span class="built_in">NSString</span> *dbPath = [<span class="keyword">self</span><span class="variable">.baseDoc</span> stringByAppendingPathComponent:<span class="string">@"manong.db"</span>];
-        <span class="built_in">NSURL</span> *dbUrl = [<span class="built_in">NSURL</span> fileURLWithPath:dbPath];
-        <span class="comment">//创建模型托管对象</span>
-        <span class="built_in">NSManagedObjectModel</span> *model = [<span class="built_in">NSManagedObjectModel</span> mergedModelFromBundles:<span class="literal">nil</span>];
-        <span class="comment">//创建持久化存储调度器</span>
-        <span class="built_in">NSPersistentStoreCoordinator</span> *store = [[<span class="built_in">NSPersistentStoreCoordinator</span> alloc] initWithManagedObjectModel:model];
-        [store addPersistentStoreWithType:<span class="built_in">NSSQLiteStoreType</span> configuration:<span class="literal">nil</span> URL:dbUrl options:<span class="literal">nil</span> error:&amp;error];
-        <span class="comment">//创建上下文</span>
-        _context = [[<span class="built_in">NSManagedObjectContext</span> alloc] init];
-        [_context setPersistentStoreCoordinator:store];
-    }
-    <span class="keyword">return</span> _context;
-}
-</code></pre><p>下面给出一张关系图</p>
-<p><img src="http://websources.qiniudn.com/iOS/CoreData类关系图.png" alt="CoreData类关系图"></p>
-<p>从上述的图中，其实可以看到一些有关系的模块</p>
-<ul>
-<li>Managed Object Model 用于描述数据模型，这里包括实体，属性，请求等</li>
-<li>Managed Object Context 参与对数据对象进行各项操作的上下文</li>
-<li>Managed Object 数据对象（用户使用的对象与上下文有关联）</li>
-<li>Persistent Store 相当于数据库文件的管理器，处理底层对数据库文件的读取与写入</li>
-</ul>
-<p><strong>基本上创建一个Managed Object文件不需要自己去手动创建，而且建议Xcode帮助我们创建的model文件不要修改</strong></p>
-<p>如果非要自己创建的话，那么继承NSManagedObject类吧</p>
-<pre><code><span class="preprocessor">#import <span class="title">&lt;Foundation/Foundation.h&gt;</span></span>
-<span class="preprocessor">#import <span class="title">&lt;CoreData/CoreData.h&gt;</span></span>
-
-<span class="class"><span class="keyword">@interface</span> <span class="title">ManongTag</span> : <span class="title">NSManagedObject</span></span>
-
-<span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, retain) <span class="built_in">NSNumber</span> * contentCount;
-<span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, retain) <span class="built_in">NSString</span> * tagKey;
-<span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, retain) <span class="built_in">NSString</span> * tagName;
-
-<span class="keyword">@end</span>
-</code></pre><h1 id="下面给出一张实际的操作图，如何使用CoreData。">下面给出一张实际的操作图，如何使用CoreData。</h1><p><img src="http://websources.qiniudn.com/iOS/CoreData操作图形化.jpg" alt="CoreData操作图形化"> </p>
-<ul>
-<li>首先add Entity添加一个实体</li>
-<li>然后在Attributes中添加相应的属性，在Type中选择相应的数据类型</li>
-<li>Pelationships可以对实体进行关联，比如ManongTitle实体中关联了一个ManongContent实体</li>
-<li>&lt;橘黄色箭头&gt;可以设置多关联，在使用的时候它会是一个NSSet集合</li>
-<li>Style可以查看设计图</li>
-</ul>
-<p>如果想新增一条数据，需要三个步骤才能实现，第一先创建一个实体描述，第二创建一个ManagedObject对象，第三给上下文的save方法发送消息。</p>
-<pre><code><span class="built_in">NSEntityDescription</span> *mnTag = [<span class="built_in">NSEntityDescription</span> entityForName:<span class="string">@"ManongTag"</span> inManagedObjectContext:<span class="keyword">self</span><span class="variable">.context</span>];
-ManongTag *manongTag = [[ManongTag alloc] initWithEntity:mnTag insertIntoManagedObjectContext:<span class="keyword">self</span><span class="variable">.context</span>];
-manongTag<span class="variable">.tagKey</span> = tagKey;
-manongTag<span class="variable">.tagName</span> = tagNmae;
-<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
-<span class="built_in">BOOL</span> success;
-[<span class="keyword">self</span><span class="variable">.context</span> save:&amp;error];
-success = error ? <span class="literal">NO</span> : <span class="literal">YES</span>;
-</code></pre><p>如果想在实体中查询数据，一般情况下两个步骤，如果是条件查询最少三个步骤，第一创建一个查询请求，第二创建一个谓词对象，第三给上下文的executeFetchRequest方法发送消息。</p>
-<pre><code><span class="comment">//查询所有的数据</span>
-<span class="built_in">NSFetchRequest</span> *request = [[<span class="built_in">NSFetchRequest</span> alloc] initWithEntityName:<span class="string">@"ManongDigest"</span>];
-<span class="built_in">NSArray</span> *arr = [<span class="keyword">self</span><span class="variable">.context</span> executeFetchRequest:request error:&amp;error];
-
-<span class="comment">//条件查询</span>
-<span class="built_in">NSFetchRequest</span> *request = [[<span class="built_in">NSFetchRequest</span> alloc] initWithEntityName:@“ManongDigest”];
-<span class="built_in">NSPredicate</span> *dicate = [<span class="built_in">NSPredicate</span> predicateWithFormat:<span class="string">@"%K BEGINSWITH[c] %@"</span>,<span class="string">@"tagName"</span>,<span class="string">@"a"</span>];
-<span class="built_in">NSArray</span> *arr = [<span class="keyword">self</span><span class="variable">.context</span> executeFetchRequest:request error:&amp;error];
-</code></pre><p>如果想更新某一条数据，正常情况下三个步骤，第一创建一个查询请求，第二修改MangedObject对象的属性，第三给上下文的save方法发送消息。</p>
-<pre><code><span class="built_in">NSFetchRequest</span> *request = [[<span class="built_in">NSFetchRequest</span> alloc] initWithEntityName:<span class="string">@"ManongDigest"</span>];
-<span class="built_in">NSArray</span> *arr = [<span class="keyword">self</span><span class="variable">.context</span> executeFetchRequest:request error:&amp;error];
-<span class="keyword">for</span>(ManongDigest *digest <span class="keyword">in</span> arr)
-{
-    digest<span class="variable">.tagName</span> = <span class="string">@"lcepy"</span>;
-}
-<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
-[<span class="keyword">self</span><span class="variable">.context</span> save:&amp;error];
-<span class="keyword">if</span> (error) {
-    <span class="keyword">return</span> <span class="literal">NO</span>;
-}<span class="keyword">else</span>{
-    <span class="keyword">return</span> <span class="literal">YES</span>;
-}
-</code></pre><p>如果想删除某一条数据</p>
-<pre><code><span class="built_in">NSFetchRequest</span> *request = [[<span class="built_in">NSFetchRequest</span> alloc] initWithEntityName:<span class="string">@"ManongDigest"</span>];
-<span class="built_in">NSArray</span> *arr = [<span class="keyword">self</span><span class="variable">.context</span> executeFetchRequest:request error:&amp;error];
-<span class="keyword">if</span>(arr<span class="variable">.count</span>){
-    ManongDigest *digest = (ManongDigest *)arr[<span class="number">0</span>];
-    [<span class="keyword">self</span><span class="variable">.context</span> deleteObject:digest];
-}
-</code></pre><p>上述四种操作方式是最常用的，当然CoreData 的API肯定不止这四种，但是使用的逻辑思维基本上是，查询－处理－使用上下文或者创建实体－处理－使用上下文。</p>
-<p>这个框架算比较复杂的一个，学习起来曲线也比较大，需要耐心。</p>
-<p>参考资料</p>
-<ul>
-<li><a href="http://www.objc.io/issue-4/" target="_blank" rel="external">objc-CoreData</a></li>
-<li><a href="http://objccn.io/issue-4-2/" target="_blank" rel="external">一个完整的 Core Data 应用</a></li>
-<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/CoreData_ObjC/index.html" target="_blank" rel="external">Core Data API</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSPredicate_Class/" target="_blank" rel="external">NSPredicate API</a></li>
-</ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-NSArray" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/05/03/NSArray/" class="article-date">
-  	<time datetime="2015-05-03T07:42:06.000Z" itemprop="datePublished">2015-05-03</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/03/NSArray/">NSArray</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>基础扎实才能使编程更加的得心应手，今天要写一些学习NSArray以及NSMutableArray的东西。</p>
-<p>创建一个数组其实跟创建NSString一样OC也提供了三种方式，语法糖，实例化，类方法。</p>
-<pre><code><span class="comment">//创建语法糖</span>
-<span class="built_in">NSArray</span> *arry = @[<span class="string">@"1"</span>,<span class="string">@"2"</span>,<span class="string">@"3"</span>,<span class="string">@"4"</span>];
-<span class="comment">//手动实例创建</span>
-<span class="built_in">NSArray</span> *arry1 = [[<span class="built_in">NSArray</span> alloc] initWithObjects:<span class="string">@"1"</span>,<span class="string">@"2"</span>, <span class="literal">nil</span>];
-<span class="comment">//类方法创建</span>
-<span class="built_in">NSArray</span> *arry2 = [<span class="built_in">NSArray</span> arrayWithObjects:<span class="string">@"1"</span>,<span class="string">@"2"</span>, <span class="literal">nil</span>];
-</code></pre><p>查找一个元素在数组中是否存在</p>
-<pre><code><span class="comment">//查找元素是否存在，在数组中</span>
-BOOL isTrue = [arry <span class="string">containsObject:</span>@<span class="string">"1"</span>];
-</code></pre><p>获取数组的长度</p>
-<pre><code><span class="comment">//数组的长度</span>
-NSUInteger <span class="keyword">count</span> = arry.<span class="keyword">count</span>;
-NSLog(@<span class="string">"%zd"</span>,<span class="keyword">count</span>);
-</code></pre><p>获取第一个元素和获取最后一个元素</p>
-<pre><code><span class="comment">//获取第一个元素</span>
-<span class="keyword">id</span> first = arry<span class="variable">.firstObject</span>;
-<span class="comment">//获取最后一个元素</span>
-<span class="keyword">id</span> last = arry<span class="variable">.lastObject</span>;
-</code></pre><p>查找元素在数组中的位置，还可以指定一个range来确定查找的范围</p>
-<pre><code><span class="comment">//查找元素在数组中的位置</span>
-<span class="built_in">NSInteger</span> index = [arry indexOfObject:<span class="string">@"1"</span>];
-<span class="built_in">NSLog</span>(<span class="string">@"%zd"</span>,index);
-
-<span class="comment">//查找元素的位置，可以指定一个range</span>
-<span class="built_in">NSRange</span> arrRange = <span class="built_in">NSMakeRange</span>(<span class="number">1</span>, <span class="number">2</span>);
-<span class="built_in">NSInteger</span> rangeIndex = [arry indexOfObject:<span class="string">@"3"</span> inRange:arrRange];
-<span class="built_in">NSLog</span>(<span class="string">@"%zd"</span>,rangeIndex);
-</code></pre><p>指定一个下标来获取元素</p>
-<pre><code><span class="comment">//指定一个下标获取元素</span>
-<span class="keyword">id</span> element = [arry objectAtIndex:<span class="number">1</span>];
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,element);
-</code></pre><p>添加一个元素<strong>注意 NSArray是不可变的，所以添加的元素不是旧数组，而是创建了一个包含旧数组的新数组</strong>，还可以添加一个数组</p>
-<pre><code><span class="comment">//添加一个元素，返回一个新的数组</span>
-NSArray *lcepy = [arry <span class="string">arrayByAddingObject:</span>@<span class="string">"lcepy"</span>];
-<span class="comment">//添加一个数组，返回一个新的数组</span>
-NSArray *newLcepy = [arry <span class="string">arrayByAddingObjectsFromArray:</span>@[@<span class="string">"lcepy"</span>,@<span class="string">"github.io"</span>]];
-</code></pre><p>格式化一个数组</p>
-<pre><code><span class="comment">//通过一个分隔字符串来组建一个拼接字符串</span>
-<span class="built_in">NSString</span> *ress =  [newLcepy componentsJoinedByString:<span class="string">@"."</span>];
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,ress);
-</code></pre><p>除了for循环，for in循环外的其它几种常用的遍历方式</p>
-<pre><code><span class="comment">//NSEnumerator是一个抽象类，可以使用它的nextObject来遍历元素，通常和while一起使用</span>
-<span class="built_in">NSEnumerator</span> *enumer =  [newLcepy objectEnumerator];
-<span class="built_in">BOOL</span> isEnumer = <span class="literal">YES</span>;
-<span class="keyword">while</span> (isEnumer) {
-    <span class="keyword">id</span> enumerValue = [enumer nextObject];
-    <span class="keyword">if</span> (!enumerValue) {
-        isEnumer = <span class="literal">NO</span>;
-    }
-    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,enumerValue);
-}
-
-[arrays enumerateObjectsUsingBlock:^(<span class="keyword">id</span> obj, <span class="built_in">NSUInteger</span> idx, <span class="built_in">BOOL</span> *stop) {
-    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,obj);
-    <span class="keyword">if</span> (idx &gt; <span class="number">3</span>) {
-        *stop = <span class="literal">YES</span>;
-    }
-}];
-</code></pre><p>假设如果数组中的元素都想向某个方法发送消息，那么可以这么使用，这样的方式，比如在想移除所有子视图这样的场景中非常好用</p>
-<pre><code><span class="comment">//假设有一个数组中的元素都想向某个方法发送消息，那么可以使用makeObjectsPerformSelector类定义了</span>
-[newLcepy <span class="string">makeObjectsPerformSelector:</span><span class="annotation">@selector</span>(length)];
-</code></pre><p>给数组排序的几种方式</p>
-<pre><code><span class="comment">//排序</span>
-<span class="built_in">NSArray</span> *arrays = @[@<span class="number">1</span>,@<span class="number">2</span>,@<span class="number">0</span>,@<span class="number">8</span>,@<span class="number">3</span>,@<span class="number">9</span>,@<span class="number">5</span>];
-
-<span class="comment">//正</span>
-<span class="built_in">NSArray</span> *minMax = [arrays sortedArrayUsingComparator:^<span class="built_in">NSComparisonResult</span>(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) {
-    <span class="keyword">return</span> obj1 &gt; obj2;
-}];
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,minMax);
-<span class="comment">//倒</span>
-<span class="built_in">NSArray</span> *maxMin = [arrays sortedArrayUsingComparator:^<span class="built_in">NSComparisonResult</span>(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) {
-    <span class="keyword">return</span> obj1 &lt; obj2;
-}];
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,maxMin);
-
-<span class="comment">//    [arrays sortedArrayWithOptions:&lt;#(NSSortOptions)#&gt; usingComparator:&lt;#^NSComparisonResult(id obj1, id obj2)cmptr#&gt;]</span>
-
-<span class="comment">//    [arrays sortedArrayUsingFunction:&lt;#(NSInteger (*)(__strong id, __strong id, void *))#&gt; context:&lt;#(void *)#&gt;]</span>
-
-SEL execu = <span class="keyword">@selector</span>(compare:);
-<span class="built_in">NSArray</span> *newArr = [arrays sortedArrayUsingSelector:execu];
-<span class="built_in">NSLog</span>(<span class="string">@"s%@"</span>,newArr);
-</code></pre><p>数组还可以进行筛选，NSPredicate这个类在使用Core Data时会经常用到</p>
-<pre><code><span class="collection">[arrays filteredArrayUsingPredicate:&lt;#<span class="list">(<span class="keyword">NSPredicate</span> *)</span>#&gt;]</span>
-</code></pre><h3 id="NSMutableArray">NSMutableArray</h3><p>创建NSMutableArray只有两种方式，alloc和类方法，这是一个可变的数组，可以增删改滴，也可以排序，NSArray存在的方法，NSMutableArray全部具备，只是它多了可以添加，删除，修改，替换的方法，这里不一一写例子了，可以自己实际操作一下。</p>
-<pre><code><span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">addObject</span>:<span class="value">(id)anObject</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">insertObject</span>:<span class="value">(id)anObject atIndex:(NSUInteger)index</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="tag">removeLastObject</span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectAtIndex</span>:<span class="value">(NSUInteger)index</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">replaceObjectAtIndex</span>:<span class="value">(NSUInteger)index withObject:(id)anObject</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">addObjectsFromArray</span>:<span class="value">(NSArray *)otherArray</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">exchangeObjectAtIndex</span>:<span class="value">(NSUInteger)idx1 withObjectAtIndex:(NSUInteger)idx2</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="tag">removeAllObjects</span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObject</span>:<span class="value">(id)anObject inRange:(NSRange)range</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObject</span>:<span class="value">(id)anObject</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectIdenticalTo</span>:<span class="value">(id)anObject inRange:(NSRange)range</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectIdenticalTo</span>:<span class="value">(id)anObject</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectsFromIndices</span>:<span class="value">(NSUInteger *)indices numIndices:(NSUInteger)cnt <span class="function">NS_DEPRECATED</span>(<span class="number">10</span>_0, <span class="number">10</span>_6, <span class="number">2</span>_0, <span class="number">4</span>_0)</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectsInArray</span>:<span class="value">(NSArray *)otherArray</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectsInRange</span>:<span class="value">(NSRange)range</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">replaceObjectsInRange</span>:<span class="value">(NSRange)range withObjectsFromArray:(NSArray *)otherArray range:(NSRange)otherRange</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">replaceObjectsInRange</span>:<span class="value">(NSRange)range withObjectsFromArray:(NSArray *)otherArray</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">setArray</span>:<span class="value">(NSArray *)otherArray</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">sortUsingFunction</span>:<span class="value">(NSInteger (*)(id, id, void *))compare context:(void *)context</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">sortUsingSelector</span>:<span class="value">(SEL)comparator</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">insertObjects</span>:<span class="value">(NSArray *)objects atIndexes:(NSIndexSet *)indexes</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectsAtIndexes</span>:<span class="value">(NSIndexSet *)indexes</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">replaceObjectsAtIndexes</span>:<span class="value">(NSIndexSet *)indexes withObjects:(NSArray *)objects</span></span>;
-
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">setObject</span>:<span class="value">(id)obj atIndexedSubscript:(NSUInteger)idx <span class="function">NS_AVAILABLE</span>(<span class="number">10</span>_8, <span class="number">6</span>_0)</span></span>;
-
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">sortUsingComparator</span>:<span class="value">(NSComparator)cmptr <span class="function">NS_AVAILABLE</span>(<span class="number">10</span>_6, <span class="number">4</span>_0)</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">sortWithOptions</span>:<span class="value">(NSSortOptions)opts usingComparator:(NSComparator)cmptr <span class="function">NS_AVAILABLE</span>(<span class="number">10</span>_6, <span class="number">4</span>_0)</span></span>;
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-好用的WebKit-framework" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/05/01/好用的WebKit-framework/" class="article-date">
-  	<time datetime="2015-05-01T06:25:36.000Z" itemprop="datePublished">2015-05-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/01/好用的WebKit-framework/">好用的WebKit.framework</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>WebKit是iOS8推出的一个用于替代UIWebView的框架，解决了很多UIWebView的问题，比如释放内存，各种稀奇古怪的bug，而且还内置了手势的处理，一句话：好用。</p>
-<p>注意：<strong>2015年4月更新的苹果审核文档中明确标识，必须要用WebKit替换UIWebView，不然审核拒绝。</strong></p>
-<p>在使用WebKit框架的过程中，自己也遇到了一些问题，有些解决了，有些还未解决。</p>
-<ul>
-<li>WebKit目前还未能在storyboard中直接使用，需要用代码的方式创建，手动添加约束</li>
-<li>对于某些页面如果设置了overflow-x，这可能引起scrollView的contentSize的变化，进一步影响WKWebView的内置手势，swipe返回失效</li>
-<li>目前还未找到怎么处理NSURLCache的问题，也就是页面的缓存机制，看样子好像要自己实现</li>
-</ul>
-<p>如何创建一个WKWebView？首先要在link中引入WebKit.framework，然后使用代码的方式：</p>
-<pre><code>-(<span class="constant">WKWebView</span> *)<span class="constant">WKWebPageView</span>
-{
-    <span class="keyword">if</span> (!_WKWebPageView) {
-        _WKWebPageView = [[<span class="constant">WKWebView</span> alloc] <span class="symbol">initWithFrame:</span><span class="keyword">self</span>.view.bounds];
-        _WKWebPageView.navigationDelegate = <span class="keyword">self</span>;
-    }
-    <span class="keyword">return</span> _WKWebPageView;
-}
-</code></pre><p>WKWebView主要需要实现两个协议WKNavigationDelegate和WKUIDelegate，前一个用于一个页面的加载状态，包括第一次响应成功，加载中，加载完成，加载错误等，后面一个我个人感觉有点意思，主要用于改变UI界面，比如客户端JavaScript使用了一个alert，这个协议可以捕获到，然后使用原生的控件来替代。</p>
-<p>WebKit框架还提供了一个任务配置类WKWebViewConfiguration，跟NSURLSessionConfiguration的使用方式类似,可以重新初始化WKWebView的一些配置。</p>
-<p>WKNavigationDelegate协议，我主要使用了三个来处理我的应用，加载中，加载完成，加载错误的处理：</p>
-<pre><code><span class="tag">-</span>(void)<span class="tag">webView</span>:(WKWebView *)<span class="tag">webView</span> <span class="tag">didStartProvisionalNavigation</span>:(WKNavigation *)<span class="tag">navigation</span>
-{
-
-}
-
-<span class="tag">-</span>(void)<span class="tag">webView</span>:(WKWebView *)<span class="tag">webView</span> <span class="tag">didFinishNavigation</span>:(WKNavigation *)<span class="tag">navigation</span>
-{
-
-}
-
-<span class="tag">-</span>(void)<span class="tag">webView</span>:(WKWebView *)<span class="tag">webView</span> <span class="tag">didFailProvisionalNavigation</span>:(WKNavigation *)<span class="tag">navigation</span> <span class="tag">withError</span>:(NSError *)<span class="tag">error</span>
-{
-
-}
-</code></pre><p>另外一些属性我用KVO来监听：</p>
-<pre><code>[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"estimatedProgress"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
-[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"title"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
-[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"URL"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
-[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"canGoBack"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
-</code></pre><p>它们分别是，页面的加载进度，页面的标题，页面的URL，页面是否回退过</p>
-<p>WKWebView默认是没有开启内置手势的，可以通过allowsBackForwardNavigationGestures来设置</p>
-<p>与JavaScript的交互，我目前主要使用[self.WKWebPageView evaluateJavaScript:&lt;#(NSString <em>)#&gt; completionHandler:&lt;#^(id, NSError </em>)completionHandler#&gt;]来动态改变页面加载完成之后的css样式，还有WKUserScript <em>script = [[WKUserScript alloc] initWithSource:&lt;#(NSString </em>)#&gt; injectionTime:&lt;#(WKUserScriptInjectionTime)#&gt; forMainFrameOnly:&lt;#(BOOL)#&gt;]来创建脚本，它可以明确指定加载前后注入的方式。</p>
-<p><strong>注明：上述的两种创建脚本的方式都是单方向的</strong></p>
-<p>如果我们想互相调用，那么就要实现WKScriptMessageHandler协议了，具体的使用方式可以参考下面给出的的参考资料。</p>
-<p>参考资料：</p>
-<ul>
-<li><a href="http://nshipster.cn/wkwebkit/" target="_blank" rel="external">WKWebView-NSHipster</a></li>
-<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/WebKit/Reference/WKScriptMessageHandler_Ref/index.html" target="_blank" rel="external">WKScriptMessageHandler</a></li>
-<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/WebKit/Reference/WKWebView_Ref/index.html" target="_blank" rel="external">WKWebView</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKWebViewConfiguration_Ref/index.html" target="_blank" rel="external">WKWebViewConfiguration</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKUIDelegate_Ref/index.html" target="_blank" rel="external">WKUIDelegate</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKNavigationDelegate_Ref/index.html" target="_blank" rel="external">WKNavigationDelegate</a></li>
-</ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-iOS的网络编程NSURL" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/04/22/iOS的网络编程NSURL/" class="article-date">
-  	<time datetime="2015-04-22T04:37:14.000Z" itemprop="datePublished">2015-04-22</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/04/22/iOS的网络编程NSURL/">iOS的网络编程NSURL</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>如果只是说iOS中的URL系统，它的东西还不算比较多。但是，如果想用好它，可能还需要具备一些其他方面的知识，特别是多任务编程，比如GCD，NSOperation，NSOperationQueue，NSURLSession等等，而且苹果公司在后期还推了一个叫NSURLComponents的东西，这也是需要去学习的。</p>
-<p>一个简单的URL是这样发送出去的：</p>
-<pre><code><span class="built_in">NSString</span> *path = <span class="string">@"http://lcepy.github.io"</span>;
-<span class="built_in">NSURL</span> *url = [<span class="built_in">NSURL</span> URLWithString:path];
-<span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:url];
-<span class="built_in">NSURLResponse</span> *response = <span class="literal">nil</span>;
-<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
-[<span class="built_in">NSURLConnection</span> sendSynchronousRequest:request returningResponse:&amp;response error:&amp;error];
-</code></pre><p>基本上如果要构造一个request需要先构造一个NSURL对象，然后通过NSURLConnection发送出去。NSURLRequest是一个不可变的对象，默认发送的是GET的请求，如果想要发送POST请求，可以用它可变的NSMutableURLRequest来支持POST请求，包括超时时间等等。</p>
-<p>关于NSURLConnection有三种方式可以发送请求，前面同步版本我们已经看过了，下面是异步和使用协议的方式：</p>
-<pre><code>[<span class="built_in">NSURLConnection</span> sendAsynchronousRequest:request queue:<span class="literal">nil</span> completionHandler:^(<span class="built_in">NSURLResponse</span> *response, <span class="built_in">NSData</span> *data, <span class="built_in">NSError</span> *connectionError) {
-
-}];
-</code></pre><p>协议：</p>
-<pre><code><span class="comment">//实现NSURLConnectionDataDelegate协议</span>
-
-<span class="built_in">NSURLConnection</span> *connection = [<span class="built_in">NSURLConnection</span> connectionWithRequest:request delegate:<span class="keyword">self</span>];
-[connection start];
-
-<span class="comment">//常用的需要实现下面四种方法</span>
-
--(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didFailWithError:(<span class="built_in">NSError</span> *)error
-{
-    <span class="comment">//请求超时，错误的时候</span>
-}
-
--(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveResponse:(<span class="built_in">NSURLResponse</span> *)response
-{
-    <span class="comment">//服务器第一次响应一个response的时候</span>
-}
-
--(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveData:(<span class="built_in">NSData</span> *)data
-{
-    <span class="comment">//传输数据</span>
-}
-
--(<span class="keyword">void</span>)connectionDidFinishLoading:(<span class="built_in">NSURLConnection</span> *)connection
-{
-    <span class="comment">//完成的时候</span>
-}
-</code></pre><p>对于某些任务，比如下载图片，文件等等大数据的时候，可以使用一个临时会话来启动一个请求，也就是构造一个NSURLSession。</p>
-<pre><code><span class="built_in">NSURLSessionConfiguration</span> *configuration = [<span class="built_in">NSURLSessionConfiguration</span> defaultSessionConfiguration];
-<span class="built_in">NSURLSession</span> *session = [<span class="built_in">NSURLSession</span> sessionWithConfiguration:configuration];
-<span class="built_in">NSURLSessionDataTask</span> *task = [session dataTaskWithRequest:request completionHandler:^(<span class="built_in">NSData</span> *data, <span class="built_in">NSURLResponse</span> *response, <span class="built_in">NSError</span> *error) {
-
-    <span class="comment">//请求的结果</span>
-}];
-[task resume];
-</code></pre><p>临时会话的好处是每一个都不是在主线程执行，写的代码量比较少，适合简单的任务。</p>
-<p><strong>参考资料</strong></p>
-<ul>
-<li><a href="http://nshipster.cn/nsurl/" target="_blank" rel="external">NSURL/NSURLComponents</a></li>
-<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSURLRequest_Class/" target="_blank" rel="external">NSURLRequest</a></li>
-<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSURL_Class/index.html" target="_blank" rel="external">NSURL</a></li>
-<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/Cocoa/Reference/Foundation/Classes/NSURLConnection_Class/index.html" target="_blank" rel="external">NSURLConnection</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/" target="_blank" rel="external">NSURLSession</a></li>
-<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSURLResponse_Class/index.html" target="_blank" rel="external">NSURLResponse</a></li>
-<li><a href="http://objccn.io/issue-5-4/" target="_blank" rel="external">从 NSURLConnection 到 NSURLSession</a></li>
-<li><a href="http://ubluesky.com/archives/55" target="_blank" rel="external">NSURL详解</a></li>
-</ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-NSString" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/04/18/NSString/" class="article-date">
-  	<time datetime="2015-04-18T15:05:37.000Z" itemprop="datePublished">2015-04-18</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/04/18/NSString/">NSString</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>NSString是我学习的第一个类，它是iOS中专门处理字符串的一个类，包括有从文件读取，从网络读取，标准C的转换，格式化，大小写转换，查询，写入文件等，当然它也有一个对应的Mutable。</p>
-<p><strong>优化指南：尽早开启ARC，以下都是ARC版</strong></p>
-<p>要使用NSString有三种方式，第一种语法糖方式，第二种alloc方式，第三种使用类方法方式。</p>
-<pre><code><span class="built_in">NSString</span> *str = <span class="string">@""</span>;
-<span class="built_in">NSString</span> *str1 = [[<span class="built_in">NSString</span> alloc] initWithFormat:<span class="string">@"%@"</span>,<span class="string">@"hello"</span>];
-<span class="built_in">NSString</span> *str2 = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@"</span>,<span class="string">@"hello"</span>];
-</code></pre><p>开发中用语法糖或者类方法的方式比较多</p>
-<h3 id="NSString常用">NSString常用</h3><p>查询前缀，后缀</p>
-<pre><code>NSString *<span class="keyword">str</span> = @<span class="string">"http://lcepy.github.io"</span>;
-BOOL isF = [<span class="keyword">str</span> hasPrefix:@<span class="string">"http"</span>];
-BOOL isL = [<span class="keyword">str</span> hasSuffix:@<span class="string">"io"</span>];
-</code></pre><p>创建格式化字符串</p>
-<pre><code><span class="built_in">NSString</span> *formatter = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"http://%@"</span>,<span class="string">@"lcepy.github.io"</span>];
-<span class="built_in">NSString</span> *formatter1 = [[<span class="built_in">NSString</span> alloc] initWithFormat:<span class="string">@"http://%@"</span>,<span class="string">@"lcepy.github.io"</span>];
-</code></pre><p>从网络读取以及响应，当然很少有人会这么干PS :会block主线程</p>
-<pre><code><span class="built_in">NSURL</span> *urlS = [<span class="built_in">NSURL</span> URLWithString:<span class="string">@"http://lcepy.github.io"</span>];
-<span class="built_in">NSString</span> *urlStr = [<span class="built_in">NSString</span> stringWithContentsOfURL:urlS encoding:<span class="built_in">NSUTF8StringEncoding</span> error:<span class="literal">nil</span>];
-<span class="built_in">NSString</span> *urlStr1 = [[<span class="built_in">NSString</span> alloc] initWithContentsOfURL:urlS encoding:<span class="built_in">NSUTF8StringEncoding</span> error:<span class="literal">nil</span>];
-[urlStr writeToURL:urlS atomically:<span class="literal">YES</span> encoding:<span class="built_in">NSUTF8StringEncoding</span> error:<span class="literal">nil</span>];
-</code></pre><p>从本地文件中读取以及写入</p>
-<pre><code><span class="built_in">NSString</span> *path = [[<span class="built_in">NSBundle</span> mainBundle] pathForResource:<span class="string">@"lcepy"</span> ofType:<span class="string">@"html"</span>];
-<span class="built_in">NSString</span> *fileStr = [<span class="built_in">NSString</span> stringWithContentsOfFile:path encoding:<span class="built_in">NSUTF8StringEncoding</span> error:<span class="literal">nil</span>];
-<span class="built_in">NSString</span> *fileStr1 = [[<span class="built_in">NSString</span> alloc] initWithContentsOfFile:path encoding:<span class="built_in">NSUTF8StringEncoding</span> error:<span class="literal">nil</span>];
-[fileStr writeToFile:str atomically:<span class="literal">YES</span> encoding:<span class="built_in">NSUTF8StringEncoding</span> error:<span class="literal">nil</span>];
-</code></pre><p>字符串的比较，因为OC是C语言的超集，所以字符串有两种比较方式，指针一样，还有指针一样内容一样的比较，而==一般都不建议使用，它比较的是引用，NSString有它的比较方法。</p>
-<pre><code>isEqualToString
-
-<span class="type">NSString</span> *astring01 = @<span class="string">"This is a String!"</span>;
-<span class="type">NSString</span> *astring02 = @<span class="string">"This is a String!"</span>;
-<span class="type">BOOL</span> <span class="literal">result</span> = [astring01 compare:astring02] == <span class="type">NSOrderedSame</span>;    //<span class="type">NSOrderedSame</span>判断两者内容是否相同
-<span class="type">NSLog</span>(@<span class="string">"result:%d"</span>,<span class="literal">result</span>);
-<span class="type">BOOL</span> result1 = [astring01 compare:astring02] == <span class="type">NSOrderedAscending</span>;    //<span class="type">NSOrderedAscending</span>判断两对象值的大小(按字母顺序进行比较，astring02大于astring01为真)
-<span class="type">NSLog</span>(@<span class="string">"result:%d"</span>,result1);
-<span class="type">BOOL</span> result2 = [astring01 compare:astring02] == <span class="type">NSOrderedDescending</span>;    //<span class="type">NSOrderedDescending</span>判断两对象值的大小(按字母顺序进行比较，astring02小于astring01为真)
-<span class="type">NSLog</span>(@<span class="string">"result:%d"</span>,result2);
-</code></pre><p>大小写以及首字母大写</p>
-<pre><code><span class="built_in">NSString</span> *io = <span class="string">@"hello"</span>;
-<span class="built_in">NSString</span> *IO = <span class="string">@"HELLO"</span>;
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,[io uppercaseString]);
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,[IO lowercaseString]);
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,[io capitalizedString]);
-</code></pre><p>查询截取PS—&gt;<strong>我觉得NSString使用最频繁的一处，查询截取是在开发中无法避免的事项，它非常有用</strong>其实，在使用查询这一系列的方式时，它和NSRange有紧密相连的关系。NSRange是一个结构体，用来描述起始位置，以及计数。</p>
-<pre><code><span class="built_in">NSString</span> *str = <span class="string">@"http://lcepy.github.io"</span>;
-<span class="built_in">NSRange</span> httpRange =  [str rangeOfString:<span class="string">@"http"</span>]; <span class="comment">//返回一个range结构体</span>
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,<span class="built_in">NSStringFromRange</span>(httpRange));
-
-
-<span class="built_in">NSRange</span> ioRange = [str rangeOfString:<span class="string">@"io"</span>];
-<span class="built_in">NSString</span> *subs = [str substringWithRange:<span class="built_in">NSMakeRange</span>(ioRange<span class="variable">.location</span>, ioRange<span class="variable">.length</span>-<span class="number">1</span>)]; <span class="comment">//从指定位置开始截取字符串</span>
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,subs);
-
-<span class="comment">//从字符串开头一直截取到指定位置</span>
-<span class="built_in">NSString</span> *indexStr = [str substringToIndex:<span class="number">4</span>];
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,indexStr);
-
-<span class="comment">//从指定位置开始截取到最后的字符串（包括）</span>
-<span class="built_in">NSString</span> *lastStr = [str substringFromIndex:<span class="number">4</span>];
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,lastStr);
-</code></pre><p>扩展路径以及获取扩展文件名</p>
-<pre><code><span class="built_in">NSString</span> *doc = <span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>)[<span class="number">0</span>];
-<span class="built_in">NSString</span> *filePath = [doc stringByAppendingPathComponent:<span class="string">@"PhotoCache"</span>];
-<span class="built_in">NSString</span> *file = <span class="string">@"~/lcepy.io"</span>;
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,[file pathExtension]);
-</code></pre><h3 id="NSMutableString常用">NSMutableString常用</h3><p>注意PS—&gt;<strong>NSString可以使用的方法，Mutable版全部具备，Mutable版的方法，NSString不一定有</strong></p>
-<p>在字符串最后插入或者格式化插入字符串</p>
-<pre><code>NSMutableString *str1 = [NSMutableString <span class="string">stringWithString:</span>@<span class="string">"http://lcepy.github.io"</span>];
-[str1 <span class="string">appendString:</span>@<span class="string">"#login"</span>];
-[str1 <span class="string">appendFormat:</span>@<span class="string">"%@"</span>,@<span class="string">"#login"</span>];
-NSLog(@<span class="string">"%@"</span>,str1);
-</code></pre><p>在指定的位置插入字符串</p>
-<pre><code><span class="list">[<span class="keyword">str1</span> insertString:@<span class="string">"?id=fjdkfjkgfgi384jkg"</span> atIndex:str1.length]<span class="comment">;</span>
-NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,str1)</span><span class="comment">;</span></span>
-</code></pre><p>在指定的范围内替换</p>
-<pre><code>NSRange login = [str1 <span class="string">rangeOfString:</span>@<span class="string">"#login"</span>];
-[str1 <span class="string">replaceCharactersInRange:</span>login <span class="string">withString:</span>@<span class="string">"#logou"</span>];
-NSLog(@<span class="string">"%@"</span>,str1);
-</code></pre><p>延伸阅读：</p>
-<ul>
-<li><a href="http://blog.devtang.com/blog/2012/02/14/nsstring-java-like-wrapper/" target="_blank" rel="external">给NSString添加java风格：（感觉有点意思）</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSString_Class/index.html" target="_blank" rel="external">NSString</a></li>
-</ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-NSURLProtocol" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/04/13/NSURLProtocol/" class="article-date">
-  	<time datetime="2015-04-13T03:38:06.000Z" itemprop="datePublished">2015-04-13</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/04/13/NSURLProtocol/">NSURLProtocol</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>阅读资料：</p>
-<ul>
-<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtocol_Class/index.html" target="_blank" rel="external">Apple Foundation NSURLProtocol</a></li>
-<li><a href="http://nshipster.cn/nsurlprotocol/" target="_blank" rel="external">http://nshipster.cn/nsurlprotocol/</a></li>
-</ul>
-<p>正如NSHipster在上篇文章所写的一样，iOS离不开网络，那么这就需要网络编程。cocoa提供了一系列的API来操作网络，比如NSURL，NSURLRequest，NSURLSession等等，以及处理网络的GCD，NSOperation多任务处理。</p>
-<p>那么NSURLProtocol，它有什么用呢？官方给它的解释是，可以重新定义已经加载的URL的行为或者定义一个新的URL。换句话来说，就是这个类可以监管应用的网络活动，只要是通过URL来进行的。</p>
-<p>NSURLProtocol是一个抽象类，也就是说它需要一个子类继承它才可以正常工作，关于怎么使用可以阅读NSHipster的文章，把子类注册到NSURLProtocol中。</p>
-<pre><code>+ (<span class="tag">void</span>)<span class="rule"><span class="attribute">consolelog</span>:<span class="value">(UITextView *)debugText
-{
-    debug = debugText</span></span>;
-    <span class="attr_selector">[NSURLProtocol registerClass:self]</span>;
-}
-</code></pre><h3 id="案例需求，监管应用的URL加载系统，并且支持web_client_console_log">案例需求，监管应用的URL加载系统，并且支持web client console log</h3><p>案例可以在Github中查看<a href="https://github.com/lcepy/MFLog" target="_blank" rel="external">MFLog</a></p>
-<pre><code>+ <span class="comment">(BOOL)</span>registerClass:<span class="comment">(Class)</span>protocolClass
-</code></pre><p>把子类注册到NSURLProtocol中</p>
-<pre><code>+ (<span class="keyword">void</span>)unregisterClass:(<span class="keyword">Class</span>)protocolClass
-</code></pre><p>把子类从NSURLProtocol中移除</p>
-<p>NSURLProtocol提供了一系列的方法来操作一个URL Data，先看其一，一个静态方法。</p>
-<pre><code>+ (<span class="built_in">BOOL</span>)canInitWithRequest:(<span class="built_in">NSURLRequest</span> *)request
-</code></pre><p>canInitWithRequest <strong>注意，这些是覆盖父类NSURLProtocol的静态方法</strong>是系统询问，是否处理该请求URL，如果返回NO，不处理。如果返回YES，子类进一步控制。</p>
-<pre><code>+ <span class="list">(<span class="keyword">NSURLRequest</span> <span class="variable">*)canonicalRequestForRequest:(NSURLRequest *</span>)</span>request
-</code></pre><p>返回请求的原始request</p>
-<pre><code>- <span class="list">(<span class="keyword">void</span>)</span>startLoading
-</code></pre><p>加载此次请求，可以通过self.request获取当前URL的request对象</p>
-<pre><code>- <span class="list">(<span class="keyword">void</span>)</span>stopLoading
-</code></pre><p>此次请求完成时，可以在这个方法中处理</p>
-<p>每一个NSURLProtocol都有一个client属性，这个属性是NSURLProtocolClient。另外，还可以实现NSConnectionDataDelegate协议，把NSURLProtocol与NSURLConnection链接起来，这样就可以在statLoading调用之后，系统将回调NSConnectionDataDelegate中定义的各种方法，这个在自定义时非常有用。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-纪录开发第一个iOS客户端遇见的坑" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/28/纪录开发第一个iOS客户端遇见的坑/" class="article-date">
-  	<time datetime="2015-03-28T06:51:34.000Z" itemprop="datePublished">2015-03-28</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/28/纪录开发第一个iOS客户端遇见的坑/">纪录开发第一个iOS客户端遇见的坑</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>来到新公司做的第一个产品就是iOS客户端，我负责的是基于LeanCloud SDK开发的售后服务IM系统，也就是一个聊天的模块。第一次比较纯粹的在工作中，写Objective-c，遇到了一些坑，解决之后才发现原来是这么回事，而且还复习了它的基础语法知识。</p>
-<p><strong>block的问题</strong></p>
-<p>引用资料：</p>
-<ul>
-<li><a href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/" target="_blank" rel="external">谈Objective-C Block的实现</a></li>
-<li><a href="http://www.cnbluebox.com/?p=255" target="_blank" rel="external">Block防止循环引用</a></li>
-</ul>
-<p>本来我想使用Block来解决通信的问题，后来我发现语法以及对Block的理解有些忘记了。基础不扎实，带来了严重的后果。Block使用^来声明，用;来结束一个完整的Block，缺一不可。</p>
-<pre><code><span class="keyword">void</span> (^ blockde)(<span class="built_in">NSString</span> *,<span class="built_in">NSString</span> *) = ^(<span class="built_in">NSString</span> *test1,<span class="built_in">NSString</span> *test2){
-    <span class="built_in">NSString</span> *log = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@,%@"</span>,test1,test2];
-    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,log);
-};
-</code></pre><p>Block的语法有些难度，特别是灵活运用的时候，但是记住一点，先声明返回值，然后两个括号用来描述这个Block的签名，以及参数类型，如果是OC对象，需要写上指针符号。如果没有签名，可以什么也不写。<strong>有一个情况例外，利用typedef定义的block必须写上签名</strong></p>
-<p>我想在动态方法中提供一个Block来处理一些事情，定义它有两种写法。</p>
-<p>第一种写法是利用typedef定义一个别名，描述还是第一项声明返回值参数，第二项别名签名，第三项传入的参数类型。</p>
-<pre><code><span class="keyword">typedef</span> <span class="built_in">NSString</span> *(^handlerBlock)(<span class="built_in">NSDictionary</span> * dic,<span class="built_in">NSArray</span> * arr);
-
--(<span class="keyword">void</span>)sendMessageText:(handlerBlock)block
-{
-    block();
-}
-</code></pre><p>第二种写法是直接写在动态方法中，方法的参数形式一般都是()名字，所以block的声明就要写在一个圆括号中，这种写法可以省略block的签名。</p>
-<pre><code>-<span class="params">(void)</span>setSource:<span class="params">(NSString *)</span> source andBlock:<span class="params">(void<span class="params">(^)</span><span class="params">(NSString *treme)</span>)</span> block
-{
-    block<span class="params">()</span>;
-}
-</code></pre><p>因为公司的项目都是ARC的，所以copy就省略了，其他方面主要是需要避免循环引用的问题，比如使用__weak关键字给self对象。</p>
-<p><strong>导入第三方库的问题</strong></p>
-<p>这个IM模块是基于第三方SDK实现的，所以需要导入第三方库，在这里也踩了下坑。LeanCloud依赖了其他五个框架，需要手动的添加到Link Binary With Libraries中，必须得承认学艺不精的后果是这个编译的错，琢磨了很久，而且还需要把openssl的include的路径添加到Head中。</p>
-<p>关于Xcode的使用，一定要把cocoaChina的那个Xcode系列阅读完。</p>
-<p><strong>开发者证书的问题</strong></p>
-<p>根据以往的经验想真机调试，那就必须的添加开发者证书，于是按照老旧的流程，去<a href="https://developer.apple.com/account/ios/certificate/certificateList.action" target="_blank" rel="external">https://developer.apple.com/account/ios/certificate/certificateList.action</a> 下载证书，然后添加设备UID，接着添加Profile一路Next。</p>
-<p>现在这些步骤真的不需要了，在Xcode中登录自己的Apple ID，然后在项目的Team选项中选择正确的签名，Xcode自动下载，自动匹配设备UID，一切自动化，当然首先要把设备连接好。</p>
-<p>它不是坑，而是因为自己不知道，在安装证书时发现了现在有这么方便的流程。    </p>
-<p><strong>访问相册或者摄像头返回给web端</strong>    </p>
-<p>引用资料：</p>
-<ul>
-<li><a href="http://blog.devtang.com/blog/2012/02/22/use-gcd/" target="_blank" rel="external">GCD</a></li>
-</ul>
-<p>在拿到图片image对象后，怎么处理，是一个非常头疼的问题。LeanCloud的AVIMImageMessage类需要的是一个filePath而不是UIImage或者NSData对象，iOS应用是没有权限访问应用沙盒之外的东西的。首先想到的解决办法是把这个UIImage写入到应用内的Documents目录下的Photos目录，然后把这个地址发送给AVIMImageMessage对象。考虑到文件IO操作，还会对应用界面卡顿，所以把这个任务委托给了GCD去调度。</p>
-<p>在使用dispatch_async之前，还需要处理一个问题，那就是UI展示的问题。大坑在这里，我们的UI是web的。所以对于图片，调用UIImageJPEGRepresentation去压缩体积，然后再转成base64，把这个base64发送给客户端。</p>
-<p>为什么说这里是坑呢？因为它是一个IM系统，操作会非常的频繁，最关键的是展示是在web中，它的交互流程很坑。</p>
-<p><strong>文件处理</strong></p>
-<ul>
-<li><a href="http://nshipster.cn/nsfilemanager/" target="_blank" rel="external">NSFileManager</a></li>
-</ul>
-<p>针对每一个用户都应该在应用沙盒内有它对应的一个缓存文件，它必须写入在Documents目录下，当人在获取之前，可以先判断一下，文件是否存在。</p>
-<p><strong>使用ionic添加插件时的巨坑</strong></p>
-<p>在升级了ionic为1.3.18之后，它的plugin编译时需要手动添加，据说这个版本他们去掉了自动添加的模块，于是写在配置文件中的插件，需要在platform add ios后，再ionic plugin add im手动添加到编译环境中，每一个都需要重复上述的动作，最后ionic build ios。</p>
-<p>希望下一个版本，ionic能把这个补上吧。</p>
-<p><strong>debug模式|重构IM|Date处理</strong></p>
-<p>debug workflow 如果选择了汇编debug，进入的是直接查看内存地址的debug模式，这种模式某些情况下有用。本来使用web来写IM我们发现它的性能实在是不能忍受，于是用OC把它重构了。</p>
-<p>使用NSDate来处理时间的时候，还需要NSDateFormatter来格式化，而且拿到的毫秒还需要除以1000，因为OC只处理秒单位。</p>
-<p><strong>代码布局聊天界面的cell</strong></p>
-<p>利用CGFloat mainScreenWidth = [UIScreen mainScreen].bounds.size.width来获取屏幕的宽度，然后计算自定义的cell，统计出来一个高度，在-(CGFloat)tableView:(UITableView <em>)tableView heightForRowAtIndexPath:(NSIndexPath </em>)indexPath 返回给TableView。</p>
-<pre><code>-(<span class="built_in">CGFloat</span>)tableView:(<span class="built_in">UITableView</span> *)tableView heightForRowAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath
-{
-    MissIMFrame *missIMFrame = [<span class="keyword">self</span><span class="variable">.modelManager</span><span class="variable">.dataSource</span> objectAtIndex:indexPath<span class="variable">.row</span>];
-    <span class="keyword">return</span> missIMFrame<span class="variable">.cellHeight</span>;
-}
-</code></pre><p><strong>解析历史纪录</strong></p>
-<p>第三方的leanCloud拉取的历史纪录全部是字符串，还要进一步的处理，转成JSON，这个地方主要是使用了NSJSONSerialization来处理，判断解析的错误，如果错误了，说明它是一个真正的文本，如果是正确的，那么说明它是一个可以转化为字典的字符串，然后再进一步处理。</p>
-<p><strong>滚动上拉加载历史纪录</strong></p>
-<p>实现scrollView的三个协议</p>
-<pre><code>-(<span class="keyword">void</span>)scrollViewWillBeginDragging:(<span class="built_in">UIScrollView</span> *)scrollView
-{
-    <span class="comment">//手指触摸屏幕，准备滚动的那一刻</span>
-    <span class="built_in">NSLog</span>(<span class="string">@"手指滑动开始－－－－－的那一瞬间"</span>);
-    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,<span class="built_in">NSStringFromCGPoint</span>(scrollView<span class="variable">.contentOffset</span>));
-}
-
--(<span class="keyword">void</span>)scrollViewWillEndDragging:(<span class="built_in">UIScrollView</span> *)scrollView withVelocity:(<span class="built_in">CGPoint</span>)velocity targetContentOffset:(<span class="keyword">inout</span> <span class="built_in">CGPoint</span> *)targetContentOffset
-{
-    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,<span class="built_in">NSStringFromCGPoint</span>(scrollView<span class="variable">.contentOffset</span>));
-}
-
--(<span class="keyword">void</span>)scrollViewDidEndDragging:(<span class="built_in">UIScrollView</span> *)scrollView willDecelerate:(<span class="built_in">BOOL</span>)decelerate
-{
-    <span class="comment">//手指离开屏幕，放下的那一刻</span>
-    <span class="built_in">NSLog</span>(<span class="string">@"刷动到顶部，放下的时候"</span>);
-    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,<span class="built_in">NSStringFromCGPoint</span>(scrollView<span class="variable">.contentOffset</span>));
-    <span class="keyword">if</span> (scrollView<span class="variable">.contentOffset</span><span class="variable">.y</span> &lt; <span class="number">0</span> &amp;&amp; <span class="keyword">self</span><span class="variable">.historyTimeId</span> &gt; <span class="number">0</span>) {
-        <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.isScroll</span>) {
-            <span class="keyword">self</span><span class="variable">.application</span><span class="variable">.networkActivityIndicatorVisible</span> = <span class="literal">YES</span>;
-            [<span class="keyword">self</span><span class="variable">.mainUI</span><span class="variable">.MissIMActivity</span> startAnimating];
-            <span class="keyword">self</span><span class="variable">.isScroll</span> = <span class="literal">NO</span>;
-            [<span class="keyword">self</span> fetchHistoryMessage:<span class="keyword">self</span><span class="variable">.conversationId</span> timeId:<span class="keyword">self</span><span class="variable">.historyTimeId</span>];
-        }
-    }
-}
-</code></pre><p><strong>UIApplication</strong></p>
-<p>在info.plist文件中设置Application dose not run is background 设置为YES，就可以在应用退出的时候进行存盘了</p>
-<p><strong>Category添加自定义属性</strong></p>
-<p>分类只能在运行时，利用它的机制，动态的添加属性，使用@dynamic关键字，和两个函数objc_setAssociatedObject，objc_getAssociatedObject。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-陀螺" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/19/陀螺/" class="article-date">
-  	<time datetime="2015-03-19T08:25:26.000Z" itemprop="datePublished">2015-03-19</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/19/陀螺/">陀螺</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在生活中遇到了很多挫折，一个无所事事的状态，其实非常的糟糕，为什么这么说，因为人一旦无所谓，就会无所畏惧，就会混乱。也许走入社会一直以来，都非常的顺利，没有经历这些挫折，根本无法了解这个社会的残酷。</p>
-<p>最近一直喜欢听李健的歌，特别是这首《陀螺》，很真实的写照。人，应该要学会陀螺的心态，把一些负面的情绪，心态，全部转走。为什么？因为只有这样，才能调整好自己，用一个很轻松的状态去面对自己。陀螺，其实它一直在旋转，就好比，它会面对很多不断接触的东西，喜怒哀乐，而且一直停不下来。它要在沉默中转，在孤独中转，在欢笑中转，在泪水中转。</p>
-<p>如果我能陀螺的心，那该多好，但我还是我，一个非常任性的人。喜欢了，特别的喜欢。不喜欢了，特别的不喜欢。这样的对错是非观念非常强烈的一个人，在社会中，摸爬滚打，是非常不利的。我的情绪都表现在脸上，无形中，或许得罪或者让别人感觉到难堪。但是，如果我有一个陀螺的心，我能很从容，荣辱不惊的面对这些，迟早要转过这一页，不是么？</p>
-<p>李健不愧是一个用诗唱歌的人，这样的情绪，直透人心。是非曲折，道理谁都会明白，但是往往处理起来，却又很意想不到。时至今日，我该有一个陀螺的心了，不能再像以前那样，如此任性。虽然这些年里，欢笑，泪水相交织，度过了人生，很重要的一个时刻。从一个平平无奇的过路人，到了一个人爱编程，分享，写作的程序员，其实背后的付出，真的是，可以用‘心酸’二字。真正的摸爬滚打的真谛，我还未触及，因为这一路，有人帮助，有人提携，有人教授。于是，有了一次，比较真正的面对自我的过程。来到北京，去面试，去找工作。</p>
-<p>人是一个非常复杂的情绪化的动物，人也是一个很有欲望的动物。但是，为什么说，欲望能促进进步呢？很可能，欲望会转化为动力，动力就能推动人自身的进步。我有欲望吗？其实是有的，但是这样的欲望，又有些不切实际。时间，就像是一把锁，已经把过去的锁住了。我们没法改变时间，也没法去打开这把锁。而我欲望，这看来，确实很傻逼。</p>
+<p>我都不知道，这是创业吗，还是我来给你们打工的。满腔热血，换来的是冷漠。</p>
+<p>看看我跑来的成果，那又怎么样？农业怎么了？不体面吗？我们之间一点契约精神都没，说不搞就不搞撂挑子了。每个人都有自己的小盘算，是，我理解，那又怎么样？每次到了关键时刻，就开始退缩了。</p>
+<p>各种理由，你爸妈不想你辞职，我今年还想拿年终奖，我还有点别的事情，那你来创个鬼的业，之前约定好的一起回来，说翻脸就翻脸，又只有我一个人回来。</p>
+<p>我哥哥说的对，意料之中，创业你还太嫩了。</p>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/action/IMG_0575.png" alt=""></p>
+<p>如果创业，年终奖这种风险，时间风险，你都承受不了，那你还来创个毛的业，都想赚钱又不想出力，天朝这种好事，怎么就轮不到我呢。</p>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/action/IMG_0573.png" alt=""></p>
+<p>在离开北京时，我们四个人一起商量着能做些什么，于是我们想到了食品安全，我们想做生态农业，想做安全，放心的食材，我们觉得这非常有意义。</p>
+<p>我们想到了在雪峰山这个大生态圈中去研究食材，我们想到了如何利用好H5技术去推广，营销，我们想到了如何利用好雪峰山这个生态圈去研究共生系统，我们想到了如何利用好移动互联网去跟需求安全，放心食材的客户对接。于是，我们下了决心，希望能朝着我们预期的目标前进。</p>
+<p>在这里，我就犯了自己第一个错误，前期我很主动的去承担了评估的工作，在网上找数据，联系农业专家，给在林业局上班的表哥打电话要来雪峰山的土壤评估，能否去养殖和种植什么，看看市场的行情是怎样的。</p>
+<p>我把这些东西整理成了一个小册子，用邮件写给了我的合伙人。</p>
+<p>第一步总是美好和圆满的，对于前景我们也很有信心把它做好，而且如果我们做的好还能带动我们的族人一起，这个积极意义就更大了，不是么。</p>
+<p>有了第一步的基础，很顺利的进入预估期，开始预估我们能承包多少地，我们的微信端和官方网站的开发周期，我们能种植养殖什么，确定了这一个目标，我们约定好了七月初六月底一起回到家乡，开创我们的事业。</p>
+<p>6月23日，我从北京辞职，回到了雪峰山，开始进行筹备工作，到这里为止，噩梦来了。</p>
+<hr>
+<p>说好的一起回到家乡，却只有我一个人，那么就一个人吧，我又开始迁就我的团队成员，开始了漫长的一个人系列。</p>
+<p>最后的结局是什么呢？一个合伙人的家里不允许他回来，因为农业，农民是不体面的工作，如果回来搞这个大学就白读了。一个合伙人希望能拿了年终奖再回来，不想前半年的时间都浪费了。说到这里，前面的好像都白说了，因为我回来了，损失的只是我一个人，前前后后花费的精力和金钱。</p>
+<p>哥哥说的那句话，真的很讽刺我，我确实太嫩了。</p>
+<p>我记得我们小时候都不是这样的，为什么人长大了，变成了这样。</p>
+<p>很希望，我们还是这样的老房子，什么都未变，可是确实变了。</p>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/action/IMG_0587.png" alt=""></p>
 
       
     </div>
@@ -1339,9 +353,269 @@ NSLog(@<span class="string">"%@"</span>,str1);
 
 
   
+    <article id="post-利用AVFoundation实现扫描条码" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/06/16/利用AVFoundation实现扫描条码/" class="article-date">
+  	<time datetime="2015-06-16T09:39:05.000Z" itemprop="datePublished">2015-06-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/16/利用AVFoundation实现扫描条码/">利用AVFoundation实现扫描条码</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>iOS7中添加了一组原生支持扫描的组件，通过AVCaptureMetaDataOutput可以扫描各式各样的QR码，条形码，你所需要做的就是写好UI，并将它设置为AVCaptureSession的输出，再实现相应的协议即可。而且，这玩意可以跟Passbook相结合，有许多潜力可以实现，官方也非常推荐大家使用这个API。</p>
+<blockquote>
+<p>import AVFoundation</p>
+<p>实现 AVCaptureMetadataOutputObjectsDelegate协议</p>
+</blockquote>
+<p>要实现这个扫描器，首先需要导入AVFoundation框架，这是一个专门处理音频，视频的框架。</p>
+<p>创建一个AV设备，使用AVMediaTypeVideo常量</p>
+<pre><code>let captureDevice = AVCaptureDevice.<span class="function"><span class="title">defaultDeviceWithMediaType</span><span class="params">(AVMediaTypeVideo)</span></span>
+</code></pre><p>然后建立一个输入</p>
+<pre><code>let <span class="tag">input</span>:AnyObject! = AVCaptureDeviceInput.<span class="function"><span class="title">deviceInputWithDevice</span><span class="params">(captureDevice, error: &amp;error)</span></span>
+</code></pre><p>现在，我们来看一看，最关键的部分，创建输出会话，不过在此之前，我们需要先使用AVCaptureSession创建一个会话，将输入端添加到会话中。</p>
+<pre><code><span class="keyword">self</span><span class="variable">.captureSession</span> = <span class="built_in">AVCaptureSession</span>()
+<span class="keyword">self</span><span class="variable">.captureSession</span>?<span class="variable">.addInput</span>(input as! <span class="built_in">AVCaptureInput</span>)
+</code></pre><p>接着，我们开始使用AVCaptureMetadataOutput创建一个输出端</p>
+<pre><code>let captureMetadataOutput = <span class="function"><span class="title">AVCaptureMetadataOutput</span><span class="params">()</span></span>
+captureMetadataOutput.<span class="function"><span class="title">setMetadataObjectsDelegate</span><span class="params">(self, queue: dispatch_get_main_queue()</span></span>)
+captureMetadataOutput<span class="class">.metadataObjectTypes</span> = [AVMetadataObjectTypeEAN13Code,AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode128Code,AVMetadataObjectTypeQRCode]
+</code></pre><p>指定要实现的扫描常量，添加一个协议，GCD可以使用在主线程中，并把它添加到会话中。</p>
+<pre><code><span class="tag">self</span><span class="class">.captureSession</span>?<span class="class">.addOutput</span>(<span class="tag">captureMetadataOutput</span>)
+</code></pre><p>然后我们还需要使用AVCaptureVideoPreviewLayer创建一个画布，用来显示扫描的展示区域，并添加到当前视图的layer中。</p>
+<pre><code><span class="keyword">self</span><span class="variable">.videoPreviewLayer</span> = <span class="built_in">AVCaptureVideoPreviewLayer</span>(session: <span class="keyword">self</span><span class="variable">.captureSession</span>)
+<span class="keyword">self</span><span class="variable">.videoPreviewLayer</span>?<span class="variable">.videoGravity</span> = <span class="built_in">AVLayerVideoGravityResizeAspect</span>
+<span class="keyword">self</span><span class="variable">.videoPreviewLayer</span>?<span class="variable">.frame</span> = <span class="keyword">self</span><span class="variable">.view</span><span class="variable">.bounds</span>
+<span class="keyword">self</span><span class="variable">.view</span><span class="variable">.layer</span><span class="variable">.addSublayer</span>(<span class="keyword">self</span><span class="variable">.videoPreviewLayer</span>)
+</code></pre><p>最后启动这个会话</p>
+<pre><code><span class="tag">self</span><span class="class">.captureSession</span>?<span class="class">.startRunning</span>()
+</code></pre><p>到这里，整个扫描条码的程序就已经准备就绪了，但是如果你还需要获取扫描相应的结果，那么需要实现它的协议，并实现func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!, fromConnection connection: AVCaptureConnection!) {} 方法。</p>
+<p>metadataObjects是一个AnyObject的数组，在这里，还需要进步的判断，获取第一个元素转化为AVMetadataMachineReadableCodeObject，通过type，可以判断扫描的类型，是二维码，还是条形码，还是其他，而值，则是在AVMetadataMachineReadableCodeObject的stringValue属性。</p>
+<pre><code><span class="keyword">let</span> metadata = metadataObjects[<span class="number">0</span>] <span class="keyword">as</span>! AVMetadataMachineReadableCodeObject
+<span class="comment">//metadata.type</span>
+<span class="comment">//metadata.stringValue</span>
+</code></pre><p>扫描的Demo可以查看<a href="https://github.com/lcepy/Mockingbird" target="_blank" rel="external">Mockingbird</a></p>
+<h2 id="在Objective-C项目中使用">在Objective-C项目中使用</h2><p>runpath $(inherited)@executable_path/Frameworks</p>
+<p>三步走图片，可查</p>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/iOS/bridging-header-file.png" alt=""></p>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/iOS/defines-module-yes.png" alt=""></p>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/iOS/import-swift-file.png" alt=""></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-上架AppStore的经历" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/05/27/上架AppStore的经历/" class="article-date">
+  	<time datetime="2015-05-27T04:43:22.000Z" itemprop="datePublished">2015-05-27</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/27/上架AppStore的经历/">上架AppStore的经历</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="开发之前的准备">开发之前的准备</h2><p>关于证书，以及流程，前人已有总结，请阅读</p>
+<ul>
+<li><a href="http://www.jianshu.com/p/6c75a6e53605" target="_blank" rel="external">iOS App提交指南(一)</a></li>
+<li><a href="http://www.jianshu.com/p/c7cf65911bc1?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=mobile_author_hots&amp;utm_source=recommendation" target="_blank" rel="external">iOS App提交指南(二)-协议、税务和银行业务</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5OTM0MzIwMQ==&amp;mid=206718165&amp;idx=3&amp;sn=860ec99f81da19cd3d6faffe6d85083b#rd" target="_blank" rel="external">iOS证书说明和发布内购流程整理</a></li>
+</ul>
+<h2 id="准备开发">准备开发</h2><ul>
+<li>在开发码农周刊应用之前，先写了一份PRD，把需求写清楚，然后利用storyboard画了一个简单的原型。PRD List我用的是<a href="https://trello.com/" target="_blank" rel="external">trello</a></li>
+<li>图片资源我统一用Images.xcassets来进行管理</li>
+<li><a href="http://pixabay.com/" target="_blank" rel="external">pixabay</a>搜索一些免费的资源</li>
+<li><a href="http://makeappicon.com/" target="_blank" rel="external">makeappicon</a>生成app的启动icon</li>
+<li><a href="https://icons8.com/" target="_blank" rel="external">icons8</a>下载了一份iOS的icon</li>
+<li><a href="https://appscreens.io/" target="_blank" rel="external">appscreens</a>这个工具用于生成需要提交到AppStore审核的预览图片</li>
+</ul>
+<h2 id="准备提交">准备提交</h2><p>在Build Settings Code Signing中设置 Code Signing Identity和Provisioning Profile，用你在apple申请的发布证书和发布描述，然后把Device选择为真机。</p>
+<p><img src="http://websources.qiniudn.com/iOS/codsigning.png" alt=""></p>
+<p>选择Product中的Archive构建发布版本，可以直接点击Submit to App Store</p>
+<p><img src="http://websources.qiniudn.com/iOS/archives.png" alt=""></p>
+<h2 id="构建错误与警告">构建错误与警告</h2><p>在构建发布版本时Xcode会检测发布App所具备的逻辑，下面是我遇到的错误和警告</p>
+<p>error itms -90096 : your binary is not optimized for iphone5 new iPhone apps and app updates submitted must support the 4-inch display on iphone5 and must include a launch image with the -568h size modifier immediately following the<basename> portion of the launch images’ filename. launch images must be png files and located at the top level of your bundle or provided within each. lproj folder if you localize your launch images learn more about iPhone 5 support and app launch images by reviewing the ‘iOS Human interface guidelines at</basename></p>
+<p>上传启动动画PNG图片，另外还给出了三个解决方案参考的URL</p>
+<p><a href="https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/IconsImages/IconsImages.html" target="_blank" rel="external">参考一</a><a href="https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/LaunchImages.html#//apple_ref/doc/uid/TP40006556-CH22-SW1" target="_blank" rel="external">参考二</a><a href="https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/IconMatrix.html#//apple_ref/doc/uid/TP40006556-CH27-SW1" target="_blank" rel="external">参考三</a></p>
+<p>error itms-4238 redundant binary upload. there already exists a binary upload with build version ‘1’ for train ‘1.0’ at software assets/prereleasesoftwareasset</p>
+<p>因为想要提交的版本已经存在，更改build版本号</p>
+<p>error itms-90032: invalid image path - no image found at the path referenced under key CFBundleIconFiles:’xxx</p>
+<p>存在一个不使用的配置，在Info中删除</p>
+<p>WARNING ITMS:iTunes Store operation succeeded with a warning<br>the app references non-public selectors in Payload/manongweekly.app/manongweekly:addContent</p>
+<p>查找是否使用了非公用API，一些名字可能会是私有API，最好把名改了</p>
+<p>WARNING ITMS 90025:Missing recommended icon file the bundle does not contain an app icon for iPhone/ipodtouch of exactly ‘120x120’pixels in.png format for iOS versions &gt;=7.0</p>
+<p>添加76，76@2x的图标PNG</p>
+<h2 id="查看被拒原因与加急">查看被拒原因与加急</h2><p>在<a href="https://developer.apple.com/membercenter/index.action" target="_blank" rel="external">Member Center</a>中应用审核的最下面，有一个解决方案中心，点击解决方案中心，可以查看被拒原因，审核人员会给你罗列以及解决方案参考。</p>
+<p>如果应用审核通过了，在使用的过程中发现有重大的bug导致应用crash，可以申请加急，非常快，<a href="https://developer.apple.com/appstore/contact/?topic=expedite%3E" target="_blank" rel="external">contact</a></p>
+<p>最后《码农周刊》iOS客户端愉快的上线了</p>
+<p><a href="https://itunes.apple.com/cn/app/yuan-yi-yue/id990227579?l=en&amp;mt=8" target="_blank" rel="external"><img src="https://camo.githubusercontent.com/770175f6c01d89c84a020706126a9e6399ff76c4/68747470733a2f2f696d672e736869656c64732e696f2f636f636f61706f64732f702f4b696e676669736865722e7376673f7374796c653d666c6174" alt="AppStore"></a>  <a href="https://github.com/lcepy/manong-reading" target="_blank" rel="external"><img src="https://camo.githubusercontent.com/b0224997019dec4e51d692c722ea9bee2818c837/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f6c6963656e73652f6d6173686170652f6170697374617475732e737667" alt="manong-reading"></a></p>
+<p><a href="https://itunes.apple.com/cn/app/yuan-yi-yue/id990227579?l=en&amp;mt=8" target="_blank" rel="external">Download on the App Store</a> </p>
+<p><a href="https://github.com/lcepy/manong-reading" target="_blank" rel="external">checking on the manong-reading project </a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-使用storyboard设计app原型" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/05/23/使用storyboard设计app原型/" class="article-date">
+  	<time datetime="2015-05-23T12:48:13.000Z" itemprop="datePublished">2015-05-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/23/使用storyboard设计app原型/">使用storyboard设计app原型</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天我想写一下自己利用storyboard+swift快速设计一款App原型的经历，这是突然发现Xcode的强大之处带来的优势，你可以设计一个如下图的原型。</p>
+<p><img src="http://websources.qiniudn.com/iOS/prototype.png" alt=""></p>
+<p>先创建一个项目＋创建一个storyboard＋拖拽一个ViewController到storyboard中（默认你知道怎么创建一个项目，怎么新建一个storyboard，以及怎么拖拽一个ViewController到storyboard中）</p>
+<p><img src="http://websources.qiniudn.com/iOS/storyboard.png" alt=""></p>
+<p>给ViewController设置启动，这个设置针对storyboard是唯一的，也就是只能设置一个</p>
+<p><img src="http://websources.qiniudn.com/iOS/initViewController.png" alt=""></p>
+<p>给ViewController设置身份ID(identity)，它应该是唯一的，而且后期如果有多个storyboard时场景的跳转会使用到</p>
+<pre><code>var <span class="string">sd:</span>UIStoryboard = UIStoryboard(<span class="string">name:</span> <span class="string">"Cycling"</span>, <span class="string">bundle:</span> nil)
+var <span class="string">cyc:</span>CyclingInitViewController = sd.instantiateViewControllerWithIdentifier(<span class="string">"CyclingInit"</span>) <span class="keyword">as</span>! CyclingInitViewController
+self.navigationController?.pushViewController(cyc, animated: <span class="literal">true</span>)
+</code></pre><p><img src="http://websources.qiniudn.com/iOS/identity.png" alt=""></p>
+<p>给ViewController应用一个NavgationController，每一个视图控制器中都有一个navigationController和navigationItem。（注意：前者应该算一个公共的，后者navigationItem是每个控制器自身独有的）在使用的时候需要注意这些，以保证标题，以及导航栏上的bar可以设置正确</p>
+<p><img src="http://websources.qiniudn.com/iOS/navigationC.png" alt=""></p>
+<p>拖拽一个label到视图中，我们可以通过属性板来设置它的一些属性，比如字体大小，颜色，是否居中。属性有很多，基本上和代码中的UILabel可以一一对应起来。</p>
+<p><img src="http://websources.qiniudn.com/iOS/attributes.png" alt=""></p>
+<p>在Size面板中可以调整x,y以及高宽</p>
+<p><img src="http://websources.qiniudn.com/iOS/size.png" alt=""></p>
+<p>接下来应该是一个最重要的活儿了，autolayout技术对视图进行约束，这是接下来想对UI进行正确排版所使用的技术，关于它的细节问题，你需要慢慢了解，我只能告诉你怎样在storyboard中利用Xcode给我们提供的工具去连线，去进行约束。</p>
+<p>第一种方式，利用右下角的小三角形，对约束进行重置（简单的约束，Xcode非常智能的帮你排版了）</p>
+<p><img src="http://websources.qiniudn.com/iOS/constraintsimage.png" alt=""></p>
+<p>第二种方式，利用连线去设置constraints，属性比较多，可以记一下，上下左右高宽都有，还有居中什么的</p>
+<p><img src="http://websources.qiniudn.com/iOS/constraints3.png" alt=""></p>
+<p>第三种方式，利用代码去设置constraints（一般来说，我们是在设计原型，如果用代码…感觉杀鸡焉用牛刀了）推荐一个库<a href="https://github.com/SnapKit/Masonry" target="_blank" rel="external">Masonry</a>（注明：现在还没有swift版的）</p>
+<p>最后大家看看我们设计的一个结果吧，源代码可以在Github上查看<a href="https://github.com/lcepy/storyboard-app-prototype" target="_blank" rel="external">storyboard-app-prototype</a></p>
+<p><img src="http://websources.qiniudn.com/iOS/result.png" alt=""></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 </div>

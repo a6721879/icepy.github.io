@@ -167,11 +167,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-复习JavaScript六之事件" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-陀螺" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/01/27/复习JavaScript六之事件/" class="article-date">
-  	<time datetime="2015-01-27T10:08:04.000Z" itemprop="datePublished">2015-01-27</time>
+      <a href="/2015/03/19/陀螺/" class="article-date">
+  	<time datetime="2015-03-19T08:25:26.000Z" itemprop="datePublished">2015-03-19</time>
 </a>
     </div>
   
@@ -184,7 +184,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/27/复习JavaScript六之事件/">复习JavaScript六之事件</a>
+      <a class="article-title" href="/2015/03/19/陀螺/">陀螺</a>
     </h1>
   
 
@@ -193,457 +193,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>IE浏览器的事件不是复习的重点</p>
-</blockquote>
-<p>事件是JavaScript与HTML进行交互的一个纽带，理解事件可以更好的处理Web应用程序，现在的浏览器中主要支持两种事件流：</p>
-<ul>
-<li>事件冒泡</li>
-<li>事件捕获</li>
-<li>DOM事件流</li>
-</ul>
-<p>事件冒泡则是指事件开始时由具体的元素接收，然后逐级向上传播。比如：</p>
-<pre><code><span class="tag">&lt;html&gt;</span>
-    <span class="tag">&lt;head&gt;</span><span class="tag">&lt;/head&gt;</span>
-    <span class="tag">&lt;body&gt;</span>
-        <span class="tag">&lt;div&gt;</span>
-            <span class="tag">&lt;p&gt;</span><span class="tag">&lt;/p&gt;</span>
-        <span class="tag">&lt;/div&gt;</span>
-    <span class="tag">&lt;/body&gt;</span>
-<span class="tag">&lt;/html&gt;</span>
-</code></pre><p>给p标签监听一个事件，它的流向是p,div,body,html,document，其实细心看来这种流的走向会存在一个问题，给div也监听一个事件，当用户点击P的时候是会触发两次的，好在event对象中有可以阻止事件冒泡的方法。</p>
-<p>事件捕获则是指事件由最上级接收，逐级向下传播到具体的元素上，了解了冒泡之后这个就非常好理解了，正是一个相反的步骤。</p>
-<p>而DOM事件流又正好是冒泡与捕获的结合体，它分为三个阶段：事件捕获，目标事件，事件冒泡，如果在纸上画出来，它的走向就是一个圆形。</p>
-<blockquote>
-<p>对于事件处理程序，写在HTML标签中的，另外一种是直接写一个function的，比如doc.onclick = function(){}，一般来说这些浏览器支持，但是基本上不会使用了。因为前者是跟HTML耦合的，不利代码维护，而且虽然HTML加载了但是Js文件还未加载，用户点击后，是直接报错的。后者虽然也可以删除，比如doc.onclick = null，对于对代码有强迫症的同学，基本上不会使用到它。</p>
-</blockquote>
-<p>那么，我们该怎么给一个元素添加上事件处理程序呢？</p>
-<h3 id="DOM2级事件处理程序">DOM2级事件处理程序</h3><ul>
-<li>addEventLister</li>
-<li>removeEventLister</li>
-</ul>
-<p>所有的DOM节点都具备这两个方法，它接收三个参数：</p>
-<ul>
-<li>要处理的事件名称，比如click（这里跟上述两个以及IE注册事件都不同，不需要on）</li>
-<li>需要事件进行处理的函数</li>
-<li>一个布尔值，表示（true，在捕获阶段调用事件处理函数）（false，在冒泡阶段调用事件处理函数）</li>
-</ul>
-<blockquote>
-<p>一般情况下第三个参数都填false</p>
-</blockquote>
-<p>IE浏览器对应的两个方法，attachEvent，detachEvent，它们只有冒泡，事件名要加上on。</p>
-<h3 id="事件对象">事件对象</h3><p>在注册完事件处理程序后，事件的一个比较重要的对象必须要理解，<strong>event事件对象</strong>。</p>
-<p>一般来说，这个对象中包含着所有与当前元素所监听的事件有关的信息，比如元素监听的事件类型，元素本身等等。</p>
-<p><strong>比较重要的属性和方法（只读）</strong></p>
-<ul>
-<li>currentTarget 真正监听事件的那个元素</li>
-<li>target 事件的目标元素</li>
-<li>type 事件的类型</li>
-<li>perventDefault()  取消事件的默认行为</li>
-<li>stopPropagation()  取消事件的捕获或者冒泡</li>
-<li>bubbles 事件是否冒泡</li>
-<li>eventPhase 事件处理程序的三个阶段，1捕获2处于目标3冒泡</li>
-</ul>
-<p><strong>比较重要的属性和方法（读写）</strong></p>
-<ul>
-<li>clientX 鼠标在窗口中的水平位置</li>
-<li>clientY 鼠标在窗口中的垂直位置</li>
-</ul>
-<h3 id="事件类型">事件类型</h3><blockquote>
-<p>PC端主要是针对鼠标，移动端则是触摸，手势相关的处理</p>
-</blockquote>
-<p>如果在PC端上发生一次click事件，实际上它是发生了三次事件，mousedown当鼠标按下的时候，mouseup当用户放开的时候，click两个加起来就发生了一次click事件。相对于移动，PC上的鼠标事件非常的丰富，例如mouseover当鼠标首次移入一个元素边界时触发，mouseout当鼠标移出元素时触发，这个移出，到子元素上也会触发这个事件，mousemove当鼠标在元素内移动时重复触发。</p>
-<p>总体来说对于文档加载，表单控件，窗口大小改变等事件，比如获取焦点，在失去或者获取焦点是值改变等移动上都是一样的，focus（获得焦点）blur（失去焦点）。</p>
-<p>在做一些视差滚动的效果时scroll事件是非常好用，移动上在css中提供了一个类似的属性。</p>
-<p>唯一的区别是移动端上没有键盘事件。</p>
-<h3 id="移动事件">移动事件</h3><ul>
-<li>touchstart 当手指触摸到屏幕时触发</li>
-<li>touchmove 当手指在屏幕上连续滑动时触发</li>
-<li>touchend 当手指从屏幕上移开时触发</li>
-<li>touchcancel 当系统停止跟踪触摸时触发（这个事件没有确定的触发时间）</li>
-</ul>
-<p>它们都是冒泡的，也可以取消</p>
-<p><strong>三个跟踪触摸事件的属性</strong></p>
-<ul>
-<li>touches 当前跟踪触摸操作的touch数组，在touchend事件中为空</li>
-<li>targetTouchs 特定事件目标的touch数组</li>
-<li>ChangedTouches 上次触摸时发生了什么改变的touch数组</li>
-</ul>
-<p><strong>移动event事件对象</strong></p>
-<p>PC上存在的，在移动上也存在，描述上有差异，比如</p>
-<ul>
-<li>target 触摸的DOM节点目标</li>
-<li>pageX 触摸目标在页面中的X坐标</li>
-<li>pageY 触摸目标在页面中的Y坐标</li>
-</ul>
-<p><strong>一些手势</strong></p>
-<ul>
-<li>gesturestart 当一个手指按在屏幕上另外一个手指又触摸屏幕时触发</li>
-<li>gesturechange 依赖前者当其中的一个手指发生改变时触发</li>
-<li>gestureend 当任何一个手指离开时触发</li>
-</ul>
-<p><strong>移动手势干货三部曲</strong></p>
-<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/23/webkit-touch-event-1.html" target="_blank" rel="external">对于Touch的处理</a></p>
-<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-2.html" target="_blank" rel="external">处理简单手势</a></p>
-<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-3.html" target="_blank" rel="external">处理复杂手势</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript五之面向对象的程序设计" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/26/复习JavaScript五之面向对象的程序设计/" class="article-date">
-  	<time datetime="2015-01-26T06:52:39.000Z" itemprop="datePublished">2015-01-26</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/26/复习JavaScript五之面向对象的程序设计/">复习JavaScript五之面向对象的程序设计</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>面向对象的语言有一个非常明显的标志：类，通过类来创建任意多个具有相同属性和方法的对象，可惜的是Js里没有这样的概念。</p>
-<p>但是Js有一个特性：一切皆是对象。</p>
-<p>聪明的开发者通过这些特性进行摸索，于是迂回发明了一些程序设计，以便更好的组织代码结构。</p>
-<h3 id="工厂模式">工厂模式</h3><p>主要是用来解决有多个相同属性和方法的对象的问题，可以用函数来封装特定的接口来实现</p>
-<pre><code><span class="keyword">var</span> computer = <span class="function"><span class="keyword">function</span><span class="params">(name,version)</span></span>{
-    <span class="keyword">return</span> {
-        <span class="string">'name'</span>:name,
-        <span class="string">'version'</span>:version,
-        <span class="string">'showMessage'</span>:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-            alert(<span class="keyword">this</span>.name);
-        }
-    }
-}
-<span class="keyword">var</span> test = computer(<span class="string">'apple'</span>,<span class="string">'11.1'</span>);
-test.showMessage();
-</code></pre><h3 id="构造函数模式">构造函数模式</h3><p>我们知道像原生的构造函数，比如Object，Array等，它们是在运行时自动出现在执行环境中的。因此，为了模仿它，这里也可以通过一个普通的函数，并且new出一个对象，这样就成为了自定义的构造函数，也可以为他们添加自定义的属性和方法。</p>
-<p>但是这样的构造函数有一个缺陷，就是每个方法都会在每个实例上创建一次，因为每次创建都需要分配内存空间，但是有时候这样的特性还是有用的，主要是要控制它们，在不使用的时候释放内存。</p>
-<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name,version)</span></span>{
-    <span class="keyword">this</span>.name = name;
-    <span class="keyword">this</span>.version = version;
-    <span class="keyword">this</span>.showMessage = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
-        alert(<span class="keyword">this</span>.name);
-    }
-}
-
-<span class="keyword">var</span> apple = <span class="keyword">new</span> Computer(<span class="string">'apple'</span>,<span class="number">2014</span>);
-<span class="keyword">var</span> dell = <span class="keyword">new</span> Computer(<span class="string">'dell'</span>,<span class="number">2010</span>);
-apple.showMessage();
-dell.showMessage();
-</code></pre><p>像apple，dell是通过Computer实例化出来的不同的对象，但是它们的constructor都是指向Computer的。这里也可以使用instanceof来对（对象）进行检测。</p>
-<p>在书写上构造函数跟其他函数是没有什么区别的，主要的区别还是在使用上，构造函数需要使用new操作符。</p>
-<p>其实这样的书写，已经跟类没有什么区别了，表面上来看，而构造函数我个人更倾向于一个类的某个静态方法。</p>
-<h3 id="原型模式">原型模式</h3><p>说到原型模式就不得不提一提关于指针的问题，因为每一个函数都有一个prototype属性，而这个属性是一个指针，指向一个对象。</p>
-<p><strong>C语言描述指针，这个在iOS开发中非常重要</strong></p>
-<p>比如我先定义一个int类型的指针变量和一个普通的int类型数据，然后给指针变量赋值。</p>
-<pre><code><span class="keyword">int</span> *<span class="keyword">p</span>;
-<span class="keyword">int</span> <span class="keyword">pp</span> = <span class="number">123</span>;
-<span class="keyword">p</span> = &amp;<span class="keyword">pp</span>;
-*<span class="keyword">p</span> = <span class="number">999</span>;
-<span class="built_in">printf</span>(<span class="string">'%d'</span>,<span class="keyword">pp</span>);
-</code></pre><p>*是一个特殊符号用于标明它是一个指针变量。</p>
-<p>&amp;是地址符</p>
-<p>分析这个就要说到栈内存和堆内存了，比如*p在栈内存中分配了一个地址假设是ff22x0，它还没有空间。而pp存在一个地址ff23x0，并且分配了一个空间存储着123，这个地址是指向这个空间的。</p>
-<p>p = &amp;pp 这样的赋值操作，也就是把ff23x0取出来，并且给p分配一个空间把ff23x0存储进去，并且ff22x0指向这个空间。</p>
-<p>*p = 999 从这里就可以看出来p操作的是地址，而这个地址不就是ff23x0么，于是pp成了999。</p>
-<p>所谓的指针也就是存储着地址的变量。</p>
-<p>回到原型上，如果每一个函数中的 prototype属性都是一个指针，实际上它只是一个地址引用着一个空间，而这个空间正是我们写的xxx.prototype.xxx = function(){}这样的代码在运行时分配的空间。那么可见，使用原型的好处是空间只分配一次，大家都是共享的，因为它是指针。</p>
-<p>先看一个例子</p>
-<pre><code><span class="keyword">var</span> Computer = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
-    <span class="keyword">this</span>.name = name;
-}
-Computer.prototype.showMessage = <span class="function"><span class="keyword">function</span><span class="params">(name)</span></span>{
-    alert(name);
-}
-
-<span class="keyword">var</span> apple = <span class="keyword">new</span> Computer(<span class="string">'apple'</span>);
-<span class="keyword">var</span> dell = <span class="keyword">new</span> Computer(<span class="string">'dell'</span>);
-Computer.prototype.isPrototypeOf(apple);
-</code></pre><p>在解释这个原型链之前，还要明白Js的一个特性，就是如果自身不存在，它会沿着原型往上查找。它的原理稍微有些绕，Computer自身的prototype是指向它自身的原型对象的，而每一个函数又有一个constructor指向它自身，prototype.constructor又指向它自身。于是Computer的两个实例apple，dell内部有一个<strong>proto</strong>属性是指向Computer.prototype的，最后的结果是它们可以使用showMessage方法。</p>
-<p>当然它们还有一个搜索原则，比如在调用showMessage的时候，引擎先问apple自身有showMessage吗？“没有”，继续搜索，apple的原型有吗，“有”，调用。所以从这里可以看出，this.showMessage是会覆盖prototype.showMessage的。</p>
-<p>另外还可以使用isPrototypeOf来检测一个对象是否在另一个对象的原型链上，上述的代码返回的是true。</p>
-<pre><code>apple.<span class="function"><span class="title">hasOwnProperty</span><span class="params">(<span class="string">'name'</span>)</span></span>
-
-apple.<span class="function"><span class="title">hasOwnProperty</span><span class="params">(<span class="string">'showMessage'</span>)</span></span>
-</code></pre><p>使用hasOwnProperty来检测到底是对象属性还是原型属性，使用this创建的属性是一个对象属性。<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/01/26/复习JavaScript五之面向对象的程序设计/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript四之Object" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/25/复习JavaScript四之Object/" class="article-date">
-  	<time datetime="2015-01-25T13:42:07.000Z" itemprop="datePublished">2015-01-25</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/25/复习JavaScript四之Object/">复习JavaScript四之Object</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>JavaScript的所有对象都衍生于Object对象，所有对象都继承了Object.prototype上的方法和属性，虽然它们可能会被覆盖，熟悉它对于编程能起到很大的作用，也能比较深刻的了解JavaScript这门语言。</p>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" rel="external">可参考的资料-Object</a></p>
-<p>创建一个对象可以使用new，也可以使用快速创建的方式：</p>
-<pre><code><span class="variable"><span class="keyword">var</span> _object</span> = {};
-</code></pre><p>_object对象中就可以使用Object.prototype中所有的方法和属性，虽然看起来它是空的。说到这里在编程中常常有一个非常有用的需求，如何判断一个对象是空对象。</p>
-<p>这是zepto中的判断一个对象是否是空对象，常常使用：</p>
-<pre><code>$.isEmptyObject = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>{
-    <span class="keyword">var</span> name
-    <span class="keyword">for</span> (name <span class="keyword">in</span> obj) <span class="keyword">return</span> <span class="literal">false</span>
-    <span class="keyword">return</span> <span class="literal">true</span>
-  }
-</code></pre><p>也顺便看了下jQuery原理是一模一样的：</p>
-<pre><code>isEmptyObject: <span class="function"><span class="keyword">function</span><span class="params">( obj )</span> </span>{
-    <span class="keyword">var</span> name;
-    <span class="keyword">for</span> ( name <span class="keyword">in</span> obj ) {
-        <span class="keyword">return</span> <span class="literal">false</span>;
-    }
-    <span class="keyword">return</span> <span class="literal">true</span>;
-}
-</code></pre><p>使用in操作符来实现，它不会遍历到父原型链。</p>
-<p>constructor返回一个指向创建了该对象的函数引用，这个东西主要是可以用来识别（类）到底是指向哪里的。</p>
-<p>defineProperty直接在一个对象上定义一个新属性，非常适合用于动态构建，传入三个参数［动态添加对象的目标对象，需要定义或被修改的属性名，需要定义的对象］，在第三个参数中可以有些属性来表示是否继承（<strong>proto</strong>），要不要定义get，set方法，enumerable是否可枚举。</p>
-<p>defineProperties跟上述defineProperty一样，但是它可以添加多个。</p>
-<p>getOwnPropertyNames返回一个由指定对象的所有属性组成的数组</p>
-<p>keys返回一个数组包括对象所有的属性（可枚举）</p>
-<blockquote>
-<p>keys是经常会用到的一个属性，它只能包可枚举的，如果想获取一个对象的所有属性包括不枚举的，那么使用getOwnPropertyNames。</p>
-</blockquote>
-<p>hasOwnProperty用于判断某个对象是否包含有自身的属性，这个方法常常用于检测对象中的属性是否存在，它只检测自身，对于继承过来的都是false，这一点是非常重要的理解。</p>
-<p>isPrototypeOf 用于检测一个对象是否在另一个对象的原型链上，比如有两个对象是互相交互的，常常会使用它来进行检测。</p>
-<p>propertyIsEnumerable这个方法也比较重要，返回一个布尔值，检测一个对象的自身属性是否可以枚举</p>
-<blockquote>
-<p>可枚举的理解，也就是对象的属性可枚举，它的属性值不可以修改，但是在Js中它有自己的定义，引擎内部看不见的该属性的[[Enumerable]]特性为true，那么就是可枚举的。基本上把一个普通对象可以看做是一个枚举类型，比如var color = {‘red’:1}，red是可以修改的，但是red是可枚举的，但是如果是继承过来的属性，propertyIsEnumerable是返回false的，它还有一个特点，就是自身。</p>
-</blockquote>
-<p>如果要定义不可枚举的属性，那就要使用defineProperty方法了，目前不能用对象直接量或者构造函数定义出来。</p>
-<pre><code>var obj = {<span class="string">name:</span> <span class="string">'jack'</span>, <span class="string">age:</span><span class="number">23</span>}
-Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="string">value :</span> <span class="string">'123'</span>, <span class="string">enumerable :</span> <span class="literal">false</span> });
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript三之BOM" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/24/复习JavaScript三之BOM/" class="article-date">
-  	<time datetime="2015-01-24T14:14:04.000Z" itemprop="datePublished">2015-01-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/24/复习JavaScript三之BOM/">复习JavaScript三之BOM</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>BOM提供了很多对象，它的核心是window，表示它是浏览器的一个实例，在ECMAScript中又是Global对象。它提供了很多访问浏览器的功能，这些功能与网页无关，所以缺少事实标准的BOM既有意思又有些坑。复习它，主要是复习几个比较有用的对象，其他可以了解一二。</p>
-<h3 id="location">location</h3><blockquote>
-<p>算起来它是我用的最多的一个对象</p>
-</blockquote>
-<p>它提供了当前窗口加载的页面有关的信息，也对URL进行了片段分解，既是window的属性，也是document的属性。</p>
-<ul>
-<li>hash 返回URL的散列（#号后面跟着的零个或多个值）</li>
-<li>host 返回服务器名称和端口号</li>
-<li>hostname 返回不带端口号的服务器名称</li>
-<li>href 返回当前加载页面的完整URL</li>
-<li>pathname 返回URL中的目录或文件名</li>
-<li>port 返回URL中指定的端口号</li>
-<li>protocol 返回页面使用的协议</li>
-<li>search 返回URL中的查询字符串，它以问好（?）开头</li>
-</ul>
-<p>上述的属性基本上都可以直接使用，search除外，它返回的是一个完整的查询字符串，没有办法访问其中的每个查询字符串参数，还需要额外的进行处理。</p>
-<p>一般来说根据它的特点，?开头&amp;拼接，key=value的形式来展现，最好是key和value都要decodeURIComponent一下。</p>
-<p>在location中除了上述的属性外，还有一些比较有用的方法和技巧，主要是用来控制页面跳转的问题。</p>
-<ul>
-<li>assign方法接收一个参数，表示立即打开一个新的页面并在历史纪录中生成一条记录，它的效果等同于window.location.href = ‘’或者location.href = ‘’</li>
-<li>修改location对象的属性比如href，hash，search等也可以来改变URL</li>
-<li>replace方法接收一个参数，既跳转到新的URL上，并且不会在历史纪录中增加一条新的纪录</li>
-<li>reload表示重新加载当前页面</li>
-</ul>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/01/24/复习JavaScript三之BOM/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-如果宅-纪念" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/23/如果宅-纪念/" class="article-date">
-  	<time datetime="2015-01-23T15:37:26.000Z" itemprop="datePublished">2015-01-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/23/如果宅-纪念/">如果宅*纪念</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="http://websources.qiniudn.com/img/mywow.png" alt="青春独醉"></p>
-<p>魔兽世界练到100级之后，我竟然一点想玩的想法都没有了，不知道是对游戏不感兴趣了呢？还是自己老了。细数下来，八个角色，只有一个练到了100级，其他的再也不想登陆了。</p>
-<p>今天回到家里看见了四年前买的一本书《如果＊宅》，花了一天的时间把它读完了，我才知道我的魔兽世界跟他们一样，一去不可复返了。</p>
-<p>2006年的夏天在安江买电脑报里面送了一张体验卡，第一感觉是“这个游戏真牛逼”，比之前玩的传奇要“牛逼”几个档次，当时还是九城，超级大的一个板块，在介绍一个全新的世界。当然，进入游戏断断续续的玩了段时间，高考了。</p>
-<p>2008年重新注册了一个账号，在三区天空之墙安家落户了，玩的是法师。那时候YY刚刚流行起来，走在TBC的末期。没有牛逼的人，但是有个牛逼的公会，貌似我忘记发生了什么，2010年的夏天，我又AFKl了。好像是刷马桶刷了一年半，切蛋蛋切了两年多，哈哈，公会的战士，盗贼人手一把蛋刀，我的法师也有了凤凰。让我印象很深刻的是，半夜了，很多人一起在YY聊天，然后在泰卡罗森林的那个鸦人巢穴打生命，刷布，刷材料，那里是要有飞行坐骑才能到，而且还是刷虚空鳐声望的地方。</p>
-<p>说起来TBC是我玩的最久，也是最开心的一个版本，感觉每天都很有精力和激情去做每一件事情，比如刷虚空龙，刷乌鸦，刷材料，在拍卖行倒卖物资，代刷破碎，代刷祖尔法拉克，代刷STSM，现在想起来，我也是蛮拼的了。</p>
-<p>2013年熊猫人版本，我又重新建了个角色SS，玩到了90级。后续，就成了刷单机，各种随机团，随机副本，玩了玩很没味道，聊天的人都没有了。</p>
-<p>2014年德拉若版本练到了100级，这下更好，出了个要塞系统，彻底单机了。</p>
-<p>游戏一路在变，人也是一样，发现自己再也没法融入这个世界的圈子了，27岁。</p>
-<p>删除客户端，AFK。</p>
+        <p>最近在生活中遇到了很多挫折，一个无所事事的状态，其实非常的糟糕，为什么这么说，因为人一旦无所谓，就会无所畏惧，就会混乱。也许走入社会一直以来，都非常的顺利，没有经历这些挫折，根本无法了解这个社会的残酷。</p>
+<p>最近一直喜欢听李健的歌，特别是这首《陀螺》，很真实的写照。人，应该要学会陀螺的心态，把一些负面的情绪，心态，全部转走。为什么？因为只有这样，才能调整好自己，用一个很轻松的状态去面对自己。陀螺，其实它一直在旋转，就好比，它会面对很多不断接触的东西，喜怒哀乐，而且一直停不下来。它要在沉默中转，在孤独中转，在欢笑中转，在泪水中转。</p>
+<p>如果我能陀螺的心，那该多好，但我还是我，一个非常任性的人。喜欢了，特别的喜欢。不喜欢了，特别的不喜欢。这样的对错是非观念非常强烈的一个人，在社会中，摸爬滚打，是非常不利的。我的情绪都表现在脸上，无形中，或许得罪或者让别人感觉到难堪。但是，如果我有一个陀螺的心，我能很从容，荣辱不惊的面对这些，迟早要转过这一页，不是么？</p>
+<p>李健不愧是一个用诗唱歌的人，这样的情绪，直透人心。是非曲折，道理谁都会明白，但是往往处理起来，却又很意想不到。时至今日，我该有一个陀螺的心了，不能再像以前那样，如此任性。虽然这些年里，欢笑，泪水相交织，度过了人生，很重要的一个时刻。从一个平平无奇的过路人，到了一个人爱编程，分享，写作的程序员，其实背后的付出，真的是，可以用‘心酸’二字。真正的摸爬滚打的真谛，我还未触及，因为这一路，有人帮助，有人提携，有人教授。于是，有了一次，比较真正的面对自我的过程。来到北京，去面试，去找工作。</p>
+<p>人是一个非常复杂的情绪化的动物，人也是一个很有欲望的动物。但是，为什么说，欲望能促进进步呢？很可能，欲望会转化为动力，动力就能推动人自身的进步。我有欲望吗？其实是有的，但是这样的欲望，又有些不切实际。时间，就像是一把锁，已经把过去的锁住了。我们没法改变时间，也没法去打开这把锁。而我欲望，这看来，确实很傻逼。</p>
 
       
     </div>
@@ -672,11 +226,11 @@ Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="strin
 
 
   
-    <article id="post-复习JavaScript二之跨域" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Native与H5交互的原理" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/01/23/复习JavaScript二之跨域/" class="article-date">
-  	<time datetime="2015-01-23T14:17:20.000Z" itemprop="datePublished">2015-01-23</time>
+      <a href="/2015/03/14/Native与H5交互的原理/" class="article-date">
+  	<time datetime="2015-03-14T04:14:50.000Z" itemprop="datePublished">2015-03-14</time>
 </a>
     </div>
   
@@ -689,7 +243,7 @@ Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="strin
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/23/复习JavaScript二之跨域/">复习JavaScript二之跨域</a>
+      <a class="article-title" href="/2015/03/14/Native与H5交互的原理/">Native与H5交互的原理</a>
     </h1>
   
 
@@ -698,409 +252,49 @@ Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="strin
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>客户端Js出于安全的考虑，不允许跨域调用其他页面的对象，正是因为这样才给Ajax带来了很多不方便的地方。跨域最简单的理解就是因为Js同源策略的存在，比如a.com域名下的Js不能访问b.com下的Js对象。</p>
+        <p>在做混合应用时，H5与Native通信的重要性，我想每一个H5开发者都非常的清楚。通过它，我们可以很好的借用Native API的优势来实现自己想做的事情，业界有一个非常成熟的框架让大家选择，它就是PhoneGap。混合开发，并不是意味着什么App都可以做，它也有局限性。在写交互原理之前，我想先写写自己的体会。</p>
 <ul>
-<li>协议端口没法跨，客户端</li>
-<li>在跨域上，域仅仅是通过首部来识别，window.location.protocol +window.location.host</li>
+<li>混合开发使用的语言是JavaScript由于系统分配的资源始终有限，在UIWebView这个容器中运行，效率跟原生的差距是非常明显的</li>
+<li>应用需要解决首次加载白屏的问题，因为资源加载的速度始终有些慢</li>
+<li>这玩意调试起来很痛苦，不像在web端有chrome的开发者工具，iOS有Xcode</li>
+<li>iOS和android交互始终不一样，但是混合应用提供了一个统一的UI，目前不清楚用户是否能习惯交互</li>
+<li>关于通信JavaScript到Native是一个异步的过程，而Native到JavaScript是一个同步的过程</li>
 </ul>
-<h3 id="利用document-domain和iframe来设置">利用document.domain和iframe来设置</h3><p>对于主域相同而子域名不同的情况，可以通过document.domain来处理，比如www.163.com/index.html和wow.163.com/wower.html，在这两个文件中分别加入document.domain = “163.com”，然后在index.html页面中创建一个iframe引入wower.html，获取iframe的contentDocument，这样这两个js就可以交互了。</p>
-<p>index.html</p>
-<pre><code><span class="built_in">document</span>.domain = <span class="string">'163.com'</span>;
-<span class="keyword">var</span> iframe = <span class="built_in">document</span>.createElement(<span class="string">'iframe'</span>);
-iframe.src = <span class="string">'http://wow.163.com/wower.html'</span>;
-iframe.style.display = <span class="string">'none'</span>; 
-<span class="built_in">document</span>.body.appendChild(iframe);
-iframe.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
-    <span class="keyword">var</span> doc = iframe.contentDocument || iframe.contentWindow.document;
-    <span class="comment">//现在可以通过doc来操作wower.html中的js对象了</span>
-}
-</code></pre><p>wower.html</p>
-<pre><code><span class="built_in">document</span>.domain = <span class="string">'163.com'</span>;
-</code></pre><p>使用这样的方式来实现的跨域是有限制的</p>
+<p>那么使用混合应用在什么场景下比较有优势呢？</p>
 <ul>
-<li>主域名必须是同一个</li>
-<li>安全性引发的问题，比如第一个页面出现了安全问题，在后面的页面也会出现</li>
-<li>iframe引用过多的话，每一个iframe都必须设置document.domain，比较琐碎</li>
+<li>内容驱动型的应用</li>
+<li>经常需要调整UI的应用</li>
+<li>经常需要调整业务的应用</li>
+<li>交互不复杂并且不需要大量计算的应用</li>
 </ul>
-<blockquote>
-<p>偶尔可以使用一下</p>
-</blockquote>
-<h3 id="利用window-name">利用window.name</h3><p>稍微有些绕，但是数据量比较大，也比较安全</p>
-<ul>
-<li>wow.163.com/app.html 应用所在的页面</li>
-<li>wow.163.com/empty.html 中间代理页面，搞个空的即可，但是必须在主域名下</li>
-<li>www.qq.com/data.html 需要交互的数据页面</li>
-</ul>
-<p>在data.html页面中</p>
-<pre><code>window.<span class="property">name</span> = <span class="number">123</span>;
-</code></pre><p>app.html页面中创建一个隐藏的iframe，它的scr指向data.html，在onload事件中，把当前iframe的contentWindow.loaction修改成empty.html，当再次onload时就可以通过contentWindow.name来获取到123了。</p>
-<blockquote>
-<p>偶尔使用</p>
-</blockquote>
-<h3 id="利用iframe和location-hash">利用iframe和location.hash</h3><p>利用这种方式，说实话（不建议），比较绕，而且数据量小，直接暴露在URL上。它的原理主要是这样的，假设wow.163.com/index.html页面，wow.163.com/empty.html（空的，什么内容都没有），需要交换数据的页面在www.qq.com/a.html上。</p>
-<p>在wow.163.com/index.html#（＃号就是我们要传递的数据），创建一个隐藏的iframe，hash值可以当参数传递给www.qq.com/a.html#()，在www.qq.com/a.html中可以获取到hash值，根据它进行处理，然后在www.qq.com/a.html页面中创建一个隐藏iframe，把处理的结果当hash值进行传递，给wow.163.com/empty.html#()这样，在同一个域名下，wow.163.com/empty.html中的js可以通过parent.parent.location.hash = self.location.hash来改变hash值，这样就达到了跨域的目的。</p>
-<blockquote>
-<p>不建议使用，坑爹的思路</p>
-</blockquote>
-<h3 id="JSONP">JSONP</h3><p>这种方式是目前开发时最常用的一种方式，利用动态创建script标签来实现跨域的目的，虽然浏览器有显示Js对象的访问，但是它没有限制Js文件的加载，任何域名下的Js文件都可以加载。</p>
-<p>对客户端而言，文件的加载其实就是发送一次GET请求，在服务端实现时，也就是处理这次的GET请求，并且响应，参数可以通过?来带走，俗称一波流。</p>
-<p>在客户端上对于script文件加载是否已经完毕的判断，IE是判断script标签的readystatechange属性，而其他浏览器是onload事件。</p>
-<blockquote>
-<p>突然感觉做移动端不考虑IE的兼容，果然是杠杠的，建议使用</p>
-</blockquote>
-<h3 id="HTML5_postMessage">HTML5 postMessage</h3><p>主要是利用window.postMessage来发送消息，监听window.message来获取消息，判断origin可以判断消息来源，data获取消息内容，soucre来引用发送方的window对象引用。</p>
-<p>www.b.com/b.html发送消息给www.a.com/a.html</p>
-<pre><code>window.<span class="function"><span class="title">postMessage</span><span class="params">(<span class="string">'hello'</span>,<span class="string">'www.a.com/a.html'</span>)</span></span>
-</code></pre><p>www.a.com/a.html获取消息</p>
-<pre><code><span class="built_in">window</span>.addEventLister(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>{
-    <span class="keyword">if</span>(event.origin === <span class="string">'http://b.com'</span>){
-        <span class="comment">//处理</span>
+<p>总结起来，比如携程的App，因为都是内容驱动，比如购买门票，旅游之类的，又比如淘宝的App，大量商品类的展示，以及一些如图书，查询，工具类的应用，混合开发在这些场景下，有很明显的优势。</p>
+<p>言归正传，因为iOS并没有提供原生的调用API，所以当JavaScript跟Native进行通信时，就需要利用一些技巧了。UIWebView这个容器，除了可以加载请求之外，也可以加载本地资源，如果当一个页面发起请求时，是要经过UIWebView的，于是有人会想，我能知道这个URL么？不错，UIWebView可以拦截这个request，并且知道它的全部。那么UIWebView可以通知页面不，这个依然可以。利用这些原理技巧，于是两端通信的问题就解决了。</p>
+<p>在UIWebView中实现UIWebViewDelegate协议，就可以拦截到页面端发送的request。</p>
+<pre><code>-(<span class="built_in">BOOL</span>)webView:(<span class="built_in">UIWebView</span> *)webView shouldStartLoadWithRequest:(<span class="built_in">NSURLRequest</span> *)request navigationType:(<span class="built_in">UIWebViewNavigationType</span>)navigationType
+{
+    <span class="built_in">NSURL</span> *url = [request URL];
+    <span class="keyword">if</span> ([[url scheme] isEqualToString:<span class="string">@"test"</span>]) {
+        [_webView stringByEvaluatingJavaScriptFromString:<span class="string">@"window.iOSPhoneName = 'iam lcepy'"</span>];
+        <span class="keyword">return</span> <span class="literal">NO</span>;
     }
-})
-</code></pre><p>iframe的发送方式</p>
-<pre><code>contentWindow.<span class="function"><span class="title">postMessage</span><span class="params">(<span class="string">'data'</span>,<span class="string">'b.com'</span>)</span></span>
-</code></pre><blockquote>
-<p>话不多说，移动端这种跨域方式也很常用（建议推荐使用）</p>
-</blockquote>
-<h3 id="HTML5_跨域头_XMLHttpRequest2">HTML5 跨域头 XMLHttpRequest2</h3><p>如果是自己产品，又是做移动端可以使用，比上述任何方式都要方便，需要服务端支持响应时也要设置跨域头。</p>
-<p>如果服务器响应此头，浏览器会检查此头，它的值表示请求内容所允许的域名，也就是如果是*号，表示所有域都可以访问，如果这里是a.com，表示除了同源外，只允许来自a.com域的访问。</p>
-<pre><code><span class="keyword">Access</span>-Control-Allow-Origin：＊
-</code></pre><p>如果需要读取cookie则需要设置它</p>
-<pre><code>Access-Control-Allow-<span class="string">Credentials:</span><span class="literal">true</span>
-</code></pre><p>设置允许跨域的请求类型</p>
-<pre><code><span class="rule"><span class="attribute">Access-Control-Allow-Methods</span>:<span class="value">POST</span></span>
-</code></pre><blockquote>
-<p>兼容性问题，某些版本的浏览器需要在open之后，设置xhr.withCredentials ＝ true;话不多说，建议推荐使用</p>
-</blockquote>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript一之Ajax" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/23/复习JavaScript一之Ajax/" class="article-date">
-  	<time datetime="2015-01-23T10:07:54.000Z" itemprop="datePublished">2015-01-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/23/复习JavaScript一之Ajax/">复习JavaScript一之Ajax</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>IE8已上，支持现代XMLHttpRequest</p>
-</blockquote>
-<p>客户端Js与服务器进行网络交互必备的一个玩意，它不支持跨域，若要跨域还需要进行一些额外的处理。</p>
-<pre><code><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();
-</code></pre><p>在使用xhr对象时，要调用的第一个方法是open()，它接受三个参数［发送请求的类型，请求的URL，描述是否同步还是异步的布尔值］false同步，true异步。</p>
-<p>关于Ajax同步异步的个人理解：</p>
-<ul>
-<li>同步，是用数据块的方式来传输的，在Js执行的表现上，当执行到这个Ajax请求时会等待它与服务器交互成功之后才能执行下面一行的代码，也就是阻塞。</li>
-<li>异步，是用字节来传输的，它不等待是否成功，会执行之后的代码</li>
-</ul>
-<p>结束时需要调用xhr.send()，如果没有发送数据的主体，必须要null，做为发送参数。另外在接收到响应之前还可以调用abort()来取消异步请求（不建议调用它）</p>
-<h3 id="HTTP状态验证">HTTP状态验证</h3><p>当收到响应后会自动填充xhr对象，它有几个比较重要的状态，我们必须要了解清楚与处理。</p>
-<ul>
-<li>responseText:作为响应主体返回的文本</li>
-<li>responseXML:如果响应内容的类型是”text/xml”或者”application/xml”，这个属性中保存的就是XML的DOM文档</li>
-<li>status：响应的HTTP状态</li>
-<li>statusText：HTTP状态的说明</li>
-<li>readyState：用于描述请求发送到完成的过程</li>
-</ul>
-<p>正常情况下需要检测status === 200 readyState === 4 这就表示responseText或者responseXML中已经填充了全部的数据可以提供给客户端使用了。</p>
-<pre><code>1 开头的用于描述请求已经发送，需要请求者继续操作才能继续的状态
-2 开头的用于描述请求已经成功
-3 开头的用于描述成功，但是还需要继续操作
-4 开头的用于描述客户端发送了什么数据导致服务器错误
-5 开头的用于描述服务器错误（常见的如，服务端代码抛错了）
-</code></pre><p>readyState状态</p>
-<pre><code><span class="number">0</span> 未初始化，还没有调用<span class="built_in">open</span>方法
-<span class="number">1</span> 已经调用<span class="built_in">open</span>方法，还没有调用<span class="built_in">send</span>方法
-<span class="number">2</span> 已经调用<span class="built_in">send</span>方法，但是还没有接收到响应
-<span class="number">3</span> 已经接收了部分数据
-<span class="number">4</span> 已经接收了全部的数据
-</code></pre><h3 id="xhr对象其他方法或事件">xhr对象其他方法或事件</h3><p>每一个请求和响应都会带有相应的HTTP头信息，其中对开发者是很有用的，而xhr对象提供了一个setRequestHeader方法来设置头信息，它必须在调用open方法之后并且在send方法之前。有设置，必须得有获取，xhr对象也提供了两个方法分别来获取，getResponseHeader传入一个头部字段名来获取，getAllResponseHeaders来获取全部的头信息。</p>
-<p>onreadystatechange事件，每次刷新状态时，系统都会重新调用此事件。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-移动H5-HybridApp开发思路的一些总结" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/" class="article-date">
-  	<time datetime="2015-01-10T07:04:24.000Z" itemprop="datePublished">2015-01-10</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/">移动H5-HybridApp开发思路的一些总结</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>利用H5来开发移动app时，很大一部分的逻辑处理是在每一个视图的切换上，包括维护生命周期，释放内存，以及维护动画。我们在使用iOS时，基本上当前屏幕中内容显示的区域内就应该算是一个视图，当然H5版的app跟纯粹的iOS开发又有一些不同。</p>
-<ul>
-<li>H5版本的app是一个HTML页面，场景的切换基本上是切换内部的div容器，而当前浏览器内的框架则是它的window</li>
-<li>H5版本的app还需要监听hashchange或者history，来维护每一个视图控制器js文件的加载，执行</li>
-<li>每一个视图控制器需要维护它自身的生命周期，如创建，渲染视图，添加事件，销毁，以及离开当前视图时等一系列的生命周期</li>
-<li>一个视图控制器对应一个视图，一个模型，视图控制器来控制模型的请求，视图的渲染，模型与视图之间互相不干扰</li>
-<li>H5版本的app还需要维护一个NavigationController的头，用来控制内容区域内的视图控制器的转换以及它的动画</li>
-<li>应用兼容iOS，安卓，WP手持设备的dom兼容库（zepto），以及手势，触摸事件的兼容处理</li>
-<li>关于请求还需要维护本地存储与它之间的联系</li>
-<li>在Hybrid中，要构建起与原生框架的交互桥梁，比如phoneGap</li>
-<li>维护一个UI组件交互的库，比如一些常用的scoll，slider等</li>
-</ul>
-<p>从上述的一些总结中，可以看的出来要开发基于H5的移动端app，需要做的事情还是有很多的，浓缩的总结有三个方面：</p>
-<blockquote>
-<p>代码组织，MVC或者MVVM以及它们的生命周期与文件加载</p>
-<p>DOM 触摸 手势兼容处理</p>
-<p>与Native的交互</p>
-</blockquote>
-<p>在代码实现的思路上，这里都会使用一个栈来实现它。</p>
-<ul>
-<li>栈顶属于当前视图控制器</li>
-<li>基栈则是根视图控制器</li>
-</ul>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/经验之谈/">经验之谈</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-this与prototype的区别" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/05/this与prototype的区别/" class="article-date">
-  	<time datetime="2015-01-05T11:15:53.000Z" itemprop="datePublished">2015-01-05</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/05/this与prototype的区别/">this与prototype的区别</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>this可以访问私有成员（用var声明的变量）私有方法（直接function或者内部），prototype无法访问</li>
-<li>Js首先查找自身的静态属性，方法，再查找上下文中可以访问的属性或方法，最后才查找prototype，谁先谁优先</li>
-<li>prototype比this要节约分配的空间，因为prototype有一个指向父类的指向，而this，每次实例化时都要分配存储空间</li>
-</ul>
-<pre><code><span class="keyword">var</span> Copy = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
-    <span class="keyword">var</span> d = <span class="string">"123"</span>;
-    <span class="keyword">this</span>._log = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
-        <span class="built_in">console</span>.log(d);
-    }
-    <span class="keyword">this</span>.log = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
-        <span class="built_in">console</span>.log(<span class="string">'yes'</span>);
-    }
+    <span class="keyword">return</span> <span class="literal">YES</span>;
 }
-Copy.prototype.log = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
-    <span class="built_in">console</span>.log(<span class="string">'no'</span>);
-}
-<span class="keyword">var</span> c = <span class="keyword">new</span> Copy();
-c.log();
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
+</code></pre><p>返回YES表示执行浏览器的默认执行，返回NO表示不执行浏览器的默认执行</p>
+<p>而从Native到JavaScript可以利用上stringByEvaluatingJavaScriptFromString方法，执行Js字符串，它就能在UIWebView中执行这一段Js代码。在客户端，我们知道全局的对象是window，如果在客户端需要获取结果，可以把Native执行的结果放到window上。</p>
+<p>那么Js这一端如何实现呢？不错，利用的就是隐藏的iframe。</p>
+<pre><code><span class="keyword">var</span> requ = $(<span class="string">'#requestToNative'</span>);
+requ.bind(<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+    <span class="keyword">var</span> iframe = <span class="built_in">document</span>.createElement(<span class="string">'iframe'</span>);
+    iframe.style.display = <span class="string">'none'</span>;
+    iframe.src = <span class="string">'test://iOS/userInfo'</span>;
+    <span class="keyword">var</span> requs = requ[<span class="number">0</span>];
+    requs.appendChild(iframe);
+    iframe = <span class="literal">null</span>;
+    alert(<span class="built_in">window</span>.iOSPhoneName);
+});
+</code></pre><p>发送这个request让Native进行拦截，协议名可以随便取，当然这个名字要取的有意义。</p>
+<p><a href="https://github.com/lcepy/geekObjective-C/tree/master/WebViewNativeToJavaScript" target="_blank" rel="external">例子查看</a></p>
 
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-iOS学习第一个月心得与总结" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/02/iOS学习第一个月心得与总结/" class="article-date">
-  	<time datetime="2015-01-02T15:45:14.000Z" itemprop="datePublished">2015-01-02</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/02/iOS学习第一个月心得与总结/">iOS学习第一个月心得与总结</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>从买来Mac之后，还是看的池建强老师的一篇文章《程序员如何选择技术方向》，就开始自发的学习iOS了，因为我也想做一个自己的应用，想学一门编译型的语言，说来也巧，买Mac电脑，还是看了池老师《Mac Talk人生元编程》才开始真正下定决心入手了一台。</p>
-<p>在开始学习iOS编程之前，我先重新去复习了一下C语言，这个是非常有必要的。虽然现在Swift已经出来了，但是Objective-C还是需要掌握的，而它又是C的超集，无可厚非，于是从头开始。</p>
-<p>C语言总结：</p>
-<ul>
-<li>学习它的基本类型，比如int float等</li>
-<li>学习数组，了解C语言数组是没有边界的，以及数组的指针是如何指向的</li>
-<li>学习C语言的函数，了解它的一些传参，返回值等等，C语言中的函数如果想改变参数的值，那么必须传入指针类型</li>
-<li>学习内存分配，以及如何分析问题</li>
-<li>学习指针*，地址符&amp;</li>
-<li>学习结构体，静态类型</li>
-<li>学习宏定义，文件包含，条件编译</li>
-<li>学习typedef</li>
-<li>学习指向一维，二维数组的指针，指针字符串，以及指向函数的指针与返回指针的函数</li>
-<li>枚举</li>
-<li>个别C语言函数库</li>
-</ul>
-<p>总体来说学习完C语言之后，再学习OC非常的轻松，很多东西都可以command + 鼠标左键 去h文件中自己看，苹果的方法长的跟句子一样，真的很难记住，所以必须要看头文件了。而且学习完C语言，对于内存的分配，更加的清楚了。</p>
-<p>Objective-C语言语法总结：</p>
-<ul>
-<li>学习OC后的结果第一条就是要学习如何看源代码</li>
-<li>@interface定义一个类，在h文件中，以及如何在m文件中实现这个类@implementation，它们都有@end来结尾</li>
-<li>了解OC是单继承，所以一个类只能继承一个父类，但可以有多个子类，OC中的继承是在头文件定义的类名后面:UIViewController 写上需要继承父类的类名</li>
-<li>OC里也有成员变量，可以用一个大括号括起来，它也有如@public @private等，如果没有显示的声明，那么默认都是@protected</li>
-<li>接着是学习如何定义方法，- + 以及self的作用，－表示实例方法，+表示静态方法，self表示当前谁用就指向谁</li>
-<li>学习如何传入参数-(int)number:(int)num; 第一个括号表示返回值，冒号也算方法名，后面跟着的括号，表示传入一个int类型的参数</li>
-<li>在成员变量中，可以显示的声明getter，setter方法，而在OC中这两种可以使用点语法来使用</li>
-<li>学习分类category，在xcode中创建的文件一般都是类＋分类名比如@interface Game:(Test)，通过它可以实现对类的扩展</li>
-<li>学习协议protocol，这玩意在做实际项目时会大量的运用到，它跟接口非常的类似，OC不强制要求实现全部的协议，使用的时候在类名后面加上尖括号<xxxDelegate>要求实现这个协议</li>
-<li>block语法，^{}，这玩意跟Js中的callback函数非常的类似，只是OC实现的语法会非常的奇怪int(^number)(int,int)第一个int表示返回值，中间括号表示block的名字，最后一个括号表示传入参数的类型，这玩意字符多的时候看起来会有些怪异和费解</li>
-<li>一些循环，for for in 或者block</li>
-<li>内存管理，OC是使用引用计数的方式来管理内存的，所以创建就必须对应有释放，现在因为已经有了ARC所以这部分代码可以不用写了，编译器会帮助我们自动补全。alloc retain copy ＋1 relese -1 0的时候系统释放，一般情况下，谁使用，谁释放的原则，比如我现在用alloc创建一个对象，那么我就需要在relese它，如果我把这个对象setter给另一个对象当属性，那么这个对象就要retain一次，在dealloc这个方法中对它relese，原则就是这样的，谁使用，谁释放。</li>
-<li>@property属性，OC提供了一个快速创建属性并默认实现getter setter方法的东西，主要是配合原子性，retain copy来使用，在开启ARC的环境下，可以用weak strong来使用，这个主要对应UI方面，一般情况下只是赋值用assign，NSString用copy，其他OC对象用retain</li>
-<li>学习copy语法，了解什么是浅拷贝，深拷贝</li>
-</ul>
       
     </div>
     
@@ -1114,9 +308,236 @@ c.log();
       
 
       
-        <p class="article-more-link">
-          <a  href="/2015/01/02/iOS学习第一个月心得与总结/#more">more >></a>
-        </p>
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-2015年面试之囧途" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/13/2015年面试之囧途/" class="article-date">
+  	<time datetime="2015-03-13T11:07:52.000Z" itemprop="datePublished">2015-03-13</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/13/2015年面试之囧途/">2015年面试之囧途</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>至去年从携程离职之后，就开启了一次新的面试囧途，面试这东西，主要可以了解自己所处的水平，写写它是想告诉自己一些事情，有事，人应该要了解和想清楚自己到底需要什么，到底适合什么样的工作，而不是为了生活，为了好的公司，为了高的薪水去妥协，在与兴趣之间平衡的坍塌，会造成很严重的后果，诱惑，是每一个人都会遇到的，如何面对这些诱惑，而明确自己所想，才是最重要的。</p>
+<p>2015年面试了大概有七家公司，为什么会出现这样的状况，是我今天想要反思的主要目的。在去面试极客学院时，包括电话几轮的沟通，双方都非常满意，给出了17K的offer。其实这，是一个很心动的数字，毕竟比上一份work多出了3K。有时候，选择，往往很意外。</p>
+<p>我是一个非常直接的人，我很忍受不了忽悠和欺骗。明明在面试时，就已经沟通过，我能做什么，以及我根本不考虑做什么，为什么入职之后往往的工作就要偏离呢？这个问题，其实我一直很思考不明白，最后的结局是我只能离职走人，浪费了时间，精力，当然还有金钱。</p>
+<p>下面要写的事情，都非常琐碎，两周的时间内发生的事情。在过年之前，我来到北京，寻找机会，老乡给我推荐了聚美优品，面试时的一些沟通，包括自己的情况，想法，以及能做的事情，都很明白的说了。从1月4号面试到了1月14号，经历了四轮，然后就没有消息了。</p>
+<p>大家都明白没有消息意味着什么，抱着挂了的心态，1月20号回到湖南。在和淳敏沟通了之后，我答应了在27号之前，去上海他那边工作。过完年后买了高铁票，去了上海，可是下午北京聚美优品又通知我，审批过了，如果我来北京，立马就发聚美的offer。其实，这里我就犯了一个很严重的错误，<strong>没有能抵制住诱惑</strong>。当天，我纠结郁闷了很久，淳敏也和我说了很多，包括聚美的工作气氛，研发团队，以及未来可以学习的东西到底有多少。也许当时我被这样的惊喜冲昏了头脑，一发热，连夜买了去北京的火车票，当我坐上火车时，我又接到了通知，还需要在继续面试。</p>
+<p>当时在心里，真是一万只草泥马奔腾而过，这不是逗我玩么？如果，能让时光倒流，告诉我是来北京面试的话，我想大家应该都可以知道，自己会选择什么。用一句现在的话说，会来的是<strong>傻逼</strong>，于是我傻逼了。可是，时间没法回滚，发生了就要自己面对这些。其实当时的心里状态是很后悔的，后悔没听淳敏的话，后悔跑来北京。如果这边的工作黄了，接下来怎么办。自己没有任何想法，那只能继续面试，继续找工作了。</p>
+<p>3月2日上午去了JD，我只能说我的简历写的很清楚。如果你需要正规军，就不应该来找我。JD的男HR真的是屌的一逼。下午去了一家创业公司，我大呼伤不起，各种奇葩要求。比如你能不能做服务，对不起，我不能。那你能不能写移动客户端，对不起，我不能。我简历写的是，移动前端好吧？未必，汉字这么难理解？那一天，我对后面的面试安排，已经不抱任何想去的态度了，但是朋友推荐的，还是去了。</p>
+<p>3月3日下午的时候接到了聚美HR的电话，通知我她们人事搞错对象了，把别人的结果拿去审批了，而我是不需要面试了，在跟我确定了一下薪水之后，语重的告诉我，不过还是需要审批。如果老板审批不通过，她也没有办法，只能和我说声对不起。当时，我心里只是呵呵的，反正是有了不信任感。</p>
+<p>3月4日去联想研究院面试，结果很理想，包括聊了很多关于移动H5的一些开发心得，中午面试的大哥还请我吃了一顿午饭，反正是心情很愉悦，唯一可惜的是联想研究院的HC计划需要等待到3月底，当时面试大哥的领导就询问我，是否愿意等待，告诉我如果公司的HC一开，优先联系我，只要我愿意。</p>
+<p>吃过午饭的时候接到了聚美HR的电话，告诉我审批通过了，让我耐性等待offer。下午时聚美的offer发到了我的邮箱里，通知我3月10号入职。但是我没注意查收邮箱，其实，这也很狗血，我在想着，唉，工作哪里不是做，只要自己踏踏实实，本本份份的做好工作，管他呢。</p>
+<p>3月5日去每日优鲜面试，本来经历了2号奇葩的面试之后，后面的一些网投的面试邀请，我都不打算去了。那天，接到个超美小姑娘的电话，而且还是个性感HR负责人，啧啧，来吧来吧，过来聊一聊。抱着想调戏调戏HR妹纸的心态，下午4点半搭地铁去望京那边，最后愣没找到地方。我在想，反正也就是聊会天，心中不快跟陌生人吐一吐，也许能减轻心理的压抑感。去了之后，跟技术，跟其他人聊的还挺愉快。反正HR的美色，没有让我失望，我在感谢老天，终于遇上了一家正常的公司。</p>
+<p>第二天上午又跑去了每日优鲜，跟她们的CEO大哥聊聊，挺对味的。只是我还答应了朋友要去面试，所以没有急着答应他。当天下午还去百度面试了，上来做了三个题目，解析URL，实现深浅拷贝，对数字字符串进行以每四个一组的分隔。只是后面问到的一些问题，比如盒子模型，我知道它是由高宽内边距外边距线组成的，可是它在浏览器中的渲染顺序，我是真心不知道，这些问题有些变态了。后来，我朋友帮我去问，他告诉我百度对毕业证有要求，必须要统招，虽然面试了一个下午，但是没有然后了。于是，我能想到是什么。</p>
+<p>最后我还是没有能抵制住”好公司”的诱惑，选择了去聚美优品，本来我朋友说，你别去聚美，你看看你面试的那个经历，太不靠谱了，让人感觉就像是把你吊着，他们一直在找人，只不过没找到合适的，最后才选择你。至于，是不是这样，我不清楚，但是从面试到发offer，确实让我有不信任的感受。</p>
+<p>说起来，人嘛，都有头脑发热的时候，也很难抵制的了诱惑。没有办法，选择去了，那只能继续往前走，不然还能怎么办？入职聚美之后，第二天Leader告诉我还需要签署一份补充的协议，虽然我去签了，但是我发现一同来的那几个人都没签补充协议，就我一个人签了，为什么？这是有甄别的对待么？如果试用期的一些考核，不通过，立马开掉，那就呵呵了。我朋友说，我真蠢，这种开人协议也签，我也只能呵呵了。而我的试用期两项任务，都是切图，写CSS和静态页面。</p>
+<p>确实，在我提交离职申请的时候，Leader跟我说，我是第一个签了这种补充协议的人。本来工作，就应当是有一个安心的氛围，我是没法安心。这对我来说有风险的，任何一个平常的人，都会这么想。如果一切都是看表现，安排一个没有切过图，没写过CSS的人去做这些事情，这可以看出他的表现吗？我想不能。而且，最重要的是，在和Leader沟通毕业证的时候，他要我自己去和HR协商，这让我更加的产生了危机感。如果6月不能顺利转正，是否意味着我还要接着找工作，然后又是三个月的试用期，到那个时候就已经10月，11月了，这一年又废了。这样的情况，如何能让人安心工作，我想，任何一个人都不能。</p>
+<p>今天我办了离职手续，跟聚美负责技术的总监，Leader最后沟通了一下。也许在你们看来，这是一个很不负责的表现。如果换位思考一下，从面试到发offer，入职到第一个签到这种补充协议，如何能让感觉到是被信任的，是能安心工作的。其实很反感Leader最后说的一句话，有些威胁的味道，至于他想表述的本意是不是这样，我不清楚，但是让我感觉到威胁的味道是实在的。他说：<strong>互联网圈子这么小，基本上每个公司的技术人员我都认识。你能来聚美，我找携程的同事打听过你的事情，正因为你比较实在，所以才招你来。就你这样的，如果有人问起来，你觉得我该怎么说？只怕会影响你今后的发展。</strong></p>
+<p>在坐地铁回来的路上，我自己又想了很多。一开始，从上海跑来北京，就是一个错误的选择。我没有听淳敏的建议，一腔热血的往前冲，后来我发现我冲到坑里了。这样的原因是什么？</p>
+<ul>
+<li>没有了解好自己真正的需求，擅长什么，对什么有兴趣</li>
+<li>没有想好自己可以真正发展的城市，北京上海来回跑，什么意义都没有</li>
+<li>内心不够强大，不能抵挡诱惑，比如有名的公司，较高的薪水</li>
+<li>没有坚定自己发展的方向，PC移动都有前端，我没选择好方向</li>
+<li>没有想好自己是否可以独自上路</li>
+<li>没有选择好正确的公司</li>
+</ul>
+<p>以后我该怎么办？经历了这些之后，我才明白了一个道理，在做一项决定的时候，一定要考虑清楚了自己是否合适，这是不是我想要的。挫折，每个人都要面对，唯一不同的是，我如何从挫折中吸取教训，总结教训，未来能正确的行在路上。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-iOS多线程GCD的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/07/iOS多线程GCD的使用/" class="article-date">
+  	<time datetime="2015-03-07T09:07:36.000Z" itemprop="datePublished">2015-03-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/07/iOS多线程GCD的使用/">iOS多线程GCD的使用</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在做iOS开发的时候线程的使用场景还是蛮多的，比如网络请求，比如大的数据处理等等。因为iOS只有一个主线程，而且这个主线程是让UIKit来使用的，如果我们不想让UI界面因为某些操作而出现卡顿，那么就必须把一些需要时间等待的操作，分配给其他的线程去处理，并且保证主线程不让UIKit之外的程序来使用。</p>
+<p>在UIKit中某些对象是可以在其他线程中正常工作的，比如UIImage，UIColor等。但是UIKit的大部分只能在主线程中正常工作的，明白这一点非常的重要。</p>
+<p>iOS中实现多任务编程，主要使用三种方式，1、NSThread 2、NSOperation 3、GCD；个人感觉GCD比较好使用，它主要是与block来配合使用的。比如在网络活动时，我想在<a href="http://wow.163.com" target="_blank" rel="external">http://wow.163.com</a>下载一张图片显示在UIImageView，但是下载的过程，如果不使用其他线程来下载图片数据，UI界面就会出现卡顿的感觉，用户体验非常不好。</p>
+<p>GCD主要可以使用的函数有几个：</p>
+<ul>
+<li>dispatch_queue_create(“name”,NULL) </li>
+<li>dispatch_async(dispatch_queue_t queue,^{})</li>
+<li>dispatch_get_main_queue</li>
+<li>dispatch_sync</li>
+<li>dispatch_get_global_queue</li>
+</ul>
+<p>dispatch_get_main_queue顾名思义，运行在主线程的Main queue，可以通过dispatch_get_main_queue获取。</p>
+<p>dispatch_async用于异步操作</p>
+<p>dispatch_sync用于同步操作</p>
+<p>dispatch_queue_create一般用来创建串行queue，而且只可能创建一个线程，顺序执行</p>
+<p>dispatch_get_global_queue 添加到主queue的可能会并行执行，也就意味着创建了多个线程</p>
+<p>回到例子上来说，如果我有两个界面，从其中一个界面点击一个按钮到另外一个界面中显示一张图片，而这个图片需要在网络上下载。如果这里不使用多线程，在视觉上得到的反馈，就有可能在第一个界面中出现卡顿，因为网络下载把主线程阻塞了。</p>
+<p>例子：</p>
+<pre><code><span class="comment">//创建一个请求</span>
+<span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:<span class="keyword">self</span><span class="variable">.imageURL</span>];
+<span class="built_in">NSURLSessionConfiguration</span> *configuration = [<span class="built_in">NSURLSessionConfiguration</span> ephemeralSessionConfiguration];
+<span class="built_in">NSURLSession</span> *session = [<span class="built_in">NSURLSession</span> sessionWithConfiguration:configuration];
+<span class="built_in">NSURLSessionDownloadTask</span> *task = [session downloadTaskWithRequest:request completionHandler:^(<span class="built_in">NSURL</span> *location, <span class="built_in">NSURLResponse</span> *response, <span class="built_in">NSError</span> *error) {
+    <span class="keyword">if</span> (!error) {
+        <span class="keyword">if</span> ([request<span class="variable">.URL</span> isEqual:<span class="keyword">self</span><span class="variable">.imageURL</span>]) {
+            <span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageWithData:[<span class="built_in">NSData</span> dataWithContentsOfURL:location]];
+            <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^{
+                <span class="keyword">self</span><span class="variable">.image</span> = image;
+            });
+        }
+    }
+}];
+[task resume];    
+</code></pre><p>在这个例子中主要是利用了NSURLSession临时会话，NSURLSessionDownloadTask任务，NSURLSessionConfiguration配置与dispatch_async相结合的方式来处理的多线程。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-iOS自动布局的理解" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/07/iOS自动布局的理解/" class="article-date">
+  	<time datetime="2015-03-07T03:47:44.000Z" itemprop="datePublished">2015-03-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/07/iOS自动布局的理解/">iOS自动布局的理解</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一般情况下iOS的自动布局可以在Xcode中利用图形化的工具来操作完成，当然也可以使用代码的方式来完成，这些工作主要是对视图定义一些规则和约束，在容器变化的时候，视图可以遵守这些约束。</p>
+<p>实现约束的三种方式：</p>
+<ul>
+<li>比如拖动一个Label在storyboard中，会出现蓝色的辅助线，放定好位置时，在下方的小按钮中点击Reset to Suggested Constraints，系统会帮助我们选择最佳的自动布局方式</li>
+<li>拖动一个Label到storyboard中，依然是点击下方小按钮，有add，手动添加。</li>
+<li>拖动一个Label到storyboard中按住control键，拖动到想放的位置上，这里有一个前提，是有一个参照视图，放开的时候会弹出一个小框来让你选择约束</li>
+</ul>
+<p>比如要查看效果，可以右边的属性栏中选择Orientation中的Landscape，就变成了横屏。如果想删除约束，可以在左侧的文档大纲中进行删除，假设一个视图没有约束，也可以在文档大纲中来add约束。</p>
+<p>如果想要查看一个约束，可以在Show the size inspector中查看constraints。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
       
       <div class="clearfix"></div>
     </div>
@@ -1134,7 +555,7 @@ c.log();
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
     </nav>
   
 </div>
