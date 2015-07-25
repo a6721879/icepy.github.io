@@ -2,4 +2,4 @@
 
 ## thanks [resume](https://github.com/resume/resume.github.com)
 
-## [my resume](http://resume.github.io/?lcepy)
+## [my resume](http://resume.github.io/?icepy)
