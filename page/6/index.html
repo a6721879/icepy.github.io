@@ -167,6 +167,69 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-iOS自动布局的理解" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/07/iOS自动布局的理解/" class="article-date">
+  	<time datetime="2015-03-07T03:47:44.000Z" itemprop="datePublished">2015-03-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/07/iOS自动布局的理解/">iOS自动布局的理解</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一般情况下iOS的自动布局可以在Xcode中利用图形化的工具来操作完成，当然也可以使用代码的方式来完成，这些工作主要是对视图定义一些规则和约束，在容器变化的时候，视图可以遵守这些约束。</p>
+<p>实现约束的三种方式：</p>
+<ul>
+<li>比如拖动一个Label在storyboard中，会出现蓝色的辅助线，放定好位置时，在下方的小按钮中点击Reset to Suggested Constraints，系统会帮助我们选择最佳的自动布局方式</li>
+<li>拖动一个Label到storyboard中，依然是点击下方小按钮，有add，手动添加。</li>
+<li>拖动一个Label到storyboard中按住control键，拖动到想放的位置上，这里有一个前提，是有一个参照视图，放开的时候会弹出一个小框来让你选择约束</li>
+</ul>
+<p>比如要查看效果，可以右边的属性栏中选择Orientation中的Landscape，就变成了横屏。如果想删除约束，可以在左侧的文档大纲中进行删除，假设一个视图没有约束，也可以在文档大纲中来add约束。</p>
+<p>如果想要查看一个约束，可以在Show the size inspector中查看constraints。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-JavaScript解析URL字符串" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -541,75 +604,6 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
 
 
   
-    <article id="post-UIViewController的生命周期" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/16/UIViewController的生命周期/" class="article-date">
-  	<time datetime="2015-02-16T13:54:06.000Z" itemprop="datePublished">2015-02-16</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/16/UIViewController的生命周期/">UIViewController的生命周期</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>关于生命周期的问题，主要是在某些情况上必须要使用它，以及一些一系列的管理。比如在视图准备呈现在屏幕之前，我可能要做某些事情。在视图准备消失在屏幕之前，需要做某些事情。当内存不足的时候，需要做某些事情等等。而UIViewController的生命周期，就是来负责这些问题的处理。</p>
-<p><strong>呈现视图的顺序</strong></p>
-<p>它内部的顺序是这样的，先走init方法，如果有自定义视图，则走自定义视图。如果没有，则走xib或storyborad，如果这个也没有则走loadView方法，loadView方法系统调用，也可以重载它。当我们重载它时，可以[super loadView] 父类帮助我们创建一个空的view，如果不调用父类，那么就要自己创建一个UIView，并且self.view = UIView。</p>
-<p>如果在调用loadView时不调用父类，也不创建，如果使用self.view的getter method并且view等于nil，会发生自我循环调用。一般情况下，不要在初始化时做view相当的动作。在viewDiload中调用一些网络访问的动作，可以在初始化方法中做一些关于模型数据的准备工作。</p>
-<p>如果覆盖了loadView，则必须创建UIViewController的view属性。如果没有覆盖该方法，UIViewController会默认调用initWithNibName方法来初始化并加载view。</p>
-<p><strong>生命周期</strong></p>
-<p>一般来说我们需要知道应用程序什么时候在屏幕上，什么时候从屏幕上消失，这个就是生命周期了。初始化的方法可以在viewDidLoad，这个方法在生命周期中只会调用一次，当然不要忘记了调用它的父类的viewDidLoad方法，[super viewDidLoad]。在调用这个方法时，实际上视图并没有在屏幕上确定下来，于是一般来说，如果视图的几何操作，不要放在这个方法中执行。</p>
-<p>viewWillAppear，这个方法会被多次调用，一般来说一次性的初始化不要放在这个方法中实现，但是如果是基于模型的动态初始化，可以放置在这个方法中实现。这个方法会在视图即将要在屏幕上呈现之前调用。</p>
-<p>当视图从屏幕上消失时，也会得到通知，viewWillDisappear方法。这个方法是在视图将要从屏幕消失之前调用。</p>
-<p>viewDidAppear视图已经呈现在屏幕上调用 viewDidDisappear视图已经从屏幕上消失调用。</p>
-<p>viewWillLayoutSubviews  viewDidLayoutSubviews 这两个方法可以在，比如从竖屏到横屏，系统会自动元素的位置，第一个方法是在移动之前调用，第二个方法是在移动完成之后调用，需要设置Autorotation属性。</p>
-<p>didReceiveMemoryWarning 当内存不足时，系统会调用这个方法，发送警告。 </p>
-<h2 id="顺序">顺序</h2><p>viewDidLoad -&gt; viewWillAppear -&gt; viewDidAppear -&gt; viewWillDisappear -&gt; viewDidDisappear</p>
-<p>关于layout的顺序</p>
-<p>viewWillLayoutSubviews -&gt; viewDidLayoutSubviews</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
@@ -631,12 +625,12 @@ h.array[<span class="number">1</span>] = <span class="number">8</span>;
 <script>
 var _hmt = _hmt || [];
 (function() {
-	  var hm = document.createElement("script");
-	    hm.src = "//hm.baidu.com/hm.js?37a8f2a62793e2b12b1c0ea96d7849af";
-		  var s = document.getElementsByTagName("script")[0]; 
-		    s.parentNode.insertBefore(hm, s);
-			})();
-			</script>
+var hm = document.createElement("script");
+hm.src = "//hm.baidu.com/hm.js?37a8f2a62793e2b12b1c0ea96d7849af";
+var s = document.getElementsByTagName("script")[0]; 
+s.parentNode.insertBefore(hm, s);
+})();
+</script>
 
     </div>
     

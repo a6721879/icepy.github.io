@@ -167,6 +167,165 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-iOS的内存管理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/04/iOS的内存管理/" class="article-date">
+  	<time datetime="2015-02-04T15:00:33.000Z" itemprop="datePublished">2015-02-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/04/iOS的内存管理/">iOS的内存管理</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在iOS开发中使用的是引用计数的方式来管理内存，也就是跟踪记录每个值被引用的次数。当声明一个变量来接收一个指针对象，引用次数就＋1，如果指针对象被添加到数组，字典，或者被其他指针对象所使用又＋1.如果使用完毕之后对它进行－1，一直到0，系统会立马释放这段内存。</p>
+<blockquote>
+<p>如果开启了ARC机制，编译器会帮助我们在代码中添加上内存管理的代码，而且在Xcode中比如retain这些都是不可以使用的</p>
+</blockquote>
+<p>在OC中可以使用retainCount来查看指针对象的引用次数。</p>
+<pre><code><span class="name">Wower</span> *<span class="atom">wower</span> = [[<span class="name">Wower</span> <span class="atom">alloc</span>] <span class="atom">initWithName</span>:@<span class="string">"lcepy"</span> <span class="atom">andT</span>:@<span class="string">"魔兽世界"</span>];
+<span class="name">NSLog</span>(@<span class="string">"%zi"</span>,[<span class="atom">wower</span> <span class="atom">retainCount</span>]);
+</code></pre><p>一般来说如果在代码中使用了alloc，copy，retain，引用计数都是加一，而release则是引用计数减一，又比如把指针对象添加到数组，字典，内部的引用计数也会加一，但是这个的话，系统是会来管理的。又比如一些静态方法，也会由系统来管理，内部是会加一的。还有一种叫做自动释放池的玩意，autorelease，它的功能是整个执行过程结束，系统来管理释放的工作。</p>
+<p>一般来说基本类型的数据也就是C语言的如int这样的，直接赋值即可不用管理，在iOS中主要是对OC指针对象进行内存管理。在使用@property的时候，根据参数retain，copy，编译器会帮助我们生成getter，setter方法，而且还会帮助我们进行一下内存管理，比如：</p>
+<pre><code>-<span class="params">(void)</span>setterFound:<span class="params">(Found *)</span>found
+{
+    <span class="keyword">if</span> <span class="params">(_found != found)</span> {
+        [_found release];
+        _found = found;
+        [_found retain];
+    }
+}
+</code></pre><p>有一点要注意的是如果是retain，copy一般来说接收的都是OC对象，基本类型可以用assign。</p>
+<p>实例：</p>
+<pre><code><span class="comment">//.h文件</span>
+<span class="class"><span class="keyword">@interface</span> <span class="title">Found</span> : <span class="title">NSObject</span></span>
+
+<span class="keyword">@end</span>
+
+
+<span class="class"><span class="keyword">@interface</span> <span class="title">Wower</span> : <span class="title">NSObject</span></span>
+{
+    Found *_found;
+}
+
+<span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *name;
+<span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>) <span class="built_in">NSString</span> *game;
+
+-(<span class="keyword">id</span>)initWithName:(<span class="built_in">NSString</span> *)name andT:(<span class="built_in">NSString</span> *)game;
+-(<span class="keyword">void</span>)setterFound:(Found *)found;
+
+<span class="keyword">@end</span>
+<span class="comment">//.m文件</span>
+<span class="class"><span class="keyword">@implementation</span> <span class="title">Wower</span></span>
+
+-(<span class="keyword">id</span>)initWithName:(<span class="built_in">NSString</span> *)name andT:(<span class="built_in">NSString</span> *)game
+{
+    <span class="keyword">self</span> = [<span class="keyword">super</span> init];
+    <span class="keyword">if</span> (<span class="keyword">self</span>) {
+        _name = name;
+        _game = game;
+    }
+    <span class="keyword">return</span> <span class="keyword">self</span>;
+}
+
+
+-(<span class="keyword">void</span>)dealloc
+{
+
+    <span class="built_in">NSLog</span>(<span class="string">@"Found的引用计数%zi"</span>,[_found retainCount]);
+    [_found release];
+    <span class="built_in">NSLog</span>(<span class="string">@"Found的引用计数%zi"</span>,[_found retainCount]);
+    [<span class="keyword">super</span> dealloc];
+
+}
+
+-(<span class="keyword">void</span>)showMessage
+{
+
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,_name);
+    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,_game);
+}
+
+-(<span class="keyword">void</span>)setterFound:(Found *)found
+{
+    <span class="keyword">if</span> (_found != found) {
+        [_found release];
+        _found = found;
+        [_found retain];
+    }
+}
+<span class="keyword">@end</span>
+
+<span class="class"><span class="keyword">@implementation</span> <span class="title">Found</span></span>
+
+-(<span class="keyword">void</span>)dealloc
+{
+    [<span class="keyword">super</span> dealloc];
+    <span class="built_in">NSLog</span>(<span class="string">@"释放"</span>);
+}
+
+<span class="keyword">@end</span>
+
+<span class="comment">//main文件</span>
+
+<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {
+    <span class="keyword">@autoreleasepool</span> {
+        Wower *wower = [[Wower alloc] initWithName:<span class="string">@"lcepy"</span> andT:<span class="string">@"魔兽世界"</span>];
+        <span class="built_in">NSLog</span>(<span class="string">@"%zi"</span>,[wower retainCount]);
+        Found *f = [[Found alloc] init];
+        [wower setterFound:f];
+        [wower release];
+        [f release];
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><p>dealloc是OC对象释放之后，系统会自动调用，这里一般都是来释放一些其他对象。在Wower类的dealloc中只释放了_found，而copy的那个却没有释放，那是因为@””快速创建的，一般来说这些都不需要自己来管理而是系统。</p>
+<blockquote>
+<p>关于OC的内存管理，其实有一个原则，就是谁创建谁释放，谁使用谁释放。在之前，创建了wower,f对象，于是它们要在外部释放，而我使用了setFound方法来把f对象设置到成员变量中，于是这里就成了wower对象的_found成员变量在使用，于是它有责任在dealloc的时候来把f对象的引用计数减1。</p>
+</blockquote>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-复习JavaScript十一之理解内存管理" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -646,111 +805,6 @@ xmldom.load('http:<span class="comment">//<span class="doctag"><span class="keyw
 
 
   
-    <article id="post-UINavigationController的理解" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/01/UINavigationController的理解/" class="article-date">
-  	<time datetime="2015-02-01T11:23:41.000Z" itemprop="datePublished">2015-02-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/01/UINavigationController的理解/">UINavigationController的理解</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在做iOS开发的时候，<strong>UINavigationController</strong>可以说使用跟那个UITableView一样非常的常见。在学习这个之前，需要了解一下在iOS开发中的层级关系。</p>
-<p>我把它想象成一本书，虽然这么描述非常的不精准，但是却很像。每一个UIViewController就像书页，最外面的一个是封页，当然它就是我们的启动UI界面了，而目录就相当于是UINavigationController，通过它可以精准的翻到每一页。在iOS应用中，这样的层级关系就像书页一页。</p>
-<blockquote>
-<p>实际上这里可能描述的有些错误，但是我只能这么想象了，当我翻到某一页时，这一页（UIViewController）就是在顶端的，而其他页（UIViewController）是在下面的。当然，对于导航控制，它想要控制每一页（对于书来说是人在控制）就必需在每一个视图控制器的根部。</p>
-</blockquote>
-<p>UINavigationController是一个栈结构，所谓的栈结构也就是一个顺序（先进后出的顺序），因为当前的书页我们要看见，它永远都必须在第一的位置，我们才能看见，也就决定了它是我们人看完之后才能出去的顺序。</p>
-<p>如何创建一个UINavigationController？</p>
-<pre><code> ViewController *view = <span class="comment">[<span class="comment">[ViewController alloc]</span> init]</span>;
-UINavigationController *navigation = <span class="comment">[<span class="comment">[UINavigationController alloc]</span>
-initWithRootViewController:view]</span>;
-self.window.rootViewController = navigation;
-</code></pre><p>这里会要求加入一个根视图控制器，也就是初始化时我们看见的那一页。</p>
-<p>从官方的.h文件中可以看的出来用来进行导航的就四个方法，协议的不算。</p>
-<pre><code>- (<span class="keyword">void</span>)pushViewController:(<span class="built_in">UIViewController</span> *)viewController animated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Uses a horizontal slide transition. Has no effect if the view controller is already in the stack.</span>
-
-- (<span class="built_in">UIViewController</span> *)popViewControllerAnimated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Returns the popped controller.</span>
-- (<span class="built_in">NSArray</span> *)popToViewController:(<span class="built_in">UIViewController</span> *)viewController animated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Pops view controllers until the one specified is on top. Returns the popped controllers.</span>
-- (<span class="built_in">NSArray</span> *)popToRootViewControllerAnimated:(<span class="built_in">BOOL</span>)animated; <span class="comment">// Pops until there's only a single view controller left on the stack. Returns the popped controllers.</span>
-</code></pre><p>分别是添加到视图控制器入栈，移出最后一个视图控制器，移出到跟视图控制器上，移出到任意位置上的视图控制器。</p>
-<p>除了上述的方法外，还有几个属性需要掌握，在写到这个之前，还需要理解导航控制上的一些概念问题。对于管理多个内容视图的push和pop，导航控制器自身提供了视图切换的动画效果。一般来说一个app中的内容区域就相当于视图控制器，而这个框就是导航控制器，当然这个框又是在另一个框上的，比如window。假设一下，当我们切换了内容后，有些app是上部的一个工具条不会变中间的内容变，也有可能中间和上部都会变。从这里，其实可以看的出来，导航控制存在着这些toolBar，也控制着视图控制器，但是这些toolBar的真正控制权是在每一个视图控制器上的。</p>
-<p>总结起来</p>
-<blockquote>
-<p>一个navigationController对应一个navigationBar，一个navigationController包含多个UIViewController，每个UIViewController对应一个UINavigationItem，UINavigationItem控制着多个UIBarButtonItem，一个UINavigationController控制一个UIToolBar，UIToolBar中的UIBarButtonItem由当前视图控制器管理，而不是导航控制器来控制。需要注意的是，一个UINavigationItem不是由navigationbar或者是导航控制器来控制，而是由当前视图控制器来控制。</p>
-</blockquote>
-<p>对于生成一个系统自带的UIBarButtonItem，从代码上就可以看的出来它不是self.navigationController在控制，当然有系统的一般来说肯定有自定义的。</p>
-<pre><code><span class="built_in">UIBarButtonItem</span> *leftbutton = [[<span class="built_in">UIBarButtonItem</span> alloc] initWithBarButtonSystemItem:<span class="built_in">UIBarButtonSystemItemBookmarks</span> target:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(leftEvent)];
-<span class="keyword">self</span><span class="variable">.navigationItem</span><span class="variable">.leftBarButtonItem</span> = leftbutton;
-
-<span class="built_in">UIButton</span> *button1 = [<span class="built_in">UIButton</span> buttonWithType:<span class="built_in">UIButtonTypeRoundedRect</span>];
-[button1 setTitle:<span class="string">@"view"</span> forState:<span class="built_in">UIControlStateNormal</span>];
-[button1 setTitleColor:[<span class="built_in">UIColor</span> blackColor] forState:<span class="built_in">UIControlStateNormal</span>];
-[button1 setFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">40</span>, <span class="number">40</span>)];
-[button1 addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(customviews:) forControlEvents:<span class="built_in">UIControlEventTouchUpInside</span>];
-<span class="built_in">UIBarButtonItem</span> *right = [[<span class="built_in">UIBarButtonItem</span> alloc] initWithCustomView:button1];
-
-<span class="keyword">self</span><span class="variable">.navigationItem</span><span class="variable">.rightBarButtonItem</span> = right;
-</code></pre><p>自定义一个button放到navigationItem的右边的bar中</p>
-<pre><code>UIButton *button = [UIButton <span class="string">buttonWithType:</span>UIButtonTypeRoundedRect];
-[button <span class="string">setTitle:</span>@<span class="string">"Push"</span> <span class="string">forState:</span>UIControlStateNormal];
-[button <span class="string">setTitleColor:</span>[UIColor blackColor] <span class="string">forState:</span>UIControlStateNormal];
-[button <span class="string">setFrame:</span>CGRectMake(<span class="number">90</span>, <span class="number">100</span>, <span class="number">140</span>, <span class="number">40</span>)];
-[button <span class="string">addTarget:</span>self <span class="string">action:</span><span class="annotation">@selector</span>(<span class="string">pushview:</span>) <span class="string">forControlEvents:</span>UIControlEventTouchUpInside];
-[self.view <span class="string">addSubview:</span>button];
-
--(<span class="typename">void</span>)<span class="string">pushview:</span>(UIButton *)sender
-{
-    SecondViewController *secoundVC = [[SecondViewController alloc] init];
-    [self.navigationController <span class="string">pushViewController:</span>secoundVC <span class="string">animated:</span>YES];
-}
-</code></pre><p>然后创建一个按钮，导航到第二个视图控制器上。</p>
-<p><a href="https://github.com/lcepy/LearnObjective-C/tree/master/NavigationControllerDemo" target="_blank" rel="external">源代码查看</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/9/">Next &raquo;</a>
@@ -772,12 +826,12 @@ self.window.rootViewController = navigation;
 <script>
 var _hmt = _hmt || [];
 (function() {
-	  var hm = document.createElement("script");
-	    hm.src = "//hm.baidu.com/hm.js?37a8f2a62793e2b12b1c0ea96d7849af";
-		  var s = document.getElementsByTagName("script")[0]; 
-		    s.parentNode.insertBefore(hm, s);
-			})();
-			</script>
+var hm = document.createElement("script");
+hm.src = "//hm.baidu.com/hm.js?37a8f2a62793e2b12b1c0ea96d7849af";
+var s = document.getElementsByTagName("script")[0]; 
+s.parentNode.insertBefore(hm, s);
+})();
+</script>
 
     </div>
     

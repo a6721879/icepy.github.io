@@ -167,6 +167,85 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-使用storyboard设计app原型" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/05/23/使用storyboard设计app原型/" class="article-date">
+  	<time datetime="2015-05-23T12:48:13.000Z" itemprop="datePublished">2015-05-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/23/使用storyboard设计app原型/">使用storyboard设计app原型</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天我想写一下自己利用storyboard+swift快速设计一款App原型的经历，这是突然发现Xcode的强大之处带来的优势，你可以设计一个如下图的原型。</p>
+<p><img src="http://websources.qiniudn.com/iOS/prototype.png" alt=""></p>
+<p>先创建一个项目＋创建一个storyboard＋拖拽一个ViewController到storyboard中（默认你知道怎么创建一个项目，怎么新建一个storyboard，以及怎么拖拽一个ViewController到storyboard中）</p>
+<p><img src="http://websources.qiniudn.com/iOS/storyboard.png" alt=""></p>
+<p>给ViewController设置启动，这个设置针对storyboard是唯一的，也就是只能设置一个</p>
+<p><img src="http://websources.qiniudn.com/iOS/initViewController.png" alt=""></p>
+<p>给ViewController设置身份ID(identity)，它应该是唯一的，而且后期如果有多个storyboard时场景的跳转会使用到</p>
+<pre><code>var <span class="string">sd:</span>UIStoryboard = UIStoryboard(<span class="string">name:</span> <span class="string">"Cycling"</span>, <span class="string">bundle:</span> nil)
+var <span class="string">cyc:</span>CyclingInitViewController = sd.instantiateViewControllerWithIdentifier(<span class="string">"CyclingInit"</span>) <span class="keyword">as</span>! CyclingInitViewController
+self.navigationController?.pushViewController(cyc, animated: <span class="literal">true</span>)
+</code></pre><p><img src="http://websources.qiniudn.com/iOS/identity.png" alt=""></p>
+<p>给ViewController应用一个NavgationController，每一个视图控制器中都有一个navigationController和navigationItem。（注意：前者应该算一个公共的，后者navigationItem是每个控制器自身独有的）在使用的时候需要注意这些，以保证标题，以及导航栏上的bar可以设置正确</p>
+<p><img src="http://websources.qiniudn.com/iOS/navigationC.png" alt=""></p>
+<p>拖拽一个label到视图中，我们可以通过属性板来设置它的一些属性，比如字体大小，颜色，是否居中。属性有很多，基本上和代码中的UILabel可以一一对应起来。</p>
+<p><img src="http://websources.qiniudn.com/iOS/attributes.png" alt=""></p>
+<p>在Size面板中可以调整x,y以及高宽</p>
+<p><img src="http://websources.qiniudn.com/iOS/size.png" alt=""></p>
+<p>接下来应该是一个最重要的活儿了，autolayout技术对视图进行约束，这是接下来想对UI进行正确排版所使用的技术，关于它的细节问题，你需要慢慢了解，我只能告诉你怎样在storyboard中利用Xcode给我们提供的工具去连线，去进行约束。</p>
+<p>第一种方式，利用右下角的小三角形，对约束进行重置（简单的约束，Xcode非常智能的帮你排版了）</p>
+<p><img src="http://websources.qiniudn.com/iOS/constraintsimage.png" alt=""></p>
+<p>第二种方式，利用连线去设置constraints，属性比较多，可以记一下，上下左右高宽都有，还有居中什么的</p>
+<p><img src="http://websources.qiniudn.com/iOS/constraints3.png" alt=""></p>
+<p>第三种方式，利用代码去设置constraints（一般来说，我们是在设计原型，如果用代码…感觉杀鸡焉用牛刀了）推荐一个库<a href="https://github.com/SnapKit/Masonry" target="_blank" rel="external">Masonry</a>（注明：现在还没有swift版的）</p>
+<p>最后大家看看我们设计的一个结果吧，源代码可以在Github上查看<a href="https://github.com/icepy/storyboard-app-prototype" target="_blank" rel="external">storyboard-app-prototype</a></p>
+<p><img src="http://websources.qiniudn.com/iOS/result.png" alt=""></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-使用Worker实现一个多线程数据缓存模块" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -783,176 +862,6 @@ success = error ? <span class="literal">NO</span> : <span class="literal">YES</s
 
 
   
-    <article id="post-NSArray" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/05/03/NSArray/" class="article-date">
-  	<time datetime="2015-05-03T07:42:06.000Z" itemprop="datePublished">2015-05-03</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/03/NSArray/">NSArray</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>基础扎实才能使编程更加的得心应手，今天要写一些学习NSArray以及NSMutableArray的东西。</p>
-<p>创建一个数组其实跟创建NSString一样OC也提供了三种方式，语法糖，实例化，类方法。</p>
-<pre><code><span class="comment">//创建语法糖</span>
-<span class="built_in">NSArray</span> *arry = @[<span class="string">@"1"</span>,<span class="string">@"2"</span>,<span class="string">@"3"</span>,<span class="string">@"4"</span>];
-<span class="comment">//手动实例创建</span>
-<span class="built_in">NSArray</span> *arry1 = [[<span class="built_in">NSArray</span> alloc] initWithObjects:<span class="string">@"1"</span>,<span class="string">@"2"</span>, <span class="literal">nil</span>];
-<span class="comment">//类方法创建</span>
-<span class="built_in">NSArray</span> *arry2 = [<span class="built_in">NSArray</span> arrayWithObjects:<span class="string">@"1"</span>,<span class="string">@"2"</span>, <span class="literal">nil</span>];
-</code></pre><p>查找一个元素在数组中是否存在</p>
-<pre><code><span class="comment">//查找元素是否存在，在数组中</span>
-BOOL isTrue = [arry <span class="string">containsObject:</span>@<span class="string">"1"</span>];
-</code></pre><p>获取数组的长度</p>
-<pre><code><span class="comment">//数组的长度</span>
-NSUInteger <span class="keyword">count</span> = arry.<span class="keyword">count</span>;
-NSLog(@<span class="string">"%zd"</span>,<span class="keyword">count</span>);
-</code></pre><p>获取第一个元素和获取最后一个元素</p>
-<pre><code><span class="comment">//获取第一个元素</span>
-<span class="keyword">id</span> first = arry<span class="variable">.firstObject</span>;
-<span class="comment">//获取最后一个元素</span>
-<span class="keyword">id</span> last = arry<span class="variable">.lastObject</span>;
-</code></pre><p>查找元素在数组中的位置，还可以指定一个range来确定查找的范围</p>
-<pre><code><span class="comment">//查找元素在数组中的位置</span>
-<span class="built_in">NSInteger</span> index = [arry indexOfObject:<span class="string">@"1"</span>];
-<span class="built_in">NSLog</span>(<span class="string">@"%zd"</span>,index);
-
-<span class="comment">//查找元素的位置，可以指定一个range</span>
-<span class="built_in">NSRange</span> arrRange = <span class="built_in">NSMakeRange</span>(<span class="number">1</span>, <span class="number">2</span>);
-<span class="built_in">NSInteger</span> rangeIndex = [arry indexOfObject:<span class="string">@"3"</span> inRange:arrRange];
-<span class="built_in">NSLog</span>(<span class="string">@"%zd"</span>,rangeIndex);
-</code></pre><p>指定一个下标来获取元素</p>
-<pre><code><span class="comment">//指定一个下标获取元素</span>
-<span class="keyword">id</span> element = [arry objectAtIndex:<span class="number">1</span>];
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,element);
-</code></pre><p>添加一个元素<strong>注意 NSArray是不可变的，所以添加的元素不是旧数组，而是创建了一个包含旧数组的新数组</strong>，还可以添加一个数组</p>
-<pre><code><span class="comment">//添加一个元素，返回一个新的数组</span>
-NSArray *lcepy = [arry <span class="string">arrayByAddingObject:</span>@<span class="string">"lcepy"</span>];
-<span class="comment">//添加一个数组，返回一个新的数组</span>
-NSArray *newLcepy = [arry <span class="string">arrayByAddingObjectsFromArray:</span>@[@<span class="string">"lcepy"</span>,@<span class="string">"github.io"</span>]];
-</code></pre><p>格式化一个数组</p>
-<pre><code><span class="comment">//通过一个分隔字符串来组建一个拼接字符串</span>
-<span class="built_in">NSString</span> *ress =  [newLcepy componentsJoinedByString:<span class="string">@"."</span>];
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,ress);
-</code></pre><p>除了for循环，for in循环外的其它几种常用的遍历方式</p>
-<pre><code><span class="comment">//NSEnumerator是一个抽象类，可以使用它的nextObject来遍历元素，通常和while一起使用</span>
-<span class="built_in">NSEnumerator</span> *enumer =  [newLcepy objectEnumerator];
-<span class="built_in">BOOL</span> isEnumer = <span class="literal">YES</span>;
-<span class="keyword">while</span> (isEnumer) {
-    <span class="keyword">id</span> enumerValue = [enumer nextObject];
-    <span class="keyword">if</span> (!enumerValue) {
-        isEnumer = <span class="literal">NO</span>;
-    }
-    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,enumerValue);
-}
-
-[arrays enumerateObjectsUsingBlock:^(<span class="keyword">id</span> obj, <span class="built_in">NSUInteger</span> idx, <span class="built_in">BOOL</span> *stop) {
-    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,obj);
-    <span class="keyword">if</span> (idx &gt; <span class="number">3</span>) {
-        *stop = <span class="literal">YES</span>;
-    }
-}];
-</code></pre><p>假设如果数组中的元素都想向某个方法发送消息，那么可以这么使用，这样的方式，比如在想移除所有子视图这样的场景中非常好用</p>
-<pre><code><span class="comment">//假设有一个数组中的元素都想向某个方法发送消息，那么可以使用makeObjectsPerformSelector类定义了</span>
-[newLcepy <span class="string">makeObjectsPerformSelector:</span><span class="annotation">@selector</span>(length)];
-</code></pre><p>给数组排序的几种方式</p>
-<pre><code><span class="comment">//排序</span>
-<span class="built_in">NSArray</span> *arrays = @[@<span class="number">1</span>,@<span class="number">2</span>,@<span class="number">0</span>,@<span class="number">8</span>,@<span class="number">3</span>,@<span class="number">9</span>,@<span class="number">5</span>];
-
-<span class="comment">//正</span>
-<span class="built_in">NSArray</span> *minMax = [arrays sortedArrayUsingComparator:^<span class="built_in">NSComparisonResult</span>(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) {
-    <span class="keyword">return</span> obj1 &gt; obj2;
-}];
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,minMax);
-<span class="comment">//倒</span>
-<span class="built_in">NSArray</span> *maxMin = [arrays sortedArrayUsingComparator:^<span class="built_in">NSComparisonResult</span>(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) {
-    <span class="keyword">return</span> obj1 &lt; obj2;
-}];
-<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,maxMin);
-
-<span class="comment">//    [arrays sortedArrayWithOptions:&lt;#(NSSortOptions)#&gt; usingComparator:&lt;#^NSComparisonResult(id obj1, id obj2)cmptr#&gt;]</span>
-
-<span class="comment">//    [arrays sortedArrayUsingFunction:&lt;#(NSInteger (*)(__strong id, __strong id, void *))#&gt; context:&lt;#(void *)#&gt;]</span>
-
-SEL execu = <span class="keyword">@selector</span>(compare:);
-<span class="built_in">NSArray</span> *newArr = [arrays sortedArrayUsingSelector:execu];
-<span class="built_in">NSLog</span>(<span class="string">@"s%@"</span>,newArr);
-</code></pre><p>数组还可以进行筛选，NSPredicate这个类在使用Core Data时会经常用到</p>
-<pre><code><span class="collection">[arrays filteredArrayUsingPredicate:&lt;#<span class="list">(<span class="keyword">NSPredicate</span> *)</span>#&gt;]</span>
-</code></pre><h3 id="NSMutableArray">NSMutableArray</h3><p>创建NSMutableArray只有两种方式，alloc和类方法，这是一个可变的数组，可以增删改滴，也可以排序，NSArray存在的方法，NSMutableArray全部具备，只是它多了可以添加，删除，修改，替换的方法，这里不一一写例子了，可以自己实际操作一下。</p>
-<pre><code><span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">addObject</span>:<span class="value">(id)anObject</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">insertObject</span>:<span class="value">(id)anObject atIndex:(NSUInteger)index</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="tag">removeLastObject</span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectAtIndex</span>:<span class="value">(NSUInteger)index</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">replaceObjectAtIndex</span>:<span class="value">(NSUInteger)index withObject:(id)anObject</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">addObjectsFromArray</span>:<span class="value">(NSArray *)otherArray</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">exchangeObjectAtIndex</span>:<span class="value">(NSUInteger)idx1 withObjectAtIndex:(NSUInteger)idx2</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="tag">removeAllObjects</span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObject</span>:<span class="value">(id)anObject inRange:(NSRange)range</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObject</span>:<span class="value">(id)anObject</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectIdenticalTo</span>:<span class="value">(id)anObject inRange:(NSRange)range</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectIdenticalTo</span>:<span class="value">(id)anObject</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectsFromIndices</span>:<span class="value">(NSUInteger *)indices numIndices:(NSUInteger)cnt <span class="function">NS_DEPRECATED</span>(<span class="number">10</span>_0, <span class="number">10</span>_6, <span class="number">2</span>_0, <span class="number">4</span>_0)</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectsInArray</span>:<span class="value">(NSArray *)otherArray</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectsInRange</span>:<span class="value">(NSRange)range</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">replaceObjectsInRange</span>:<span class="value">(NSRange)range withObjectsFromArray:(NSArray *)otherArray range:(NSRange)otherRange</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">replaceObjectsInRange</span>:<span class="value">(NSRange)range withObjectsFromArray:(NSArray *)otherArray</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">setArray</span>:<span class="value">(NSArray *)otherArray</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">sortUsingFunction</span>:<span class="value">(NSInteger (*)(id, id, void *))compare context:(void *)context</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">sortUsingSelector</span>:<span class="value">(SEL)comparator</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">insertObjects</span>:<span class="value">(NSArray *)objects atIndexes:(NSIndexSet *)indexes</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">removeObjectsAtIndexes</span>:<span class="value">(NSIndexSet *)indexes</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">replaceObjectsAtIndexes</span>:<span class="value">(NSIndexSet *)indexes withObjects:(NSArray *)objects</span></span>;
-
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">setObject</span>:<span class="value">(id)obj atIndexedSubscript:(NSUInteger)idx <span class="function">NS_AVAILABLE</span>(<span class="number">10</span>_8, <span class="number">6</span>_0)</span></span>;
-
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">sortUsingComparator</span>:<span class="value">(NSComparator)cmptr <span class="function">NS_AVAILABLE</span>(<span class="number">10</span>_6, <span class="number">4</span>_0)</span></span>;
-<span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">sortWithOptions</span>:<span class="value">(NSSortOptions)opts usingComparator:(NSComparator)cmptr <span class="function">NS_AVAILABLE</span>(<span class="number">10</span>_6, <span class="number">4</span>_0)</span></span>;
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -974,12 +883,12 @@ SEL execu = <span class="keyword">@selector</span>(compare:);
 <script>
 var _hmt = _hmt || [];
 (function() {
-	  var hm = document.createElement("script");
-	    hm.src = "//hm.baidu.com/hm.js?37a8f2a62793e2b12b1c0ea96d7849af";
-		  var s = document.getElementsByTagName("script")[0]; 
-		    s.parentNode.insertBefore(hm, s);
-			})();
-			</script>
+var hm = document.createElement("script");
+hm.src = "//hm.baidu.com/hm.js?37a8f2a62793e2b12b1c0ea96d7849af";
+var s = document.getElementsByTagName("script")[0]; 
+s.parentNode.insertBefore(hm, s);
+})();
+</script>
 
     </div>
     
