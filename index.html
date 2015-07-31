@@ -259,6 +259,8 @@ git branch
 </code></pre><p>可以看见存在一个gh-pages分支，这个分支就是我们放入静态页面的地方，Github帮助生存的文件都可以删除。</p>
 <h2 id="第三步_安装_Hexo">第三步 安装 Hexo</h2><p>hexo是一个基于NodeJS的项目，所以首先需要安装NodeJS，各平台的安装步骤，可以查看</p>
 <p><a href="https://nodejs.org/" target="_blank" rel="external">NodeJS</a></p>
+<p>Mac 可以先安装nvm，通过nvm来安装Nodejs</p>
+<p>Windows 可以下载文件直接安装</p>
 <p>需要安装一个编译扩展</p>
 <p><a href="https://github.com/TooTallNate/node-gyp" target="_blank" rel="external">node-gyp</a></p>
 <pre><code>sudo npm <span class="keyword">install</span> -g node-gyp
@@ -274,7 +276,7 @@ git branch
 <p>随便建立一个blog目录，在目录下输入</p>
 <pre><code>hexo init
 
-npm <span class="keyword">install</span>
+sudo npm <span class="keyword">install</span>
 </code></pre><p><em>等待安装hexo所需要的其他插件</em></p>
 <p>安装完成之后的目录结构，如下</p>
 <pre><code>_config<span class="class">.yml</span>  
@@ -298,9 +300,9 @@ themes
 ## <span class="string">Source:</span> <span class="string">https:</span><span class="comment">//github.com/hexojs/hexo/</span>
 
 # Site
-<span class="string">title:</span> 农业-行者
+<span class="string">title:</span> 农业-行者  
 <span class="string">subtitle:</span> 曾记否，到中流击水，浪遏飞舟！
-<span class="string">description:</span> iOS JavaScript Swift Objective-C 前端 HTML5
+<span class="string">description:</span> iOS JavaScript Swift Objective-C 前端 HTML5  
 <span class="string">author:</span> icepy
 <span class="string">language:</span> zh-CN
 <span class="string">timezone:</span>
@@ -383,7 +385,7 @@ themes
 <p>输入：hexo init 初始化一下</p>
 <p>然后npm install 安装所需要的模块</p>
 <p>输入hexo server 可以先进行一下预览，看看是否已经安装成功</p>
-<p>subl _config.yml 打开这个文件先修改一下配置，比如title，author之类的</p>
+<p>vim _config.yml 打开这个文件先修改一下配置，比如title，author之类的</p>
 <p><strong>在配置文件中:后要空一格再输入</strong></p>
 <p>接着在主题<a href="https://github.com/hexojs/hexo/wiki/Themes" target="_blank" rel="external">themes</a>中查看自己中意的主题，在插件<a href="https://github.com/hexojs/hexo/wiki/Plugins" target="_blank" rel="external">plugins</a>中查看自己需要的插件。具体的配置，主题要git clone 在themes目录中，然后修改_config.yml配置文件中的theme:[主题名]。而插件则可以用npm来安装，例如安装feed插件，npm install hexo-generator-feed —save，然后在_config.yml文件中任意位置配置：</p>
 <pre><code><span class="attribute">feed</span>:
