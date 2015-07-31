@@ -171,6 +171,86 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-移动H5-HybridApp开发思路的一些总结" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/" class="article-date">
+  	<time datetime="2015-01-10T07:04:24.000Z" itemprop="datePublished">2015-01-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/">移动H5-HybridApp开发思路的一些总结</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>利用H5来开发移动app时，很大一部分的逻辑处理是在每一个视图的切换上，包括维护生命周期，释放内存，以及维护动画。我们在使用iOS时，基本上当前屏幕中内容显示的区域内就应该算是一个视图，当然H5版的app跟纯粹的iOS开发又有一些不同。</p>
+<ul>
+<li>H5版本的app是一个HTML页面，场景的切换基本上是切换内部的div容器，而当前浏览器内的框架则是它的window</li>
+<li>H5版本的app还需要监听hashchange或者history，来维护每一个视图控制器js文件的加载，执行</li>
+<li>每一个视图控制器需要维护它自身的生命周期，如创建，渲染视图，添加事件，销毁，以及离开当前视图时等一系列的生命周期</li>
+<li>一个视图控制器对应一个视图，一个模型，视图控制器来控制模型的请求，视图的渲染，模型与视图之间互相不干扰</li>
+<li>H5版本的app还需要维护一个NavigationController的头，用来控制内容区域内的视图控制器的转换以及它的动画</li>
+<li>应用兼容iOS，安卓，WP手持设备的dom兼容库（zepto），以及手势，触摸事件的兼容处理</li>
+<li>关于请求还需要维护本地存储与它之间的联系</li>
+<li>在Hybrid中，要构建起与原生框架的交互桥梁，比如phoneGap</li>
+<li>维护一个UI组件交互的库，比如一些常用的scoll，slider等</li>
+</ul>
+<p>从上述的一些总结中，可以看的出来要开发基于H5的移动端app，需要做的事情还是有很多的，浓缩的总结有三个方面：</p>
+<blockquote>
+<p>代码组织，MVC或者MVVM以及它们的生命周期与文件加载</p>
+<p>DOM 触摸 手势兼容处理</p>
+<p>与Native的交互</p>
+</blockquote>
+<p>在代码实现的思路上，这里都会使用一个栈来实现它。</p>
+<ul>
+<li>栈顶属于当前视图控制器</li>
+<li>基栈则是根视图控制器</li>
+</ul>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/经验之谈/">经验之谈</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/01/10/移动H5-HybridApp开发思路的一些总结/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-this与prototype的区别" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -464,70 +544,6 @@ hexo <span class="keyword">server</span></span>
       
         <p class="article-more-link">
           <a  href="/2014/11/22/用Hexo写博客/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-正则的一些理解" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/11/14/正则的一些理解/" class="article-date">
-  	<time datetime="2014-11-14T13:50:22.000Z" itemprop="datePublished">2014-11-14</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/14/正则的一些理解/">正则的一些理解</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>今天写到这里，是想总结一下，自己重新学习正则表达式之后，对它的一个全新的认识。我想描述一个中心思想，学习任何东西，编程，音乐，基础是非常important的，就好像吉他里基础不在于认识六线谱而是在于节拍。</p>
-<h2 id="从人类的角度来阅读正则">从人类的角度来阅读正则</h2><p>在写代码示例之前，我描述一个正确的阅读正则表达式的方式，也许有点反人类，从右往左读。我很喜欢正则表达式，就像我喜欢python一样，因为它给了我一个很快速处理字符的能力。python中也有很多高效处理字符串的方式，比如步距，比如正则，嘿嘿。</p>
-<p>import re</p>
-<p>g = re.search(‘\d+(.\d*)?’,’0.2556223.556655’)</p>
-<p>g.group(0)</p>
-<p>我们来看一个搜索浮点数的正则，我们从右往左看，把这一个正则表达式分割成三分，\d+，(.\d<em>)，?。我们知道?描述的是出现零次或一次，在这里阅读的时候，是描述(.\d</em>)这一个组会出现零次或一次。我们再看这个组中的描述.用来描述.，\d用来描述0-9的数字，而*描述的是出现零次或多次，我们组合起来看，这个组就是来描述.后面的数字会出现零次或多次。\d依然是用来描述0-9的数字，+用来描述出现一次或多次。</p>
-<p>到这里，我们把这三个部分，从右往左看，组合起来，用人类阅读的角度去描述它：小数点后面出现的数字是多次的，而这一个部分只能出现一次或零次，并且在小数点之前可以出现一次或多次的数字。<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2014/11/14/正则的一些理解/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

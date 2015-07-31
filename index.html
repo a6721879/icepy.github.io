@@ -171,6 +171,173 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-CALayer的变换效果与CAShapeLayer" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/07/31/CALayer的变换效果与CAShapeLayer/" class="article-date">
+  	<time datetime="2015-07-31T03:14:21.000Z" itemprop="datePublished">2015-07-31</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/07/31/CALayer的变换效果与CAShapeLayer/">CALayer的变换效果与CAShapeLayer</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天想写一写CALayer的变换效果，一个属性affineTransform来进行设置，想想，这是多么的简单啊。</p>
+<p>可惜的是，数学知识不是今天我想写。</p>
+<h2 id="一些概念要牢记">一些概念要牢记</h2><ul>
+<li>pi做为弧度单位，一个pi为180 M_PI_4也就是四分之一，45度</li>
+<li>2D一般3x2的矩阵，3D一般是4x4的矩阵</li>
+<li>灭点，由近到远，最后汇成一个点</li>
+</ul>
+<p>虽然看起来好像很要数学知识，幸运的是Core Graphics提供了一系列的函数来帮助开发者去实现变换。</p>
+<pre><code>CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI_4)<span class="comment">;</span>
+calayer.affineTransform = transform<span class="comment">;</span>
+</code></pre><p>不管是UIView的transform属性，还是CALayer的affineTransform属性，它们都是一个CGAffineTransform类型，它们就是专门来做变换的，上面一个函数就是用来旋转45弧度。</p>
+<p>3D稍微有些不同，CALayer的transform属性，是一个CATransform3D类型，这玩意，就是专门来做3D的。</p>
+<pre><code>CATransform3D <span class="built_in">transform</span> = CATransform3DIdentity;
+<span class="built_in">transform</span>.m34 = -<span class="number">1</span>/<span class="number">500.0</span>;
+<span class="built_in">transform</span> = CATransform3DRotate(<span class="built_in">transform</span>, M_PI_4, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);
+calayer.<span class="built_in">transform</span> = <span class="built_in">transform</span>;
+</code></pre><h2 id="写一下CAShapeLayer">写一下CAShapeLayer</h2><p>虽然它继承了CALayer，但是要牢记一点，渲染的时候会忽略很多CALayer的属性，它只会去渲染自己的属性。这是一个可以绘制不规则图形的一个图层，可以和UIBezierPath配合使用，这是因为它本身是没有形状的，它的形状来源于path属性，使用UIBezierPath相对C API来说要简单很多，有了ARC之后就不用管理内存啦。</p>
+<p>CAShapeLayer属于Core Animation框架，它是直接提交到设备的GPU来渲染的，意味着它的性能非常高。</p>
+<ul>
+<li>path 用于提供路径</li>
+<li>fillColor 填充背景颜色</li>
+<li>strokeColor 填充线的背景颜色</li>
+</ul>
+<p>fillColor与strokeColor是有区别的，前者填充的是整个区域内的颜色（bezier曲线的区域），后者填充的是lineWidth那个属性设置的边界线颜色。</p>
+<ul>
+<li>lineWidth 设置线条的厚度（宽）</li>
+<li>strokeStart 可以设置为0来触发strokeEnd动画 </li>
+<li>strokeEnd 设置动画使用，绘制结束点</li>
+</ul>
+<h2 id="CAShapeLayer与UIBezierPath配合使用才有意义">CAShapeLayer与UIBezierPath配合使用才有意义</h2><p>UIBezierPath可以创建基于矢量的路径，用于给CAShapeLayer提供路径，假设我们开始写一个圆形进度条的控件时，我们该如何设计？</p>
+<ul>
+<li>确定需要设置的参数</li>
+<li>封装实现的细节</li>
+</ul>
+<p>创建一个UIView的子类，就叫RoundView</p>
+<p>我们先思考一下，我们需要哪里设置，可能需要颜色，初始值，线的宽度等，既然有了，我们开始下一步。</p>
+<pre><code>  <span class="comment">//RoundView.h</span>
+
+<span class="keyword">@property</span>(<span class="keyword">assign</span>,<span class="keyword">nonatomic</span>) <span class="built_in">CGFloat</span> startValue; <span class="comment">//初始值(0-1)</span>
+<span class="keyword">@property</span>(<span class="keyword">assign</span>,<span class="keyword">nonatomic</span>) <span class="built_in">CGFloat</span> endValue; <span class="comment">//结束值</span>
+<span class="keyword">@property</span>(<span class="keyword">assign</span>,<span class="keyword">nonatomic</span>) <span class="built_in">CGFloat</span> borderWidth; <span class="comment">//边框线</span>
+<span class="keyword">@property</span>(<span class="keyword">strong</span>,<span class="keyword">nonatomic</span>) <span class="built_in">UIColor</span> *fillColor; <span class="comment">//填充区域</span>
+<span class="keyword">@property</span>(<span class="keyword">strong</span>,<span class="keyword">nonatomic</span>) <span class="built_in">UIColor</span> *borderColor; <span class="comment">// 边框颜色</span>
+
+<span class="comment">//RoundView.m</span>
+
+<span class="class"><span class="keyword">@interface</span> <span class="title">RoundView</span>()</span>
+
+<span class="keyword">@property</span>(<span class="keyword">strong</span>,<span class="keyword">nonatomic</span>) <span class="built_in">CAShapeLayer</span> *shapeLayer;
+
+<span class="keyword">@end</span>
+
+<span class="class"><span class="keyword">@implementation</span> <span class="title">RoundView</span></span>
+
+-(instancetype)initWithFrame:(<span class="built_in">CGRect</span>)frame
+{
+    <span class="keyword">self</span> = [<span class="keyword">super</span> initWithFrame:frame];
+    <span class="keyword">if</span> (<span class="keyword">self</span>) {
+        <span class="keyword">self</span><span class="variable">.shapeLayer</span> = [<span class="built_in">CAShapeLayer</span> layer];
+        <span class="keyword">self</span><span class="variable">.frame</span> = <span class="keyword">self</span><span class="variable">.bounds</span>;
+        <span class="built_in">UIBezierPath</span> *path = [<span class="built_in">UIBezierPath</span> bezierPathWithOvalInRect:<span class="keyword">self</span><span class="variable">.bounds</span>];
+        <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.path</span> = path<span class="variable">.CGPath</span>;
+        <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.fillColor</span> = [<span class="built_in">UIColor</span> clearColor]<span class="variable">.CGColor</span>;
+        <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.lineWidth</span> = <span class="number">1.</span>f;
+        <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.strokeColor</span> = [<span class="built_in">UIColor</span> colorWithRed:<span class="number">0.000</span> green:<span class="number">0.502</span> blue:<span class="number">0.502</span> alpha:<span class="number">1.000</span>]<span class="variable">.CGColor</span>;
+        [<span class="keyword">self</span><span class="variable">.layer</span> addSublayer:<span class="keyword">self</span><span class="variable">.shapeLayer</span>];
+    }
+    <span class="keyword">return</span> <span class="keyword">self</span>;
+}
+</code></pre><p>运行一下，其实可以看见，我们绘制了一个圆形，接下来，我们处理一下暴露出来的属性。</p>
+<pre><code>-(<span class="keyword">void</span>)setFillColor:(<span class="built_in">UIColor</span> *)fillColor
+{
+    _fillColor = fillColor;
+    <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.fillColor</span> = fillColor<span class="variable">.CGColor</span>;
+}
+
+-(<span class="keyword">void</span>)setBorderWidth:(<span class="built_in">CGFloat</span>)borderWidth
+{
+    _borderWidth = borderWidth;
+    <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.lineWidth</span> = borderWidth;
+}
+
+-(<span class="keyword">void</span>)setBorderColor:(<span class="built_in">UIColor</span> *)borderColor
+{
+    _borderColor = borderColor;
+    <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.strokeColor</span> = borderColor<span class="variable">.CGColor</span>;
+}
+
+-(<span class="keyword">void</span>)setStartValue:(<span class="built_in">CGFloat</span>)startValue
+{
+    _startValue = startValue;
+    <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.strokeStart</span> = startValue;
+}
+
+-(<span class="keyword">void</span>)setEndValue:(<span class="built_in">CGFloat</span>)endValue
+{
+    _endValue = endValue;
+    <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.strokeEnd</span> = endValue;
+}
+</code></pre><p>最后，我们怎么让它动起来呢？这里就用到了CALayer的隐式动画了，先使用一下它。</p>
+<pre><code><span class="keyword">self</span><span class="variable">.rouview</span> = [[RoundView alloc] initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">200</span>, <span class="number">200</span>)];
+<span class="keyword">self</span><span class="variable">.rouview</span><span class="variable">.startValue</span> = <span class="number">0.5</span>;
+<span class="keyword">self</span><span class="variable">.rouview</span><span class="variable">.center</span> = <span class="keyword">self</span><span class="variable">.view</span><span class="variable">.center</span>;
+<span class="keyword">self</span><span class="variable">.rouview</span><span class="variable">.borderColor</span> = [<span class="built_in">UIColor</span> colorWithRed:<span class="number">0.502</span> green:<span class="number">0.000</span> blue:<span class="number">0.000</span> alpha:<span class="number">1.000</span>];
+<span class="keyword">self</span><span class="variable">.rouview</span><span class="variable">.borderWidth</span> = <span class="number">1.</span>f;
+[<span class="keyword">self</span><span class="variable">.view</span> addSubview:<span class="keyword">self</span><span class="variable">.rouview</span>];
+
+[<span class="keyword">self</span> performSelector:<span class="keyword">@selector</span>(roudAnimationTimer) withObject:<span class="literal">nil</span> afterDelay:<span class="number">3.</span>f];
+
+-(<span class="keyword">void</span>)roudAnimationTimer
+{
+    <span class="keyword">self</span><span class="variable">.rouview</span><span class="variable">.endValue</span> = <span class="number">1.0</span>f;
+}
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-CALayer的视觉效果" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -900,62 +1067,6 @@ npm install -<span class="keyword">g</span> glup
 <li><a href="http://www.coreanimator.com/#keyframing" target="_blank" rel="external">CoreAnimator</a></li>
 <li><a href="http://www.quartzcodeapp.com/" target="_blank" rel="external">QuartzCode</a></li>
 </ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-policy" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/07/09/policy/" class="article-date">
-  	<time datetime="2015-07-09T07:50:31.000Z" itemprop="datePublished">2015-07-09</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/07/09/policy/">隐私政策</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>申明 \n\n《猿已阅》不会存留你的（用户）任何信息，包括Email，若你需要订阅《码农周刊》，可以在［隐私政策与订阅］中输入你的Email进行订阅。若你（用户）确认订阅，一切事宜与此应用作者无关，请详细阅读《码农周刊》的隐私政策以及服务条款。</p>
-<p>可以访问 <a href="http://weekly.manong.io/" target="_blank" rel="external">《码农周刊》</a></p>
 
       
     </div>

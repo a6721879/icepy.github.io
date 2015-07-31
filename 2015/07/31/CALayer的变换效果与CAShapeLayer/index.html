@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>CALayer的变换效果与CAShapeLayer | 农业-行者</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="今天想写一写CALayer的变换效果，一个属性affineTransform来进行设置，想想，这是多么的简单啊。
+可惜的是，数学知识不是今天我想写。
+一些概念要牢记
+pi做为弧度单位，一个pi为180 M_PI_4也就是四分之一，45度
+2D一般3x2的矩阵，3D一般是4x4的矩阵
+灭点，由近到远，最后汇成一个点
+
+虽然看起来好像很要数学知识，幸运的是Core Graphics提供了一系列的函数来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CALayer的变换效果与CAShapeLayer">
+<meta property="og:url" content="http://lcepy.github.io/2015/07/31/CALayer的变换效果与CAShapeLayer/index.html">
+<meta property="og:site_name" content="农业-行者">
+<meta property="og:description" content="今天想写一写CALayer的变换效果，一个属性affineTransform来进行设置，想想，这是多么的简单啊。
+可惜的是，数学知识不是今天我想写。
+一些概念要牢记
+pi做为弧度单位，一个pi为180 M_PI_4也就是四分之一，45度
+2D一般3x2的矩阵，3D一般是4x4的矩阵
+灭点，由近到远，最后汇成一个点
+
+虽然看起来好像很要数学知识，幸运的是Core Graphics提供了一系列的函数来">
+<meta property="og:updated_time" content="2015-07-31T05:27:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CALayer的变换效果与CAShapeLayer">
+<meta name="twitter:description" content="今天想写一写CALayer的变换效果，一个属性affineTransform来进行设置，想想，这是多么的简单啊。
+可惜的是，数学知识不是今天我想写。
+一些概念要牢记
+pi做为弧度单位，一个pi为180 M_PI_4也就是四分之一，45度
+2D一般3x2的矩阵，3D一般是4x4的矩阵
+灭点，由近到远，最后汇成一个点
+
+虽然看起来好像很要数学知识，幸运的是Core Graphics提供了一系列的函数来">
+  
+    <link rel="alternative" href="/atom.xml" title="农业-行者" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">icepy</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/icepy" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+								<a class="facebook" target="_blank" href="http://www.facebook.com/py.ice.79" title="facebook">facebook</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">icepy</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">icepy</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/icepy" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+						<a class="facebook" target="_blank" href="http://www.facebook.com/py.ice.79" title="facebook">facebook</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-CALayer的变换效果与CAShapeLayer" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/07/31/CALayer的变换效果与CAShapeLayer/" class="article-date">
+  	<time datetime="2015-07-31T03:14:21.000Z" itemprop="datePublished">2015-07-31</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CALayer的变换效果与CAShapeLayer
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天想写一写CALayer的变换效果，一个属性affineTransform来进行设置，想想，这是多么的简单啊。</p>
+<p>可惜的是，数学知识不是今天我想写。</p>
+<h2 id="一些概念要牢记">一些概念要牢记</h2><ul>
+<li>pi做为弧度单位，一个pi为180 M_PI_4也就是四分之一，45度</li>
+<li>2D一般3x2的矩阵，3D一般是4x4的矩阵</li>
+<li>灭点，由近到远，最后汇成一个点</li>
+</ul>
+<p>虽然看起来好像很要数学知识，幸运的是Core Graphics提供了一系列的函数来帮助开发者去实现变换。</p>
+<pre><code>CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI_4)<span class="comment">;</span>
+calayer.affineTransform = transform<span class="comment">;</span>
+</code></pre><p>不管是UIView的transform属性，还是CALayer的affineTransform属性，它们都是一个CGAffineTransform类型，它们就是专门来做变换的，上面一个函数就是用来旋转45弧度。</p>
+<p>3D稍微有些不同，CALayer的transform属性，是一个CATransform3D类型，这玩意，就是专门来做3D的。</p>
+<pre><code>CATransform3D <span class="built_in">transform</span> = CATransform3DIdentity;
+<span class="built_in">transform</span>.m34 = -<span class="number">1</span>/<span class="number">500.0</span>;
+<span class="built_in">transform</span> = CATransform3DRotate(<span class="built_in">transform</span>, M_PI_4, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);
+calayer.<span class="built_in">transform</span> = <span class="built_in">transform</span>;
+</code></pre><h2 id="写一下CAShapeLayer">写一下CAShapeLayer</h2><p>虽然它继承了CALayer，但是要牢记一点，渲染的时候会忽略很多CALayer的属性，它只会去渲染自己的属性。这是一个可以绘制不规则图形的一个图层，可以和UIBezierPath配合使用，这是因为它本身是没有形状的，它的形状来源于path属性，使用UIBezierPath相对C API来说要简单很多，有了ARC之后就不用管理内存啦。</p>
+<p>CAShapeLayer属于Core Animation框架，它是直接提交到设备的GPU来渲染的，意味着它的性能非常高。</p>
+<ul>
+<li>path 用于提供路径</li>
+<li>fillColor 填充背景颜色</li>
+<li>strokeColor 填充线的背景颜色</li>
+</ul>
+<p>fillColor与strokeColor是有区别的，前者填充的是整个区域内的颜色（bezier曲线的区域），后者填充的是lineWidth那个属性设置的边界线颜色。</p>
+<ul>
+<li>lineWidth 设置线条的厚度（宽）</li>
+<li>strokeStart 可以设置为0来触发strokeEnd动画 </li>
+<li>strokeEnd 设置动画使用，绘制结束点</li>
+</ul>
+<h2 id="CAShapeLayer与UIBezierPath配合使用才有意义">CAShapeLayer与UIBezierPath配合使用才有意义</h2><p>UIBezierPath可以创建基于矢量的路径，用于给CAShapeLayer提供路径，假设我们开始写一个圆形进度条的控件时，我们该如何设计？</p>
+<ul>
+<li>确定需要设置的参数</li>
+<li>封装实现的细节</li>
+</ul>
+<p>创建一个UIView的子类，就叫RoundView</p>
+<p>我们先思考一下，我们需要哪里设置，可能需要颜色，初始值，线的宽度等，既然有了，我们开始下一步。</p>
+<pre><code>  <span class="comment">//RoundView.h</span>
+
+<span class="keyword">@property</span>(<span class="keyword">assign</span>,<span class="keyword">nonatomic</span>) <span class="built_in">CGFloat</span> startValue; <span class="comment">//初始值(0-1)</span>
+<span class="keyword">@property</span>(<span class="keyword">assign</span>,<span class="keyword">nonatomic</span>) <span class="built_in">CGFloat</span> endValue; <span class="comment">//结束值</span>
+<span class="keyword">@property</span>(<span class="keyword">assign</span>,<span class="keyword">nonatomic</span>) <span class="built_in">CGFloat</span> borderWidth; <span class="comment">//边框线</span>
+<span class="keyword">@property</span>(<span class="keyword">strong</span>,<span class="keyword">nonatomic</span>) <span class="built_in">UIColor</span> *fillColor; <span class="comment">//填充区域</span>
+<span class="keyword">@property</span>(<span class="keyword">strong</span>,<span class="keyword">nonatomic</span>) <span class="built_in">UIColor</span> *borderColor; <span class="comment">// 边框颜色</span>
+
+<span class="comment">//RoundView.m</span>
+
+<span class="class"><span class="keyword">@interface</span> <span class="title">RoundView</span>()</span>
+
+<span class="keyword">@property</span>(<span class="keyword">strong</span>,<span class="keyword">nonatomic</span>) <span class="built_in">CAShapeLayer</span> *shapeLayer;
+
+<span class="keyword">@end</span>
+
+<span class="class"><span class="keyword">@implementation</span> <span class="title">RoundView</span></span>
+
+-(instancetype)initWithFrame:(<span class="built_in">CGRect</span>)frame
+{
+    <span class="keyword">self</span> = [<span class="keyword">super</span> initWithFrame:frame];
+    <span class="keyword">if</span> (<span class="keyword">self</span>) {
+        <span class="keyword">self</span><span class="variable">.shapeLayer</span> = [<span class="built_in">CAShapeLayer</span> layer];
+        <span class="keyword">self</span><span class="variable">.frame</span> = <span class="keyword">self</span><span class="variable">.bounds</span>;
+        <span class="built_in">UIBezierPath</span> *path = [<span class="built_in">UIBezierPath</span> bezierPathWithOvalInRect:<span class="keyword">self</span><span class="variable">.bounds</span>];
+        <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.path</span> = path<span class="variable">.CGPath</span>;
+        <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.fillColor</span> = [<span class="built_in">UIColor</span> clearColor]<span class="variable">.CGColor</span>;
+        <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.lineWidth</span> = <span class="number">1.</span>f;
+        <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.strokeColor</span> = [<span class="built_in">UIColor</span> colorWithRed:<span class="number">0.000</span> green:<span class="number">0.502</span> blue:<span class="number">0.502</span> alpha:<span class="number">1.000</span>]<span class="variable">.CGColor</span>;
+        [<span class="keyword">self</span><span class="variable">.layer</span> addSublayer:<span class="keyword">self</span><span class="variable">.shapeLayer</span>];
+    }
+    <span class="keyword">return</span> <span class="keyword">self</span>;
+}
+</code></pre><p>运行一下，其实可以看见，我们绘制了一个圆形，接下来，我们处理一下暴露出来的属性。</p>
+<pre><code>-(<span class="keyword">void</span>)setFillColor:(<span class="built_in">UIColor</span> *)fillColor
+{
+    _fillColor = fillColor;
+    <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.fillColor</span> = fillColor<span class="variable">.CGColor</span>;
+}
+
+-(<span class="keyword">void</span>)setBorderWidth:(<span class="built_in">CGFloat</span>)borderWidth
+{
+    _borderWidth = borderWidth;
+    <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.lineWidth</span> = borderWidth;
+}
+
+-(<span class="keyword">void</span>)setBorderColor:(<span class="built_in">UIColor</span> *)borderColor
+{
+    _borderColor = borderColor;
+    <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.strokeColor</span> = borderColor<span class="variable">.CGColor</span>;
+}
+
+-(<span class="keyword">void</span>)setStartValue:(<span class="built_in">CGFloat</span>)startValue
+{
+    _startValue = startValue;
+    <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.strokeStart</span> = startValue;
+}
+
+-(<span class="keyword">void</span>)setEndValue:(<span class="built_in">CGFloat</span>)endValue
+{
+    _endValue = endValue;
+    <span class="keyword">self</span><span class="variable">.shapeLayer</span><span class="variable">.strokeEnd</span> = endValue;
+}
+</code></pre><p>最后，我们怎么让它动起来呢？这里就用到了CALayer的隐式动画了，先使用一下它。</p>
+<pre><code><span class="keyword">self</span><span class="variable">.rouview</span> = [[RoundView alloc] initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">200</span>, <span class="number">200</span>)];
+<span class="keyword">self</span><span class="variable">.rouview</span><span class="variable">.startValue</span> = <span class="number">0.5</span>;
+<span class="keyword">self</span><span class="variable">.rouview</span><span class="variable">.center</span> = <span class="keyword">self</span><span class="variable">.view</span><span class="variable">.center</span>;
+<span class="keyword">self</span><span class="variable">.rouview</span><span class="variable">.borderColor</span> = [<span class="built_in">UIColor</span> colorWithRed:<span class="number">0.502</span> green:<span class="number">0.000</span> blue:<span class="number">0.000</span> alpha:<span class="number">1.000</span>];
+<span class="keyword">self</span><span class="variable">.rouview</span><span class="variable">.borderWidth</span> = <span class="number">1.</span>f;
+[<span class="keyword">self</span><span class="variable">.view</span> addSubview:<span class="keyword">self</span><span class="variable">.rouview</span>];
+
+[<span class="keyword">self</span> performSelector:<span class="keyword">@selector</span>(roudAnimationTimer) withObject:<span class="literal">nil</span> afterDelay:<span class="number">3.</span>f];
+
+-(<span class="keyword">void</span>)roudAnimationTimer
+{
+    <span class="keyword">self</span><span class="variable">.rouview</span><span class="variable">.endValue</span> = <span class="number">1.0</span>f;
+}
+</code></pre>
+      
+    </div>
+    
+  </div>
+  
+    <div class="article-entry">
+<h2>谢谢</h2>
+<p>如果文章对你有用，小小捐赠是你对我继续写作的鼓励与支持：支付宝 1368843198@qq.com 。</p>
+<p>支付宝链接 <a href="https://shenghuo.alipay.com/send/payment/fill.htm?optEmail=1368843198@qq.com" target="_blank">https://shenghuo.alipay.com/send/payment/fill.htm</a></p>
+<div align="left">
+<img src="http://7qncz5.com1.z0.glb.clouddn.com/action/aphqeqbbr88mde48c51.png" alt=""/><br>
+</div>
+</div>
+
+<nav id="article-nav">
+  
+  
+    <a href="/2015/07/26/CALayer的视觉效果/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">CALayer的视觉效果</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="CALayer的变换效果与CAShapeLayer" data-title="CALayer的变换效果与CAShapeLayer" data-url="http://lcepy.github.io/2015/07/31/CALayer的变换效果与CAShapeLayer/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lcepy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 icepy
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+<script>
+var _hmt = _hmt || [];
+(function() {
+var hm = document.createElement("script");
+hm.src = "//hm.baidu.com/hm.js?37a8f2a62793e2b12b1c0ea96d7849af";
+var s = document.getElementsByTagName("script")[0]; 
+s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
