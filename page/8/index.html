@@ -107,7 +107,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 10px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
@@ -170,6 +170,81 @@
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-复习JavaScript十二之理解作用域" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/05/复习JavaScript十二之理解作用域/" class="article-date">
+  	<time datetime="2015-02-05T10:17:09.000Z" itemprop="datePublished">2015-02-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/05/复习JavaScript十二之理解作用域/">复习JavaScript十二之理解作用域</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>理解作用域链是Js编程中一个必须要具备的，作用域决定了变量和函数有权力访问哪些数据。在Web浏览器中，全局执行环境是window对象，这也意味着所有的全局变量或者方法都是window对象的属性或方法。当个函数在被调用的时候都会创建自己的执行环境，而这个函数中所写的代码就开始进入这个函数的执行环境，于是由变量对象构建起了一个作用域链。</p>
+<pre><code><span class="keyword">var</span> wow = <span class="string">'魔兽世界'</span>;
+<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> _wow = <span class="string">'123'</span>;
+}
+</code></pre><p>在这个例子中全局环境中包含了两个对象（全局环境的变量对象不算），window.wow和window.message，而这个message函数中又包含了两个对象，它自己的变量对象（其中定义了arguments对象）和全局环境的变量对象。当这个函数开始执行时，message自己的变量对象中定义了_wow，而它的全局环境的变量对象有wow，假设在message中alert一下wow，实际上是message中包含的全局环境的变量对象.wow，于是可以访问。</p>
+<pre><code><span class="keyword">var</span> wow = <span class="string">'123'</span>;
+<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> wow = <span class="string">'456'</span>;
+}
+</code></pre><p>如果执行message函数alert一下wow，它的作用域是这样开始搜索的，先搜索message自己的变量对象中是否存在wow，如果有就访问并且立马停止搜索，如果没有则继续往上访问它，有wow，则访问并且立马停止搜索，以此类推一直搜索到全局环境上的变量对象，如果这里都没，恭喜你，这里要抛错了。</p>
+<pre><code><span class="keyword">var</span> c = <span class="string">'123'</span>;
+<span class="keyword">var</span> message = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+    <span class="keyword">var</span> g = <span class="string">'123'</span>;
+    <span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{
+        <span class="keyword">var</span> d = <span class="string">'123'</span>;
+    }
+}
+</code></pre><p>在这个例子中包含有三个执行环境，全局环境，message的环境，a的环境。从这里可以看出message自身包含两个对象，自己的变量对象和全局环境中的变量对象，而函数a则包含了三个，自身的变量对象，message的变量对象和全局变量对象。</p>
+<p>当开始执行这函数时，在函数a中可以访问到变量g，那是因为函数a包含了message的变量对象，于是在自身没有开始搜索上一级的变量对象时发现了，于是可以访问。那么访问c的原理也是如此，当自身和上一级的message的变量对象都没有，但是全局变量对象中存在，于是访问成功。</p>
+<p>了解这个作用域，对于Js编程是至关重要的，不然可能会出现，明明想要的预期结果是123，但是变成了456，为什么？那就是因为一级一级的搜索，可能会存在覆盖，或者搜索到别的地方就立即停止搜索了。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-iOS的copy语法" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -660,130 +735,6 @@ g();
 </code></pre><p>什么是传参？按值传递，相当于是在那个立即执行的函数中创建了一个新的地址和空间，虽然值是一样的，但是每一个k又是不同的，所以得到的结果正好满足了我们的预期。</p>
 <p>本来正常情况下save_i执行完毕后就要销毁，但是内部的闭包被包含在这个作用域内了，所以save_i没法销毁，从这里可以看的出来闭包会带来内存的问题，因为用完之后没法销毁，如果不注意的话。</p>
 <p>那么用完之后只能设置为null来解除引用，等着自动销毁把内存回收。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript九之客户端存储方案" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/02/03/复习JavaScript九之客户端存储方案/" class="article-date">
-  	<time datetime="2015-02-03T09:43:48.000Z" itemprop="datePublished">2015-02-03</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/03/复习JavaScript九之客户端存储方案/">复习JavaScript九之客户端存储方案</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>随着Web应用越来越复杂，总是有很多需求需要在客户端存储一些特定的信息，用来描述访问者或者跟访问者相关的信息。于是，就有了这些客户端存储的方案，供开发者选择以及使用。</p>
-<h3 id="cookie">cookie</h3><p>说起来cookie的出现是非常早的，用于在客户端存储会话信息，它要求服务器对任意的HTTP请求发送Set-Cookie HTTP头作为响应的一部分，例如：</p>
-<pre><code><span class="status">HTTP/1.1 <span class="number">200</span> OK</span>
-<span class="attribute">Content-Type</span>: <span class="string">text/html</span>
-<span class="attribute">Set-Cookie</span>: <span class="string">name=value</span>
-</code></pre><p>cookie虽然好用，但是它在客户端上有很多限制，而去获取也不是很容易。最重要的是关于请求的性能，cookie是对任意HTTP设置，所以也会发送给服务器，这些额外信息有时候不是必需的。</p>
-<ul>
-<li>cookie是跟特定的域有关系的，也就意味着存储在cookie中的信息只能让特定的域来访问</li>
-<li>cookie的条数是有限制的，大体上来说各浏览器不会超过50个，除了safair chrome</li>
-<li>cookie在客户端只有一个方法可以用document.cookie</li>
-<li>cookie的大小在客户端上也有限制，大体不会超过1MB</li>
-<li>如果在客户端设置了cookie，是没法删除的，只能在同一个cookie上设置name=空字符串或者设置失效时间</li>
-<li>如果设置了secure，cookie只能在SSL链接才能传输</li>
-</ul>
-<p>cookie在浏览器上的保存是由几个方面组成的，理解这个对于使用Js操作cookie是一个必备条件，它由名称也就是每一项的key，每一项的值value，域名的限制，路径对于哪一个页面起作用，时间，以及安全标识secure。</p>
-<p>在客户端主要是使用document.cookie来进行操作，获取和设置都是这一个。而去获取是一个全的字符串，还需要进一步的处理才能得到值。如果是设置，也是需要设置一个全的字符串。对于这个，最好都要encodeURIComponent一下，获取的时候decodeURIComponent一下。</p>
-<pre><code><span class="keyword">var</span> setCookie = <span class="function"><span class="keyword">function</span>(<span class="params">name,value,expires,path,domain,secure</span>)</span>{
-    <span class="keyword">var</span> cookieText = <span class="built_in">encodeURIComponent</span>(name)+<span class="string">'='</span>+<span class="built_in">encodeURIComponent</span>(value);
-
-    <span class="comment">//各项的拼接</span>
-    <span class="built_in">document</span>.cookie = cookieText;
-}
-</code></pre><p>聪明的开发者为了绕开浏览器上对于条数的限制，研究出了一个方式，把真实的值设置在子cookie上。</p>
-<pre><code><span class="keyword">name</span>=<span class="keyword">name</span>=<span class="keyword">value</span>
-</code></pre><h3 id="IE上的客户端存储userData">IE上的客户端存储userData</h3><p>在IE中引入了一个userData的方案来存储客户端数据，允许每个文档最多128KB，每个域1MB的数据量。想使用它首选在那个元素上应用一个css。</p>
-<pre><code>&lt;div style=<span class="string">"behavior:url(<span class="subst">#<span class="keyword">default</span></span><span class="subst">#userData</span>)"</span>&gt;&lt;/div&gt;
-</code></pre><p>使用的时候跟设置dom属性一样，唯一有一个不同的地方是最后要调用save方法，告诉它存储在哪个数据仓库上。</p>
-<pre><code><span class="reserved">var</span> dataStore = <span class="built_in">document</span>.getElementById(<span class="string">'dataStore'</span>);
-dataStore.setAttribute(<span class="string">'name'</span>,<span class="string">'lcepy'</span>);
-dataStore.save(<span class="string">'MyNameInfo'</span>);
-</code></pre><p>获取</p>
-<pre><code>dataStore.<span class="built_in">load</span>(<span class="string">'MyNameInfo'</span>);
-dataStore.getAttribute(<span class="string">'name'</span>);
-</code></pre><h3 id="HTML5的客户端存储方案">HTML5的客户端存储方案</h3><blockquote>
-<p>支持度以及使用比较广泛的是Web Storage API，当然客户端还有本地数据IndexDB等等，这些也是可以存储客户端数据，但是它们支持的很少。在做移动端开发时，localStorage的使用是非常频繁的，还要注意一点是个别比如safair浏览器有隐私模式，本地缓存是不起作用的，无法读取，所以要做一些额外的处理。</p>
-</blockquote>
-<p>主要的是两个sessionStorage和localStorage两套API来应用，它们是有区别的，前者只在浏览器运行时存在，也可以跨页面，前提是页面不能关闭。后者是永久存在的，如果用户不删除，那么它永远不会删除。它们的使用方式都是一样的，包括API。至于分配的空间，要看各浏览器的态度的，一般情况下是5MB，还有一点它是跟域走的。</p>
-<pre><code><span class="keyword">interface</span> <span class="title">Storage</span>{
-    <span class="keyword">readonly</span> attribute unsigned <span class="keyword">long</span> legth;
-    <span class="function">getter DOMString <span class="title">key</span>(<span class="params"></span>)</span>;
-    <span class="function">getter any <span class="title">getItem</span>(<span class="params"></span>)</span>;
-    <span class="function">setter creator <span class="keyword">void</span> <span class="title">setItem</span>(<span class="params"></span>)</span>;
-    <span class="function">deleter <span class="keyword">void</span> <span class="title">removeItem</span>(<span class="params"></span>)</span>;
-    <span class="function">viod <span class="title">clear</span>(<span class="params"></span>)</span>;
-}
-</code></pre><ul>
-<li>length 描述Storage对象中存储的key=value数量</li>
-<li>key 方法允许获取一个指定位置的键</li>
-<li>getItem方法根据指定的key返回一个value</li>
-<li>setItem方法将数据value存入指定的位置key</li>
-<li>removeItem根据指定的key来删除数据</li>
-<li>clear 删除全部的数据</li>
-</ul>
-<p>使用：</p>
-<pre><code><span class="built_in">local</span>Storage.setItem(<span class="string">'name'</span>,<span class="string">'lcepy'</span>);
-<span class="built_in">local</span>Storage.getItem(<span class="string">'name'</span>);
-<span class="built_in">local</span>Storage.key(<span class="number">0</span>);
-<span class="built_in">local</span>Storage.length;
-<span class="built_in">local</span>Storage.removeItem(<span class="string">'name'</span>);
-<span class="built_in">local</span>Storage.clear();
-</code></pre><p>另外API中还有一套事件用于本地存储发生改变时的通知</p>
-<pre><code><span class="built_in">window</span>.addEventLister(<span class="string">'storage'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{},<span class="literal">true</span>);
-</code></pre><p>event对象中包含有</p>
-<ul>
-<li>key 存储了被更新或者删除的键</li>
-<li>oldValue 包含了更新之前的数据</li>
-<li>url Storage事件发生的源</li>
-<li>newValue 包含了更新之后的数据</li>
-<li>storageArea 包含一个引用，指向发生改变之前的localStorage或者sessionStorage</li>
-</ul>
 
       
     </div>

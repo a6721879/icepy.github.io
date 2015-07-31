@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>用Hexo写博客（图文解说） | 农业-行者</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="第一步 配置SSH KEY配置SSH KEY
+在终端中输入
+cd ~/.ssh
+检查一下.ssh文件是否存在，如果不存在
+mkdir ~/.ssh
+然后，再次在终端中输入
+ssh-keygen -t rsa -C &quot;这里是输入你的Github账户邮箱&quot; 
+Enter passphrase (empty for no passphrase): [Type a passphrase] 
+Enter s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用Hexo写博客（图文解说）">
+<meta property="og:url" content="http://lcepy.github.io/2015/07/31/用Hexo写博客/index.html">
+<meta property="og:site_name" content="农业-行者">
+<meta property="og:description" content="第一步 配置SSH KEY配置SSH KEY
+在终端中输入
+cd ~/.ssh
+检查一下.ssh文件是否存在，如果不存在
+mkdir ~/.ssh
+然后，再次在终端中输入
+ssh-keygen -t rsa -C &quot;这里是输入你的Github账户邮箱&quot; 
+Enter passphrase (empty for no passphrase): [Type a passphrase] 
+Enter s">
+<meta property="og:image" content="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/settingsshkey.png">
+<meta property="og:image" content="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/clicksshkey.png">
+<meta property="og:image" content="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/addsshkey.png">
+<meta property="og:image" content="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/publishaddsshkey.png">
+<meta property="og:image" content="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/createproject.png">
+<meta property="og:image" content="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/inputname.png">
+<meta property="og:image" content="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/clicksetting.png">
+<meta property="og:image" content="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/clickpage.png">
+<meta property="og:image" content="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/continue.png">
+<meta property="og:image" content="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/publishpage.png">
+<meta property="og:updated_time" content="2015-07-31T14:49:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="用Hexo写博客（图文解说）">
+<meta name="twitter:description" content="第一步 配置SSH KEY配置SSH KEY
+在终端中输入
+cd ~/.ssh
+检查一下.ssh文件是否存在，如果不存在
+mkdir ~/.ssh
+然后，再次在终端中输入
+ssh-keygen -t rsa -C &quot;这里是输入你的Github账户邮箱&quot; 
+Enter passphrase (empty for no passphrase): [Type a passphrase] 
+Enter s">
+  
+    <link rel="alternative" href="/atom.xml" title="农业-行者" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">icepy</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/icepy" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+								<a class="facebook" target="_blank" href="http://www.facebook.com/py.ice.79" title="facebook">facebook</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 10px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">怅寥廓，问苍茫大地，谁主沉浮？</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">icepy</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://7qncz5.com1.z0.glb.clouddn.com/blog/mockingbird.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">icepy</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">曾记否，到中流击水，浪遏飞舟！</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/icepy" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/u/2455876310" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+						<a class="facebook" target="_blank" href="http://www.facebook.com/py.ice.79" title="facebook">facebook</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-用Hexo写博客" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/07/31/用Hexo写博客/" class="article-date">
+  	<time datetime="2015-07-31T13:12:00.000Z" itemprop="datePublished">2015-07-31</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      用Hexo写博客（图文解说）
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="第一步_配置SSH_KEY">第一步 配置SSH KEY</h2><p><code>配置SSH KEY</code></p>
+<p>在终端中输入</p>
+<pre><code><span class="built_in">cd</span> ~/.ssh
+</code></pre><p>检查一下.ssh文件是否存在，如果不存在</p>
+<pre><code><span class="built_in">mkdir</span> ~/.ssh
+</code></pre><p>然后，再次在终端中输入</p>
+<pre><code>ssh-keygen -t rsa -<span class="keyword">C</span> <span class="string">"这里是输入你的Github账户邮箱"</span> 
+</code></pre><p>Enter passphrase (empty for no passphrase): [Type a passphrase] </p>
+<p>Enter same passphrase again: [Type passphrase again]</p>
+<p>出现这个时可以输入在Github上设置的密码</p>
+<p>最后在.ssh目录中会有两个文件id_rsa      id_rsa.pub 一个私钥，一个公钥</p>
+<pre><code>ssh -<span class="constant">T </span>git<span class="variable">@github</span>.com
+
+cat ~<span class="regexp">/.ssh/id</span>_rsa.pub
+</code></pre><p>先ssh测试一下，当你看见如下内容是，填上yes</p>
+<p>The authenticity of host ‘github.com (207.97.227.239)’ can’t be established.<br>RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.<br>Are you sure you want to continue connecting (yes/no)?</p>
+<p>最后cat一下在终端中打印出来</p>
+<p><code>拥有自己的Github账户</code></p>
+<ul>
+<li>点击人物头像的setting</li>
+</ul>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/settingsshkey.png" alt=""></p>
+<ul>
+<li>点击 SSH KEY</li>
+</ul>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/clicksshkey.png" alt=""></p>
+<ul>
+<li>添加一个 add ssh key</li>
+</ul>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/addsshkey.png" alt=""></p>
+<ul>
+<li>完成添加 </li>
+</ul>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/publishaddsshkey.png" alt=""></p>
+<h2 id="第二步_创建一个静态页面的项目">第二步 创建一个静态页面的项目</h2><p><code>创建一个项目</code></p>
+<ul>
+<li>创建第一个项目</li>
+</ul>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/createproject.png" alt=""></p>
+<ul>
+<li>输入名字</li>
+</ul>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/inputname.png" alt=""></p>
+<ul>
+<li>点击setting</li>
+</ul>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/clicksetting.png" alt=""></p>
+<ul>
+<li>点击launch automatic page generator来创建静态页面</li>
+</ul>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/clickpage.png" alt=""></p>
+<ul>
+<li>(什么都不用修改continue一次，然后完成)</li>
+</ul>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/continue.png" alt=""><br><img src="http://7qncz5.com1.z0.glb.clouddn.com/githubpage/publishpage.png" alt=""></p>
+<p><strong>我们先下载这个项目，在终端中输入</strong></p>
+<pre><code>git clone git@github<span class="class">.com</span>:icepy/wen<span class="class">.github</span><span class="class">.io</span><span class="class">.git</span>
+
+git branch
+</code></pre><p>可以看见存在一个gh-pages分支，这个分支就是我们放入静态页面的地方，Github帮助生存的文件都可以删除。</p>
+<h2 id="第三步_安装_Hexo">第三步 安装 Hexo</h2><p>hexo是一个基于NodeJS的项目，所以首先需要安装NodeJS，各平台的安装步骤，可以查看</p>
+<p><a href="https://nodejs.org/" target="_blank" rel="external">NodeJS</a></p>
+<p>需要安装一个编译扩展</p>
+<p><a href="https://github.com/TooTallNate/node-gyp" target="_blank" rel="external">node-gyp</a></p>
+<pre><code>sudo npm <span class="keyword">install</span> -g node-gyp
+</code></pre><p>访问<a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>，查看例子：</p>
+<pre><code>sudo npm <span class="keyword">install</span> hexo -g
+</code></pre><p>等待hexo 安装成功</p>
+<ul>
+<li><p><a href="https://hexo.io/themes/" target="_blank" rel="external">查看主题</a></p>
+</li>
+<li><p><a href="https://hexo.io/plugins/" target="_blank" rel="external">查看插件</a></p>
+</li>
+</ul>
+<p>随便建立一个blog目录，在目录下输入</p>
+<pre><code>hexo init
+
+npm <span class="keyword">install</span>
+</code></pre><p><em>等待安装hexo所需要的其他插件</em></p>
+<p>安装完成之后的目录结构，如下</p>
+<pre><code>_config<span class="class">.yml</span>  
+db<span class="class">.json</span>      
+node_modules 
+package<span class="class">.json</span> 
+public       
+scaffolds    
+source       
+themes
+</code></pre><ul>
+<li>_config.yml 是顶级的配置文件</li>
+<li>db.json 是一个缓存文件</li>
+<li>public 目录 是生成的静态文件</li>
+<li>source 编写博文时的markdown文件</li>
+<li>themes 主题放置的目录 </li>
+</ul>
+<p>_config.yml 配置</p>
+<pre><code># Hexo Configuration
+## <span class="string">Docs:</span> <span class="string">http:</span><span class="comment">//hexo.io/docs/configuration.html</span>
+## <span class="string">Source:</span> <span class="string">https:</span><span class="comment">//github.com/hexojs/hexo/</span>
+
+# Site
+<span class="string">title:</span> 农业-行者
+<span class="string">subtitle:</span> 曾记否，到中流击水，浪遏飞舟！
+<span class="string">description:</span> iOS JavaScript Swift Objective-C 前端 HTML5
+<span class="string">author:</span> icepy
+<span class="string">language:</span> zh-CN
+<span class="string">timezone:</span>
+
+# URL
+## If your site is put <span class="keyword">in</span> a subdirectory, set url <span class="keyword">as</span> <span class="string">'http://yoursite.com/child'</span> and root <span class="keyword">as</span> <span class="string">'/child/'</span>
+<span class="string">url:</span> <span class="string">http:</span><span class="comment">//lcepy.github.io</span>
+<span class="string">root:</span> /
+<span class="string">permalink:</span> :year<span class="regexp">/:month/</span>:day<span class="regexp">/:title/</span>
+<span class="string">permalink_defaults:</span>
+
+# Directory
+<span class="string">source_dir:</span> source    
+<span class="string">public_dir:</span> <span class="keyword">public</span>
+<span class="string">tag_dir:</span> tags
+<span class="string">archive_dir:</span> archives
+<span class="string">category_dir:</span> categories
+<span class="string">code_dir:</span> downloads/code
+<span class="string">i18n_dir:</span> :lang
+<span class="string">skip_render:</span>
+
+# Writing
+<span class="string">new_post_name:</span> :title.md # File name of <span class="keyword">new</span> posts
+<span class="string">default_layout:</span> post
+<span class="string">titlecase:</span> <span class="literal">false</span> # Transform title into titlecase
+<span class="string">external_link:</span> <span class="literal">true</span> # Open external links <span class="keyword">in</span> <span class="keyword">new</span> tab
+<span class="string">filename_case:</span> <span class="number">0</span>
+<span class="string">render_drafts:</span> <span class="literal">false</span>
+<span class="string">post_asset_folder:</span> <span class="literal">false</span>
+<span class="string">relative_link:</span> <span class="literal">false</span>
+<span class="string">future:</span> <span class="literal">true</span>
+<span class="string">highlight:</span>
+<span class="label">      enable:</span> <span class="literal">true</span>
+<span class="label">      line_number:</span> <span class="literal">true</span>
+<span class="label">      auto_detect:</span> <span class="literal">true</span>
+<span class="label">      tab_replace:</span>
+
+# Category &amp; Tag
+<span class="string">default_category:</span> uncategorized
+<span class="string">category_map:</span>
+<span class="string">tag_map:</span>
+
+# Date / Time format
+## Hexo uses Moment.js to parse and display date
+## You can customize the date format <span class="keyword">as</span> defined <span class="keyword">in</span>
+## <span class="string">http:</span><span class="comment">//momentjs.com/docs/#/displaying/format/</span>
+<span class="string">date_format:</span> YYYY-MM-DD
+<span class="string">time_format:</span> <span class="string">HH:</span><span class="string">mm:</span>ss
+
+# Pagination
+## Set per_page to <span class="number">0</span> to disable pagination
+<span class="string">per_page:</span> <span class="number">5</span>
+<span class="string">pagination_dir:</span> page
+
+# Extensions
+## <span class="string">Plugins:</span> <span class="string">http:</span><span class="comment">//hexo.io/plugins/</span>
+## <span class="string">Themes:</span> <span class="string">http:</span><span class="comment">//hexo.io/themes/</span>
+<span class="string">theme:</span> yilia
+
+# Deployment
+## <span class="string">Docs:</span> <span class="string">http:</span><span class="comment">//hexo.io/docs/deployment.html</span>
+<span class="string">deploy:</span>
+<span class="label">      type:</span> github
+<span class="label">      repository:</span> <span class="string">https:</span><span class="comment">//github.com/lcepy/lcepy.github.io.git</span>
+<span class="label">      branch:</span> master
+</code></pre><p><strong>这里基本上只需要关心Site URL Extensions deploy部分，Site是设置博客名字，语言等，URL是设置博客的访问地址，Extensions用来设置主题，deploy用来设置github的仓库名与分支名</strong></p>
+<p>hexo主要有如下几个命令来操作：</p>
+<blockquote>
+<p>hexo init  初始化一个hexo项目</p>
+<p>hexo server 监听4000端口启动一个服务器，可以预览，端口可以在_config.yml文件中修改</p>
+<p>hexo generate 输出静态文件，在public目录下</p>
+<p>hexo new 生成一个md文件，这个文件就是我们要写的博客文件了</p>
+<p>hexo clean 清除public目录以及缓存，其实这个缓存就是db.json文件</p>
+<p>hexo deploy 如果在_conig.yml文件中配置了这项，它会帮助我们发布到网络</p>
+</blockquote>
+<p>一般大项的配置都是在顶层的_config.yml配置文件中配置，比如博客作者名，标题，时间格式，资源文件目录，静态资源文件目录，插件等等。而具体的博客配置，比如菜单之类的都在themes具体的主题_config.yml文件中配置。</p>
+<h2 id="第四步_学习Markdown语法">第四步 学习Markdown语法</h2><p><a href="https://github.com/LearnShare/Learning-Markdown" target="_blank" rel="external">学习Markdown语法</a></p>
+<h2 id="第五步_具体的操作步骤">第五步 具体的操作步骤</h2><p>建立一个名为myblog的目录。</p>
+<p>cd ~/myblog</p>
+<p>输入：hexo init 初始化一下</p>
+<p>然后npm install 安装所需要的模块</p>
+<p>输入hexo server 可以先进行一下预览，看看是否已经安装成功</p>
+<p>subl _config.yml 打开这个文件先修改一下配置，比如title，author之类的</p>
+<p><strong>在配置文件中:后要空一格再输入</strong></p>
+<p>接着在主题<a href="https://github.com/hexojs/hexo/wiki/Themes" target="_blank" rel="external">themes</a>中查看自己中意的主题，在插件<a href="https://github.com/hexojs/hexo/wiki/Plugins" target="_blank" rel="external">plugins</a>中查看自己需要的插件。具体的配置，主题要git clone 在themes目录中，然后修改_config.yml配置文件中的theme:[主题名]。而插件则可以用npm来安装，例如安装feed插件，npm install hexo-generator-feed —save，然后在_config.yml文件中任意位置配置：</p>
+<pre><code><span class="attribute">feed</span>:
+    <span class="attribute">type</span>: atom
+    <span class="attribute">path</span>: atom.xml
+    <span class="attribute">limit</span>: <span class="number">20</span>
+</code></pre><p>基本上hexo渲染是可以用md来进行的，在配置好主题，插件之后，hexo new hello生成一个新的文章，然后开始你的写作之旅吧。</p>
+<p>在终端输入</p>
+<pre><code>hexo <span class="keyword">new</span> 我的第一个博文
+</code></pre><p>访问 <a href="http://127.0.0.1:4000" target="_blank" rel="external">http://127.0.0.1:4000</a></p>
+<h2 id="第六步_开发自己的主题">第六步 开发自己的主题</h2><p>在开发自己的主题之前，可以先准备好静态文件。主题的开发主要依赖几个layout目录中的模版，除了布局模版，其他的可以根据自己的需求来修改。</p>
+<p>访问<a href="http://hexo.io/docs/" target="_blank" rel="external">hexo docs</a>来获取具体的参考信息</p>
+<blockquote>
+<p>layout.ejs 是主题的一个基础框架模版</p>
+<p>index.ejs 是主题的首页</p>
+<p>post.ejs  是主题的内容页</p>
+<p>archive.ejs 是主题的分类页</p>
+</blockquote>
+<p>这些相当于，手脚架，用户访问首页实际上访问的是layout.ejs + index.ejs 渲染出来的页面，而内容页则是layout.ejs + post.ejs 渲染出来的页面，当然，不仅仅只有这么四项，还有标签页等等，其他具体可以访问文档去参考。在这些模版中，可以使用&lt;%- partial() %&gt;来加载一个小模版，小模版可以放置在_partial目录下。</p>
+<p><strong>全局变量</strong></p>
+<blockquote>
+<p>config 主要是可以获取到顶层的_config.yml中的配置项，比如想获取标题，&lt;%= config.title%&gt;</p>
+<p>theme 主要是可以获取主题_config.yml中的配置项，使用&lt;%= theme.name%&gt;</p>
+<p>site  在任何手脚架中都可以引用，site对象包含了posts（所有文章）pages（所有页面）tags（所有标签）categories（所有分类）可以each</p>
+</blockquote>
+<p><strong>具体变量</strong></p>
+<blockquote>
+<p>page 个对象中包含了具体内容，这所有的内容。如果不是在post.ejs中使用，则可以each。若是，则是一篇具体文章的所有对象 &lt;%= page.title%&gt;</p>
+<p>post 包含所有文章的一个对象，可以each</p>
+</blockquote>
+<p><strong>布局</strong></p>
+<p>基础布局，也就是不带&lt;%- body%&gt;的布局，在这个布局中也可以自定义其他布局，比如link之类的,若找不到自定的布局的话，则会根据 Generator 的不同，使用相对应的布局代替。而带&lt;%- body%&gt;的layout布局，则是把page对象一一传递给最终所使用的模版中。</p>
+<p><strong>注意事项</strong></p>
+
+<!--￼0-->
+
+
+<p><a href="https://github.com/hexojs/hexo/issues/916" target="_blank" rel="external">#916</a></p>
+<p><strong>额外的学习</strong></p>
+<p>主要是看看ejs模版如何使用，亲，玩转自己的主题去吧。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    <div class="article-entry">
+<h2>谢谢</h2>
+<p>如果文章对你有用，小小捐赠是你对我继续写作的鼓励与支持：支付宝 1368843198@qq.com 。</p>
+<p>支付宝链接 <a href="https://shenghuo.alipay.com/send/payment/fill.htm?optEmail=1368843198@qq.com" target="_blank">https://shenghuo.alipay.com/send/payment/fill.htm</a></p>
+<div align="left">
+<img src="http://7qncz5.com1.z0.glb.clouddn.com/action/aphqeqbbr88mde48c51.png" alt=""/><br>
+</div>
+</div>
+
+<nav id="article-nav">
+  
+  
+    <a href="/2015/07/31/CALayer的变换效果与CAShapeLayer/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">CALayer的变换效果与CAShapeLayer</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="用Hexo写博客" data-title="用Hexo写博客（图文解说）" data-url="http://lcepy.github.io/2015/07/31/用Hexo写博客/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lcepy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 icepy
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+<script>
+var _hmt = _hmt || [];
+(function() {
+var hm = document.createElement("script");
+hm.src = "//hm.baidu.com/hm.js?37a8f2a62793e2b12b1c0ea96d7849af";
+var s = document.getElementsByTagName("script")[0]; 
+s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

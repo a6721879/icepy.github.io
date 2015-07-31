@@ -107,7 +107,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
+						<a href="/tags/JavaScript/" style="font-size: 18px;">JavaScript</a> <a href="/tags/django/" style="font-size: 14px;">django</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/nodejs/" style="font-size: 10px;">nodejs</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/生活/" style="font-size: 16px;">生活</a> <a href="/tags/简历/" style="font-size: 10px;">简历</a> <a href="/tags/经验之谈/" style="font-size: 12px;">经验之谈</a>
 					</div>
 				</section>
 				
@@ -170,6 +170,97 @@
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-利用AVFoundation实现扫描条码" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/06/16/利用AVFoundation实现扫描条码/" class="article-date">
+  	<time datetime="2015-06-16T09:39:05.000Z" itemprop="datePublished">2015-06-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/16/利用AVFoundation实现扫描条码/">利用AVFoundation实现扫描条码</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>iOS7中添加了一组原生支持扫描的组件，通过AVCaptureMetaDataOutput可以扫描各式各样的QR码，条形码，你所需要做的就是写好UI，并将它设置为AVCaptureSession的输出，再实现相应的协议即可。而且，这玩意可以跟Passbook相结合，有许多潜力可以实现，官方也非常推荐大家使用这个API。</p>
+<blockquote>
+<p>import AVFoundation</p>
+<p>实现 AVCaptureMetadataOutputObjectsDelegate协议</p>
+</blockquote>
+<p>要实现这个扫描器，首先需要导入AVFoundation框架，这是一个专门处理音频，视频的框架。</p>
+<p>创建一个AV设备，使用AVMediaTypeVideo常量</p>
+<pre><code>let captureDevice = AVCaptureDevice.<span class="function"><span class="title">defaultDeviceWithMediaType</span><span class="params">(AVMediaTypeVideo)</span></span>
+</code></pre><p>然后建立一个输入</p>
+<pre><code>let <span class="tag">input</span>:AnyObject! = AVCaptureDeviceInput.<span class="function"><span class="title">deviceInputWithDevice</span><span class="params">(captureDevice, error: &amp;error)</span></span>
+</code></pre><p>现在，我们来看一看，最关键的部分，创建输出会话，不过在此之前，我们需要先使用AVCaptureSession创建一个会话，将输入端添加到会话中。</p>
+<pre><code><span class="keyword">self</span><span class="variable">.captureSession</span> = <span class="built_in">AVCaptureSession</span>()
+<span class="keyword">self</span><span class="variable">.captureSession</span>?<span class="variable">.addInput</span>(input as! <span class="built_in">AVCaptureInput</span>)
+</code></pre><p>接着，我们开始使用AVCaptureMetadataOutput创建一个输出端</p>
+<pre><code>let captureMetadataOutput = <span class="function"><span class="title">AVCaptureMetadataOutput</span><span class="params">()</span></span>
+captureMetadataOutput.<span class="function"><span class="title">setMetadataObjectsDelegate</span><span class="params">(self, queue: dispatch_get_main_queue()</span></span>)
+captureMetadataOutput<span class="class">.metadataObjectTypes</span> = [AVMetadataObjectTypeEAN13Code,AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode128Code,AVMetadataObjectTypeQRCode]
+</code></pre><p>指定要实现的扫描常量，添加一个协议，GCD可以使用在主线程中，并把它添加到会话中。</p>
+<pre><code><span class="tag">self</span><span class="class">.captureSession</span>?<span class="class">.addOutput</span>(<span class="tag">captureMetadataOutput</span>)
+</code></pre><p>然后我们还需要使用AVCaptureVideoPreviewLayer创建一个画布，用来显示扫描的展示区域，并添加到当前视图的layer中。</p>
+<pre><code><span class="keyword">self</span><span class="variable">.videoPreviewLayer</span> = <span class="built_in">AVCaptureVideoPreviewLayer</span>(session: <span class="keyword">self</span><span class="variable">.captureSession</span>)
+<span class="keyword">self</span><span class="variable">.videoPreviewLayer</span>?<span class="variable">.videoGravity</span> = <span class="built_in">AVLayerVideoGravityResizeAspect</span>
+<span class="keyword">self</span><span class="variable">.videoPreviewLayer</span>?<span class="variable">.frame</span> = <span class="keyword">self</span><span class="variable">.view</span><span class="variable">.bounds</span>
+<span class="keyword">self</span><span class="variable">.view</span><span class="variable">.layer</span><span class="variable">.addSublayer</span>(<span class="keyword">self</span><span class="variable">.videoPreviewLayer</span>)
+</code></pre><p>最后启动这个会话</p>
+<pre><code><span class="tag">self</span><span class="class">.captureSession</span>?<span class="class">.startRunning</span>()
+</code></pre><p>到这里，整个扫描条码的程序就已经准备就绪了，但是如果你还需要获取扫描相应的结果，那么需要实现它的协议，并实现func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!, fromConnection connection: AVCaptureConnection!) {} 方法。</p>
+<p>metadataObjects是一个AnyObject的数组，在这里，还需要进步的判断，获取第一个元素转化为AVMetadataMachineReadableCodeObject，通过type，可以判断扫描的类型，是二维码，还是条形码，还是其他，而值，则是在AVMetadataMachineReadableCodeObject的stringValue属性。</p>
+<pre><code><span class="keyword">let</span> metadata = metadataObjects[<span class="number">0</span>] <span class="keyword">as</span>! AVMetadataMachineReadableCodeObject
+<span class="comment">//metadata.type</span>
+<span class="comment">//metadata.stringValue</span>
+</code></pre><p>扫描的Demo可以查看<a href="https://github.com/lcepy/Mockingbird" target="_blank" rel="external">Mockingbird</a></p>
+<h2 id="在Objective-C项目中使用">在Objective-C项目中使用</h2><p>runpath $(inherited)@executable_path/Frameworks</p>
+<p>三步走图片，可查</p>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/iOS/bridging-header-file.png" alt=""></p>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/iOS/defines-module-yes.png" alt=""></p>
+<p><img src="http://7qncz5.com1.z0.glb.clouddn.com/iOS/import-swift-file.png" alt=""></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-上架AppStore的经历" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -668,109 +759,6 @@ NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"
 <pre><code><span class="list">[<span class="keyword">dicmutable</span> removeObjectForKey:@<span class="string">"build"</span>]<span class="comment">;</span>
 NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,dicmutable)</span><span class="comment">;</span></span>
 </code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-iOS动画基础" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/05/10/iOS动画基础/" class="article-date">
-  	<time datetime="2015-05-09T17:02:06.000Z" itemprop="datePublished">2015-05-10</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/10/iOS动画基础/">iOS动画基础</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>貌似在哪个领域里，动画的实现都赋予了软件非常生动的交互，所以我们必须要掌握并学好它。在学习动画之前，首推<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004514" target="_blank" rel="external">Core Animation Programming Guide</a>核心动画编程指南，去了解一下官方的术语，定义，以及指导，这很有帮助。</p>
-<p>顾名思义，动画也就是让我们的view可以动起来，所谓的view实际上都会继承于UIView，而每一个UIView都有一个CALayer对象，它们两个是分开的，分别用于不同的地方。可以看见的是，UIView用于显示，CALayer用于绘制。（注明：CALayer属于QuartzCore框架）</p>
-<p>UIView自身（注明：UIView属于UIKit框架）会有描述位置的信息，比如frame，transform。在使用一些比较简单的动画时，我们应该首选考虑的是使用UIView提供的一些方法，去改变frame，transform等属性。</p>
-<pre><code><span class="collection">[UIView animateWithDuration:1.6 animations:<span class="comment">^{
-
-}</span>]</span><span class="comment">;</span>
-</code></pre><p>对于高度复杂一些的动画，就需要我们对Core Animation整个的熟悉和了解了。这里，我建议先阅读一下<a href="http://objccn.io/issue-12-1/" target="_blank" rel="external">动画理解</a>，把一些概念性的东西了解清楚。比如Core Animation维护的层次结构，什么叫模型层树(model layer tree)，什么叫表现层树(presentation layer tree)，而且你务必要理解，当把动画添加到一个layer的时候，是不直接修改其属性的。</p>
-<p>在清楚这些概念性的问题后，你可以去学习一些动画类了，比如CABasicAnimation，CATransform3D，CAKeyframeAnimation,CAAnimationGroup,CAAnimation，另外你务必要记住一点，CAAnimation是这些动画类的鼻祖(它是一个抽象类，不能直接使用)，而且要搞清楚CALayer。</p>
-<p>举例一些简单的例子</p>
-<p><strong>使用CABasicAnimation</strong></p>
-<pre><code>CABasicAnimation *<span class="variable">animation =</span> [CABasicAnimation animation];
-animation.<span class="variable">keyPath =</span> @<span class="string">"position.x"</span>;
-animation.<span class="variable">duration =</span> <span class="number">1</span>;
-animation.<span class="variable">fromValue =</span> @<span class="number">50</span>;
-animation.<span class="variable">toValue =</span> @<span class="number">250</span>;
-[view.layer addAnimation:animation forKey:@<span class="string">"left"</span>];
-</code></pre><p>为了验证动画究竟修改了那个地方的值，我打印了一下view的frame，NSLog(@”%@”,NSStringFromCGRect(view.frame))，这里可以看的出来，view的frame值没有发生改变，而且在模拟器中，动画结束了，view又回到了原来的位置。说明啊，动画的执行和view的渲染是分开的，如果你还不理解，请继续阅读《核心动画编程指南》或者简单的《动画理解》。</p>
-<p>如果我们不想动画结束后view回到原来的位置，可以使用</p>
-<pre><code>animation.fillMode = kCAFillModeForwards<span class="comment">;</span>
-animation.removedOnCompletion = NO<span class="comment">;</span>
-</code></pre><p><strong>使用CAKeyframeAnimation</strong></p>
-<pre><code>CAKeyframeAnimation *animation = [CAKeyframeAnimation animation]<span class="comment">;</span>
-animation.keyPath = @<span class="string">"position.x"</span><span class="comment">;</span>
-animation.values = @[<span class="localvars">@0</span>,<span class="localvars">@10</span>,@-<span class="number">10</span>,<span class="localvars">@10</span>,<span class="localvars">@0</span>]<span class="comment">;</span>
-animation.keyTimes = @[ <span class="localvars">@0</span>, @(<span class="number">1</span> / <span class="number">6.0</span>), @(<span class="number">3</span> / <span class="number">6.0</span>), @(<span class="number">5</span> / <span class="number">6.0</span>), <span class="localvars">@1</span> ]<span class="comment">;</span>
-animation.duration = <span class="number">0.4</span><span class="comment">;</span>
-animation.additive = YES<span class="comment">;</span>
-[view.layer addAnimation:animation forKey:@<span class="string">"shake"</span>]<span class="comment">;</span>
-</code></pre><p><strong>使用CAAnimationGroup</strong></p>
-<pre><code>CABasicAnimation *right = <span class="comment">[CABasicAnimation animation]</span>;
-right.keyPath = @<span class="string">"position.x"</span>;
-right.duration = 1;
-right.toValue = @250;
-right.timingFunction = <span class="comment">[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]</span>;
-
-CABasicAnimation *top = <span class="comment">[CABasicAnimation animation]</span>;
-top.keyPath = @"position.y";
-top.duration = 1;
-top.toValue = @10;
-right.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-
-CAAnimationGroup *animationsGroup = <span class="comment">[CAAnimationGroup animation]</span>;
-animationsGroup.animations = @<span class="comment">[right,top]</span>;
-<span class="comment">[view.layer addAnimation:animationsGroup forKey:@"group"]</span>;
-</code></pre><p>阅读资料：</p>
-<ul>
-<li><a href="http://objccn.io/issue-12/" target="_blank" rel="external">#12动画</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/CoreAnimation_framework/index.html#//apple_ref/doc/uid/TP40004513" target="_blank" rel="external">Core Animation Reference Collection</a></li>
-</ul>
-
       
     </div>
     
