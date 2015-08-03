@@ -171,6 +171,293 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-复习JavaScript七之DOM" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/28/复习JavaScript七之DOM/" class="article-date">
+  	<time datetime="2015-01-28T11:51:01.000Z" itemprop="datePublished">2015-01-28</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/28/复习JavaScript七之DOM/">复习JavaScript七之DOM</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>DOM是针对HTML和XML文档的一个API，主要是使用JavaScript来进行编程操作HTML和XML文档。其他语言如果实现了DOM标准，理论上也是可以使用这个API的，这里仅仅讨论JavaScript的应用。</p>
+<p><strong>理解层级结构与关系</strong></p>
+<p>在浏览器中比如HTML页面是由很多有层次结构的标签组成的，而为这些标签提供查询，添加，删除等等方法主要就是DOM在提供支持。</p>
+<p>（页面又称为文档）文档中所有的节点之间都存在这样或那样的关系，比如下面一个经典的HTML：</p>
+<pre><code><span class="tag">&lt;html&gt;</span>
+    <span class="tag">&lt;head&gt;</span><span class="tag">&lt;/head&gt;</span>
+    <span class="tag">&lt;body&gt;</span><span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span>
+</code></pre><p>一个标签又可以称为一个元素，head和body那就是兄弟关系，它们都来自一个父系html，又可以说html的子元素是head和body，可能这样描述还不太明显，这样就用原生Js操作DOM来的方式来看看层级结构。</p>
+<pre><code><span class="reserved">var</span> html = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'html'</span>)[<span class="number">0</span>];
+</code></pre><p>先通过getElementsByTagName获取html根元素的节点，每一个元素都有一个childNodes集合和一个parentNode分别代表子节点集合和父节点，<strong>如果不存在，则都是null，如果是集合不存在，则是一个[]</strong>。</p>
+<blockquote>
+<p>html的childNodes //[head,body] html的parentNode // document</p>
+</blockquote>
+<p>每一个元素也都有一个firstChild和lastChild来分别代表第一个子元素和最后一个子元素</p>
+<p>每一个元素也都有一个nextSibling和previousSibling分别代表前面一个元素和后面一个元素，以当前自己为参照物。</p>
+<p>从这样可以看出来，它就像族谱一样对元素的关系进行了定义，通过理解这些层级关系，利用DOM提供的API可以很顺利的进行操作。</p>
+<h3 id="操作DOM">操作DOM</h3><p><strong>常见的获取方式</strong></p>
+<ul>
+<li>document.getElementById （通过ID来获取到节点）</li>
+<li>document.getElementsByTagName （通过节点标签来获取）</li>
+<li>document.querySelector  </li>
+<li>document.querySelectorAll</li>
+</ul>
+<p>后面两个属于HTML5提供的新API，在移动端会用的比较多，前者是获取单个，后者获取集合。</p>
+<p><strong>常见添加，删除</strong></p>
+<ul>
+<li>appendChild</li>
+<li>insterBefore</li>
+<li>replaceChild</li>
+<li>removeChild</li>
+</ul>
+<p>appendChild主要是向childNodes集合的末尾添加一条元素，insterBefore可以用来插入特定位置，两个参数，要插入的节点和作为参照的节点，更新成功后插入的节点会在参照节点之前，也就是参照节点的previousSibling。replaceChild和insterBefore有些类似，两个参数，要插入的节点和参照节点，更新成功后，要插入的节点会替换参照节点，removeChild就比较好理解了，删除一个节点，这四个方法都有返回值。</p>
+<p><strong>常见元素属性</strong></p>
+<p>一般来说，如果var doc = document.getElementById(‘doc’);doc.id = ‘xx’;这样的方式也是可以更新或者获取到元素的属性的，不过不推荐这么使用，要获取元素的属性，DOM API也提供了三个方法来使用。</p>
+<ul>
+<li>getAttribute</li>
+<li>setAttribute</li>
+<li>removeAttribute</li>
+</ul>
+<p>getAttribute可以获取元素的属性，setAttribute可以对元素的属性进行设置，如果属性名不存在，则创建该属性。removeAttribute则是完全删除此属性。</p>
+<p>还有一个属性attributes，主要是获取元素属性集合，这个不是很常用，主要是在遍历元素属性时会使用到，它是一个集合。</p>
+<p><strong>常见创建元素或文本</strong></p>
+<p>一般情况下创建元素都会使用字符串的形式，innerHTML进去。不过，某些情况下，会用到createElement来创建一个元素，如果用到它，那么创建的文本也必须使用createTextNode了。</p>
+<p>对于文本节点，注释节点等开发真的很少用，可以当一个子类大概了解即可。</p>
+<blockquote>
+<p>关于模式的讨论，主要可以用document.compatMode来判断，如果是CSS1Compat就是标准模式，移动端不会出现这样的情况，IE上可能有别的模式，模式主要是影响到CSS布局上，Js影响非常少。</p>
+<p>在移动端上滚动是一个比较要处理的问题，一般来说会使用scrollIntoView，scrollIntoViewIfNeeded，scrollByLines，scrollByPages，这四个方法safari chrome都有实现，意味着在iOS和安卓平台都是良好的。</p>
+</blockquote>
+<ul>
+<li>scrollByPages 将元素的内容滚动到指定的页面高度，具体的高度是由元素的高度来决定的。</li>
+<li>scrollByLines 将元素的内容滚动到知道的行数高度，参数可正可负。</li>
+<li>scrollIntoViewIfNeeded，当元素在视窗（viewport）不可见，会滚动容器元素或者浏览器窗口让其可见。如果是可见的，这个方法不起任何作用。如果参数为true，可能是垂直居中的可见。</li>
+<li>scrollIntoView 滚动容器元素或者浏览器窗口，让元素可见。</li>
+</ul>
+<p><strong>一些小技巧</strong></p>
+<p>每一个元素都存在一个contains方法，用来检测传入的节点是不是当前节点的子节点，火狐对于的方法名叫compareDocumentPosition。</p>
+<p>如果要获取一个文本节点可以使用innerText（纯文本）来获取字符串，如果要获取所有的包括标签的字符串可以使用innerHTML。它们还有一种outer系列对应的方法，主要的区别是前者（outerText）会替换节点，后者(outerHTML)会修改调用它的元素，一般基本没人使用。它们可以获取，也可以通过赋值来设置新的节点。</p>
+<h3 id="DOM2和DOM3">DOM2和DOM3</h3><p>对于这两级在DOM中基本上IE没啥支持，或者说支持的非常少，像style对象，CSS的一些对象外。</p>
+<p>这里最大的变化是增加了对XML命名空间的支持，元素样式的访问，节点的遍历以及range。当然目前来看，节点的遍历，range，XML命名空间在开发中使用的非常少，可以当资料来阅读，了解有这么回事，用到的时候再查询。而元素样式的访问，这个在开发中普遍使用的较多，因为在没法使用css3动画的浏览器中，可以通过改变样式来到达动画的目的。</p>
+<pre><code>var <span class="annotation">doc</span> = document.getElementById(<span class="string">'doc'</span>);
+<span class="annotation">doc</span>.style.width = <span class="string">'100px'</span>;
+</code></pre><p>对于iframe的访问这里增加了一个contentDocument对象来进行引用，还有节点的比较，isSameNode和isEqualNode，这两个的区别在于，前者是否引用的同一个节点对象，后者是指两个节点是否是相同的类型。不过，它们使用的也不多，了解就好。</p>
+<p><strong>元素的大小</strong></p>
+<p>这个部分需要理解，因为关乎到元素在浏览器上的位置显示，跟动画有关系，四个属性。</p>
+<ul>
+<li>offsetWidth 元素在水平方向占用的空间大小</li>
+<li>offsetHeight 元素在垂直方向占用的空间大小</li>
+<li>offsetLeft 元素的左外边框到内边框的距离</li>
+<li>offsetTop 元素的上外边框到内边框的距离</li>
+</ul>
+<p><strong>滚动大小</strong></p>
+<p>这个在视察滚动或者处理滚动条的时候用的上，也是四个属性</p>
+<ul>
+<li>scrollHeight 在没有滚动的情况下，元素的总高度</li>
+<li>scrollWidth 在没有滚动的情况下，元素的总宽度</li>
+<li>scrollLeft 被隐藏在内容区域左侧的像素度</li>
+<li>scrollTop 被隐藏在内容区域上侧的像素度</li>
+</ul>
+<blockquote>
+<p>下面这些IE全部不支持，range支持一种叫做文本范围的东西</p>
+</blockquote>
+<p><strong>元素遍历</strong></p>
+<p>关于遍历其实有两个方法可用createNodeIterator和createTreeWalker，不过这些在开发中几乎不会使用到，谁没事去遍历节点完呢。</p>
+<p><strong>关于range</strong></p>
+<p>这个也是非常少会使用到，除非是做那种编辑器应用或者在线编辑器等等，不过使用它可以更精准的控制的DOM，主要是使用createRange方法。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-复习JavaScript六之事件" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/27/复习JavaScript六之事件/" class="article-date">
+  	<time datetime="2015-01-27T10:08:04.000Z" itemprop="datePublished">2015-01-27</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/27/复习JavaScript六之事件/">复习JavaScript六之事件</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>IE浏览器的事件不是复习的重点</p>
+</blockquote>
+<p>事件是JavaScript与HTML进行交互的一个纽带，理解事件可以更好的处理Web应用程序，现在的浏览器中主要支持两种事件流：</p>
+<ul>
+<li>事件冒泡</li>
+<li>事件捕获</li>
+<li>DOM事件流</li>
+</ul>
+<p>事件冒泡则是指事件开始时由具体的元素接收，然后逐级向上传播。比如：</p>
+<pre><code><span class="tag">&lt;html&gt;</span>
+    <span class="tag">&lt;head&gt;</span><span class="tag">&lt;/head&gt;</span>
+    <span class="tag">&lt;body&gt;</span>
+        <span class="tag">&lt;div&gt;</span>
+            <span class="tag">&lt;p&gt;</span><span class="tag">&lt;/p&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span>
+</code></pre><p>给p标签监听一个事件，它的流向是p,div,body,html,document，其实细心看来这种流的走向会存在一个问题，给div也监听一个事件，当用户点击P的时候是会触发两次的，好在event对象中有可以阻止事件冒泡的方法。</p>
+<p>事件捕获则是指事件由最上级接收，逐级向下传播到具体的元素上，了解了冒泡之后这个就非常好理解了，正是一个相反的步骤。</p>
+<p>而DOM事件流又正好是冒泡与捕获的结合体，它分为三个阶段：事件捕获，目标事件，事件冒泡，如果在纸上画出来，它的走向就是一个圆形。</p>
+<blockquote>
+<p>对于事件处理程序，写在HTML标签中的，另外一种是直接写一个function的，比如doc.onclick = function(){}，一般来说这些浏览器支持，但是基本上不会使用了。因为前者是跟HTML耦合的，不利代码维护，而且虽然HTML加载了但是Js文件还未加载，用户点击后，是直接报错的。后者虽然也可以删除，比如doc.onclick = null，对于对代码有强迫症的同学，基本上不会使用到它。</p>
+</blockquote>
+<p>那么，我们该怎么给一个元素添加上事件处理程序呢？</p>
+<h3 id="DOM2级事件处理程序">DOM2级事件处理程序</h3><ul>
+<li>addEventLister</li>
+<li>removeEventLister</li>
+</ul>
+<p>所有的DOM节点都具备这两个方法，它接收三个参数：</p>
+<ul>
+<li>要处理的事件名称，比如click（这里跟上述两个以及IE注册事件都不同，不需要on）</li>
+<li>需要事件进行处理的函数</li>
+<li>一个布尔值，表示（true，在捕获阶段调用事件处理函数）（false，在冒泡阶段调用事件处理函数）</li>
+</ul>
+<blockquote>
+<p>一般情况下第三个参数都填false</p>
+</blockquote>
+<p>IE浏览器对应的两个方法，attachEvent，detachEvent，它们只有冒泡，事件名要加上on。</p>
+<h3 id="事件对象">事件对象</h3><p>在注册完事件处理程序后，事件的一个比较重要的对象必须要理解，<strong>event事件对象</strong>。</p>
+<p>一般来说，这个对象中包含着所有与当前元素所监听的事件有关的信息，比如元素监听的事件类型，元素本身等等。</p>
+<p><strong>比较重要的属性和方法（只读）</strong></p>
+<ul>
+<li>currentTarget 真正监听事件的那个元素</li>
+<li>target 事件的目标元素</li>
+<li>type 事件的类型</li>
+<li>perventDefault()  取消事件的默认行为</li>
+<li>stopPropagation()  取消事件的捕获或者冒泡</li>
+<li>bubbles 事件是否冒泡</li>
+<li>eventPhase 事件处理程序的三个阶段，1捕获2处于目标3冒泡</li>
+</ul>
+<p><strong>比较重要的属性和方法（读写）</strong></p>
+<ul>
+<li>clientX 鼠标在窗口中的水平位置</li>
+<li>clientY 鼠标在窗口中的垂直位置</li>
+</ul>
+<h3 id="事件类型">事件类型</h3><blockquote>
+<p>PC端主要是针对鼠标，移动端则是触摸，手势相关的处理</p>
+</blockquote>
+<p>如果在PC端上发生一次click事件，实际上它是发生了三次事件，mousedown当鼠标按下的时候，mouseup当用户放开的时候，click两个加起来就发生了一次click事件。相对于移动，PC上的鼠标事件非常的丰富，例如mouseover当鼠标首次移入一个元素边界时触发，mouseout当鼠标移出元素时触发，这个移出，到子元素上也会触发这个事件，mousemove当鼠标在元素内移动时重复触发。</p>
+<p>总体来说对于文档加载，表单控件，窗口大小改变等事件，比如获取焦点，在失去或者获取焦点是值改变等移动上都是一样的，focus（获得焦点）blur（失去焦点）。</p>
+<p>在做一些视差滚动的效果时scroll事件是非常好用，移动上在css中提供了一个类似的属性。</p>
+<p>唯一的区别是移动端上没有键盘事件。</p>
+<h3 id="移动事件">移动事件</h3><ul>
+<li>touchstart 当手指触摸到屏幕时触发</li>
+<li>touchmove 当手指在屏幕上连续滑动时触发</li>
+<li>touchend 当手指从屏幕上移开时触发</li>
+<li>touchcancel 当系统停止跟踪触摸时触发（这个事件没有确定的触发时间）</li>
+</ul>
+<p>它们都是冒泡的，也可以取消</p>
+<p><strong>三个跟踪触摸事件的属性</strong></p>
+<ul>
+<li>touches 当前跟踪触摸操作的touch数组，在touchend事件中为空</li>
+<li>targetTouchs 特定事件目标的touch数组</li>
+<li>ChangedTouches 上次触摸时发生了什么改变的touch数组</li>
+</ul>
+<p><strong>移动event事件对象</strong></p>
+<p>PC上存在的，在移动上也存在，描述上有差异，比如</p>
+<ul>
+<li>target 触摸的DOM节点目标</li>
+<li>pageX 触摸目标在页面中的X坐标</li>
+<li>pageY 触摸目标在页面中的Y坐标</li>
+</ul>
+<p><strong>一些手势</strong></p>
+<ul>
+<li>gesturestart 当一个手指按在屏幕上另外一个手指又触摸屏幕时触发</li>
+<li>gesturechange 依赖前者当其中的一个手指发生改变时触发</li>
+<li>gestureend 当任何一个手指离开时触发</li>
+</ul>
+<p><strong>移动手势干货三部曲</strong></p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/23/webkit-touch-event-1.html" target="_blank" rel="external">对于Touch的处理</a></p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-2.html" target="_blank" rel="external">处理简单手势</a></p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/22/webkit-touch-event-3.html" target="_blank" rel="external">处理复杂手势</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-复习JavaScript五之面向对象的程序设计" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -465,201 +752,9 @@ Object.defineProperty(obj, <span class="string">'id'</span>, {<span class="strin
 
 
   
-    <article id="post-如果宅-纪念" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/23/如果宅-纪念/" class="article-date">
-  	<time datetime="2015-01-23T15:37:26.000Z" itemprop="datePublished">2015-01-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/23/如果宅-纪念/">如果宅*纪念</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="http://websources.qiniudn.com/img/mywow.png" alt="青春独醉"></p>
-<p>魔兽世界练到100级之后，我竟然一点想玩的想法都没有了，不知道是对游戏不感兴趣了呢？还是自己老了。细数下来，八个角色，只有一个练到了100级，其他的再也不想登陆了。</p>
-<p>今天回到家里看见了四年前买的一本书《如果＊宅》，花了一天的时间把它读完了，我才知道我的魔兽世界跟他们一样，一去不可复返了。</p>
-<p>2006年的夏天在安江买电脑报里面送了一张体验卡，第一感觉是“这个游戏真牛逼”，比之前玩的传奇要“牛逼”几个档次，当时还是九城，超级大的一个板块，在介绍一个全新的世界。当然，进入游戏断断续续的玩了段时间，高考了。</p>
-<p>2008年重新注册了一个账号，在三区天空之墙安家落户了，玩的是法师。那时候YY刚刚流行起来，走在TBC的末期。没有牛逼的人，但是有个牛逼的公会，貌似我忘记发生了什么，2010年的夏天，我又AFKl了。好像是刷马桶刷了一年半，切蛋蛋切了两年多，哈哈，公会的战士，盗贼人手一把蛋刀，我的法师也有了凤凰。让我印象很深刻的是，半夜了，很多人一起在YY聊天，然后在泰卡罗森林的那个鸦人巢穴打生命，刷布，刷材料，那里是要有飞行坐骑才能到，而且还是刷虚空鳐声望的地方。</p>
-<p>说起来TBC是我玩的最久，也是最开心的一个版本，感觉每天都很有精力和激情去做每一件事情，比如刷虚空龙，刷乌鸦，刷材料，在拍卖行倒卖物资，代刷破碎，代刷祖尔法拉克，代刷STSM，现在想起来，我也是蛮拼的了。</p>
-<p>2013年熊猫人版本，我又重新建了个角色SS，玩到了90级。后续，就成了刷单机，各种随机团，随机副本，玩了玩很没味道，聊天的人都没有了。</p>
-<p>2014年德拉若版本练到了100级，这下更好，出了个要塞系统，彻底单机了。</p>
-<p>游戏一路在变，人也是一样，发现自己再也没法融入这个世界的圈子了，27岁。</p>
-<p>删除客户端，AFK。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-复习JavaScript二之跨域" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/01/23/复习JavaScript二之跨域/" class="article-date">
-  	<time datetime="2015-01-23T14:17:20.000Z" itemprop="datePublished">2015-01-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/23/复习JavaScript二之跨域/">复习JavaScript二之跨域</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>客户端Js出于安全的考虑，不允许跨域调用其他页面的对象，正是因为这样才给Ajax带来了很多不方便的地方。跨域最简单的理解就是因为Js同源策略的存在，比如a.com域名下的Js不能访问b.com下的Js对象。</p>
-<ul>
-<li>协议端口没法跨，客户端</li>
-<li>在跨域上，域仅仅是通过首部来识别，window.location.protocol +window.location.host</li>
-</ul>
-<h3 id="利用document-domain和iframe来设置">利用document.domain和iframe来设置</h3><p>对于主域相同而子域名不同的情况，可以通过document.domain来处理，比如www.163.com/index.html和wow.163.com/wower.html，在这两个文件中分别加入document.domain = “163.com”，然后在index.html页面中创建一个iframe引入wower.html，获取iframe的contentDocument，这样这两个js就可以交互了。</p>
-<p>index.html</p>
-<pre><code><span class="built_in">document</span>.domain = <span class="string">'163.com'</span>;
-<span class="keyword">var</span> iframe = <span class="built_in">document</span>.createElement(<span class="string">'iframe'</span>);
-iframe.src = <span class="string">'http://wow.163.com/wower.html'</span>;
-iframe.style.display = <span class="string">'none'</span>; 
-<span class="built_in">document</span>.body.appendChild(iframe);
-iframe.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
-    <span class="keyword">var</span> doc = iframe.contentDocument || iframe.contentWindow.document;
-    <span class="comment">//现在可以通过doc来操作wower.html中的js对象了</span>
-}
-</code></pre><p>wower.html</p>
-<pre><code><span class="built_in">document</span>.domain = <span class="string">'163.com'</span>;
-</code></pre><p>使用这样的方式来实现的跨域是有限制的</p>
-<ul>
-<li>主域名必须是同一个</li>
-<li>安全性引发的问题，比如第一个页面出现了安全问题，在后面的页面也会出现</li>
-<li>iframe引用过多的话，每一个iframe都必须设置document.domain，比较琐碎</li>
-</ul>
-<blockquote>
-<p>偶尔可以使用一下</p>
-</blockquote>
-<h3 id="利用window-name">利用window.name</h3><p>稍微有些绕，但是数据量比较大，也比较安全</p>
-<ul>
-<li>wow.163.com/app.html 应用所在的页面</li>
-<li>wow.163.com/empty.html 中间代理页面，搞个空的即可，但是必须在主域名下</li>
-<li>www.qq.com/data.html 需要交互的数据页面</li>
-</ul>
-<p>在data.html页面中</p>
-<pre><code>window.<span class="property">name</span> = <span class="number">123</span>;
-</code></pre><p>app.html页面中创建一个隐藏的iframe，它的scr指向data.html，在onload事件中，把当前iframe的contentWindow.loaction修改成empty.html，当再次onload时就可以通过contentWindow.name来获取到123了。</p>
-<blockquote>
-<p>偶尔使用</p>
-</blockquote>
-<h3 id="利用iframe和location-hash">利用iframe和location.hash</h3><p>利用这种方式，说实话（不建议），比较绕，而且数据量小，直接暴露在URL上。它的原理主要是这样的，假设wow.163.com/index.html页面，wow.163.com/empty.html（空的，什么内容都没有），需要交换数据的页面在www.qq.com/a.html上。</p>
-<p>在wow.163.com/index.html#（＃号就是我们要传递的数据），创建一个隐藏的iframe，hash值可以当参数传递给www.qq.com/a.html#()，在www.qq.com/a.html中可以获取到hash值，根据它进行处理，然后在www.qq.com/a.html页面中创建一个隐藏iframe，把处理的结果当hash值进行传递，给wow.163.com/empty.html#()这样，在同一个域名下，wow.163.com/empty.html中的js可以通过parent.parent.location.hash = self.location.hash来改变hash值，这样就达到了跨域的目的。</p>
-<blockquote>
-<p>不建议使用，坑爹的思路</p>
-</blockquote>
-<h3 id="JSONP">JSONP</h3><p>这种方式是目前开发时最常用的一种方式，利用动态创建script标签来实现跨域的目的，虽然浏览器有显示Js对象的访问，但是它没有限制Js文件的加载，任何域名下的Js文件都可以加载。</p>
-<p>对客户端而言，文件的加载其实就是发送一次GET请求，在服务端实现时，也就是处理这次的GET请求，并且响应，参数可以通过?来带走，俗称一波流。</p>
-<p>在客户端上对于script文件加载是否已经完毕的判断，IE是判断script标签的readystatechange属性，而其他浏览器是onload事件。</p>
-<blockquote>
-<p>突然感觉做移动端不考虑IE的兼容，果然是杠杠的，建议使用</p>
-</blockquote>
-<h3 id="HTML5_postMessage">HTML5 postMessage</h3><p>主要是利用window.postMessage来发送消息，监听window.message来获取消息，判断origin可以判断消息来源，data获取消息内容，soucre来引用发送方的window对象引用。</p>
-<p>www.b.com/b.html发送消息给www.a.com/a.html</p>
-<pre><code>window.<span class="function"><span class="title">postMessage</span><span class="params">(<span class="string">'hello'</span>,<span class="string">'www.a.com/a.html'</span>)</span></span>
-</code></pre><p>www.a.com/a.html获取消息</p>
-<pre><code><span class="built_in">window</span>.addEventLister(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>{
-    <span class="keyword">if</span>(event.origin === <span class="string">'http://b.com'</span>){
-        <span class="comment">//处理</span>
-    }
-})
-</code></pre><p>iframe的发送方式</p>
-<pre><code>contentWindow.<span class="function"><span class="title">postMessage</span><span class="params">(<span class="string">'data'</span>,<span class="string">'b.com'</span>)</span></span>
-</code></pre><blockquote>
-<p>话不多说，移动端这种跨域方式也很常用（建议推荐使用）</p>
-</blockquote>
-<h3 id="HTML5_跨域头_XMLHttpRequest2">HTML5 跨域头 XMLHttpRequest2</h3><p>如果是自己产品，又是做移动端可以使用，比上述任何方式都要方便，需要服务端支持响应时也要设置跨域头。</p>
-<p>如果服务器响应此头，浏览器会检查此头，它的值表示请求内容所允许的域名，也就是如果是*号，表示所有域都可以访问，如果这里是a.com，表示除了同源外，只允许来自a.com域的访问。</p>
-<pre><code><span class="keyword">Access</span>-Control-Allow-Origin：＊
-</code></pre><p>如果需要读取cookie则需要设置它</p>
-<pre><code>Access-Control-Allow-<span class="string">Credentials:</span><span class="literal">true</span>
-</code></pre><p>设置允许跨域的请求类型</p>
-<pre><code><span class="rule"><span class="attribute">Access-Control-Allow-Methods</span>:<span class="value">POST</span></span>
-</code></pre><blockquote>
-<p>兼容性问题，某些版本的浏览器需要在open之后，设置xhr.withCredentials ＝ true;话不多说，建议推荐使用</p>
-</blockquote>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/9/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/11/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/9/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/11/">Next &raquo;</a>
     </nav>
   
 </div>

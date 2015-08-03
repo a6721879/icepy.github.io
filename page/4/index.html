@@ -171,6 +171,361 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-使用Worker实现一个多线程数据缓存模块" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/05/20/使用Worker实现一个多线程数据缓存模块/" class="article-date">
+  	<time datetime="2015-05-20T08:24:18.000Z" itemprop="datePublished">2015-05-20</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/20/使用Worker实现一个多线程数据缓存模块/">使用Worker实现一个多线程数据缓存模块</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Worker是一个可以在后台运行的任务，并提供了一个JavaScript接口让我们来使用它。Worker能够被轻松的创建，还能向它的创建者发送消息。 你只要调用 Worker() 构造函数，指定一个需要运行在 worker 线程内的脚本，就能够很容易的创建一个 worker。</p>
+<p>Worker这个API的使用非常的简单</p>
+<ul>
+<li>postMessage()  向worker内部发送消息</li>
+<li>terminate() 立即停止当前的worker</li>
+<li>onmessage 一个消息事件，worker内部向前台发送消息 </li>
+<li>onerror 一个错误事件，运行环境出错时，worker内部向前台发送消息</li>
+</ul>
+<p>属性</p>
+<ul>
+<li>message 一个可读的错误消息</li>
+<li>filename 错误所在的文件名</li>
+<li>lineno 错误所在的文本行号 </li>
+</ul>
+<p>JavaScript Client Code</p>
+<pre><code><span class="keyword">var</span> workerQueue = [];
+<span class="keyword">var</span> cacheSystem = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+    <span class="keyword">var</span> isWork         = !!Worker;
+    <span class="keyword">var</span> dataSource     = {};
+    <span class="keyword">var</span> contains     = [];
+    <span class="keyword">var</span> lock        = <span class="literal">false</span>;
+    <span class="keyword">var</span> count         = <span class="number">0</span>;
+    <span class="keyword">var</span> getDash     = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+        <span class="keyword">var</span> dash         = localStorage.getItem(<span class="string">'scanUseDashDataSource'</span>);
+        <span class="keyword">var</span> dashData     = dash ? <span class="built_in">JSON</span>.parse(dash).data : contains;
+        <span class="keyword">return</span> dashData; 
+    }
+    <span class="keyword">return</span>    {
+        allObject:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+            <span class="keyword">var</span> d = localStorage.getItem(<span class="string">'scanUseModalDataSource'</span>);
+            <span class="keyword">return</span> d ? d = <span class="built_in">JSON</span>.parse(d).data : <span class="literal">null</span>;
+        },
+        objectForKey:<span class="function"><span class="keyword">function</span>(<span class="params">key</span>)</span>{
+            <span class="keyword">return</span> <span class="keyword">this</span>.allObject()[key];
+        },
+        allKeys:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+            <span class="keyword">var</span> o = <span class="keyword">this</span>.allObject();
+            <span class="keyword">return</span> o ? <span class="built_in">Object</span>.keys(o) : contains;
+        },
+        allValues:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+            <span class="keyword">var</span> o = <span class="keyword">this</span>.allObject();
+            <span class="keyword">if</span>(!o){
+                <span class="keyword">return</span> contains;
+            }
+            <span class="keyword">var</span> c = [];
+            <span class="keyword">for</span>(<span class="keyword">var</span> k <span class="keyword">in</span> o){
+                c.push(o[k].data);
+            }
+            <span class="keyword">return</span> c;
+        },
+        allDash:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+            <span class="keyword">return</span> getDash();
+        },
+        setObject:<span class="function"><span class="keyword">function</span>(<span class="params">value</span>)</span>{
+            <span class="keyword">var</span> s             = <span class="keyword">this</span>;
+            <span class="keyword">var</span> metadata     = <span class="keyword">this</span>.allObject() || {};
+            metadata[value] = {<span class="string">"data"</span>:<span class="literal">null</span>,<span class="string">"work"</span>:<span class="literal">false</span>,<span class="string">"error"</span>:<span class="literal">false</span>};
+            <span class="keyword">var</span> dashData     = <span class="keyword">this</span>.allDash();    
+            <span class="comment">//如果有网络，提交给后台线程去处理网络请求</span>
+            <span class="built_in">window</span>.networkState = <span class="number">1</span>;
+            <span class="keyword">if</span>(isWork &amp;&amp; <span class="built_in">window</span>.networkState &gt; <span class="number">0</span>){
+                <span class="keyword">var</span> worker = <span class="keyword">new</span> Worker(<span class="string">'fetchThread.js'</span>);
+                worker.addEventListener(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">evt</span>)</span>{
+                    <span class="built_in">console</span>.log(evt);
+                    <span class="keyword">var</span> obj = s.allObject();
+                    <span class="keyword">var</span> sp     = evt.data.split(<span class="string">'@icepy-&gt;'</span>);
+                    <span class="keyword">var</span> tag = sp[<span class="number">0</span>];
+                    <span class="keyword">var</span> dat = sp[<span class="number">1</span>];
+                    <span class="keyword">var</span> o   = obj[tag];
+                    <span class="keyword">var</span> r   = <span class="built_in">JSON</span>.parse(dat);
+                    <span class="keyword">if</span>(o){
+                        <span class="comment">//把后台得到的数据添加到data中</span>
+                        o.data     = r;
+                        <span class="comment">//标记work已经完成</span>
+                        o.work  = <span class="literal">true</span>;
+                        <span class="comment">//标记执行线程锁</span>
+                        lock     = <span class="literal">false</span>;
+                        <span class="keyword">if</span>(r.error){
+                            o.error = <span class="literal">true</span>;
+                        }
+                        localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:obj}));
+                        workerQueue[count][<span class="number">2</span>] = <span class="literal">true</span>;
+                        count++;
+                        <span class="keyword">var</span> work = workerQueue[count];
+                        <span class="keyword">if</span>(work){
+                            <span class="keyword">if</span>(work[<span class="number">2</span>]){
+                                <span class="keyword">var</span> i = count++;
+                                <span class="keyword">var</span> f = <span class="literal">true</span>;
+                                <span class="keyword">do</span>{
+                                    <span class="keyword">var</span> _work = workerQueue[i];
+                                    <span class="keyword">if</span>(!_work[<span class="number">2</span>]){
+                                        _work[<span class="number">1</span>].postMessage(_work[<span class="number">0</span>]);
+                                        f = <span class="literal">false</span>;
+                                        count = i;
+                                        <span class="keyword">break</span>;
+                                    }
+                                    i++;
+                                }<span class="keyword">while</span>(f);
+                            }<span class="keyword">else</span>{
+                                work[<span class="number">1</span>].postMessage(work[<span class="number">0</span>]);
+                            }
+                        }<span class="keyword">else</span>{
+                            workerQueue.length = <span class="number">0</span>;
+                            count = <span class="number">0</span>;
+                        }
+                    }
+
+                });
+                worker.addEventListener(<span class="string">'error'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">evt</span>)</span>{
+                    <span class="built_in">console</span>.log(<span class="string">'错误信息处理'</span>);
+                });
+                <span class="comment">//把线程加入队列</span>
+                workerQueue.push([value,worker,<span class="literal">false</span>]);
+                <span class="keyword">if</span>(!lock){
+                    lock = <span class="literal">true</span>;
+                    worker.postMessage(value);
+                }
+            }
+            <span class="keyword">if</span>(!(dashData.indexOf(value) &gt; -<span class="number">1</span>)){
+                dashData.push(value);
+            }
+            localStorage.setItem(<span class="string">'scanUseDashDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:dashData}));
+            localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
+        },
+        setValue:<span class="function"><span class="keyword">function</span>(<span class="params">key,value</span>)</span>{
+            <span class="keyword">var</span> metadata = <span class="keyword">this</span>.allObject();
+            metadata[key].data = value.concat();
+            metadata[key].work = <span class="literal">true</span>;
+            localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
+        },
+        removeObjectForKey:<span class="function"><span class="keyword">function</span>(<span class="params">key</span>)</span>{
+            <span class="keyword">var</span> metadata     = <span class="keyword">this</span>.allObject();
+            <span class="keyword">var</span> dash         = <span class="keyword">this</span>.allDash();
+            dash.splice(dash.indexOf(key),<span class="number">1</span>);
+            <span class="keyword">this</span>.pop(key);
+            <span class="keyword">delete</span> metadata[key];
+            localStorage.setItem(<span class="string">'scanUseDashDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:dash}));
+            localStorage.setItem(<span class="string">'scanUseModalDataSource'</span>,<span class="built_in">JSON</span>.stringify({<span class="string">"data"</span>:metadata}));
+        },
+        repeat:<span class="function"><span class="keyword">function</span>(<span class="params">v</span>)</span>{
+            <span class="keyword">var</span> d = <span class="keyword">this</span>.allKeys();
+                i = <span class="number">0</span>;
+            <span class="keyword">if</span>(!d.length){
+                <span class="keyword">return</span> <span class="literal">false</span>;
+            }<span class="keyword">else</span>{
+                <span class="keyword">var</span> lock = <span class="literal">false</span>;
+                <span class="keyword">if</span>(d.indexOf(v) &gt; -<span class="number">1</span>){
+                    lock = <span class="literal">true</span>;
+                }
+                <span class="keyword">return</span> lock;
+            }
+        },
+        pop:<span class="function"><span class="keyword">function</span>(<span class="params">key,d</span>)</span>{
+            <span class="keyword">if</span>(!d){
+                d = <span class="keyword">this</span>.allObject();
+            }
+            <span class="keyword">if</span>(isWork){
+                <span class="keyword">var</span> i = <span class="number">0</span>;
+                <span class="keyword">var</span> e = workerQueue.length;
+                <span class="keyword">if</span>(e &gt; <span class="number">0</span>){
+                    <span class="keyword">for</span>(;i&lt;e;i++){
+                        <span class="keyword">var</span> work = workerQueue[i];
+                        <span class="keyword">if</span>(work &amp;&amp; work[<span class="number">0</span>] === key){
+                            work[<span class="number">2</span>] = <span class="literal">true</span>;
+                            work[<span class="number">1</span>].terminate();
+                            <span class="keyword">break</span>;
+                        }
+                    }
+                }
+            }
+        },
+        isWork:isWork
+    }
+}();
+</code></pre><p>JavaScript Thread Code</p>
+<pre><code>addEventListener<span class="list">(<span class="quoted">'message</span>',function<span class="list">(<span class="keyword">evt</span>)</span>{
+    var parameter     = evt.data<span class="comment">;</span>
+    var xhr         = new XMLHttpRequest<span class="list">()</span><span class="comment">;</span>
+    var headers        = {}<span class="comment">;</span>
+    xhr.onreadystatechange = function<span class="list">(<span class="keyword">e</span>)</span>{
+           if<span class="list">(<span class="keyword">xhr</span>.readyState === <span class="number">4</span>)</span>{
+               clearInterval<span class="list">(<span class="keyword">abortTimeout</span>)</span><span class="comment">;</span>
+               if<span class="list">(<span class="list">(<span class="keyword">xhr</span>.status &gt;= <span class="number">200</span> <span class="keyword">&amp;&amp;</span> xhr.status &lt; <span class="number">300</span>)</span> || xhr.status == <span class="number">304</span>)</span>{
+                   postMessage<span class="list">(<span class="keyword">parameter+</span>'@icepy-&gt;<span class="quoted">'+xhr</span>.responseText)</span><span class="comment">;</span>
+                   close<span class="list">()</span><span class="comment">;</span>
+               }
+           }
+       }
+    xhr.open<span class="list">(<span class="quoted">'POST</span>',<span class="quoted">'http</span><span class="keyword">://127</span>.<span class="number">0.0</span>.<span class="number">1</span>:<span class="number">8001</span>/',true)</span><span class="comment">;</span>
+       xhr.send<span class="list">(<span class="keyword">parameter</span>)</span><span class="comment">;</span>
+       var abortTimeout = setInterval<span class="list">(<span class="keyword">function</span><span class="list">()</span>{
+           xhr.abort<span class="list">()</span><span class="comment">;</span>
+           postMessage<span class="list">(<span class="keyword">parameter+</span>'@icepy-&gt;<span class="quoted">'+</span>'{<span class="string">"error"</span>:<span class="string">"timeout"</span>}')</span><span class="comment">;</span>
+           close<span class="list">()</span><span class="comment">;</span>
+       },<span class="number">1000</span><span class="variable">*13);
+
+       xhr.onerror = function(e){
+           postMessage(parameter+'@icepy-&gt;'+'{"error":"notnetwork"}');
+           close();
+       }     
+});</span></span></span>
+</code></pre><p>阅读资料</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Worker" target="_blank" rel="external">https://developer.mozilla.org/zh-CN/docs/Web/API/Worker</a></li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-NSDictionary" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/05/16/NSDictionary/" class="article-date">
+  	<time datetime="2015-05-16T11:20:01.000Z" itemprop="datePublished">2015-05-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/16/NSDictionary/">NSDictionary</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>使用字典，能很好的组织数据，OC中的字典有三种方式</p>
+<pre><code><span class="comment">//创建字典</span>
+<span class="built_in">NSDictionary</span> *dic = [[<span class="built_in">NSDictionary</span> alloc] initWithObjectsAndKeys:<span class="string">@"value"</span>,<span class="string">@"key"</span>,<span class="string">@"github"</span>,<span class="string">@"build"</span>, <span class="literal">nil</span>];
+<span class="built_in">NSDictionary</span> *dic1 = @{<span class="string">@"key1"</span>:<span class="string">@"value1"</span>};
+<span class="built_in">NSDictionary</span> *dic2 = [<span class="built_in">NSDictionary</span> dictionaryWithObjectsAndKeys:<span class="string">@"value2"</span>,<span class="string">@"key2"</span>, <span class="literal">nil</span>];
+</code></pre><p>包含多少个键值对</p>
+<pre><code><span class="comment">//包含多少个键值对</span>
+<span class="function">NSLog</span>(<span class="at_rule">@<span class="string">"%zd"</span>,dic.count);</span>
+</code></pre><p>通过已知的key名来获取值</p>
+<pre><code><span class="comment">//已知key来获取值</span>
+NSString *<span class="keyword">value</span> = [dic objectForKey:@<span class="string">"key"</span>];
+NSLog(@<span class="string">"%@"</span>,<span class="keyword">value</span>);
+</code></pre><p>获取所有的key和获取所有的值</p>
+<pre><code><span class="comment">//获取所有的key名或者值，返回一个不可变数组</span>
+<span class="built_in">NSArray</span> *keys = [dic allKeys];
+<span class="built_in">NSArray</span> *values = [dic allValues];
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,keys);
+<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,values);
+</code></pre><p>通过一个数组key获取值</p>
+<pre><code>NSArray *vals = [dic <span class="string">objectsForKeys:</span>@[@<span class="string">"key"</span>] <span class="string">notFoundMarker:</span>@<span class="string">"not"</span>];
+NSLog(@<span class="string">"%@"</span>,vals);
+</code></pre><p>遍历</p>
+<pre><code><span class="list">[<span class="keyword">dic</span> enumerateKeysAndObjectsUsingBlock:^<span class="list">(<span class="keyword">id</span> key, id obj, BOOL *stop)</span> {
+    NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,key)</span><span class="comment">;</span>
+    NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,obj)</span><span class="comment">;</span>
+}]<span class="comment">;</span></span>
+</code></pre><p>排序</p>
+<pre><code><span class="built_in">NSArray</span> *kesArray =  [dic keysSortedByValueUsingComparator:^<span class="built_in">NSComparisonResult</span>(<span class="keyword">id</span> obj1, <span class="keyword">id</span> obj2) {
+    <span class="built_in">NSString</span> *ke1 = obj1;
+    <span class="built_in">NSString</span> *ke2 = obj2;
+    <span class="keyword">return</span> [ke1 compare:ke2];
+}];
+</code></pre><p>过滤</p>
+<pre><code><span class="collection">[dic keysOfEntriesPassingTest:&lt;#<span class="comment">^BOOL</span><span class="list">(<span class="keyword">id</span> key, id obj, BOOL *stop)</span>predicate#&gt;]</span><span class="comment">;</span>
+</code></pre><p>Mutable版的字典，多了增删的方法</p>
+<pre><code><span class="built_in">NSMutableDictionary</span> *dicmutable = [<span class="built_in">NSMutableDictionary</span> dictionaryWithDictionary:dic];
+</code></pre><p>添加</p>
+<pre><code><span class="list">[<span class="keyword">dicmutable</span> setObject:@<span class="string">"icepy"</span> forKey:@<span class="string">"io"</span>]<span class="comment">;</span>
+NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,dicmutable)</span><span class="comment">;</span></span>
+</code></pre><p>删除</p>
+<pre><code><span class="list">[<span class="keyword">dicmutable</span> removeObjectForKey:@<span class="string">"build"</span>]<span class="comment">;</span>
+NSLog<span class="list">(<span class="keyword">@</span><span class="string">"%@"</span>,dicmutable)</span><span class="comment">;</span></span>
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-iOS动画基础" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -602,230 +957,9 @@ SEL execu = <span class="keyword">@selector</span>(compare:);
 
 
   
-    <article id="post-好用的WebKit-framework" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/05/01/好用的WebKit-framework/" class="article-date">
-  	<time datetime="2015-05-01T06:25:36.000Z" itemprop="datePublished">2015-05-01</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/01/好用的WebKit-framework/">好用的WebKit.framework</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>WebKit是iOS8推出的一个用于替代UIWebView的框架，解决了很多UIWebView的问题，比如释放内存，各种稀奇古怪的bug，而且还内置了手势的处理，一句话：好用。</p>
-<p>注意：<strong>2015年4月更新的苹果审核文档中明确标识，必须要用WebKit替换UIWebView，不然审核拒绝。</strong></p>
-<p>在使用WebKit框架的过程中，自己也遇到了一些问题，有些解决了，有些还未解决。</p>
-<ul>
-<li>WebKit目前还未能在storyboard中直接使用，需要用代码的方式创建，手动添加约束</li>
-<li>对于某些页面如果设置了overflow-x，这可能引起scrollView的contentSize的变化，进一步影响WKWebView的内置手势，swipe返回失效</li>
-<li>目前还未找到怎么处理NSURLCache的问题，也就是页面的缓存机制，看样子好像要自己实现</li>
-</ul>
-<p>如何创建一个WKWebView？首先要在link中引入WebKit.framework，然后使用代码的方式：</p>
-<pre><code>-(<span class="constant">WKWebView</span> *)<span class="constant">WKWebPageView</span>
-{
-    <span class="keyword">if</span> (!_WKWebPageView) {
-        _WKWebPageView = [[<span class="constant">WKWebView</span> alloc] <span class="symbol">initWithFrame:</span><span class="keyword">self</span>.view.bounds];
-        _WKWebPageView.navigationDelegate = <span class="keyword">self</span>;
-    }
-    <span class="keyword">return</span> _WKWebPageView;
-}
-</code></pre><p>WKWebView主要需要实现两个协议WKNavigationDelegate和WKUIDelegate，前一个用于一个页面的加载状态，包括第一次响应成功，加载中，加载完成，加载错误等，后面一个我个人感觉有点意思，主要用于改变UI界面，比如客户端JavaScript使用了一个alert，这个协议可以捕获到，然后使用原生的控件来替代。</p>
-<p>WebKit框架还提供了一个任务配置类WKWebViewConfiguration，跟NSURLSessionConfiguration的使用方式类似,可以重新初始化WKWebView的一些配置。</p>
-<p>WKNavigationDelegate协议，我主要使用了三个来处理我的应用，加载中，加载完成，加载错误的处理：</p>
-<pre><code><span class="tag">-</span>(void)<span class="tag">webView</span>:(WKWebView *)<span class="tag">webView</span> <span class="tag">didStartProvisionalNavigation</span>:(WKNavigation *)<span class="tag">navigation</span>
-{
-
-}
-
-<span class="tag">-</span>(void)<span class="tag">webView</span>:(WKWebView *)<span class="tag">webView</span> <span class="tag">didFinishNavigation</span>:(WKNavigation *)<span class="tag">navigation</span>
-{
-
-}
-
-<span class="tag">-</span>(void)<span class="tag">webView</span>:(WKWebView *)<span class="tag">webView</span> <span class="tag">didFailProvisionalNavigation</span>:(WKNavigation *)<span class="tag">navigation</span> <span class="tag">withError</span>:(NSError *)<span class="tag">error</span>
-{
-
-}
-</code></pre><p>另外一些属性我用KVO来监听：</p>
-<pre><code>[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"estimatedProgress"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
-[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"title"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
-[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"URL"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
-[self.WKWebPageView <span class="string">addObserver:</span>self <span class="string">forKeyPath:</span>@<span class="string">"canGoBack"</span> <span class="string">options:</span>NSKeyValueObservingOptionNew <span class="string">context:</span>nil];
-</code></pre><p>它们分别是，页面的加载进度，页面的标题，页面的URL，页面是否回退过</p>
-<p>WKWebView默认是没有开启内置手势的，可以通过allowsBackForwardNavigationGestures来设置</p>
-<p>与JavaScript的交互，我目前主要使用[self.WKWebPageView evaluateJavaScript:&lt;#(NSString <em>)#&gt; completionHandler:&lt;#^(id, NSError </em>)completionHandler#&gt;]来动态改变页面加载完成之后的css样式，还有WKUserScript <em>script = [[WKUserScript alloc] initWithSource:&lt;#(NSString </em>)#&gt; injectionTime:&lt;#(WKUserScriptInjectionTime)#&gt; forMainFrameOnly:&lt;#(BOOL)#&gt;]来创建脚本，它可以明确指定加载前后注入的方式。</p>
-<p><strong>注明：上述的两种创建脚本的方式都是单方向的</strong></p>
-<p>如果我们想互相调用，那么就要实现WKScriptMessageHandler协议了，具体的使用方式可以参考下面给出的的参考资料。</p>
-<p>参考资料：</p>
-<ul>
-<li><a href="http://nshipster.cn/wkwebkit/" target="_blank" rel="external">WKWebView-NSHipster</a></li>
-<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/WebKit/Reference/WKScriptMessageHandler_Ref/index.html" target="_blank" rel="external">WKScriptMessageHandler</a></li>
-<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/WebKit/Reference/WKWebView_Ref/index.html" target="_blank" rel="external">WKWebView</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKWebViewConfiguration_Ref/index.html" target="_blank" rel="external">WKWebViewConfiguration</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKUIDelegate_Ref/index.html" target="_blank" rel="external">WKUIDelegate</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKNavigationDelegate_Ref/index.html" target="_blank" rel="external">WKNavigationDelegate</a></li>
-</ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-iOS的网络编程NSURL" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/04/22/iOS的网络编程NSURL/" class="article-date">
-  	<time datetime="2015-04-22T04:37:14.000Z" itemprop="datePublished">2015-04-22</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/04/22/iOS的网络编程NSURL/">iOS的网络编程NSURL</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>如果只是说iOS中的URL系统，它的东西还不算比较多。但是，如果想用好它，可能还需要具备一些其他方面的知识，特别是多任务编程，比如GCD，NSOperation，NSOperationQueue，NSURLSession等等，而且苹果公司在后期还推了一个叫NSURLComponents的东西，这也是需要去学习的。</p>
-<p>一个简单的URL是这样发送出去的：</p>
-<pre><code><span class="built_in">NSString</span> *path = <span class="string">@"http://lcepy.github.io"</span>;
-<span class="built_in">NSURL</span> *url = [<span class="built_in">NSURL</span> URLWithString:path];
-<span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:url];
-<span class="built_in">NSURLResponse</span> *response = <span class="literal">nil</span>;
-<span class="built_in">NSError</span> *error = <span class="literal">nil</span>;
-[<span class="built_in">NSURLConnection</span> sendSynchronousRequest:request returningResponse:&amp;response error:&amp;error];
-</code></pre><p>基本上如果要构造一个request需要先构造一个NSURL对象，然后通过NSURLConnection发送出去。NSURLRequest是一个不可变的对象，默认发送的是GET的请求，如果想要发送POST请求，可以用它可变的NSMutableURLRequest来支持POST请求，包括超时时间等等。</p>
-<p>关于NSURLConnection有三种方式可以发送请求，前面同步版本我们已经看过了，下面是异步和使用协议的方式：</p>
-<pre><code>[<span class="built_in">NSURLConnection</span> sendAsynchronousRequest:request queue:<span class="literal">nil</span> completionHandler:^(<span class="built_in">NSURLResponse</span> *response, <span class="built_in">NSData</span> *data, <span class="built_in">NSError</span> *connectionError) {
-
-}];
-</code></pre><p>协议：</p>
-<pre><code><span class="comment">//实现NSURLConnectionDataDelegate协议</span>
-
-<span class="built_in">NSURLConnection</span> *connection = [<span class="built_in">NSURLConnection</span> connectionWithRequest:request delegate:<span class="keyword">self</span>];
-[connection start];
-
-<span class="comment">//常用的需要实现下面四种方法</span>
-
--(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didFailWithError:(<span class="built_in">NSError</span> *)error
-{
-    <span class="comment">//请求超时，错误的时候</span>
-}
-
--(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveResponse:(<span class="built_in">NSURLResponse</span> *)response
-{
-    <span class="comment">//服务器第一次响应一个response的时候</span>
-}
-
--(<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveData:(<span class="built_in">NSData</span> *)data
-{
-    <span class="comment">//传输数据</span>
-}
-
--(<span class="keyword">void</span>)connectionDidFinishLoading:(<span class="built_in">NSURLConnection</span> *)connection
-{
-    <span class="comment">//完成的时候</span>
-}
-</code></pre><p>对于某些任务，比如下载图片，文件等等大数据的时候，可以使用一个临时会话来启动一个请求，也就是构造一个NSURLSession。</p>
-<pre><code><span class="built_in">NSURLSessionConfiguration</span> *configuration = [<span class="built_in">NSURLSessionConfiguration</span> defaultSessionConfiguration];
-<span class="built_in">NSURLSession</span> *session = [<span class="built_in">NSURLSession</span> sessionWithConfiguration:configuration];
-<span class="built_in">NSURLSessionDataTask</span> *task = [session dataTaskWithRequest:request completionHandler:^(<span class="built_in">NSData</span> *data, <span class="built_in">NSURLResponse</span> *response, <span class="built_in">NSError</span> *error) {
-
-    <span class="comment">//请求的结果</span>
-}];
-[task resume];
-</code></pre><p>临时会话的好处是每一个都不是在主线程执行，写的代码量比较少，适合简单的任务。</p>
-<p><strong>参考资料</strong></p>
-<ul>
-<li><a href="http://nshipster.cn/nsurl/" target="_blank" rel="external">NSURL/NSURLComponents</a></li>
-<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSURLRequest_Class/" target="_blank" rel="external">NSURLRequest</a></li>
-<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSURL_Class/index.html" target="_blank" rel="external">NSURL</a></li>
-<li><a href="https://developer.apple.com/library/prerelease/ios/documentation/Cocoa/Reference/Foundation/Classes/NSURLConnection_Class/index.html" target="_blank" rel="external">NSURLConnection</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/" target="_blank" rel="external">NSURLSession</a></li>
-<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSURLResponse_Class/index.html" target="_blank" rel="external">NSURLResponse</a></li>
-<li><a href="http://objccn.io/issue-5-4/" target="_blank" rel="external">从 NSURLConnection 到 NSURLSession</a></li>
-<li><a href="http://ubluesky.com/archives/55" target="_blank" rel="external">NSURL详解</a></li>
-</ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
     </nav>
   
 </div>
